@@ -6,5 +6,6 @@ namespace Sistema_de_Reservas_para_Hoteis
         {
             InitializeComponent();
         }
+        
     }
 }
