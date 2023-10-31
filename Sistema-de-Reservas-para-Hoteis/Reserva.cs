@@ -8,6 +8,7 @@ namespace Sistema_de_Reservas_para_Hoteis
 {
     public class Reserva
     {
+        private string Id { get; set; } = string.Empty;
         private string Cpf { get; set; } = string.Empty;
         private string Nome { get; set; } = string.Empty;
         private int Idade { get; set; }
