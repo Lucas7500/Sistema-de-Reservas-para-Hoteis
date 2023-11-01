@@ -38,14 +38,17 @@ namespace Sistema_de_Reservas_para_Hoteis
             TelaDaLista.DataSource = Lista();
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
 
-        }
 
         private void dataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
+        }
+
+        private void BotaoAdicionar_Click(object sender, EventArgs e)
+        {
+            CadastroCliente frm2 = new CadastroCliente();
+            frm2.Show();
         }
     }
 }

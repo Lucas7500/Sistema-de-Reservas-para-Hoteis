@@ -43,7 +43,7 @@
             BotaoAdicionar.TabIndex = 1;
             BotaoAdicionar.Text = "Adicionar";
             BotaoAdicionar.UseVisualStyleBackColor = true;
-            BotaoAdicionar.Click += button1_Click;
+            BotaoAdicionar.Click += BotaoAdicionar_Click;
             // 
             // BotaoEditar
             // 
