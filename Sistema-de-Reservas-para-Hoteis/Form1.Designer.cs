@@ -28,30 +28,16 @@
         /// </summary>
         private void InitializeComponent()
         {
-            dataGridView = new DataGridView();
             Adicionar = new Button();
             Editar = new Button();
             Deletar = new Button();
+            dataGridView = new DataGridView();
             ((System.ComponentModel.ISupportInitialize)dataGridView).BeginInit();
             SuspendLayout();
             // 
-            // dataGridView
-            // 
-            dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView.Location = new Point(26, 23);
-            dataGridView.Name = "dataGridView";
-            dataGridView.RowHeadersVisible = false;
-            dataGridView.RowTemplate.Height = 25;
-            dataGridView.RowTemplate.ReadOnly = true;
-            dataGridView.RowTemplate.Resizable = DataGridViewTriState.True;
-            dataGridView.Size = new Size(874, 368);
-            dataGridView.TabIndex = 0;
-            dataGridView.CellContentClick += dataGridView_CellContentClick;
-            // 
             // Adicionar
             // 
-            Adicionar.Location = new Point(570, 408);
+            Adicionar.Location = new Point(545, 408);
             Adicionar.Name = "Adicionar";
             Adicionar.Size = new Size(102, 30);
             Adicionar.TabIndex = 1;
@@ -61,7 +47,7 @@
             // 
             // Editar
             // 
-            Editar.Location = new Point(687, 408);
+            Editar.Location = new Point(670, 408);
             Editar.Name = "Editar";
             Editar.Size = new Size(98, 30);
             Editar.TabIndex = 2;
@@ -70,22 +56,32 @@
             // 
             // Deletar
             // 
-            Deletar.Location = new Point(800, 408);
+            Deletar.Location = new Point(786, 408);
             Deletar.Name = "Deletar";
             Deletar.Size = new Size(100, 30);
             Deletar.TabIndex = 3;
             Deletar.Text = "Deletar";
             Deletar.UseVisualStyleBackColor = true;
             // 
+            // dataGridView
+            // 
+            dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView.Location = new Point(12, 12);
+            dataGridView.Name = "dataGridView";
+            dataGridView.RowTemplate.Height = 25;
+            dataGridView.Size = new Size(901, 380);
+            dataGridView.TabIndex = 4;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(925, 450);
+            Controls.Add(dataGridView);
             Controls.Add(Deletar);
             Controls.Add(Editar);
             Controls.Add(Adicionar);
-            Controls.Add(dataGridView);
             Name = "Form1";
             Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)dataGridView).EndInit();
@@ -93,10 +89,9 @@
         }
 
         #endregion
-
-        private DataGridView dataGridView;
         private Button Adicionar;
         private Button Editar;
         private Button Deletar;
+        private DataGridView dataGridView;
     }
 }
