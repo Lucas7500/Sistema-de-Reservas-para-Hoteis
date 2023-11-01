@@ -8,19 +8,20 @@ namespace Sistema_de_Reservas_para_Hoteis
 {
     public class Reserva
     {
-        private int Id { get; set; }
-        private string Cpf { get; set; } = string.Empty;
-        private string Nome { get; set; } = string.Empty;
-        private int Idade { get; set; }
-        private string Telefone { get; set; } = string.Empty;
-        private enum Genero
+        public int Id { get; set; }
+        public string Cpf { get; set; } = string.Empty;
+        public string Nome { get; set; } = string.Empty;
+        public int Idade { get; set; }
+        public string Telefone { get; set; } = string.Empty;
+        public enum Genero
         {
             Masculino,
             Feminino
         }
-        private DateTime CheckIn { get; set; }
-        private DateTime CheckOut { get; set; }
-        private decimal PrecoDaEstadia { get; set; }
-        private bool QuartoDisponivel { get; set; } = true;
+        public Genero Sexo { get; set; }
+        public DateTime CheckIn { get; set; }
+        public DateTime CheckOut { get; set; }
+        public decimal PrecoDaEstadia { get; set; }
+        public bool PagamentoEfetuado { get; set; } = true;
     }
 }
