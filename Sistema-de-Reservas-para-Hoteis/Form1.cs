@@ -8,7 +8,7 @@ namespace Sistema_de_Reservas_para_Hoteis
         {
             CultureInfo culture = CultureInfo.InvariantCulture;
             InitializeComponent();
-            AtualizarGrid();
+            PreencherGrid();
         }
 
         private static List<Reserva> Lista()
@@ -33,7 +33,7 @@ namespace Sistema_de_Reservas_para_Hoteis
             return reservas;
         }
 
-        private void AtualizarGrid()
+        private void PreencherGrid()
         {
             TelaDaLista.DataSource = Lista();
         }
