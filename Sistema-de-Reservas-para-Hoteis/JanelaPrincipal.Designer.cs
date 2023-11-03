@@ -47,7 +47,7 @@
             // 
             // BotaoEditar
             // 
-            BotaoEditar.Location = new Point(634, 408);
+            BotaoEditar.Location = new Point(630, 408);
             BotaoEditar.Name = "BotaoEditar";
             BotaoEditar.Size = new Size(100, 30);
             BotaoEditar.TabIndex = 2;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Sistema_de_Reservas_para_Hoteis.Enum;
 
 namespace Sistema_de_Reservas_para_Hoteis
 {
@@ -13,12 +14,7 @@ namespace Sistema_de_Reservas_para_Hoteis
         public string Nome { get; set; } = string.Empty;
         public int Idade { get; set; }
         public string Telefone { get; set; } = string.Empty;
-        public enum Genero
-        {
-            Masculino,
-            Feminino
-        }
-        public Genero Sexo { get; set; }
+        public GeneroEnum Sexo { get; set; }
         public DateTime CheckIn { get; set; }
         public DateTime CheckOut { get; set; }
         public decimal PrecoDaEstadia { get; set; }

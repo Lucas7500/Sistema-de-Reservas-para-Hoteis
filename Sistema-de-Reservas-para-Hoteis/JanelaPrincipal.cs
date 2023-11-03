@@ -1,4 +1,5 @@
 using System.Globalization;
+using Sistema_de_Reservas_para_Hoteis.Enum;
 
 namespace Sistema_de_Reservas_para_Hoteis
 {
@@ -8,7 +9,7 @@ namespace Sistema_de_Reservas_para_Hoteis
         {
             CultureInfo culture = CultureInfo.InvariantCulture;
             InitializeComponent();
-            PreencherGrid();
+            //PreencherGrid();
         }
 
         private static List<Reserva> Lista()
@@ -22,7 +23,7 @@ namespace Sistema_de_Reservas_para_Hoteis
                     Nome = "Joao Da Silva",
                     Idade = 23,
                     Telefone = "(00)91234-5678",
-                    Sexo = Reserva.Genero.Feminino,
+                    Sexo = GeneroEnum.Feminino,
                     CheckIn = new DateTime(2023, 10, 12),
                     CheckOut = new DateTime(2023, 10, 24),
                     PrecoDaEstadia = 800.00M,
@@ -36,13 +37,6 @@ namespace Sistema_de_Reservas_para_Hoteis
         private void PreencherGrid()
         {
             TelaDaLista.DataSource = Lista();
-        }
-
-
-
-        private void dataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
         }
 
         private void BotaoAdicionar_Click(object sender, EventArgs e)
