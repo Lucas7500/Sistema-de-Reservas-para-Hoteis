@@ -39,13 +39,10 @@
             LabelPagamento = new Label();
             TextoNome = new TextBox();
             tableLayoutPanel1 = new TableLayoutPanel();
-            NumeroIdade = new NumericUpDown();
+            TextoIdade = new TextBox();
             TextoTelefone = new TextBox();
             TextoCpf = new TextBox();
             DataCheckOut = new DateTimePicker();
-            tableLayoutPanel2 = new TableLayoutPanel();
-            BotaoFeminino = new RadioButton();
-            BotaoMasculino = new RadioButton();
             TextoPreco = new TextBox();
             tableLayoutPanel3 = new TableLayoutPanel();
             BotaoFalse = new RadioButton();
@@ -53,9 +50,8 @@
             DataCheckIn = new DateTimePicker();
             BotaoAdicionarCadastro = new Button();
             BotaoCancelarCadastro = new Button();
+            CaixaSexo = new ComboBox();
             tableLayoutPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)NumeroIdade).BeginInit();
-            tableLayoutPanel2.SuspendLayout();
             tableLayoutPanel3.SuspendLayout();
             SuspendLayout();
             // 
@@ -152,24 +148,24 @@
             tableLayoutPanel1.ColumnCount = 2;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70F));
-            tableLayoutPanel1.Controls.Add(NumeroIdade, 1, 2);
+            tableLayoutPanel1.Controls.Add(CaixaSexo, 1, 4);
+            tableLayoutPanel1.Controls.Add(TextoIdade, 1, 2);
             tableLayoutPanel1.Controls.Add(TextoTelefone, 1, 3);
             tableLayoutPanel1.Controls.Add(LabelPreco, 0, 7);
             tableLayoutPanel1.Controls.Add(TextoCpf, 1, 1);
             tableLayoutPanel1.Controls.Add(LabelNome, 0, 0);
             tableLayoutPanel1.Controls.Add(LabelSexo, 0, 4);
-            tableLayoutPanel1.Controls.Add(TextoNome, 1, 0);
             tableLayoutPanel1.Controls.Add(LabelCPF, 0, 1);
             tableLayoutPanel1.Controls.Add(LabelTelefone, 0, 3);
             tableLayoutPanel1.Controls.Add(LabelIdade, 0, 2);
             tableLayoutPanel1.Controls.Add(LabelCheckOut, 0, 6);
             tableLayoutPanel1.Controls.Add(DataCheckOut, 1, 6);
             tableLayoutPanel1.Controls.Add(LabelCheckIn, 0, 5);
-            tableLayoutPanel1.Controls.Add(tableLayoutPanel2, 1, 4);
             tableLayoutPanel1.Controls.Add(TextoPreco, 1, 7);
             tableLayoutPanel1.Controls.Add(tableLayoutPanel3, 1, 8);
             tableLayoutPanel1.Controls.Add(DataCheckIn, 1, 5);
             tableLayoutPanel1.Controls.Add(LabelPagamento, 0, 8);
+            tableLayoutPanel1.Controls.Add(TextoNome, 1, 0);
             tableLayoutPanel1.Location = new Point(23, 12);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 9;
@@ -182,15 +178,16 @@
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 11.1249933F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 11.0591917F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 11.0591917F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel1.Size = new Size(446, 351);
             tableLayoutPanel1.TabIndex = 10;
             // 
-            // NumeroIdade
+            // TextoIdade
             // 
-            NumeroIdade.Location = new Point(136, 81);
-            NumeroIdade.Name = "NumeroIdade";
-            NumeroIdade.Size = new Size(251, 23);
-            NumeroIdade.TabIndex = 13;
+            TextoIdade.Location = new Point(136, 81);
+            TextoIdade.Name = "TextoIdade";
+            TextoIdade.Size = new Size(251, 23);
+            TextoIdade.TabIndex = 13;
             // 
             // TextoTelefone
             // 
@@ -212,42 +209,6 @@
             DataCheckOut.Name = "DataCheckOut";
             DataCheckOut.Size = new Size(251, 23);
             DataCheckOut.TabIndex = 14;
-            // 
-            // tableLayoutPanel2
-            // 
-            tableLayoutPanel2.ColumnCount = 2;
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tableLayoutPanel2.Controls.Add(BotaoFeminino, 1, 0);
-            tableLayoutPanel2.Controls.Add(BotaoMasculino, 0, 0);
-            tableLayoutPanel2.Location = new Point(136, 159);
-            tableLayoutPanel2.Name = "tableLayoutPanel2";
-            tableLayoutPanel2.RowCount = 1;
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel2.Size = new Size(251, 29);
-            tableLayoutPanel2.TabIndex = 15;
-            // 
-            // BotaoFeminino
-            // 
-            BotaoFeminino.AutoSize = true;
-            BotaoFeminino.Location = new Point(128, 3);
-            BotaoFeminino.Name = "BotaoFeminino";
-            BotaoFeminino.Size = new Size(75, 19);
-            BotaoFeminino.TabIndex = 14;
-            BotaoFeminino.TabStop = true;
-            BotaoFeminino.Text = "Feminino";
-            BotaoFeminino.UseVisualStyleBackColor = true;
-            // 
-            // BotaoMasculino
-            // 
-            BotaoMasculino.AutoSize = true;
-            BotaoMasculino.Location = new Point(3, 3);
-            BotaoMasculino.Name = "BotaoMasculino";
-            BotaoMasculino.Size = new Size(80, 19);
-            BotaoMasculino.TabIndex = 13;
-            BotaoMasculino.TabStop = true;
-            BotaoMasculino.Text = "Masculino";
-            BotaoMasculino.UseVisualStyleBackColor = true;
             // 
             // TextoPreco
             // 
@@ -301,7 +262,7 @@
             // 
             // BotaoAdicionarCadastro
             // 
-            BotaoAdicionarCadastro.Location = new Point(12, 389);
+            BotaoAdicionarCadastro.Location = new Point(668, 398);
             BotaoAdicionarCadastro.Name = "BotaoAdicionarCadastro";
             BotaoAdicionarCadastro.Size = new Size(120, 40);
             BotaoAdicionarCadastro.TabIndex = 11;
@@ -311,12 +272,20 @@
             // 
             // BotaoCancelarCadastro
             // 
-            BotaoCancelarCadastro.Location = new Point(668, 389);
+            BotaoCancelarCadastro.Location = new Point(12, 398);
             BotaoCancelarCadastro.Name = "BotaoCancelarCadastro";
             BotaoCancelarCadastro.Size = new Size(120, 40);
             BotaoCancelarCadastro.TabIndex = 12;
             BotaoCancelarCadastro.Text = "Cancelar";
             BotaoCancelarCadastro.UseVisualStyleBackColor = true;
+            // 
+            // CaixaSexo
+            // 
+            CaixaSexo.FormattingEnabled = true;
+            CaixaSexo.Location = new Point(136, 159);
+            CaixaSexo.Name = "CaixaSexo";
+            CaixaSexo.Size = new Size(251, 23);
+            CaixaSexo.TabIndex = 13;
             // 
             // CadastroCliente
             // 
@@ -330,9 +299,6 @@
             Text = "CadastroCliente";
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)NumeroIdade).EndInit();
-            tableLayoutPanel2.ResumeLayout(false);
-            tableLayoutPanel2.PerformLayout();
             tableLayoutPanel3.ResumeLayout(false);
             tableLayoutPanel3.PerformLayout();
             ResumeLayout(false);
@@ -354,16 +320,14 @@
         private TextBox TextoTelefone;
         private TextBox TextoCpf;
         private DateTimePicker DataCheckIn;
-        private RadioButton BotaoMasculino;
         private DateTimePicker DataCheckOut;
-        private TableLayoutPanel tableLayoutPanel2;
-        private RadioButton BotaoFeminino;
         private TextBox TextoPreco;
         private TableLayoutPanel tableLayoutPanel3;
         private RadioButton BotaoFalse;
         private RadioButton BotaoTrue;
         private Button BotaoAdicionarCadastro;
         private Button BotaoCancelarCadastro;
-        private NumericUpDown NumeroIdade;
+        private TextBox TextoIdade;
+        private ComboBox CaixaSexo;
     }
 }

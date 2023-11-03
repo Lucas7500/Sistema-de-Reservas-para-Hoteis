@@ -17,26 +17,24 @@ namespace Sistema_de_Reservas_para_Hoteis
         {
             InitializeComponent();
         }
+        
+        Reserva reserva = new Reserva();
 
         private void BotaoAdicionarCadastro_Click(object sender, EventArgs e)
         {
-            
-            var reservas = new List<Reserva>()
-            {
-                new Reserva
-                {
-                    Id = 1,
-                    Cpf = "123456789-00",
-                    Nome = "Joao Da Silva",
-                    Idade = 23,
-                    Telefone = "(00)91234-5678",
-                    Sexo = GeneroEnum.Feminino,
-                    CheckIn = new DateTime(2023, 10, 12),
-                    CheckOut = new DateTime(2023, 10, 24),
-                    PrecoDaEstadia = 800.00M,
-                    PagamentoEfetuado = true
-                }
-            };
+
+
+            reserva.Id++;
+            reserva.Nome = TextoNome.Text;
+            reserva.Cpf = TextoCpf.Text;
+            reserva.Idade = Convert.ToInt32(TextoIdade.Text);
+            reserva.Telefone = TextoTelefone.Text;
+            // reserva.Sexo =;
+            reserva.CheckIn = Convert.ToDateTime(DataCheckIn.Value.Date);
+            reserva.PrecoDaEstadia = Decimal.Parse(TextoPreco.Text);
+            reserva.PagamentoEfetuado = BotaoTrue.Checked ? true : false;
+            JanelaPrincipal.Lista(reserva);
+            this.Close();
         }
     }
 }

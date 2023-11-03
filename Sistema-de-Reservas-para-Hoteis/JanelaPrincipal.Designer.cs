@@ -92,6 +92,6 @@
         private Button BotaoAdicionar;
         private Button BotaoEditar;
         private Button BotaoDeletar;
-        private DataGridView TelaDaLista;
+        private static DataGridView TelaDaLista;
     }
 }

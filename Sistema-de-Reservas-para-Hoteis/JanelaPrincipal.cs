@@ -12,32 +12,18 @@ namespace Sistema_de_Reservas_para_Hoteis
             //PreencherGrid();
         }
 
-        private static List<Reserva> Lista()
-        {
-            var reservas = new List<Reserva>()
-            {
-                new Reserva
-                {
-                    Id = 1,
-                    Cpf = "123456789-00",
-                    Nome = "Joao Da Silva",
-                    Idade = 23,
-                    Telefone = "(00)91234-5678",
-                    Sexo = GeneroEnum.Feminino,
-                    CheckIn = new DateTime(2023, 10, 12),
-                    CheckOut = new DateTime(2023, 10, 24),
-                    PrecoDaEstadia = 800.00M,
-                    PagamentoEfetuado = true
-                }
-            };
+        static List<Reserva> reservas = new List<Reserva>();
 
-            return reservas;
+        public static void Lista(Reserva reserva)
+        {
+            JanelaPrincipal.reservas.Add(reserva);
+            TelaDaLista.DataSource = reservas; // Relacionado a Pilha
         }
 
-        private void PreencherGrid()
-        {
-            TelaDaLista.DataSource = Lista();
-        }
+        //private void PreencherGrid()
+        //{
+        //    TelaDaLista.DataSource = Lista();
+        //}
 
         private void BotaoAdicionar_Click(object sender, EventArgs e)
         {
