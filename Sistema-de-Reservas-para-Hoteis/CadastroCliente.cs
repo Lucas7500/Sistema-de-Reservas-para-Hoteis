@@ -23,8 +23,6 @@ namespace Sistema_de_Reservas_para_Hoteis
 
         private void BotaoAdicionarCadastro_Click(object sender, EventArgs e)
         {
-
-
             reserva.Id++;
             reserva.Nome = TextoNome.Text;
             reserva.Cpf = TextoCpf.Text;
@@ -34,7 +32,7 @@ namespace Sistema_de_Reservas_para_Hoteis
             reserva.CheckIn = Convert.ToDateTime(DataCheckIn.Value.Date);
             reserva.CheckOut = Convert.ToDateTime(DataCheckOut.Value.Date);
             reserva.PrecoDaEstadia = Decimal.Parse(TextoPreco.Text);
-            reserva.PagamentoEfetuado = BotaoTrue.Checked ? true : false;
+            reserva.PagamentoEfetuado = BotaoTrue.Checked;
             JanelaPrincipal.Lista(reserva);
             this.Close();
         }
