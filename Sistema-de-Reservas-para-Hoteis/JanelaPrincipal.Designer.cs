@@ -37,7 +37,7 @@
             // 
             // BotaoAdicionar
             // 
-            BotaoAdicionar.Location = new Point(415, 404);
+            BotaoAdicionar.Location = new Point(418, 404);
             BotaoAdicionar.Name = "BotaoAdicionar";
             BotaoAdicionar.Size = new Size(110, 35);
             BotaoAdicionar.TabIndex = 1;
@@ -47,7 +47,7 @@
             // 
             // BotaoEditar
             // 
-            BotaoEditar.Location = new Point(540, 404);
+            BotaoEditar.Location = new Point(544, 404);
             BotaoEditar.Name = "BotaoEditar";
             BotaoEditar.Size = new Size(110, 35);
             BotaoEditar.TabIndex = 2;
@@ -56,7 +56,7 @@
             // 
             // BotaoDeletar
             // 
-            BotaoDeletar.Location = new Point(665, 404);
+            BotaoDeletar.Location = new Point(669, 404);
             BotaoDeletar.Name = "BotaoDeletar";
             BotaoDeletar.Size = new Size(110, 35);
             BotaoDeletar.TabIndex = 3;
@@ -71,7 +71,7 @@
             TelaDaLista.Name = "TelaDaLista";
             TelaDaLista.ReadOnly = true;
             TelaDaLista.RowTemplate.Height = 25;
-            TelaDaLista.Size = new Size(763, 380);
+            TelaDaLista.Size = new Size(767, 380);
             TelaDaLista.TabIndex = 4;
             // 
             // JanelaPrincipal

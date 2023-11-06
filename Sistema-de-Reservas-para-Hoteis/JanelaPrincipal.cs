@@ -11,7 +11,7 @@ namespace Sistema_de_Reservas_para_Hoteis
             InitializeComponent();
         }
 
-        static readonly List<Reserva> reservas = new();
+        static List<Reserva> reservas = new();
 
         static int id = 0;
 

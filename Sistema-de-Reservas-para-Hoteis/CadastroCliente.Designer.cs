@@ -49,6 +49,7 @@
             TextoCPF = new MaskedTextBox();
             TextoTelefone = new MaskedTextBox();
             TextoIdade = new TextBox();
+            SinalDoReal = new TextBox();
             SuspendLayout();
             // 
             // LabelNome
@@ -163,9 +164,9 @@
             // 
             // TextoPreco
             // 
-            TextoPreco.Location = new Point(84, 164);
+            TextoPreco.Location = new Point(102, 164);
             TextoPreco.Name = "TextoPreco";
-            TextoPreco.Size = new Size(84, 23);
+            TextoPreco.Size = new Size(66, 23);
             TextoPreco.TabIndex = 13;
             // 
             // DataCheckOut
@@ -200,7 +201,7 @@
             BotaoAdicionarCadastro.TabIndex = 11;
             BotaoAdicionarCadastro.Text = "Adicionar";
             BotaoAdicionarCadastro.UseVisualStyleBackColor = true;
-            BotaoAdicionarCadastro.Click += AoClicarAdicionarCadastroNaTelaPrincipal;
+            BotaoAdicionarCadastro.Click += AoClicarEmAdicionar;
             // 
             // BotaoCancelarCadastro
             // 
@@ -210,7 +211,7 @@
             BotaoCancelarCadastro.TabIndex = 12;
             BotaoCancelarCadastro.Text = "Cancelar";
             BotaoCancelarCadastro.UseVisualStyleBackColor = true;
-            BotaoCancelarCadastro.Click += BotaoCancelarCadastro_Click;
+            BotaoCancelarCadastro.Click += AoClicarCancelarCadastro;
             // 
             // TextoCPF
             // 
@@ -237,11 +238,23 @@
             TextoIdade.Size = new Size(84, 23);
             TextoIdade.TabIndex = 16;
             // 
+            // SinalDoReal
+            // 
+            SinalDoReal.BackColor = Color.Gainsboro;
+            SinalDoReal.Location = new Point(84, 164);
+            SinalDoReal.Name = "SinalDoReal";
+            SinalDoReal.PlaceholderText = "R$";
+            SinalDoReal.ReadOnly = true;
+            SinalDoReal.Size = new Size(20, 23);
+            SinalDoReal.TabIndex = 17;
+            SinalDoReal.Text = "R$";
+            // 
             // CadastroCliente
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(369, 266);
+            Controls.Add(SinalDoReal);
             Controls.Add(TextoIdade);
             Controls.Add(BotaoFalse);
             Controls.Add(CaixaSexo);
@@ -295,5 +308,6 @@
         private MaskedTextBox TextoTelefone;
         private MaskedTextBox TextoCPF;
         private TextBox TextoIdade;
+        private TextBox SinalDoReal;
     }
 }

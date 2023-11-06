@@ -27,21 +27,21 @@ namespace Sistema_de_Reservas_para_Hoteis
             reserva.Cpf = TextoCPF.Text;
             reserva.Idade = Convert.ToInt32(TextoIdade.Text);
             reserva.Telefone = TextoTelefone.Text;
-            reserva.Sexo = (GeneroEnum) CaixaSexo.SelectedItem;
+            reserva.Sexo = (GeneroEnum)CaixaSexo.SelectedItem;
             reserva.CheckIn = Convert.ToDateTime(DataCheckIn.Value.Date);
             reserva.CheckOut = Convert.ToDateTime(DataCheckOut.Value.Date);
             reserva.PrecoEstadia = Decimal.Parse(TextoPreco.Text);
             reserva.FoiPago = BotaoTrue.Checked;
-            JanelaPrincipal.AdicionarReservaNaLista(reserva);
         }
 
-        private void AoClicarAdicionarCadastroNaTelaPrincipal(object sender, EventArgs e)
+        private void AoClicarEmAdicionar(object sender, EventArgs e)
         {
             LerDadosDaReserva();
+            JanelaPrincipal.AdicionarReservaNaLista(reserva);
             this.Close();
         }
 
-        private void BotaoCancelarCadastro_Click(object sender, EventArgs e)
+        private void AoClicarCancelarCadastro(object sender, EventArgs e)
         {
             this.Close();
         }
