@@ -37,28 +37,28 @@
             // 
             // BotaoAdicionar
             // 
-            BotaoAdicionar.Location = new Point(508, 408);
+            BotaoAdicionar.Location = new Point(418, 404);
             BotaoAdicionar.Name = "BotaoAdicionar";
-            BotaoAdicionar.Size = new Size(100, 30);
+            BotaoAdicionar.Size = new Size(110, 35);
             BotaoAdicionar.TabIndex = 1;
             BotaoAdicionar.Text = "Adicionar";
             BotaoAdicionar.UseVisualStyleBackColor = true;
-            BotaoAdicionar.Click += button1_Click;
+            BotaoAdicionar.Click += AoClicarAbrirTelaDeCadastro;
             // 
             // BotaoEditar
             // 
-            BotaoEditar.Location = new Point(634, 408);
+            BotaoEditar.Location = new Point(544, 404);
             BotaoEditar.Name = "BotaoEditar";
-            BotaoEditar.Size = new Size(100, 30);
+            BotaoEditar.Size = new Size(110, 35);
             BotaoEditar.TabIndex = 2;
             BotaoEditar.Text = "Editar";
             BotaoEditar.UseVisualStyleBackColor = true;
             // 
             // BotaoDeletar
             // 
-            BotaoDeletar.Location = new Point(752, 408);
+            BotaoDeletar.Location = new Point(669, 404);
             BotaoDeletar.Name = "BotaoDeletar";
-            BotaoDeletar.Size = new Size(100, 30);
+            BotaoDeletar.Size = new Size(110, 35);
             BotaoDeletar.TabIndex = 3;
             BotaoDeletar.Text = "Deletar";
             BotaoDeletar.UseVisualStyleBackColor = true;
@@ -69,21 +69,25 @@
             TelaDaLista.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             TelaDaLista.Location = new Point(12, 12);
             TelaDaLista.Name = "TelaDaLista";
+            TelaDaLista.ReadOnly = true;
             TelaDaLista.RowTemplate.Height = 25;
-            TelaDaLista.Size = new Size(840, 380);
+            TelaDaLista.Size = new Size(767, 380);
             TelaDaLista.TabIndex = 4;
             // 
             // JanelaPrincipal
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(863, 450);
+            ClientSize = new Size(791, 451);
             Controls.Add(TelaDaLista);
             Controls.Add(BotaoDeletar);
             Controls.Add(BotaoEditar);
             Controls.Add(BotaoAdicionar);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            MaximizeBox = false;
+            MinimizeBox = false;
             Name = "JanelaPrincipal";
-            Text = "Form1";
+            Text = "Reserva de Hotel";
             ((System.ComponentModel.ISupportInitialize)TelaDaLista).EndInit();
             ResumeLayout(false);
         }
@@ -92,6 +96,6 @@
         private Button BotaoAdicionar;
         private Button BotaoEditar;
         private Button BotaoDeletar;
-        private DataGridView TelaDaLista;
+        private static DataGridView TelaDaLista;
     }
 }
