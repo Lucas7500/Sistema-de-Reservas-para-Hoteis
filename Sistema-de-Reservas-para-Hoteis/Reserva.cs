@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Sistema_de_Reservas_para_Hoteis.Enum;
+using Sistema_de_Reservas_para_Hoteis.Enums;
 
 namespace Sistema_de_Reservas_para_Hoteis
 {
     public class Reserva
     {
-        public int Id { get; set; } = -1;
+        public int Id { get; set; }
         public string Cpf { get; set; } = string.Empty;
         public string Nome { get; set; } = string.Empty;
         public int Idade { get; set; }

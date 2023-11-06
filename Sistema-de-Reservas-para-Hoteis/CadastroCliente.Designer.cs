@@ -39,6 +39,7 @@
             LabelPagamento = new Label();
             TextoNome = new TextBox();
             tableLayoutPanel1 = new TableLayoutPanel();
+            CaixaSexo = new ComboBox();
             TextoIdade = new TextBox();
             TextoTelefone = new TextBox();
             TextoCpf = new TextBox();
@@ -50,7 +51,6 @@
             DataCheckIn = new DateTimePicker();
             BotaoAdicionarCadastro = new Button();
             BotaoCancelarCadastro = new Button();
-            CaixaSexo = new ComboBox();
             tableLayoutPanel1.SuspendLayout();
             tableLayoutPanel3.SuspendLayout();
             SuspendLayout();
@@ -182,6 +182,14 @@
             tableLayoutPanel1.Size = new Size(446, 351);
             tableLayoutPanel1.TabIndex = 10;
             // 
+            // CaixaSexo
+            // 
+            CaixaSexo.FormattingEnabled = true;
+            CaixaSexo.Location = new Point(136, 159);
+            CaixaSexo.Name = "CaixaSexo";
+            CaixaSexo.Size = new Size(251, 23);
+            CaixaSexo.TabIndex = 13;
+            // 
             // TextoIdade
             // 
             TextoIdade.Location = new Point(136, 81);
@@ -278,14 +286,7 @@
             BotaoCancelarCadastro.TabIndex = 12;
             BotaoCancelarCadastro.Text = "Cancelar";
             BotaoCancelarCadastro.UseVisualStyleBackColor = true;
-            // 
-            // CaixaSexo
-            // 
-            CaixaSexo.FormattingEnabled = true;
-            CaixaSexo.Location = new Point(136, 159);
-            CaixaSexo.Name = "CaixaSexo";
-            CaixaSexo.Size = new Size(251, 23);
-            CaixaSexo.TabIndex = 13;
+            BotaoCancelarCadastro.Click += BotaoCancelarCadastro_Click;
             // 
             // CadastroCliente
             // 

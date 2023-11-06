@@ -37,9 +37,9 @@
             // 
             // BotaoAdicionar
             // 
-            BotaoAdicionar.Location = new Point(508, 408);
+            BotaoAdicionar.Location = new Point(442, 403);
             BotaoAdicionar.Name = "BotaoAdicionar";
-            BotaoAdicionar.Size = new Size(100, 30);
+            BotaoAdicionar.Size = new Size(110, 35);
             BotaoAdicionar.TabIndex = 1;
             BotaoAdicionar.Text = "Adicionar";
             BotaoAdicionar.UseVisualStyleBackColor = true;
@@ -47,18 +47,18 @@
             // 
             // BotaoEditar
             // 
-            BotaoEditar.Location = new Point(630, 408);
+            BotaoEditar.Location = new Point(568, 403);
             BotaoEditar.Name = "BotaoEditar";
-            BotaoEditar.Size = new Size(100, 30);
+            BotaoEditar.Size = new Size(110, 35);
             BotaoEditar.TabIndex = 2;
             BotaoEditar.Text = "Editar";
             BotaoEditar.UseVisualStyleBackColor = true;
             // 
             // BotaoDeletar
             // 
-            BotaoDeletar.Location = new Point(752, 408);
+            BotaoDeletar.Location = new Point(693, 403);
             BotaoDeletar.Name = "BotaoDeletar";
-            BotaoDeletar.Size = new Size(100, 30);
+            BotaoDeletar.Size = new Size(110, 35);
             BotaoDeletar.TabIndex = 3;
             BotaoDeletar.Text = "Deletar";
             BotaoDeletar.UseVisualStyleBackColor = true;
@@ -69,15 +69,16 @@
             TelaDaLista.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             TelaDaLista.Location = new Point(12, 12);
             TelaDaLista.Name = "TelaDaLista";
+            TelaDaLista.ReadOnly = true;
             TelaDaLista.RowTemplate.Height = 25;
-            TelaDaLista.Size = new Size(840, 380);
+            TelaDaLista.Size = new Size(791, 380);
             TelaDaLista.TabIndex = 4;
             // 
             // JanelaPrincipal
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(863, 450);
+            ClientSize = new Size(835, 450);
             Controls.Add(TelaDaLista);
             Controls.Add(BotaoDeletar);
             Controls.Add(BotaoEditar);

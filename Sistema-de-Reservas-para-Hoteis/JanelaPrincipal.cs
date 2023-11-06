@@ -1,5 +1,5 @@
 using System.Globalization;
-using Sistema_de_Reservas_para_Hoteis.Enum;
+using Sistema_de_Reservas_para_Hoteis.Enums;
 
 namespace Sistema_de_Reservas_para_Hoteis
 {
@@ -9,21 +9,20 @@ namespace Sistema_de_Reservas_para_Hoteis
         {
             CultureInfo culture = CultureInfo.InvariantCulture;
             InitializeComponent();
-            //PreencherGrid();
         }
 
         static List<Reserva> reservas = new List<Reserva>();
 
+        static int id = 0;
+
         public static void Lista(Reserva reserva)
         {
+            TelaDaLista.DataSource = null;
+            id++;
+            reserva.Id = id;
             JanelaPrincipal.reservas.Add(reserva);
-            TelaDaLista.DataSource = reservas; // Relacionado a Pilha
+            TelaDaLista.DataSource = reservas;
         }
-
-        //private void PreencherGrid()
-        //{
-        //    TelaDaLista.DataSource = Lista();
-        //}
 
         private void BotaoAdicionar_Click(object sender, EventArgs e)
         {
