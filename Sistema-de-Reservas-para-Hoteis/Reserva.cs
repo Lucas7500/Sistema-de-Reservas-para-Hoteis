@@ -17,7 +17,7 @@ namespace Sistema_de_Reservas_para_Hoteis
         public GeneroEnum Sexo { get; set; }
         public DateTime CheckIn { get; set; }
         public DateTime CheckOut { get; set; }
-        public decimal PrecoDaEstadia { get; set; }
-        public bool PagamentoEfetuado { get; set; } = true;
+        public decimal PrecoEstadia { get; set; }
+        public bool FoiPago { get; set; } = true;
     }
 }

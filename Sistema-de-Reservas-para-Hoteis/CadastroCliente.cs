@@ -21,19 +21,23 @@ namespace Sistema_de_Reservas_para_Hoteis
 
         Reserva reserva = new Reserva();
 
-        private void BotaoAdicionarCadastro_Click(object sender, EventArgs e)
+        private void LerDadosDaReserva()
         {
-            reserva.Id++;
             reserva.Nome = TextoNome.Text;
-            reserva.Cpf = TextoCpf.Text;
+            reserva.Cpf = TextoCPF.Text;
             reserva.Idade = Convert.ToInt32(TextoIdade.Text);
             reserva.Telefone = TextoTelefone.Text;
             reserva.Sexo = (GeneroEnum) CaixaSexo.SelectedItem;
             reserva.CheckIn = Convert.ToDateTime(DataCheckIn.Value.Date);
             reserva.CheckOut = Convert.ToDateTime(DataCheckOut.Value.Date);
-            reserva.PrecoDaEstadia = Decimal.Parse(TextoPreco.Text);
-            reserva.PagamentoEfetuado = BotaoTrue.Checked;
-            JanelaPrincipal.Lista(reserva);
+            reserva.PrecoEstadia = Decimal.Parse(TextoPreco.Text);
+            reserva.FoiPago = BotaoTrue.Checked;
+            JanelaPrincipal.AdicionarReservaNaLista(reserva);
+        }
+
+        private void AoClicarAdicionarCadastroNaTelaPrincipal(object sender, EventArgs e)
+        {
+            LerDadosDaReserva();
             this.Close();
         }
 

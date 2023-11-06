@@ -37,17 +37,17 @@
             // 
             // BotaoAdicionar
             // 
-            BotaoAdicionar.Location = new Point(442, 403);
+            BotaoAdicionar.Location = new Point(415, 404);
             BotaoAdicionar.Name = "BotaoAdicionar";
             BotaoAdicionar.Size = new Size(110, 35);
             BotaoAdicionar.TabIndex = 1;
             BotaoAdicionar.Text = "Adicionar";
             BotaoAdicionar.UseVisualStyleBackColor = true;
-            BotaoAdicionar.Click += BotaoAdicionar_Click;
+            BotaoAdicionar.Click += AoClicarAbrirTelaDeCadastro;
             // 
             // BotaoEditar
             // 
-            BotaoEditar.Location = new Point(568, 403);
+            BotaoEditar.Location = new Point(540, 404);
             BotaoEditar.Name = "BotaoEditar";
             BotaoEditar.Size = new Size(110, 35);
             BotaoEditar.TabIndex = 2;
@@ -56,7 +56,7 @@
             // 
             // BotaoDeletar
             // 
-            BotaoDeletar.Location = new Point(693, 403);
+            BotaoDeletar.Location = new Point(665, 404);
             BotaoDeletar.Name = "BotaoDeletar";
             BotaoDeletar.Size = new Size(110, 35);
             BotaoDeletar.TabIndex = 3;
@@ -71,20 +71,23 @@
             TelaDaLista.Name = "TelaDaLista";
             TelaDaLista.ReadOnly = true;
             TelaDaLista.RowTemplate.Height = 25;
-            TelaDaLista.Size = new Size(791, 380);
+            TelaDaLista.Size = new Size(763, 380);
             TelaDaLista.TabIndex = 4;
             // 
             // JanelaPrincipal
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(835, 450);
+            ClientSize = new Size(791, 451);
             Controls.Add(TelaDaLista);
             Controls.Add(BotaoDeletar);
             Controls.Add(BotaoEditar);
             Controls.Add(BotaoAdicionar);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            MaximizeBox = false;
+            MinimizeBox = false;
             Name = "JanelaPrincipal";
-            Text = "Form1";
+            Text = "Reserva de Hotel";
             ((System.ComponentModel.ISupportInitialize)TelaDaLista).EndInit();
             ResumeLayout(false);
         }

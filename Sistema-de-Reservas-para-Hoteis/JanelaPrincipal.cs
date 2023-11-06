@@ -15,7 +15,7 @@ namespace Sistema_de_Reservas_para_Hoteis
 
         static int id = 0;
 
-        public static void Lista(Reserva reserva)
+        public static void AdicionarReservaNaLista(Reserva reserva)
         {
             TelaDaLista.DataSource = null;
             id++;
@@ -24,7 +24,7 @@ namespace Sistema_de_Reservas_para_Hoteis
             TelaDaLista.DataSource = reservas;
         }
 
-        private void BotaoAdicionar_Click(object sender, EventArgs e)
+        private void AoClicarAbrirTelaDeCadastro(object sender, EventArgs e)
         {
             CadastroCliente frm2 = new CadastroCliente();
             frm2.Show();
