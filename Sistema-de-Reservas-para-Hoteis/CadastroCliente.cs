@@ -21,24 +21,57 @@ namespace Sistema_de_Reservas_para_Hoteis
 
         Reserva reserva = new Reserva();
 
-        private void LerDadosDaReserva()
+        private bool LerDadosDaReserva()
         {
-            reserva.Nome = TextoNome.Text;
-            reserva.Cpf = TextoCPF.Text;
-            reserva.Idade = Convert.ToInt32(TextoIdade.Text);
-            reserva.Telefone = TextoTelefone.Text;
+            try
+            {
+                if (Validacoes.ValidarNome(TextoNome.Text))
+                {
+                    reserva.Nome = TextoNome.Text;
+                }
+                if (Validacoes.ValidarCPF(TextoCPF))
+                {
+                    reserva.Cpf = TextoCPF.Text;
+                }
+                if (Validacoes.ValidarIdade(TextoIdade.Text))
+                {
+                    reserva.Idade = Convert.ToInt32(TextoIdade.Text);
+                }
+                if (Validacoes.ValidarTelefone(TextoTelefone))
+                {
+                    reserva.Telefone = TextoTelefone.Text;
+                }
+                if(Validacoes.ValidarDatas(DataCheckIn, DataCheckOut))
+                {
+                    reserva.CheckIn = Convert.ToDateTime(DataCheckIn.Value.Date);
+                    reserva.CheckOut = Convert.ToDateTime(DataCheckOut.Value.Date);
+                }
+                if (Validacoes.ValidarPreco(TextoPreco.Text))
+                {
+                    reserva.PrecoEstadia = Decimal.Parse(TextoPreco.Text);
+                }
+                if (Validacoes.ValidarPagamento(BotaoTrue, BotaoFalse))
+                {
+                    reserva.FoiPago = BotaoTrue.Checked;
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+                return false;
+            }
+
             reserva.Sexo = (GeneroEnum)CaixaSexo.SelectedItem;
-            reserva.CheckIn = Convert.ToDateTime(DataCheckIn.Value.Date);
-            reserva.CheckOut = Convert.ToDateTime(DataCheckOut.Value.Date);
-            reserva.PrecoEstadia = Decimal.Parse(TextoPreco.Text);
-            reserva.FoiPago = BotaoTrue.Checked;
+            return true;
         }
 
         private void AoClicarEmAdicionar(object sender, EventArgs e)
         {
-            LerDadosDaReserva();
-            JanelaPrincipal.AdicionarReservaNaLista(reserva);
-            this.Close();
+            if (LerDadosDaReserva())
+            {
+                JanelaPrincipal.AdicionarReservaNaLista(reserva);
+                this.Close();
+            }
         }
 
         private void AoClicarCancelarCadastro(object sender, EventArgs e)
