@@ -35,7 +35,7 @@ namespace Sistema_de_Reservas_para_Hoteis
                 }
                 if (Validacoes.ValidarIdade(TextoIdade.Text))
                 {
-                    reserva.Idade = Convert.ToInt32(TextoIdade.Text);
+                    reserva.Idade = int.Parse(TextoIdade.Text);
                 }
                 if (Validacoes.ValidarTelefone(TextoTelefone))
                 {

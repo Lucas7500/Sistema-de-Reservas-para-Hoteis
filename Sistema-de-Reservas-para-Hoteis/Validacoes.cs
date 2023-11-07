@@ -34,7 +34,11 @@ namespace Sistema_de_Reservas_para_Hoteis
 
         public static bool ValidarIdade(string idade)
         {
-            if (Convert.ToInt32(idade) < 18)
+            if (String.IsNullOrWhiteSpace(idade))
+            {
+                throw new Exception(message: MensagemExcessao.IdadeNaoPreenchida);
+            }
+            else if (int.Parse(idade) < 18)
             {
                 throw new Exception(message: MensagemExcessao.MenorDeIdade);
             }
@@ -57,14 +61,14 @@ namespace Sistema_de_Reservas_para_Hoteis
             DateTime DataCheckIn = Convert.ToDateTime(CheckIn.Value.Date);
             DateTime DataCheckOut = Convert.ToDateTime(CheckOut.Value.Date);
 
-            TimeSpan differenceCheckIn = DataCheckIn - DateTime.Now;
-            TimeSpan differenceCheckOut = DataCheckOut - DateTime.Now;
-            
-            if (differenceCheckIn.TotalDays < 0)
+            int differenceCheckIn = DataCheckIn.Day - DateTime.Now.Day;
+            int differenceCheckOut = DataCheckOut.Day - DataCheckIn.Day;
+
+            if (differenceCheckIn < 0)
             {
                 throw new Exception(message: MensagemExcessao.CheckInEmDatasPassadas);
             }
-            else if (differenceCheckOut.TotalDays < 0)
+            else if (differenceCheckOut < 0)
             {
                 throw new Exception(message: MensagemExcessao.CheckOutEmDatasPassadas);
             }
@@ -75,13 +79,27 @@ namespace Sistema_de_Reservas_para_Hoteis
 
         public static bool ValidarPreco(string preco)
         {
-            if (Decimal.Parse(preco) <= 0)
+            if (String.IsNullOrWhiteSpace(preco))
             {
-                throw new Exception(message: MensagemExcessao.PrecoNuloOuNegativo);
+                throw new Exception(message: MensagemExcessao.PrecoNaoPreenchido);
             }
-            else if (Decimal.Parse(preco) == Convert.ToInt32(preco))
+            
+            if(!preco.Contains(','))
             {
-                throw new Exception(message: MensagemExcessao.PrecoInteiro);
+                throw new Exception(message: MensagemExcessao.PrecoNaoEDecimal);
+            }
+            else
+            {
+                string[] strings = preco.Split(',');
+
+                if (strings.Length !=  2)
+                {
+                    throw new Exception(message: MensagemExcessao.PrecoNaoEDecimal);
+                }
+                else if (strings[1].Length != 2)
+                {
+                    throw new Exception(message: MensagemExcessao.PrecoNaoEDecimal);
+                }
             }
 
             return true;
