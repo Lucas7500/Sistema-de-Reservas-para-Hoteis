@@ -17,6 +17,8 @@ namespace Sistema_de_Reservas_para_Hoteis
         {
             InitializeComponent();
             CaixaSexo.DataSource = Enum.GetValues(typeof(GeneroEnum));
+            DataCheckIn.MinDate = DateTime.Now;
+            DataCheckOut.MinDate = DateTime.Now;
         }
 
         Reserva reserva = new Reserva();
@@ -25,43 +27,54 @@ namespace Sistema_de_Reservas_para_Hoteis
         {
             try
             {
-                if (Validacoes.ValidarNome(TextoNome.Text))
+                reserva.Nome = TextoNome.Text;
+                reserva.Cpf = TextoCPF.Text;
+                reserva.Telefone = TextoTelefone.Text;
+
+                // Pré-Validação da idade
+                if (String.IsNullOrWhiteSpace(TextoIdade.Text))
                 {
-                    reserva.Nome = TextoNome.Text;
+                    Validacoes.ListaExcessoes.Add(MensagemExcessao.IdadeNaoPreenchida);
                 }
-                if (Validacoes.ValidarCPF(TextoCPF))
-                {
-                    reserva.Cpf = TextoCPF.Text;
-                }
-                if (Validacoes.ValidarIdade(TextoIdade.Text))
+                else
                 {
                     reserva.Idade = int.Parse(TextoIdade.Text);
                 }
-                if (Validacoes.ValidarTelefone(TextoTelefone))
+
+                reserva.Sexo = (GeneroEnum)CaixaSexo.SelectedItem;
+                reserva.CheckIn = Convert.ToDateTime(DataCheckIn.Value.Date);
+                reserva.CheckOut = Convert.ToDateTime(DataCheckOut.Value.Date);
+
+                // Pré-Validação do Preço
+                if (String.IsNullOrWhiteSpace(TextoPreco.Text))
                 {
-                    reserva.Telefone = TextoTelefone.Text;
+                    Validacoes.ListaExcessoes.Add(MensagemExcessao.PrecoNaoPreenchido);
                 }
-                if(Validacoes.ValidarDatas(DataCheckIn, DataCheckOut))
-                {
-                    reserva.CheckIn = Convert.ToDateTime(DataCheckIn.Value.Date);
-                    reserva.CheckOut = Convert.ToDateTime(DataCheckOut.Value.Date);
-                }
-                if (Validacoes.ValidarPreco(TextoPreco.Text))
+                else
                 {
                     reserva.PrecoEstadia = Decimal.Parse(TextoPreco.Text);
                 }
-                if (Validacoes.ValidarPagamento(BotaoTrue, BotaoFalse))
+
+                // Validação dos Botões
+                if (!BotaoTrue.Checked && !BotaoFalse.Checked)
                 {
-                    reserva.FoiPago = BotaoTrue.Checked;
+                    Validacoes.ListaExcessoes.Add(MensagemExcessao.PagamentoNaoInformado);
                 }
+                else
+                {
+                    reserva.PagamentoEfetuado = BotaoTrue.Checked;
+                }
+
+                Validacoes.ValidarCampos(reserva);
             }
-            catch (Exception e)
+            catch
             {
-                MessageBox.Show(e.Message);
+                MessageBox.Show(String.Join("\n\n", Validacoes.ListaExcessoes), "Erro no Cadastro" , MessageBoxButtons.OKCancel ,MessageBoxIcon.Error);
+                Validacoes.ListaExcessoes.Clear();
+
                 return false;
             }
 
-            reserva.Sexo = (GeneroEnum)CaixaSexo.SelectedItem;
             return true;
         }
 
@@ -77,6 +90,41 @@ namespace Sistema_de_Reservas_para_Hoteis
         private void AoClicarCancelarCadastro(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void PermitirApenasNumerosNaIdade(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void PermitirApenasLetrasNoNome(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsAsciiLetter(e.KeyChar))
+            {
+                if (e.KeyChar == ' ')
+                {
+                    return;
+                }
+
+                e.Handled = true;
+            }
+        }
+
+        private void PermitirApenasDecimaisNoPrecoDaEstadia(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == ',')
+            {
+                e.Handled = (TextoPreco.Text.Contains(','));
+                return;
+            }
+
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
         }
     }
 }

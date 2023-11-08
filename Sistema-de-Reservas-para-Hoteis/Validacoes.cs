@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,113 +9,80 @@ namespace Sistema_de_Reservas_para_Hoteis
 {
     internal class Validacoes
     {
-        public static bool ValidarNome(string nome)
+        public static List<string> ListaExcessoes = new();
+
+        public static void ValidarCampos(Reserva reserva)
         {
-            if (String.IsNullOrWhiteSpace(nome)) 
-            {
-                throw new Exception(message: MensagemExcessao.NomeNulo);
-            }
-            else if (nome.Length < 3) 
-            {
-                throw new Exception(message: MensagemExcessao.NomePequeno);
-            }
+            // Validar Nome
 
-            return true;
-        }
-
-        public static bool ValidarCPF(MaskedTextBox CPF)
-        {
-            if (!CPF.MaskCompleted)
+            if (String.IsNullOrWhiteSpace(reserva.Nome))
             {
-                throw new Exception(message: MensagemExcessao.CpfNaoPreenchido);
+                ListaExcessoes.Add(MensagemExcessao.NomeNulo);
+            }
+            else if (reserva.Nome.Length < 3)
+            {
+                ListaExcessoes.Add(MensagemExcessao.NomePequeno);
             }
 
-            return true;
-        }
+            // Validar CPF
+            int TamanhoCpf = 14;
 
-        public static bool ValidarIdade(string idade)
-        {
-            if (String.IsNullOrWhiteSpace(idade))
+            if (reserva.Cpf.Length != TamanhoCpf)
             {
-                throw new Exception(message: MensagemExcessao.IdadeNaoPreenchida);
-            }
-            else if (int.Parse(idade) < 18)
-            {
-                throw new Exception(message: MensagemExcessao.MenorDeIdade);
+                ListaExcessoes.Add(MensagemExcessao.CpfNaoPreenchido);
             }
 
-            return true;
-        }
+            // Validar Telefone
+            int TamanhoTelefone = 15;
 
-        public static bool ValidarTelefone(MaskedTextBox telefone)
-        {
-            if (!telefone.MaskCompleted)
+            if (reserva.Telefone.Length != TamanhoTelefone)
             {
-                throw new Exception(message: MensagemExcessao.TelefoneNaoPreenchido);
+                ListaExcessoes.Add(MensagemExcessao.TelefoneNaoPreenchido);
             }
 
-            return true;
-        }
+            // Validar Idade
+            bool MenordeIdade = reserva.Idade < 18 ? true : false;
 
-        public static bool ValidarDatas(DateTimePicker CheckIn, DateTimePicker CheckOut)
-        {
-            DateTime DataCheckIn = Convert.ToDateTime(CheckIn.Value.Date);
-            DateTime DataCheckOut = Convert.ToDateTime(CheckOut.Value.Date);
-
-            int differenceCheckIn = DataCheckIn.Day - DateTime.Now.Day;
-            int differenceCheckOut = DataCheckOut.Day - DataCheckIn.Day;
-
-            if (differenceCheckIn < 0)
+            if (MenordeIdade)
             {
-                throw new Exception(message: MensagemExcessao.CheckInEmDatasPassadas);
-            }
-            else if (differenceCheckOut < 0)
-            {
-                throw new Exception(message: MensagemExcessao.CheckOutEmDatasPassadas);
+                ListaExcessoes.Add(MensagemExcessao.MenorDeIdade);
             }
 
+            // Validar datas
 
-            return true;
-        }
+            bool DataCheckOutAntesDoCheckIn = reserva.CheckOut.Day - reserva.CheckIn.Day < 0 ? true : false;
 
-        public static bool ValidarPreco(string preco)
-        {
-            if (String.IsNullOrWhiteSpace(preco))
+            if (DataCheckOutAntesDoCheckIn)
             {
-                throw new Exception(message: MensagemExcessao.PrecoNaoPreenchido);
+                ListaExcessoes.Add(MensagemExcessao.CheckOutEmDatasPassadas);
             }
-            
-            if(!preco.Contains(','))
+
+            // Validar Preço
+
+            if (!reserva.PrecoEstadia.ToString().Contains(','))
             {
-                throw new Exception(message: MensagemExcessao.PrecoNaoEDecimal);
+                ListaExcessoes.Add(MensagemExcessao.PrecoEmFormatoInvalido);
             }
             else
             {
-                string[] strings = preco.Split(',');
+                string[] Preco = reserva.PrecoEstadia.ToString().Split(',');
+                int IndexCasasDecimais = 1, MaxCasasDecimais = 2;
 
-                if (strings.Length !=  2)
+                if (Preco[IndexCasasDecimais].Length != MaxCasasDecimais)
                 {
-                    throw new Exception(message: MensagemExcessao.PrecoNaoEDecimal);
-                }
-                else if (strings[1].Length != 2)
-                {
-                    throw new Exception(message: MensagemExcessao.PrecoNaoEDecimal);
+                    ListaExcessoes.Add(MensagemExcessao.PrecoEmFormatoInvalido);
                 }
             }
 
-            return true;
-        }
-
-        public static bool ValidarPagamento(RadioButton BotaoTrue, RadioButton BotaoFalse)
-        {
-            if (!BotaoTrue.Checked && !BotaoFalse.Checked)
+            if ((ListaExcessoes == null) || (!ListaExcessoes.Any()))
             {
-                throw new Exception(message: MensagemExcessao.PagamentoNaoInformado);
+                MessageBox.Show("Reserva foi feita com Sucesso!");
             }
-
-            return true;
+            else
+            {
+                throw new Exception();
+            }
         }
-
-
+      
     }
 }
