@@ -22,6 +22,7 @@ namespace Sistema_de_Reservas_para_Hoteis
         }
 
         readonly Reserva reserva = new();
+        public const int codigoDeErro = -1;
 
         private bool LerDadosDaReserva()
         {
@@ -30,11 +31,11 @@ namespace Sistema_de_Reservas_para_Hoteis
                 reserva.Nome = TextoNome.Text;
                 reserva.Cpf = TextoCPF.Text;
                 reserva.Telefone = TextoTelefone.Text;
-                reserva.Idade = String.IsNullOrWhiteSpace(TextoIdade.Text) ? -1 : int.Parse(TextoIdade.Text);
+                reserva.Idade = String.IsNullOrWhiteSpace(TextoIdade.Text) ? codigoDeErro : int.Parse(TextoIdade.Text);
                 reserva.Sexo = (GeneroEnum)CaixaSexo.SelectedItem;
                 reserva.CheckIn = Convert.ToDateTime(DataCheckIn.Value.Date);
                 reserva.CheckOut = Convert.ToDateTime(DataCheckOut.Value.Date);
-                reserva.PrecoEstadia = String.IsNullOrWhiteSpace(TextoPreco.Text) ? -1 : ConverterEmDecimalComVirgula(TextoPreco.Text);
+                reserva.PrecoEstadia = String.IsNullOrWhiteSpace(TextoPreco.Text) ? codigoDeErro : ConverterEmDecimalComVirgula(TextoPreco.Text);
                 reserva.PagamentoEfetuado = !BotaoTrue.Checked && !BotaoFalse.Checked ? null : BotaoTrue.Checked;
 
                 Validacoes.ValidarCampos(reserva);
