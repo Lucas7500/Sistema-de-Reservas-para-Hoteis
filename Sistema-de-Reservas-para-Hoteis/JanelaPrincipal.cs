@@ -26,8 +26,8 @@ namespace Sistema_de_Reservas_para_Hoteis
 
         private void AoClicarAbrirTelaDeCadastro(object sender, EventArgs e)
         {
-            CadastroCliente frm2 = new CadastroCliente();
-            frm2.Show();
+            CadastroCliente TelaCadastro = new CadastroCliente();
+            TelaCadastro.ShowDialog();
         }
     }
 }

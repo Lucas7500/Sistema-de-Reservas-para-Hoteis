@@ -138,7 +138,8 @@
             TextoNome.Location = new Point(84, 19);
             TextoNome.Name = "TextoNome";
             TextoNome.Size = new Size(249, 23);
-            TextoNome.TabIndex = 9;
+            TextoNome.TabIndex = 1;
+            TextoNome.KeyPress += PermitirApenasLetrasNoNome;
             // 
             // BotaoFalse
             // 
@@ -146,7 +147,7 @@
             BotaoFalse.Location = new Point(286, 168);
             BotaoFalse.Name = "BotaoFalse";
             BotaoFalse.Size = new Size(47, 19);
-            BotaoFalse.TabIndex = 15;
+            BotaoFalse.TabIndex = 10;
             BotaoFalse.TabStop = true;
             BotaoFalse.Text = "Não";
             BotaoFalse.UseVisualStyleBackColor = true;
@@ -157,7 +158,7 @@
             BotaoTrue.Location = new Point(235, 167);
             BotaoTrue.Name = "BotaoTrue";
             BotaoTrue.Size = new Size(45, 19);
-            BotaoTrue.TabIndex = 14;
+            BotaoTrue.TabIndex = 9;
             BotaoTrue.TabStop = true;
             BotaoTrue.Text = "Sim";
             BotaoTrue.UseVisualStyleBackColor = true;
@@ -167,7 +168,8 @@
             TextoPreco.Location = new Point(102, 164);
             TextoPreco.Name = "TextoPreco";
             TextoPreco.Size = new Size(66, 23);
-            TextoPreco.TabIndex = 13;
+            TextoPreco.TabIndex = 8;
+            TextoPreco.KeyPress += PermitirApenasDecimaisNoPrecoDaEstadia;
             // 
             // DataCheckOut
             // 
@@ -175,7 +177,7 @@
             DataCheckOut.Location = new Point(243, 124);
             DataCheckOut.Name = "DataCheckOut";
             DataCheckOut.Size = new Size(90, 23);
-            DataCheckOut.TabIndex = 14;
+            DataCheckOut.TabIndex = 7;
             // 
             // DataCheckIn
             // 
@@ -183,7 +185,7 @@
             DataCheckIn.Location = new Point(84, 124);
             DataCheckIn.Name = "DataCheckIn";
             DataCheckIn.Size = new Size(84, 23);
-            DataCheckIn.TabIndex = 13;
+            DataCheckIn.TabIndex = 6;
             // 
             // CaixaSexo
             // 
@@ -191,11 +193,11 @@
             CaixaSexo.Location = new Point(233, 90);
             CaixaSexo.Name = "CaixaSexo";
             CaixaSexo.Size = new Size(100, 23);
-            CaixaSexo.TabIndex = 13;
+            CaixaSexo.TabIndex = 5;
             // 
             // BotaoAdicionarCadastro
             // 
-            BotaoAdicionarCadastro.Location = new Point(267, 224);
+            BotaoAdicionarCadastro.Location = new Point(12, 224);
             BotaoAdicionarCadastro.Name = "BotaoAdicionarCadastro";
             BotaoAdicionarCadastro.Size = new Size(90, 30);
             BotaoAdicionarCadastro.TabIndex = 11;
@@ -205,7 +207,7 @@
             // 
             // BotaoCancelarCadastro
             // 
-            BotaoCancelarCadastro.Location = new Point(12, 224);
+            BotaoCancelarCadastro.Location = new Point(267, 224);
             BotaoCancelarCadastro.Name = "BotaoCancelarCadastro";
             BotaoCancelarCadastro.Size = new Size(90, 30);
             BotaoCancelarCadastro.TabIndex = 12;
@@ -221,7 +223,7 @@
             TextoCPF.Mask = "000.000.000-00";
             TextoCPF.Name = "TextoCPF";
             TextoCPF.Size = new Size(84, 23);
-            TextoCPF.TabIndex = 15;
+            TextoCPF.TabIndex = 2;
             // 
             // TextoTelefone
             // 
@@ -229,14 +231,15 @@
             TextoTelefone.Mask = "(00) 00000-0000";
             TextoTelefone.Name = "TextoTelefone";
             TextoTelefone.Size = new Size(100, 23);
-            TextoTelefone.TabIndex = 14;
+            TextoTelefone.TabIndex = 3;
             // 
             // TextoIdade
             // 
             TextoIdade.Location = new Point(84, 90);
             TextoIdade.Name = "TextoIdade";
             TextoIdade.Size = new Size(84, 23);
-            TextoIdade.TabIndex = 16;
+            TextoIdade.TabIndex = 4;
+            TextoIdade.KeyPress += PermitirApenasNumerosNaIdade;
             // 
             // SinalDoReal
             // 
