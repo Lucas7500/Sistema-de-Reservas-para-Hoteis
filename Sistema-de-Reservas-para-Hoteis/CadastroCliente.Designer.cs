@@ -203,7 +203,7 @@
             BotaoAdicionarCadastro.TabIndex = 11;
             BotaoAdicionarCadastro.Text = "Adicionar";
             BotaoAdicionarCadastro.UseVisualStyleBackColor = true;
-            BotaoAdicionarCadastro.Click += AoClicarEmAdicionar;
+            BotaoAdicionarCadastro.Click += AoClicarAdicionarCadastro;
             // 
             // BotaoCancelarCadastro
             // 

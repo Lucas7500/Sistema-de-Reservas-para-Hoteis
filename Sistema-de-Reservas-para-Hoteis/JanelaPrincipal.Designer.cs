@@ -33,10 +33,6 @@
             BotaoEditar = new Button();
             BotaoDeletar = new Button();
             TelaDaLista = new DataGridView();
-            reservaBindingSource3 = new BindingSource(components);
-            reservaBindingSource = new BindingSource(components);
-            reservaBindingSource1 = new BindingSource(components);
-            reservaBindingSource2 = new BindingSource(components);
             idDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             nomeDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             cpfDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
@@ -47,6 +43,10 @@
             checkOutDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             precoEstadiaDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             pagamentoEfetuadoDataGridViewCheckBoxColumn = new DataGridViewCheckBoxColumn();
+            reservaBindingSource3 = new BindingSource(components);
+            reservaBindingSource = new BindingSource(components);
+            reservaBindingSource1 = new BindingSource(components);
+            reservaBindingSource2 = new BindingSource(components);
             ((System.ComponentModel.ISupportInitialize)TelaDaLista).BeginInit();
             ((System.ComponentModel.ISupportInitialize)reservaBindingSource3).BeginInit();
             ((System.ComponentModel.ISupportInitialize)reservaBindingSource).BeginInit();
@@ -72,6 +72,7 @@
             BotaoEditar.TabIndex = 2;
             BotaoEditar.Text = "Editar";
             BotaoEditar.UseVisualStyleBackColor = true;
+            BotaoEditar.Click += AoClicarEditarElementoSelecionado;
             // 
             // BotaoDeletar
             // 
@@ -84,6 +85,8 @@
             // 
             // TelaDaLista
             // 
+            TelaDaLista.AllowUserToResizeColumns = false;
+            TelaDaLista.AllowUserToResizeRows = false;
             TelaDaLista.AutoGenerateColumns = false;
             TelaDaLista.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             TelaDaLista.Columns.AddRange(new DataGridViewColumn[] { idDataGridViewTextBoxColumn, nomeDataGridViewTextBoxColumn, cpfDataGridViewTextBoxColumn, telefoneDataGridViewTextBoxColumn, idadeDataGridViewTextBoxColumn, sexoDataGridViewTextBoxColumn, checkInDataGridViewTextBoxColumn, checkOutDataGridViewTextBoxColumn, precoEstadiaDataGridViewTextBoxColumn, pagamentoEfetuadoDataGridViewCheckBoxColumn });
@@ -94,22 +97,6 @@
             TelaDaLista.RowTemplate.Height = 25;
             TelaDaLista.Size = new Size(787, 380);
             TelaDaLista.TabIndex = 4;
-            // 
-            // reservaBindingSource3
-            // 
-            reservaBindingSource3.DataSource = typeof(Reserva);
-            // 
-            // reservaBindingSource
-            // 
-            reservaBindingSource.DataSource = typeof(Reserva);
-            // 
-            // reservaBindingSource1
-            // 
-            reservaBindingSource1.DataSource = typeof(Reserva);
-            // 
-            // reservaBindingSource2
-            // 
-            reservaBindingSource2.DataSource = typeof(Reserva);
             // 
             // idDataGridViewTextBoxColumn
             // 
@@ -198,6 +185,22 @@
             pagamentoEfetuadoDataGridViewCheckBoxColumn.Name = "pagamentoEfetuadoDataGridViewCheckBoxColumn";
             pagamentoEfetuadoDataGridViewCheckBoxColumn.ReadOnly = true;
             pagamentoEfetuadoDataGridViewCheckBoxColumn.Width = 84;
+            // 
+            // reservaBindingSource3
+            // 
+            reservaBindingSource3.DataSource = typeof(Reserva);
+            // 
+            // reservaBindingSource
+            // 
+            reservaBindingSource.DataSource = typeof(Reserva);
+            // 
+            // reservaBindingSource1
+            // 
+            reservaBindingSource1.DataSource = typeof(Reserva);
+            // 
+            // reservaBindingSource2
+            // 
+            reservaBindingSource2.DataSource = typeof(Reserva);
             // 
             // JanelaPrincipal
             // 

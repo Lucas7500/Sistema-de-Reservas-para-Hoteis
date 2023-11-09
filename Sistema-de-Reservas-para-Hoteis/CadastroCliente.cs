@@ -51,7 +51,7 @@ namespace Sistema_de_Reservas_para_Hoteis
             return true;
         }
 
-        private decimal ConverterEmDecimalComVirgula(string numero)
+        private static decimal ConverterEmDecimalComVirgula(string numero)
         {
             if (numero.Contains(','))
             {
@@ -75,7 +75,7 @@ namespace Sistema_de_Reservas_para_Hoteis
             return Decimal.Parse(numero);
         }
 
-        private void AoClicarEmAdicionar(object sender, EventArgs e)
+        private void AoClicarAdicionarCadastro(object sender, EventArgs e)
         {
             if (LerDadosDaReserva())
             {
