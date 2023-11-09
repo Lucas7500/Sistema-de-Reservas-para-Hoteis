@@ -21,7 +21,7 @@ namespace Sistema_de_Reservas_para_Hoteis
             DataCheckOut.MinDate = DateTime.Now;
         }
 
-        Reserva reserva = new Reserva();
+        readonly Reserva reserva = new();
 
         private bool LerDadosDaReserva()
         {
@@ -30,52 +30,48 @@ namespace Sistema_de_Reservas_para_Hoteis
                 reserva.Nome = TextoNome.Text;
                 reserva.Cpf = TextoCPF.Text;
                 reserva.Telefone = TextoTelefone.Text;
-
-                // Pré-Validação da idade
-                if (String.IsNullOrWhiteSpace(TextoIdade.Text))
-                {
-                    Validacoes.ListaExcessoes.Add(MensagemExcessao.IdadeNaoPreenchida);
-                }
-                else
-                {
-                    reserva.Idade = int.Parse(TextoIdade.Text);
-                }
-
+                reserva.Idade = String.IsNullOrWhiteSpace(TextoIdade.Text) ? -1 : int.Parse(TextoIdade.Text);
                 reserva.Sexo = (GeneroEnum)CaixaSexo.SelectedItem;
                 reserva.CheckIn = Convert.ToDateTime(DataCheckIn.Value.Date);
                 reserva.CheckOut = Convert.ToDateTime(DataCheckOut.Value.Date);
-
-                // Pré-Validação do Preço
-                if (String.IsNullOrWhiteSpace(TextoPreco.Text))
-                {
-                    Validacoes.ListaExcessoes.Add(MensagemExcessao.PrecoNaoPreenchido);
-                }
-                else
-                {
-                    reserva.PrecoEstadia = Decimal.Parse(TextoPreco.Text);
-                }
-
-                // Validação dos Botões
-                if (!BotaoTrue.Checked && !BotaoFalse.Checked)
-                {
-                    Validacoes.ListaExcessoes.Add(MensagemExcessao.PagamentoNaoInformado);
-                }
-                else
-                {
-                    reserva.PagamentoEfetuado = BotaoTrue.Checked;
-                }
+                reserva.PrecoEstadia = String.IsNullOrWhiteSpace(TextoPreco.Text) ? -1 : ConverterEmDecimalComVirgula(TextoPreco.Text);
+                reserva.PagamentoEfetuado = !BotaoTrue.Checked && !BotaoFalse.Checked ? null : BotaoTrue.Checked;
 
                 Validacoes.ValidarCampos(reserva);
             }
             catch
             {
-                MessageBox.Show(String.Join("\n\n", Validacoes.ListaExcessoes), "Erro no Cadastro" , MessageBoxButtons.OKCancel ,MessageBoxIcon.Error);
+                MessageBox.Show(String.Join("\n\n", Validacoes.ListaExcessoes), "Erro no Cadastro" , MessageBoxButtons.OK ,MessageBoxIcon.Error);
                 Validacoes.ListaExcessoes.Clear();
 
                 return false;
             }
 
             return true;
+        }
+
+        private decimal ConverterEmDecimalComVirgula(string numero)
+        {
+            if (numero.Contains(','))
+            {
+                string[] preco = numero.Split(',');
+                string CasasDecimais = preco[1];
+
+                switch (CasasDecimais.Length)
+                {
+                    case 0:
+                        numero += "00";
+                        return Decimal.Parse(numero);
+                    case 1:
+                        numero += '0';
+                        return Decimal.Parse(numero);
+                    case 2:
+                        return Decimal.Parse(numero);
+                }
+            }
+
+            numero += ",00";
+            return Decimal.Parse(numero);
         }
 
         private void AoClicarEmAdicionar(object sender, EventArgs e)
@@ -115,10 +111,21 @@ namespace Sistema_de_Reservas_para_Hoteis
 
         private void PermitirApenasDecimaisNoPrecoDaEstadia(object sender, KeyPressEventArgs e)
         {
+            bool PossuiVirgula = TextoPreco.Text.Contains(',');
+
             if (e.KeyChar == ',')
             {
-                e.Handled = (TextoPreco.Text.Contains(','));
+                e.Handled = PossuiVirgula;
                 return;
+            }
+
+            if (PossuiVirgula)
+            {
+                int IndexCasasDecimais = 1, MaxCasasDecimais = 2;
+                string[] preco = TextoPreco.Text.Split(',');
+                string CasasDecimais = preco[IndexCasasDecimais];
+                bool Possui2CasasDecimais = CasasDecimais.Length == MaxCasasDecimais;
+                e.Handled = Possui2CasasDecimais && !char.IsControl(e.KeyChar);
             }
 
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
