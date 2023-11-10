@@ -17,10 +17,14 @@ namespace Sistema_de_Reservas_para_Hoteis
         {
             InitializeComponent();
             CaixaSexo.DataSource = Enum.GetValues(typeof(GeneroEnum));
-            DataCheckIn.MinDate = DateTime.Now;
-            DataCheckOut.MinDate = DateTime.Now;
+            
+            if (JanelaPrincipal.tipoDeModificacao == (int)JanelaPrincipal.CRUD.Adicionar)
+            {
+                DataCheckIn.MinDate = DateTime.Now;
+                DataCheckOut.MinDate = DateTime.Now;
+            }
         }
-
+       
         readonly Reserva reserva = new();
         public const int codigoDeErro = -1;
 
@@ -28,17 +32,32 @@ namespace Sistema_de_Reservas_para_Hoteis
         {
             try
             {
-                reserva.Nome = TextoNome.Text;
-                reserva.Cpf = TextoCPF.Text;
-                reserva.Telefone = TextoTelefone.Text;
-                reserva.Idade = String.IsNullOrWhiteSpace(TextoIdade.Text) ? codigoDeErro : int.Parse(TextoIdade.Text);
-                reserva.Sexo = (GeneroEnum)CaixaSexo.SelectedItem;
-                reserva.CheckIn = Convert.ToDateTime(DataCheckIn.Value.Date);
-                reserva.CheckOut = Convert.ToDateTime(DataCheckOut.Value.Date);
-                reserva.PrecoEstadia = String.IsNullOrWhiteSpace(TextoPreco.Text) ? codigoDeErro : ConverterEmDecimalComVirgula(TextoPreco.Text);
-                reserva.PagamentoEfetuado = !BotaoTrue.Checked && !BotaoFalse.Checked ? null : BotaoTrue.Checked;
-
-                Validacoes.ValidarCampos(reserva);
+                if (JanelaPrincipal.tipoDeModificacao == (int)JanelaPrincipal.CRUD.Editar)
+                {
+                    JanelaPrincipal.reservaSelecionada.Nome = TextoNome.Text;
+                    JanelaPrincipal.reservaSelecionada.Cpf = TextoCPF.Text;
+                    JanelaPrincipal.reservaSelecionada.Telefone = TextoTelefone.Text;
+                    JanelaPrincipal.reservaSelecionada.Idade = String.IsNullOrWhiteSpace(TextoIdade.Text) ? codigoDeErro : int.Parse(TextoIdade.Text);
+                    JanelaPrincipal.reservaSelecionada.Sexo = (GeneroEnum)CaixaSexo.SelectedItem;
+                    JanelaPrincipal.reservaSelecionada.CheckIn = Convert.ToDateTime(DataCheckIn.Value.Date);
+                    JanelaPrincipal.reservaSelecionada.CheckOut = Convert.ToDateTime(DataCheckOut.Value.Date);
+                    JanelaPrincipal.reservaSelecionada.PrecoEstadia = String.IsNullOrWhiteSpace(TextoPreco.Text) ? codigoDeErro : ConverterEmDecimalComVirgula(TextoPreco.Text);
+                    JanelaPrincipal.reservaSelecionada.PagamentoEfetuado = !BotaoTrue.Checked && !BotaoFalse.Checked ? null : BotaoTrue.Checked;
+                    Validacoes.ValidarCampos(JanelaPrincipal.reservaSelecionada);
+                }
+                else
+                {
+                    reserva.Nome = TextoNome.Text;
+                    reserva.Cpf = TextoCPF.Text;
+                    reserva.Telefone = TextoTelefone.Text;
+                    reserva.Idade = String.IsNullOrWhiteSpace(TextoIdade.Text) ? codigoDeErro : int.Parse(TextoIdade.Text);
+                    reserva.Sexo = (GeneroEnum)CaixaSexo.SelectedItem;
+                    reserva.CheckIn = Convert.ToDateTime(DataCheckIn.Value.Date);
+                    reserva.CheckOut = Convert.ToDateTime(DataCheckOut.Value.Date);
+                    reserva.PrecoEstadia = String.IsNullOrWhiteSpace(TextoPreco.Text) ? codigoDeErro : ConverterEmDecimalComVirgula(TextoPreco.Text);
+                    reserva.PagamentoEfetuado = !BotaoTrue.Checked && !BotaoFalse.Checked ? null : BotaoTrue.Checked;
+                    Validacoes.ValidarCampos(reserva);
+                }
             }
             catch
             {
@@ -49,6 +68,23 @@ namespace Sistema_de_Reservas_para_Hoteis
             }
 
             return true;
+        }
+
+        public void PreencherDadosDaReserva(Reserva reservaEdicao)
+        {
+            TextoNome.Text = reservaEdicao.Nome;
+            TextoCPF.Text = reservaEdicao.Cpf;
+            TextoTelefone.Text = reservaEdicao.Telefone;
+            TextoIdade.Text = reservaEdicao.Idade.ToString();
+            CaixaSexo.SelectedItem = reservaEdicao.Sexo;
+            DataCheckIn.Value = reservaEdicao.CheckIn;
+            DataCheckOut.Value = reservaEdicao.CheckOut;
+            TextoPreco.Text = reservaEdicao.PrecoEstadia.ToString();
+            if (reservaEdicao.PagamentoEfetuado != null)
+            {
+                BotaoTrue.Checked = (bool)reservaEdicao.PagamentoEfetuado;
+                BotaoFalse.Checked = (bool)!reservaEdicao.PagamentoEfetuado;
+            }
         }
 
         private static decimal ConverterEmDecimalComVirgula(string numero)

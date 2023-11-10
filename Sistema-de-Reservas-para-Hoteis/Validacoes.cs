@@ -15,14 +15,14 @@ namespace Sistema_de_Reservas_para_Hoteis
         {
             const int tamanhoMinimoNome = 3;
             const int tamanhoNumerosCpf = 11;
-            const int tamanhoCpfFormatado = 14;
-            string numerosCPF = reserva.Cpf.Trim(new Char[] { '_', '-', '.', ' ' });
+            string numerosCPF = new string (reserva.Cpf.Where(char.IsDigit).ToArray());
             const int tamanhoNumerosTelefone = 11;
-            const int tamanhoTelefoneFormatado = 14;
-            string numerosTelefone = reserva.Telefone.Trim(new Char[] { '(', ')', '-', ' ' });
+            string numerosTelefone = new string(reserva.Telefone.Where(char.IsDigit).ToArray());
             const int idadeAdulto = 18;
             bool menordeIdade = reserva.Idade < idadeAdulto;
-            bool dataCheckOutAntesDoCheckIn = reserva.CheckOut.Day - reserva.CheckIn.Day < 0;
+            TimeSpan diferencaCheckoutCheckIn = reserva.CheckOut - reserva.CheckIn;
+            string stringDiferencaCheckoutCheckIn = diferencaCheckoutCheckIn.ToString();
+            bool dataCheckOutAntesDoCheckIn = stringDiferencaCheckoutCheckIn[0].Equals('-');
             int ehVazio = 0;
 
             if (String.IsNullOrWhiteSpace(reserva.Nome))
@@ -38,7 +38,7 @@ namespace Sistema_de_Reservas_para_Hoteis
             {
                 ListaExcessoes.Add(MensagemExcessao.CpfNaoPreenchido);
             }
-            else if (numerosCPF.Length != tamanhoNumerosCpf && numerosCPF.Length != tamanhoCpfFormatado)
+            else if (numerosCPF.Length != tamanhoNumerosCpf)
             {
                 ListaExcessoes.Add(MensagemExcessao.CpfInvalido);
             }
@@ -47,7 +47,7 @@ namespace Sistema_de_Reservas_para_Hoteis
             {
                 ListaExcessoes.Add(MensagemExcessao.TelefoneNaoPreenchido);
             }
-            else if (numerosTelefone.Length != tamanhoNumerosTelefone && numerosTelefone.Length != tamanhoTelefoneFormatado)
+            else if (numerosTelefone.Length != tamanhoNumerosTelefone)
             {
                 ListaExcessoes.Add(MensagemExcessao.TelefoneInvalido);
             }
@@ -78,9 +78,13 @@ namespace Sistema_de_Reservas_para_Hoteis
 
             bool NaoPossuemErros = (ListaExcessoes == null) || (!ListaExcessoes.Any());
 
-            if (NaoPossuemErros)
+            if (NaoPossuemErros && JanelaPrincipal.tipoDeModificacao == (int)JanelaPrincipal.CRUD.Adicionar)
             {
                 MessageBox.Show("Reserva foi feita com Sucesso!");
+            }
+            else if (NaoPossuemErros && JanelaPrincipal.tipoDeModificacao == (int)JanelaPrincipal.CRUD.Editar)
+            {
+                MessageBox.Show($"A reserva {JanelaPrincipal.idReservaSelecionada} foi editada com sucesso.");
             }
             else
             {

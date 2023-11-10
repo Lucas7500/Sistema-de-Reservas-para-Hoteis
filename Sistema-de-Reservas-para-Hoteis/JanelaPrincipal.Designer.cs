@@ -62,7 +62,7 @@
             BotaoAdicionar.TabIndex = 1;
             BotaoAdicionar.Text = "Adicionar";
             BotaoAdicionar.UseVisualStyleBackColor = true;
-            BotaoAdicionar.Click += AoClicarAbrirTelaDeCadastro;
+            BotaoAdicionar.Click += AoClicarAdicionarAbrirTelaDeCadastro;
             // 
             // BotaoEditar
             // 
@@ -94,6 +94,7 @@
             TelaDaLista.Location = new Point(12, 12);
             TelaDaLista.Name = "TelaDaLista";
             TelaDaLista.ReadOnly = true;
+            TelaDaLista.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             TelaDaLista.RowTemplate.Height = 25;
             TelaDaLista.Size = new Size(787, 380);
             TelaDaLista.TabIndex = 4;

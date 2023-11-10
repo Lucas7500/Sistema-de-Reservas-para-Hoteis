@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Globalization;
 using System.Windows.Forms;
 using Sistema_de_Reservas_para_Hoteis.Enums;
@@ -12,43 +13,72 @@ namespace Sistema_de_Reservas_para_Hoteis
             InitializeComponent();
         }
 
-        static List<Reserva> reservas = new();
-
+        public static readonly List<Reserva> reservas = new();
         static int id = 0;
+        public static int tipoDeModificacao;
+        public static int idReservaSelecionada;
+        public static Reserva reservaSelecionada = new();
+        public enum CRUD
+        {
+            Adicionar,
+            Editar
+        }
 
         public static void AdicionarReservaNaLista(Reserva reserva)
         {
+            if (tipoDeModificacao == (int)CRUD.Adicionar)
+            {
+                id++;
+                reserva.Id = id;
+                reservas.Add(reserva);
+            }
+            
             TelaDaLista.DataSource = null;
-            id++;
-            reserva.Id = id;
-            JanelaPrincipal.reservas.Add(reserva);
             TelaDaLista.DataSource = reservas;
         }
 
-        private void AoClicarAbrirTelaDeCadastro(object sender, EventArgs e)
+        private void AoClicarAdicionarAbrirTelaDeCadastro(object sender, EventArgs e)
         {
-            CadastroCliente TelaCadastro = new CadastroCliente();
+            tipoDeModificacao = (int) CRUD.Adicionar;
+            CadastroCliente TelaCadastro = new();
             TelaCadastro.ShowDialog();
         }
 
         private void AoClicarEditarElementoSelecionado(object sender, EventArgs e)
         {
-            if (TelaDaLista.SelectedRows.Count == 1)
-            {
-                int indexId = 0;
-                int indexLinha = TelaDaLista.SelectedRows[0].Index;
-                int idElemento = (int) TelaDaLista.Rows[indexLinha].Cells[indexId].Value;
-               
+            tipoDeModificacao = (int)CRUD.Editar;
+            int umaLinhaSelecionada = 1;
+            int qtdLinhasSelecionadas = TelaDaLista.SelectedRows.Count;
+            int primeiroElemento = 0;
 
+            if (qtdLinhasSelecionadas == umaLinhaSelecionada)
+            {
+                int indexLinha = TelaDaLista.SelectedRows[primeiroElemento].Index;
+                int? idLinhaSelecionada = (int)TelaDaLista.Rows[indexLinha].Cells[primeiroElemento].Value;
+
+                if (idLinhaSelecionada == null)
+                {
+                    MessageBox.Show("Seu programa não possui nenhuma reserva para ser editada.");
+                    return;
+                }
+
+                idReservaSelecionada = (int)idLinhaSelecionada;
 
                 CadastroCliente TelaCadastro = new();
-                TelaCadastro.ShowDialog();
 
-                TelaDaLista.DataSource = null;
-                // Fazer a edição
-                TelaDaLista.DataSource = reservas;
+                foreach (Reserva reservaEdicao in reservas)
+                {
+                    if (reservaEdicao.Id == idReservaSelecionada)
+                    {
+                        reservaSelecionada = reservaEdicao;
+                        TelaCadastro.PreencherDadosDaReserva(reservaSelecionada);
+                        break;
+                    }
+                }
+
+                TelaCadastro.ShowDialog();
             }
-            else if (TelaDaLista.SelectedRows.Count > 1)
+            else if (qtdLinhasSelecionadas > umaLinhaSelecionada)
             {
                 MessageBox.Show("Você deve selecionar apenas uma linha para editar.");
             }
@@ -57,6 +87,7 @@ namespace Sistema_de_Reservas_para_Hoteis
                 MessageBox.Show("Você deve selecionar ao menos uma linha para editar.");
 
             }
+
         }
     }
 }
