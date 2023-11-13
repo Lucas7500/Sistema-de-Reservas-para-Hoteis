@@ -1,6 +1,6 @@
 ﻿namespace Sistema_de_Reservas_para_Hoteis
 {
-    partial class CadastroCliente
+    partial class TelaCadastroCliente
     {
         /// <summary>
         /// Required designer variable.

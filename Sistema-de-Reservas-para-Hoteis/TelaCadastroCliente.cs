@@ -11,59 +11,36 @@ using System.Windows.Forms;
 
 namespace Sistema_de_Reservas_para_Hoteis
 {
-    public partial class CadastroCliente : Form
+    public partial class TelaCadastroCliente : Form
     {
-        public CadastroCliente()
+        public TelaCadastroCliente()
         {
             InitializeComponent();
             CaixaSexo.DataSource = Enum.GetValues(typeof(GeneroEnum));
-            
-            if (JanelaPrincipal.tipoDeModificacao == (int)JanelaPrincipal.CRUD.Adicionar)
+            if (TelaListaDeReservas.tipoDeModificacao == (int)TelaListaDeReservas.CRUD.Adicionar)
             {
                 DataCheckIn.MinDate = DateTime.Now;
                 DataCheckOut.MinDate = DateTime.Now;
             }
         }
-       
-        readonly Reserva reserva = new();
-        public const int codigoDeErro = -1;
 
-        private bool LerDadosDaReserva()
+        public bool LerDadosDaReserva(Reserva reserva)
         {
             try
             {
-                if (JanelaPrincipal.tipoDeModificacao == (int)JanelaPrincipal.CRUD.Editar)
-                {
-                    JanelaPrincipal.reservaSelecionada.Nome = TextoNome.Text;
-                    JanelaPrincipal.reservaSelecionada.Cpf = TextoCPF.Text;
-                    JanelaPrincipal.reservaSelecionada.Telefone = TextoTelefone.Text;
-                    JanelaPrincipal.reservaSelecionada.Idade = String.IsNullOrWhiteSpace(TextoIdade.Text) ? codigoDeErro : int.Parse(TextoIdade.Text);
-                    JanelaPrincipal.reservaSelecionada.Sexo = (GeneroEnum)CaixaSexo.SelectedItem;
-                    JanelaPrincipal.reservaSelecionada.CheckIn = Convert.ToDateTime(DataCheckIn.Value.Date);
-                    JanelaPrincipal.reservaSelecionada.CheckOut = Convert.ToDateTime(DataCheckOut.Value.Date);
-                    JanelaPrincipal.reservaSelecionada.PrecoEstadia = String.IsNullOrWhiteSpace(TextoPreco.Text) ? codigoDeErro : ConverterEmDecimalComVirgula(TextoPreco.Text);
-                    JanelaPrincipal.reservaSelecionada.PagamentoEfetuado = !BotaoTrue.Checked && !BotaoFalse.Checked ? null : BotaoTrue.Checked;
-                    Validacoes.ValidarCampos(JanelaPrincipal.reservaSelecionada);
-                }
-                else
-                {
-                    reserva.Nome = TextoNome.Text;
-                    reserva.Cpf = TextoCPF.Text;
-                    reserva.Telefone = TextoTelefone.Text;
-                    reserva.Idade = String.IsNullOrWhiteSpace(TextoIdade.Text) ? codigoDeErro : int.Parse(TextoIdade.Text);
-                    reserva.Sexo = (GeneroEnum)CaixaSexo.SelectedItem;
-                    reserva.CheckIn = Convert.ToDateTime(DataCheckIn.Value.Date);
-                    reserva.CheckOut = Convert.ToDateTime(DataCheckOut.Value.Date);
-                    reserva.PrecoEstadia = String.IsNullOrWhiteSpace(TextoPreco.Text) ? codigoDeErro : ConverterEmDecimalComVirgula(TextoPreco.Text);
-                    reserva.PagamentoEfetuado = !BotaoTrue.Checked && !BotaoFalse.Checked ? null : BotaoTrue.Checked;
-                    Validacoes.ValidarCampos(reserva);
-                }
+                reserva.Nome = TextoNome.Text;
+                reserva.Cpf = TextoCPF.Text;
+                reserva.Telefone = TextoTelefone.Text;
+                reserva.Idade = String.IsNullOrWhiteSpace(TextoIdade.Text) ? Validacoes.codigoDeErro : int.Parse(TextoIdade.Text);
+                reserva.Sexo = (GeneroEnum)CaixaSexo.SelectedItem;
+                reserva.CheckIn = Convert.ToDateTime(DataCheckIn.Value.Date);
+                reserva.CheckOut = Convert.ToDateTime(DataCheckOut.Value.Date);
+                reserva.PrecoEstadia = String.IsNullOrWhiteSpace(TextoPreco.Text) ? Validacoes.codigoDeErro : ConverterEmDecimalComVirgula(TextoPreco.Text);
+                reserva.PagamentoEfetuado = !BotaoTrue.Checked && !BotaoFalse.Checked ? null : BotaoTrue.Checked;
+                Validacoes.ValidarCampos(reserva);
             }
             catch
             {
-                MessageBox.Show(String.Join("\n\n", Validacoes.ListaExcessoes), "Erro no Cadastro" , MessageBoxButtons.OK ,MessageBoxIcon.Error);
-                Validacoes.ListaExcessoes.Clear();
-
                 return false;
             }
 
@@ -113,9 +90,17 @@ namespace Sistema_de_Reservas_para_Hoteis
 
         private void AoClicarAdicionarCadastro(object sender, EventArgs e)
         {
-            if (LerDadosDaReserva())
+            if (TelaListaDeReservas.tipoDeModificacao == (int)TelaListaDeReservas.CRUD.Adicionar)
             {
-                JanelaPrincipal.AdicionarReservaNaLista(reserva);
+                Reserva reserva = new();
+                if (LerDadosDaReserva(reserva))
+                {
+                    TelaListaDeReservas.AdicionarReservaNaLista(reserva);
+                    this.Close();
+                }
+            }
+            else if (TelaListaDeReservas.tipoDeModificacao == (int)TelaListaDeReservas.CRUD.Editar)
+            {
                 this.Close();
             }
         }

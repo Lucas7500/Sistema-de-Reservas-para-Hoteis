@@ -1,6 +1,6 @@
 ﻿namespace Sistema_de_Reservas_para_Hoteis
 {
-    partial class JanelaPrincipal
+    partial class TelaListaDeReservas
     {
         /// <summary>
         ///  Required designer variable.

@@ -9,15 +9,16 @@ namespace Sistema_de_Reservas_para_Hoteis
 {
     public class Validacoes
     {
-        public static List<string> ListaExcessoes = new();
+        private static readonly List<string> ListaExcessoes = new();
+        public const int codigoDeErro = -1;
 
         public static void ValidarCampos(Reserva reserva)
         {
             const int tamanhoMinimoNome = 3;
             const int tamanhoNumerosCpf = 11;
-            string numerosCPF = new string (reserva.Cpf.Where(char.IsDigit).ToArray());
+            string numerosCPF = new(reserva.Cpf.Where(char.IsDigit).ToArray());
             const int tamanhoNumerosTelefone = 11;
-            string numerosTelefone = new string(reserva.Telefone.Where(char.IsDigit).ToArray());
+            string numerosTelefone = new(reserva.Telefone.Where(char.IsDigit).ToArray());
             const int idadeAdulto = 18;
             bool menordeIdade = reserva.Idade < idadeAdulto;
             TimeSpan diferencaCheckoutCheckIn = reserva.CheckOut - reserva.CheckIn;
@@ -52,10 +53,10 @@ namespace Sistema_de_Reservas_para_Hoteis
                 ListaExcessoes.Add(MensagemExcessao.TelefoneInvalido);
             }
 
-            if (reserva.Idade == CadastroCliente.codigoDeErro)
+            if (reserva.Idade == codigoDeErro)
             {
-                Validacoes.ListaExcessoes.Add(MensagemExcessao.IdadeNaoPreenchida);
-            }   
+                ListaExcessoes.Add(MensagemExcessao.IdadeNaoPreenchida);
+            }
             else if (menordeIdade)
             {
                 ListaExcessoes.Add(MensagemExcessao.MenorDeIdade);
@@ -66,31 +67,32 @@ namespace Sistema_de_Reservas_para_Hoteis
                 ListaExcessoes.Add(MensagemExcessao.CheckOutEmDatasPassadas);
             }
 
-            if (reserva.PrecoEstadia == CadastroCliente.codigoDeErro)
+            if (reserva.PrecoEstadia == codigoDeErro)
             {
-                Validacoes.ListaExcessoes.Add(MensagemExcessao.PrecoNaoPreenchido);
+                ListaExcessoes.Add(MensagemExcessao.PrecoNaoPreenchido);
             }
 
             if (reserva.PagamentoEfetuado == null)
             {
-                Validacoes.ListaExcessoes.Add(MensagemExcessao.PagamentoNaoInformado);
+                ListaExcessoes.Add(MensagemExcessao.PagamentoNaoInformado);
             }
 
             bool NaoPossuemErros = (ListaExcessoes == null) || (!ListaExcessoes.Any());
 
-            if (NaoPossuemErros && JanelaPrincipal.tipoDeModificacao == (int)JanelaPrincipal.CRUD.Adicionar)
+            if (NaoPossuemErros && TelaListaDeReservas.tipoDeModificacao == (int)TelaListaDeReservas.CRUD.Adicionar)
             {
                 MessageBox.Show("Reserva foi feita com Sucesso!");
             }
-            else if (NaoPossuemErros && JanelaPrincipal.tipoDeModificacao == (int)JanelaPrincipal.CRUD.Editar)
+            else if (NaoPossuemErros && TelaListaDeReservas.tipoDeModificacao == (int)TelaListaDeReservas.CRUD.Editar)
             {
-                MessageBox.Show($"A reserva {JanelaPrincipal.idReservaSelecionada} foi editada com sucesso.");
+                MessageBox.Show("A reserva foi editada com sucesso!");
             }
             else
             {
+                MessageBox.Show(String.Join("\n\n", ListaExcessoes), "Erro no Cadastro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ListaExcessoes.Clear();
                 throw new Exception();
             }
         }
-      
     }
 }
