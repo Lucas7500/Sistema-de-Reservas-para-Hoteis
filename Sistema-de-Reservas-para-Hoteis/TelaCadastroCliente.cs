@@ -13,54 +13,56 @@ namespace Sistema_de_Reservas_para_Hoteis
 {
     public partial class TelaCadastroCliente : Form
     {
+        private readonly Reserva reserva;
+        private readonly bool edicao;
         public TelaCadastroCliente()
         {
             InitializeComponent();
+            edicao = false;
+            reserva = new();
             CaixaSexo.DataSource = Enum.GetValues(typeof(GeneroEnum));
-            if (TelaListaDeReservas.tipoDeModificacao == (int)TelaListaDeReservas.CRUD.Adicionar)
-            {
-                DataCheckIn.MinDate = DateTime.Now;
-                DataCheckOut.MinDate = DateTime.Now;
-            }
+            DataCheckIn.MinDate = DateTime.Now;
+            DataCheckOut.MinDate = DateTime.Now;
         }
 
-        public bool LerDadosDaReserva(Reserva reserva)
+        public TelaCadastroCliente(Reserva reservaSelecionada)
         {
-            try
-            {
-                reserva.Nome = TextoNome.Text;
-                reserva.Cpf = TextoCPF.Text;
-                reserva.Telefone = TextoTelefone.Text;
-                reserva.Idade = String.IsNullOrWhiteSpace(TextoIdade.Text) ? Validacoes.codigoDeErro : int.Parse(TextoIdade.Text);
-                reserva.Sexo = (GeneroEnum)CaixaSexo.SelectedItem;
-                reserva.CheckIn = Convert.ToDateTime(DataCheckIn.Value.Date);
-                reserva.CheckOut = Convert.ToDateTime(DataCheckOut.Value.Date);
-                reserva.PrecoEstadia = String.IsNullOrWhiteSpace(TextoPreco.Text) ? Validacoes.codigoDeErro : ConverterEmDecimalComVirgula(TextoPreco.Text);
-                reserva.PagamentoEfetuado = !BotaoTrue.Checked && !BotaoFalse.Checked ? null : BotaoTrue.Checked;
-                Validacoes.ValidarCampos(reserva);
-            }
-            catch
-            {
-                return false;
-            }
-
-            return true;
+            InitializeComponent();
+            edicao = true;
+            reserva = reservaSelecionada;
+            CaixaSexo.DataSource = Enum.GetValues(typeof(GeneroEnum));
+            DataCheckIn.MinDate = reservaSelecionada.CheckIn;
+            DataCheckOut.MinDate = reservaSelecionada.CheckIn;
+            PreencherDadosDaReserva(reservaSelecionada);
         }
 
-        public void PreencherDadosDaReserva(Reserva reservaEdicao)
+        public void LerDadosDaReserva()
         {
-            TextoNome.Text = reservaEdicao.Nome;
-            TextoCPF.Text = reservaEdicao.Cpf;
-            TextoTelefone.Text = reservaEdicao.Telefone;
-            TextoIdade.Text = reservaEdicao.Idade.ToString();
-            CaixaSexo.SelectedItem = reservaEdicao.Sexo;
-            DataCheckIn.Value = reservaEdicao.CheckIn;
-            DataCheckOut.Value = reservaEdicao.CheckOut;
-            TextoPreco.Text = reservaEdicao.PrecoEstadia.ToString();
-            if (reservaEdicao.PagamentoEfetuado != null)
+            reserva.Nome = TextoNome.Text;
+            reserva.Cpf = TextoCPF.Text;
+            reserva.Telefone = TextoTelefone.Text;
+            reserva.Idade = String.IsNullOrWhiteSpace(TextoIdade.Text) ? Validacoes.codigoDeErro : int.Parse(TextoIdade.Text);
+            reserva.Sexo = (GeneroEnum)CaixaSexo.SelectedItem;
+            reserva.CheckIn = Convert.ToDateTime(DataCheckIn.Value.Date);
+            reserva.CheckOut = Convert.ToDateTime(DataCheckOut.Value.Date);
+            reserva.PrecoEstadia = String.IsNullOrWhiteSpace(TextoPreco.Text) ? Validacoes.codigoDeErro : ConverterEmDecimalComVirgula(TextoPreco.Text);
+            reserva.PagamentoEfetuado = !BotaoTrue.Checked && !BotaoFalse.Checked ? null : BotaoTrue.Checked;
+        }
+
+        private void PreencherDadosDaReserva(Reserva reservaSelecionada)
+        {
+            TextoNome.Text = reservaSelecionada.Nome;
+            TextoCPF.Text = reservaSelecionada.Cpf;
+            TextoTelefone.Text = reservaSelecionada.Telefone;
+            TextoIdade.Text = reservaSelecionada.Idade.ToString();
+            CaixaSexo.SelectedItem = reservaSelecionada.Sexo;
+            DataCheckIn.Value = reservaSelecionada.CheckIn;
+            DataCheckOut.Value = reservaSelecionada.CheckOut;
+            TextoPreco.Text = reservaSelecionada.PrecoEstadia.ToString();
+            if (reservaSelecionada.PagamentoEfetuado != null)
             {
-                BotaoTrue.Checked = (bool)reservaEdicao.PagamentoEfetuado;
-                BotaoFalse.Checked = (bool)!reservaEdicao.PagamentoEfetuado;
+                BotaoTrue.Checked = (bool)reservaSelecionada.PagamentoEfetuado;
+                BotaoFalse.Checked = (bool)!reservaSelecionada.PagamentoEfetuado;
             }
         }
 
@@ -90,18 +92,16 @@ namespace Sistema_de_Reservas_para_Hoteis
 
         private void AoClicarAdicionarCadastro(object sender, EventArgs e)
         {
-            if (TelaListaDeReservas.tipoDeModificacao == (int)TelaListaDeReservas.CRUD.Adicionar)
+            try
             {
-                Reserva reserva = new();
-                if (LerDadosDaReserva(reserva))
-                {
-                    TelaListaDeReservas.AdicionarReservaNaLista(reserva);
-                    this.Close();
-                }
-            }
-            else if (TelaListaDeReservas.tipoDeModificacao == (int)TelaListaDeReservas.CRUD.Editar)
-            {
+                LerDadosDaReserva();
+                Validacoes.ValidarCampos(reserva, edicao);
+                TelaListaDeReservas.AdicionarReservaNaLista(reserva, edicao);
                 this.Close();
+            }
+            catch (Exception erro)
+            {
+                MessageBox.Show(erro.Message, "Erro no Cadastro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

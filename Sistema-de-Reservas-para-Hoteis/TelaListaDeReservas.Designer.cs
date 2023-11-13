@@ -96,6 +96,7 @@
             TelaDaLista.ReadOnly = true;
             TelaDaLista.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             TelaDaLista.RowTemplate.Height = 25;
+            TelaDaLista.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             TelaDaLista.Size = new Size(787, 380);
             TelaDaLista.TabIndex = 4;
             // 
@@ -203,7 +204,7 @@
             // 
             reservaBindingSource2.DataSource = typeof(Reserva);
             // 
-            // JanelaPrincipal
+            // TelaListaDeReservas
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -215,7 +216,7 @@
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             MinimizeBox = false;
-            Name = "JanelaPrincipal";
+            Name = "TelaListaDeReservas";
             Text = "Reserva de Hotel";
             ((System.ComponentModel.ISupportInitialize)TelaDaLista).EndInit();
             ((System.ComponentModel.ISupportInitialize)reservaBindingSource3).EndInit();

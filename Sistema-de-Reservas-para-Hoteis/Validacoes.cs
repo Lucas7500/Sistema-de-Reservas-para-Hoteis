@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Sistema_de_Reservas_para_Hoteis
@@ -12,7 +13,7 @@ namespace Sistema_de_Reservas_para_Hoteis
         private static readonly List<string> ListaExcessoes = new();
         public const int codigoDeErro = -1;
 
-        public static void ValidarCampos(Reserva reserva)
+        public static void ValidarCampos(Reserva reserva, bool edicao)
         {
             const int tamanhoMinimoNome = 3;
             const int tamanhoNumerosCpf = 11;
@@ -25,6 +26,7 @@ namespace Sistema_de_Reservas_para_Hoteis
             string stringDiferencaCheckoutCheckIn = diferencaCheckoutCheckIn.ToString();
             bool dataCheckOutAntesDoCheckIn = stringDiferencaCheckoutCheckIn[0].Equals('-');
             int ehVazio = 0;
+            string regexNome = @"^[a-zA-Z ]{1,50}$";
 
             if (String.IsNullOrWhiteSpace(reserva.Nome))
             {
@@ -33,6 +35,10 @@ namespace Sistema_de_Reservas_para_Hoteis
             else if (reserva.Nome.Length < tamanhoMinimoNome)
             {
                 ListaExcessoes.Add(MensagemExcessao.NomePequeno);
+            }
+            else if (!Regex.IsMatch(reserva.Nome, regexNome))
+            {
+                ListaExcessoes.Add(MensagemExcessao.NomeContemNumero);
             }
 
             if (numerosCPF.Length == ehVazio)
@@ -79,19 +85,19 @@ namespace Sistema_de_Reservas_para_Hoteis
 
             bool NaoPossuemErros = (ListaExcessoes == null) || (!ListaExcessoes.Any());
 
-            if (NaoPossuemErros && TelaListaDeReservas.tipoDeModificacao == (int)TelaListaDeReservas.CRUD.Adicionar)
+            if (NaoPossuemErros && !edicao)
             {
                 MessageBox.Show("Reserva foi feita com Sucesso!");
             }
-            else if (NaoPossuemErros && TelaListaDeReservas.tipoDeModificacao == (int)TelaListaDeReservas.CRUD.Editar)
+            else if (NaoPossuemErros && edicao)
             {
                 MessageBox.Show("A reserva foi editada com sucesso!");
             }
             else
             {
-                MessageBox.Show(String.Join("\n\n", ListaExcessoes), "Erro no Cadastro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                string erros = String.Join("\n\n", ListaExcessoes);
                 ListaExcessoes.Clear();
-                throw new Exception();
+                throw new Exception(message: erros);
             }
         }
     }

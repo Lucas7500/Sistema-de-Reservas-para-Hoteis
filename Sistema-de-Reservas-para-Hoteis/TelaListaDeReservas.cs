@@ -13,18 +13,12 @@ namespace Sistema_de_Reservas_para_Hoteis
             InitializeComponent();
         }
 
-        static int id = 0;
         private static readonly List<Reserva> reservas = new();
-        public static int tipoDeModificacao;
-        public enum CRUD
-        {
-            Adicionar,
-            Editar
-        }
+        static int id = 0;
 
-        public static void AdicionarReservaNaLista(Reserva reserva)
+        public static void AdicionarReservaNaLista(Reserva reserva, bool edicao)
         {
-            if (tipoDeModificacao == (int)CRUD.Adicionar)
+            if (!edicao)
             {
                 id++;
                 reserva.Id = id;
@@ -36,14 +30,12 @@ namespace Sistema_de_Reservas_para_Hoteis
 
         private void AoClicarAdicionarAbrirTelaDeCadastro(object sender, EventArgs e)
         {
-            tipoDeModificacao = (int)CRUD.Adicionar;
             TelaCadastroCliente TelaCadastro = new();
             TelaCadastro.ShowDialog();
         }
 
         private void AoClicarEditarElementoSelecionado(object sender, EventArgs e)
         {
-            tipoDeModificacao = (int)CRUD.Editar;
             int umaLinhaSelecionada = 1;
             int qtdLinhasSelecionadas = TelaDaLista.SelectedRows.Count;
             int primeiroElemento = 0;
@@ -59,7 +51,6 @@ namespace Sistema_de_Reservas_para_Hoteis
                 int indexLinha = TelaDaLista.SelectedRows[primeiroElemento].Index;
                 int idLinhaSelecionada = (int)TelaDaLista.Rows[indexLinha].Cells[primeiroElemento].Value;
 
-                TelaCadastroCliente TelaCadastro = new();
                 Reserva reservaSelecionada = new();
 
                 foreach (Reserva reservaEdicao in reservas)
@@ -71,12 +62,9 @@ namespace Sistema_de_Reservas_para_Hoteis
                     }
                 }
 
-                TelaCadastro.PreencherDadosDaReserva(reservaSelecionada);
+                TelaCadastroCliente TelaCadastro = new(reservaSelecionada);
+
                 TelaCadastro.ShowDialog();
-                if (TelaCadastro.LerDadosDaReserva(reservaSelecionada))
-                {
-                    AdicionarReservaNaLista(reservaSelecionada);
-                }
             }
             else if (qtdLinhasSelecionadas > umaLinhaSelecionada)
             {
