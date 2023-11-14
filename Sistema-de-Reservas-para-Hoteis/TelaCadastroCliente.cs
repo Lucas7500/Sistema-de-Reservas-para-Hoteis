@@ -18,8 +18,8 @@ namespace Sistema_de_Reservas_para_Hoteis
         public TelaCadastroCliente()
         {
             InitializeComponent();
-            edicao = false;
             reserva = new();
+            edicao = false;
             CaixaSexo.DataSource = Enum.GetValues(typeof(GeneroEnum));
             DataCheckIn.MinDate = DateTime.Now;
             DataCheckOut.MinDate = DateTime.Now;
@@ -33,23 +33,23 @@ namespace Sistema_de_Reservas_para_Hoteis
             CaixaSexo.DataSource = Enum.GetValues(typeof(GeneroEnum));
             DataCheckIn.MinDate = reservaSelecionada.CheckIn;
             DataCheckOut.MinDate = reservaSelecionada.CheckIn;
-            PreencherDadosDaReserva(reservaSelecionada);
+            PreencherCadastroComDadosDaReserva(reservaSelecionada);
         }
 
-        public void LerDadosDaReserva()
+        public void LerDadosDaReserva(Reserva reservaTemporaria)
         {
-            reserva.Nome = TextoNome.Text;
-            reserva.Cpf = TextoCPF.Text;
-            reserva.Telefone = TextoTelefone.Text;
-            reserva.Idade = String.IsNullOrWhiteSpace(TextoIdade.Text) ? Validacoes.codigoDeErro : int.Parse(TextoIdade.Text);
-            reserva.Sexo = (GeneroEnum)CaixaSexo.SelectedItem;
-            reserva.CheckIn = Convert.ToDateTime(DataCheckIn.Value.Date);
-            reserva.CheckOut = Convert.ToDateTime(DataCheckOut.Value.Date);
-            reserva.PrecoEstadia = String.IsNullOrWhiteSpace(TextoPreco.Text) ? Validacoes.codigoDeErro : ConverterEmDecimalComVirgula(TextoPreco.Text);
-            reserva.PagamentoEfetuado = !BotaoTrue.Checked && !BotaoFalse.Checked ? null : BotaoTrue.Checked;
+            reservaTemporaria.Nome = TextoNome.Text;
+            reservaTemporaria.Cpf = TextoCPF.Text;
+            reservaTemporaria.Telefone = TextoTelefone.Text;
+            reservaTemporaria.Idade = String.IsNullOrWhiteSpace(TextoIdade.Text) ? Validacoes.codigoDeErro : int.Parse(TextoIdade.Text);
+            reservaTemporaria.Sexo = (GeneroEnum)CaixaSexo.SelectedItem;
+            reservaTemporaria.CheckIn = Convert.ToDateTime(DataCheckIn.Value.Date);
+            reservaTemporaria.CheckOut = Convert.ToDateTime(DataCheckOut.Value.Date);
+            reservaTemporaria.PrecoEstadia = String.IsNullOrWhiteSpace(TextoPreco.Text) ? Validacoes.codigoDeErro : ConverterEmDecimalComVirgula(TextoPreco.Text);
+            reservaTemporaria.PagamentoEfetuado = !BotaoTrue.Checked && !BotaoFalse.Checked ? null : BotaoTrue.Checked;
         }
 
-        private void PreencherDadosDaReserva(Reserva reservaSelecionada)
+        private void PreencherCadastroComDadosDaReserva(Reserva reservaSelecionada)
         {
             TextoNome.Text = reservaSelecionada.Nome;
             TextoCPF.Text = reservaSelecionada.Cpf;
@@ -64,6 +64,19 @@ namespace Sistema_de_Reservas_para_Hoteis
                 BotaoTrue.Checked = (bool)reservaSelecionada.PagamentoEfetuado;
                 BotaoFalse.Checked = (bool)!reservaSelecionada.PagamentoEfetuado;
             }
+        }
+
+        private static void CopiarDadosDeReservas(Reserva reserva1, Reserva reserva2)
+        {
+            reserva1.Nome = reserva2.Nome;
+            reserva1.Cpf = reserva2.Cpf;
+            reserva1.Telefone = reserva2.Telefone;
+            reserva1.Idade = reserva2.Idade;
+            reserva1.Sexo = reserva2.Sexo;
+            reserva1.CheckIn = reserva2.CheckIn;
+            reserva1.CheckOut = reserva2.CheckOut;
+            reserva1.PrecoEstadia = reserva2.PrecoEstadia;
+            reserva1.PagamentoEfetuado = reserva2.PagamentoEfetuado;
         }
 
         private static decimal ConverterEmDecimalComVirgula(string numero)
@@ -94,8 +107,16 @@ namespace Sistema_de_Reservas_para_Hoteis
         {
             try
             {
-                LerDadosDaReserva();
-                Validacoes.ValidarCampos(reserva, edicao);
+                Reserva reservaTemporaria = new();
+
+                if (edicao)
+                {
+                    CopiarDadosDeReservas(reservaTemporaria, reserva);
+                }
+
+                LerDadosDaReserva(reservaTemporaria);
+                Validacoes.ValidarCampos(reservaTemporaria, edicao);
+                CopiarDadosDeReservas(reserva, reservaTemporaria);
                 TelaListaDeReservas.AdicionarReservaNaLista(reserva, edicao);
                 this.Close();
             }

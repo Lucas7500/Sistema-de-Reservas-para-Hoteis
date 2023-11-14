@@ -12,21 +12,22 @@ namespace Sistema_de_Reservas_para_Hoteis
     {
         private static readonly List<string> ListaExcessoes = new();
         public const int codigoDeErro = -1;
+        const int tamanhoMinimoNome = 3;
+        const int tamanhoNumerosCpf = 11;
+        const int tamanhoNumerosTelefone = 11;
+        const int idadeAdulto = 18;
+        const int ehVazio = 0;
+        readonly static string regexNome = @"^[a-zA-Z ]";
+
 
         public static void ValidarCampos(Reserva reserva, bool edicao)
         {
-            const int tamanhoMinimoNome = 3;
-            const int tamanhoNumerosCpf = 11;
             string numerosCPF = new(reserva.Cpf.Where(char.IsDigit).ToArray());
-            const int tamanhoNumerosTelefone = 11;
             string numerosTelefone = new(reserva.Telefone.Where(char.IsDigit).ToArray());
-            const int idadeAdulto = 18;
             bool menordeIdade = reserva.Idade < idadeAdulto;
             TimeSpan diferencaCheckoutCheckIn = reserva.CheckOut - reserva.CheckIn;
             string stringDiferencaCheckoutCheckIn = diferencaCheckoutCheckIn.ToString();
             bool dataCheckOutAntesDoCheckIn = stringDiferencaCheckoutCheckIn[0].Equals('-');
-            int ehVazio = 0;
-            string regexNome = @"^[a-zA-Z ]{1,50}$";
 
             if (String.IsNullOrWhiteSpace(reserva.Nome))
             {
