@@ -20,7 +20,7 @@ namespace Sistema_de_Reservas_para_Hoteis
         readonly static string regexNome = @"^[a-zA-Z ]";
 
 
-        public static void ValidarCampos(Reserva reserva, bool edicao)
+        public static void ValidarCampos(Reserva reserva)
         {
             string numerosCPF = new(reserva.Cpf.Where(char.IsDigit).ToArray());
             string numerosTelefone = new(reserva.Telefone.Where(char.IsDigit).ToArray());
@@ -86,11 +86,11 @@ namespace Sistema_de_Reservas_para_Hoteis
 
             bool NaoPossuemErros = (ListaExcessoes == null) || (!ListaExcessoes.Any());
 
-            if (NaoPossuemErros && !edicao)
+            if (NaoPossuemErros && reserva.Id == 0)
             {
                 MessageBox.Show("Reserva foi feita com Sucesso!");
             }
-            else if (NaoPossuemErros && edicao)
+            else if (NaoPossuemErros && reserva.Id != 0)
             {
                 MessageBox.Show("A reserva foi editada com sucesso!");
             }

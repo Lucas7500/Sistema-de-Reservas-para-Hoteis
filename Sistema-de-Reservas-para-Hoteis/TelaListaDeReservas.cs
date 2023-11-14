@@ -13,24 +13,25 @@ namespace Sistema_de_Reservas_para_Hoteis
             InitializeComponent();
         }
 
-        private static readonly List<Reserva> reservas = new();
+        private static readonly List<Reserva> listaReservas = new();
         static int id = 0;
 
-        public static void AdicionarReservaNaLista(Reserva reserva, bool edicao)
+        public static void AdicionarReservaNaLista(Reserva reserva)
         {
-            if (!edicao)
+            if (reserva.Id == 0)
             {
                 id++;
                 reserva.Id = id;
-                reservas.Add(reserva);
+                listaReservas.Add(reserva);
             }
             TelaDaLista.DataSource = null;
-            TelaDaLista.DataSource = reservas;
+            TelaDaLista.DataSource = listaReservas;
         }
 
         private void AoClicarAdicionarAbrirTelaDeCadastro(object sender, EventArgs e)
         {
-            TelaCadastroCliente TelaCadastro = new();
+            Reserva reserva = new();
+            TelaCadastroCliente TelaCadastro = new(reserva);
             TelaCadastro.ShowDialog();
         }
 
@@ -42,7 +43,7 @@ namespace Sistema_de_Reservas_para_Hoteis
 
             if (qtdLinhasSelecionadas == umaLinhaSelecionada)
             {
-                if (reservas.Count == 0)
+                if (listaReservas.Count == 0)
                 {
                     MessageBox.Show("Seu programa não possui nenhuma reserva para ser editada.");
                     return;
@@ -51,19 +52,9 @@ namespace Sistema_de_Reservas_para_Hoteis
                 int indexLinha = TelaDaLista.SelectedRows[primeiroElemento].Index;
                 int idLinhaSelecionada = (int)TelaDaLista.Rows[indexLinha].Cells[primeiroElemento].Value;
 
-                Reserva reservaSelecionada = new();
-
-                foreach (Reserva reservaEdicao in reservas)
-                {
-                    if (reservaEdicao.Id == idLinhaSelecionada)
-                    {
-                        reservaSelecionada = reservaEdicao;
-                        break;
-                    }
-                }
+                Reserva reservaSelecionada = listaReservas.Find(x => x.Id == idLinhaSelecionada);
 
                 TelaCadastroCliente TelaCadastro = new(reservaSelecionada);
-
                 TelaCadastro.ShowDialog();
             }
             else if (qtdLinhasSelecionadas > umaLinhaSelecionada)

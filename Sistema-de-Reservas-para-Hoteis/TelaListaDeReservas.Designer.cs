@@ -85,6 +85,7 @@
             // 
             // TelaDaLista
             // 
+            TelaDaLista.AllowUserToAddRows = false;
             TelaDaLista.AllowUserToResizeColumns = false;
             TelaDaLista.AllowUserToResizeRows = false;
             TelaDaLista.AutoGenerateColumns = false;

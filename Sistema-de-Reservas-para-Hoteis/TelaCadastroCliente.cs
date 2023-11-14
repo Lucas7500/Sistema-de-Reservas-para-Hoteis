@@ -13,56 +13,56 @@ namespace Sistema_de_Reservas_para_Hoteis
 {
     public partial class TelaCadastroCliente : Form
     {
-        private readonly Reserva reserva;
-        private readonly bool edicao;
-        public TelaCadastroCliente()
+        private readonly Reserva reserva = new();
+        const int idNulo = 0;
+        public TelaCadastroCliente(Reserva reservaParametro)
         {
             InitializeComponent();
-            reserva = new();
-            edicao = false;
             CaixaSexo.DataSource = Enum.GetValues(typeof(GeneroEnum));
-            DataCheckIn.MinDate = DateTime.Now;
-            DataCheckOut.MinDate = DateTime.Now;
-        }
 
-        public TelaCadastroCliente(Reserva reservaSelecionada)
-        {
-            InitializeComponent();
-            edicao = true;
-            reserva = reservaSelecionada;
-            CaixaSexo.DataSource = Enum.GetValues(typeof(GeneroEnum));
-            DataCheckIn.MinDate = reservaSelecionada.CheckIn;
-            DataCheckOut.MinDate = reservaSelecionada.CheckIn;
-            PreencherCadastroComDadosDaReserva(reservaSelecionada);
-        }
-
-        public void LerDadosDaReserva(Reserva reservaTemporaria)
-        {
-            reservaTemporaria.Nome = TextoNome.Text;
-            reservaTemporaria.Cpf = TextoCPF.Text;
-            reservaTemporaria.Telefone = TextoTelefone.Text;
-            reservaTemporaria.Idade = String.IsNullOrWhiteSpace(TextoIdade.Text) ? Validacoes.codigoDeErro : int.Parse(TextoIdade.Text);
-            reservaTemporaria.Sexo = (GeneroEnum)CaixaSexo.SelectedItem;
-            reservaTemporaria.CheckIn = Convert.ToDateTime(DataCheckIn.Value.Date);
-            reservaTemporaria.CheckOut = Convert.ToDateTime(DataCheckOut.Value.Date);
-            reservaTemporaria.PrecoEstadia = String.IsNullOrWhiteSpace(TextoPreco.Text) ? Validacoes.codigoDeErro : ConverterEmDecimalComVirgula(TextoPreco.Text);
-            reservaTemporaria.PagamentoEfetuado = !BotaoTrue.Checked && !BotaoFalse.Checked ? null : BotaoTrue.Checked;
-        }
-
-        private void PreencherCadastroComDadosDaReserva(Reserva reservaSelecionada)
-        {
-            TextoNome.Text = reservaSelecionada.Nome;
-            TextoCPF.Text = reservaSelecionada.Cpf;
-            TextoTelefone.Text = reservaSelecionada.Telefone;
-            TextoIdade.Text = reservaSelecionada.Idade.ToString();
-            CaixaSexo.SelectedItem = reservaSelecionada.Sexo;
-            DataCheckIn.Value = reservaSelecionada.CheckIn;
-            DataCheckOut.Value = reservaSelecionada.CheckOut;
-            TextoPreco.Text = reservaSelecionada.PrecoEstadia.ToString();
-            if (reservaSelecionada.PagamentoEfetuado != null)
+            if (reservaParametro.Id  > idNulo)
             {
-                BotaoTrue.Checked = (bool)reservaSelecionada.PagamentoEfetuado;
-                BotaoFalse.Checked = (bool)!reservaSelecionada.PagamentoEfetuado;
+                DataCheckIn.MinDate = reservaParametro.CheckIn;
+                DataCheckOut.MinDate = reservaParametro.CheckOut;
+                PreencherCadastroComDadosDaReserva(reservaParametro);
+                reserva = reservaParametro;  
+            }
+            else
+            {
+                DataCheckIn.MinDate = DateTime.Now;
+                DataCheckOut.MinDate = DateTime.Now;
+            }
+            
+            
+        }
+
+        public void LerDadosDaReserva(Reserva reserva)
+        {
+            reserva.Nome = TextoNome.Text;
+            reserva.Cpf = TextoCPF.Text;
+            reserva.Telefone = TextoTelefone.Text;
+            reserva.Idade = String.IsNullOrWhiteSpace(TextoIdade.Text) ? Validacoes.codigoDeErro : int.Parse(TextoIdade.Text);
+            reserva.Sexo = (GeneroEnum)CaixaSexo.SelectedItem;
+            reserva.CheckIn = Convert.ToDateTime(DataCheckIn.Value.Date);
+            reserva.CheckOut = Convert.ToDateTime(DataCheckOut.Value.Date);
+            reserva.PrecoEstadia = String.IsNullOrWhiteSpace(TextoPreco.Text) ? Validacoes.codigoDeErro : ConverterEmDecimalComVirgula(TextoPreco.Text);
+            reserva.PagamentoEfetuado = !BotaoTrue.Checked && !BotaoFalse.Checked ? null : BotaoTrue.Checked;
+        }
+
+        private void PreencherCadastroComDadosDaReserva(Reserva reserva)
+        {
+            TextoNome.Text = reserva.Nome;
+            TextoCPF.Text = reserva.Cpf;
+            TextoTelefone.Text = reserva.Telefone;
+            TextoIdade.Text = reserva.Idade.ToString();
+            CaixaSexo.SelectedItem = reserva.Sexo;
+            DataCheckIn.Value = reserva.CheckIn;
+            DataCheckOut.Value = reserva.CheckOut;
+            TextoPreco.Text = reserva.PrecoEstadia.ToString();
+            if (reserva.PagamentoEfetuado != null)
+            {
+                BotaoTrue.Checked = (bool)reserva.PagamentoEfetuado;
+                BotaoFalse.Checked = (bool)!reserva.PagamentoEfetuado;
             }
         }
 
@@ -109,15 +109,16 @@ namespace Sistema_de_Reservas_para_Hoteis
             {
                 Reserva reservaTemporaria = new();
 
-                if (edicao)
+                if (reserva.Id > idNulo)
                 {
                     CopiarDadosDeReservas(reservaTemporaria, reserva);
                 }
 
                 LerDadosDaReserva(reservaTemporaria);
-                Validacoes.ValidarCampos(reservaTemporaria, edicao);
+                Validacoes.ValidarCampos(reservaTemporaria);
+                
                 CopiarDadosDeReservas(reserva, reservaTemporaria);
-                TelaListaDeReservas.AdicionarReservaNaLista(reserva, edicao);
+                TelaListaDeReservas.AdicionarReservaNaLista(reserva);
                 this.Close();
             }
             catch (Exception erro)
@@ -128,7 +129,14 @@ namespace Sistema_de_Reservas_para_Hoteis
 
         private void AoClicarCancelarCadastro(object sender, EventArgs e)
         {
-            this.Close();
+            string mensagem = "Você realmente deseja cancelar?";
+
+            var remover = MessageBox.Show(mensagem, "Confirmação de cancelamento", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            
+            if (remover.Equals(DialogResult.Yes))
+            {
+                this.Close();
+            } 
         }
 
         private void PermitirApenasNumerosNaIdade(object sender, KeyPressEventArgs e)
