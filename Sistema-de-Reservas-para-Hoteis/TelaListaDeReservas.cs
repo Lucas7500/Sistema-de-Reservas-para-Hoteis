@@ -15,15 +15,25 @@ namespace Sistema_de_Reservas_para_Hoteis
 
         private static readonly List<Reserva> listaReservas = new();
         static int id = 0;
+        const int primeiroElemento = 0;
+        const int umaLinhaSelecionada = 1;
+        const int nenhumaLinhaSelecionada = 0;
+        const int idNulo = 0;
 
         public static void AdicionarReservaNaLista(Reserva reserva)
         {
-            if (reserva.Id == 0)
+            if (reserva.Id == idNulo)
             {
                 id++;
                 reserva.Id = id;
                 listaReservas.Add(reserva);
+                MessageBox.Show("Reserva foi feita com Sucesso!");
             }
+            else
+            {
+                MessageBox.Show("A reserva foi editada com sucesso!");
+            }
+
             TelaDaLista.DataSource = null;
             TelaDaLista.DataSource = listaReservas;
         }
@@ -37,13 +47,11 @@ namespace Sistema_de_Reservas_para_Hoteis
 
         private void AoClicarEditarElementoSelecionado(object sender, EventArgs e)
         {
-            int umaLinhaSelecionada = 1;
             int qtdLinhasSelecionadas = TelaDaLista.SelectedRows.Count;
-            int primeiroElemento = 0;
 
             if (qtdLinhasSelecionadas == umaLinhaSelecionada)
             {
-                if (listaReservas.Count == 0)
+                if (listaReservas.Count == nenhumaLinhaSelecionada)
                 {
                     MessageBox.Show("Seu programa não possui nenhuma reserva para ser editada.");
                     return;
@@ -66,7 +74,6 @@ namespace Sistema_de_Reservas_para_Hoteis
                 MessageBox.Show("Você deve selecionar ao menos uma linha para editar.");
 
             }
-
         }
     }
 }

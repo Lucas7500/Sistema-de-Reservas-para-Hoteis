@@ -84,17 +84,7 @@ namespace Sistema_de_Reservas_para_Hoteis
                 ListaExcessoes.Add(MensagemExcessao.PagamentoNaoInformado);
             }
 
-            bool NaoPossuemErros = (ListaExcessoes == null) || (!ListaExcessoes.Any());
-
-            if (NaoPossuemErros && reserva.Id == 0)
-            {
-                MessageBox.Show("Reserva foi feita com Sucesso!");
-            }
-            else if (NaoPossuemErros && reserva.Id != 0)
-            {
-                MessageBox.Show("A reserva foi editada com sucesso!");
-            }
-            else
+            if (ListaExcessoes.Any())
             {
                 string erros = String.Join("\n\n", ListaExcessoes);
                 ListaExcessoes.Clear();
