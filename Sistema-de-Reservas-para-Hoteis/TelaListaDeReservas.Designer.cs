@@ -1,6 +1,6 @@
 ﻿namespace Sistema_de_Reservas_para_Hoteis
 {
-    partial class JanelaPrincipal
+    partial class TelaListaDeReservas
     {
         /// <summary>
         ///  Required designer variable.
@@ -33,10 +33,6 @@
             BotaoEditar = new Button();
             BotaoDeletar = new Button();
             TelaDaLista = new DataGridView();
-            reservaBindingSource3 = new BindingSource(components);
-            reservaBindingSource = new BindingSource(components);
-            reservaBindingSource1 = new BindingSource(components);
-            reservaBindingSource2 = new BindingSource(components);
             idDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             nomeDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             cpfDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
@@ -47,6 +43,10 @@
             checkOutDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             precoEstadiaDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             pagamentoEfetuadoDataGridViewCheckBoxColumn = new DataGridViewCheckBoxColumn();
+            reservaBindingSource3 = new BindingSource(components);
+            reservaBindingSource = new BindingSource(components);
+            reservaBindingSource1 = new BindingSource(components);
+            reservaBindingSource2 = new BindingSource(components);
             ((System.ComponentModel.ISupportInitialize)TelaDaLista).BeginInit();
             ((System.ComponentModel.ISupportInitialize)reservaBindingSource3).BeginInit();
             ((System.ComponentModel.ISupportInitialize)reservaBindingSource).BeginInit();
@@ -62,7 +62,7 @@
             BotaoAdicionar.TabIndex = 1;
             BotaoAdicionar.Text = "Adicionar";
             BotaoAdicionar.UseVisualStyleBackColor = true;
-            BotaoAdicionar.Click += AoClicarAbrirTelaDeCadastro;
+            BotaoAdicionar.Click += AoClicarAdicionarAbrirTelaDeCadastro;
             // 
             // BotaoEditar
             // 
@@ -72,6 +72,7 @@
             BotaoEditar.TabIndex = 2;
             BotaoEditar.Text = "Editar";
             BotaoEditar.UseVisualStyleBackColor = true;
+            BotaoEditar.Click += AoClicarEditarElementoSelecionado;
             // 
             // BotaoDeletar
             // 
@@ -84,6 +85,9 @@
             // 
             // TelaDaLista
             // 
+            TelaDaLista.AllowUserToAddRows = false;
+            TelaDaLista.AllowUserToResizeColumns = false;
+            TelaDaLista.AllowUserToResizeRows = false;
             TelaDaLista.AutoGenerateColumns = false;
             TelaDaLista.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             TelaDaLista.Columns.AddRange(new DataGridViewColumn[] { idDataGridViewTextBoxColumn, nomeDataGridViewTextBoxColumn, cpfDataGridViewTextBoxColumn, telefoneDataGridViewTextBoxColumn, idadeDataGridViewTextBoxColumn, sexoDataGridViewTextBoxColumn, checkInDataGridViewTextBoxColumn, checkOutDataGridViewTextBoxColumn, precoEstadiaDataGridViewTextBoxColumn, pagamentoEfetuadoDataGridViewCheckBoxColumn });
@@ -91,25 +95,11 @@
             TelaDaLista.Location = new Point(12, 12);
             TelaDaLista.Name = "TelaDaLista";
             TelaDaLista.ReadOnly = true;
+            TelaDaLista.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             TelaDaLista.RowTemplate.Height = 25;
+            TelaDaLista.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             TelaDaLista.Size = new Size(787, 380);
             TelaDaLista.TabIndex = 4;
-            // 
-            // reservaBindingSource3
-            // 
-            reservaBindingSource3.DataSource = typeof(Reserva);
-            // 
-            // reservaBindingSource
-            // 
-            reservaBindingSource.DataSource = typeof(Reserva);
-            // 
-            // reservaBindingSource1
-            // 
-            reservaBindingSource1.DataSource = typeof(Reserva);
-            // 
-            // reservaBindingSource2
-            // 
-            reservaBindingSource2.DataSource = typeof(Reserva);
             // 
             // idDataGridViewTextBoxColumn
             // 
@@ -199,7 +189,23 @@
             pagamentoEfetuadoDataGridViewCheckBoxColumn.ReadOnly = true;
             pagamentoEfetuadoDataGridViewCheckBoxColumn.Width = 84;
             // 
-            // JanelaPrincipal
+            // reservaBindingSource3
+            // 
+            reservaBindingSource3.DataSource = typeof(Reserva);
+            // 
+            // reservaBindingSource
+            // 
+            reservaBindingSource.DataSource = typeof(Reserva);
+            // 
+            // reservaBindingSource1
+            // 
+            reservaBindingSource1.DataSource = typeof(Reserva);
+            // 
+            // reservaBindingSource2
+            // 
+            reservaBindingSource2.DataSource = typeof(Reserva);
+            // 
+            // TelaListaDeReservas
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -211,7 +217,7 @@
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             MinimizeBox = false;
-            Name = "JanelaPrincipal";
+            Name = "TelaListaDeReservas";
             Text = "Reserva de Hotel";
             ((System.ComponentModel.ISupportInitialize)TelaDaLista).EndInit();
             ((System.ComponentModel.ISupportInitialize)reservaBindingSource3).EndInit();

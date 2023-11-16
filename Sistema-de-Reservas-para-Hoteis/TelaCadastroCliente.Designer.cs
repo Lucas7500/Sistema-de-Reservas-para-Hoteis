@@ -1,6 +1,6 @@
 ﻿namespace Sistema_de_Reservas_para_Hoteis
 {
-    partial class CadastroCliente
+    partial class TelaCadastroCliente
     {
         /// <summary>
         /// Required designer variable.
@@ -203,7 +203,7 @@
             BotaoAdicionarCadastro.TabIndex = 11;
             BotaoAdicionarCadastro.Text = "Adicionar";
             BotaoAdicionarCadastro.UseVisualStyleBackColor = true;
-            BotaoAdicionarCadastro.Click += AoClicarEmAdicionar;
+            BotaoAdicionarCadastro.Click += AoClicarAdicionarCadastro;
             // 
             // BotaoCancelarCadastro
             // 
@@ -236,6 +236,7 @@
             // TextoIdade
             // 
             TextoIdade.Location = new Point(84, 90);
+            TextoIdade.MaxLength = 3;
             TextoIdade.Name = "TextoIdade";
             TextoIdade.Size = new Size(84, 23);
             TextoIdade.TabIndex = 4;
@@ -252,7 +253,7 @@
             SinalDoReal.TabIndex = 17;
             SinalDoReal.Text = "R$";
             // 
-            // CadastroCliente
+            // TelaCadastroCliente
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -282,7 +283,7 @@
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             MinimizeBox = false;
-            Name = "CadastroCliente";
+            Name = "TelaCadastroCliente";
             Text = "Cadastro";
             ResumeLayout(false);
             PerformLayout();
