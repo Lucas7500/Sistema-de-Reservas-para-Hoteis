@@ -1,5 +1,6 @@
 ﻿using Sistema_de_Reservas_para_Hoteis.Enums;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -36,7 +37,7 @@ namespace Sistema_de_Reservas_para_Hoteis
             
         }
 
-        public void LerDadosDaReserva(Reserva reserva)
+        public void AtribuirValoresReserva(Reserva reserva)
         {
             reserva.Nome = TextoNome.Text;
             reserva.Cpf = TextoCPF.Text;
@@ -66,19 +67,6 @@ namespace Sistema_de_Reservas_para_Hoteis
             }
         }
 
-        private static void CopiarDadosDeReservas(Reserva reserva1, Reserva reserva2)
-        {
-            reserva1.Nome = reserva2.Nome;
-            reserva1.Cpf = reserva2.Cpf;
-            reserva1.Telefone = reserva2.Telefone;
-            reserva1.Idade = reserva2.Idade;
-            reserva1.Sexo = reserva2.Sexo;
-            reserva1.CheckIn = reserva2.CheckIn;
-            reserva1.CheckOut = reserva2.CheckOut;
-            reserva1.PrecoEstadia = reserva2.PrecoEstadia;
-            reserva1.PagamentoEfetuado = reserva2.PagamentoEfetuado;
-        }
-
         private static decimal ConverterEmDecimalComVirgula(string numero)
         {
             if (numero.Contains(','))
@@ -103,21 +91,30 @@ namespace Sistema_de_Reservas_para_Hoteis
             return Decimal.Parse(numero);
         }
 
+        private Dictionary<string, dynamic> LerEntradasDoUsuario()
+        {
+            Dictionary<string, dynamic> reservaDict = new()
+            {
+                { "Nome", TextoNome.Text },
+                { "Cpf", TextoCPF.Text },
+                { "Telefone", TextoTelefone.Text },
+                { "Idade", String.IsNullOrWhiteSpace(TextoIdade.Text) ? Validacoes.codigoDeErro : int.Parse(TextoIdade.Text) },
+                { "Sexo", CaixaSexo.Text },
+                { "CheckIn", Convert.ToDateTime(DataCheckIn.Value.Date) },
+                { "CheckOut", Convert.ToDateTime(DataCheckOut.Value.Date) },
+                { "PrecoEstadia", String.IsNullOrWhiteSpace(TextoPreco.Text) ? Validacoes.codigoDeErro : ConverterEmDecimalComVirgula(TextoPreco.Text) },
+                { "PagamentoEfetuado", !BotaoTrue.Checked && !BotaoFalse.Checked ? "" : BotaoTrue.Checked.ToString() }
+            };
+
+            return reservaDict;
+        }
+
         private void AoClicarAdicionarCadastro(object sender, EventArgs e)
         {
             try
-            {
-                Reserva reservaTemporaria = new();
-
-                if (reserva.Id > idNulo)
-                {
-                    CopiarDadosDeReservas(reservaTemporaria, reserva);
-                }
-
-                LerDadosDaReserva(reservaTemporaria);
-                Validacoes.ValidarCampos(reservaTemporaria);
-                
-                CopiarDadosDeReservas(reserva, reservaTemporaria);
+            {  
+                Validacoes.ValidarCampos(LerEntradasDoUsuario());
+                AtribuirValoresReserva(reserva);
                 TelaListaDeReservas.AdicionarReservaNaLista(reserva);
                 this.Close();
             }

@@ -1,7 +1,4 @@
-using System.Collections.Generic;
 using System.Globalization;
-using System.Windows.Forms;
-using Sistema_de_Reservas_para_Hoteis.Enums;
 
 namespace Sistema_de_Reservas_para_Hoteis
 {

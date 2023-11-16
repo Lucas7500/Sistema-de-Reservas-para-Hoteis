@@ -17,6 +17,7 @@ namespace Sistema_de_Reservas_para_Hoteis
         public const string TelefoneInvalido = "* O Telefone digitado é inválido.";
         public const string IdadeNaoPreenchida = "* Informe a Idade do cliente.";
         public const string MenorDeIdade = "* A Idade é inválida. Cliente deve ser maior de idade.";
+        public const string SexoInvalido = "* O Sexo digitado é inválido.";
         public const string CheckOutEmDatasPassadas = "* O Check-out não pode ser realizado antes do Check-in.";
         public const string PrecoNaoPreenchido = "* Informe o Preço da Estadia.";
         public const string PagamentoNaoInformado = "* Informe se o Preço já foi pago.";

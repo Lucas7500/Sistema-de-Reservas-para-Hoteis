@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿using System.Text.RegularExpressions;
 
 namespace Sistema_de_Reservas_para_Hoteis
 {
@@ -20,24 +14,31 @@ namespace Sistema_de_Reservas_para_Hoteis
         readonly static string regexNome = @"^[a-zA-Z ]";
 
 
-        public static void ValidarCampos(Reserva reserva)
+        public static void ValidarCampos(Dictionary<string, dynamic> reservaDict)
         {
-            string numerosCPF = new(reserva.Cpf.Where(char.IsDigit).ToArray());
-            string numerosTelefone = new(reserva.Telefone.Where(char.IsDigit).ToArray());
-            bool menordeIdade = reserva.Idade < idadeAdulto;
-            TimeSpan diferencaCheckoutCheckIn = reserva.CheckOut - reserva.CheckIn;
+            string nome = reservaDict["Nome"], cpf = reservaDict["Cpf"], telefone = reservaDict["Telefone"], sexo = reservaDict["Sexo"];
+            int idade = reservaDict["Idade"];
+            decimal precoEstadia = reservaDict["PrecoEstadia"];
+            DateTime checkIn = reservaDict["CheckIn"], checkOut = reservaDict["CheckOut"];
+            string pagamentoEfetuado = reservaDict["PagamentoEfetuado"];
+
+            string numerosCPF = new(cpf.Where(char.IsDigit).ToArray());
+            string numerosTelefone = new(telefone.Where(char.IsDigit).ToArray());
+            bool menordeIdade = idade < idadeAdulto;
+            TimeSpan diferencaCheckoutCheckIn = checkOut - checkIn;
             string stringDiferencaCheckoutCheckIn = diferencaCheckoutCheckIn.ToString();
             bool dataCheckOutAntesDoCheckIn = stringDiferencaCheckoutCheckIn[0].Equals('-');
+            bool sexoInvalido = sexo != "Masculino" && sexo != "Feminino";
 
-            if (String.IsNullOrWhiteSpace(reserva.Nome))
+            if (String.IsNullOrWhiteSpace(nome))
             {
                 ListaExcessoes.Add(MensagemExcessao.NomeNulo);
             }
-            else if (reserva.Nome.Length < tamanhoMinimoNome)
+            else if (nome.Length < tamanhoMinimoNome)
             {
                 ListaExcessoes.Add(MensagemExcessao.NomePequeno);
             }
-            else if (!Regex.IsMatch(reserva.Nome, regexNome))
+            else if (!Regex.IsMatch(nome, regexNome))
             {
                 ListaExcessoes.Add(MensagemExcessao.NomeContemNumero);
             }
@@ -60,7 +61,7 @@ namespace Sistema_de_Reservas_para_Hoteis
                 ListaExcessoes.Add(MensagemExcessao.TelefoneInvalido);
             }
 
-            if (reserva.Idade == codigoDeErro)
+            if (idade == codigoDeErro)
             {
                 ListaExcessoes.Add(MensagemExcessao.IdadeNaoPreenchida);
             }
@@ -69,17 +70,22 @@ namespace Sistema_de_Reservas_para_Hoteis
                 ListaExcessoes.Add(MensagemExcessao.MenorDeIdade);
             }
 
+            if (sexoInvalido)
+            {
+                ListaExcessoes.Add(MensagemExcessao.SexoInvalido);
+            }
+
             if (dataCheckOutAntesDoCheckIn)
             {
                 ListaExcessoes.Add(MensagemExcessao.CheckOutEmDatasPassadas);
             }
 
-            if (reserva.PrecoEstadia == codigoDeErro)
+            if (precoEstadia == codigoDeErro)
             {
                 ListaExcessoes.Add(MensagemExcessao.PrecoNaoPreenchido);
             }
 
-            if (reserva.PagamentoEfetuado == null)
+            if (pagamentoEfetuado == "")
             {
                 ListaExcessoes.Add(MensagemExcessao.PagamentoNaoInformado);
             }
