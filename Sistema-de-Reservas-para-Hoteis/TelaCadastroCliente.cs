@@ -20,7 +20,6 @@ namespace Sistema_de_Reservas_para_Hoteis
         {
             InitializeComponent();
             CaixaSexo.DataSource = Enum.GetValues(typeof(GeneroEnum));
-
             if (reservaParametro.Id > idNulo)
             {
                 DataCheckIn.MinDate = reservaParametro.CheckIn;
@@ -33,7 +32,6 @@ namespace Sistema_de_Reservas_para_Hoteis
                 DataCheckIn.MinDate = DateTime.Now;
                 DataCheckOut.MinDate = DateTime.Now;
             }
-
         }
 
         private void PermitirApenasNumerosNaIdade(object sender, KeyPressEventArgs e)
@@ -52,7 +50,6 @@ namespace Sistema_de_Reservas_para_Hoteis
                 {
                     return;
                 }
-
                 e.Handled = true;
             }
         }
@@ -66,7 +63,6 @@ namespace Sistema_de_Reservas_para_Hoteis
                 e.Handled = PossuiVirgula;
                 return;
             }
-
             if (PossuiVirgula)
             {
                 int IndexCasasDecimais = 1, MaxCasasDecimais = 2;
@@ -75,7 +71,6 @@ namespace Sistema_de_Reservas_para_Hoteis
                 bool Possui2CasasDecimais = CasasDecimais.Length == MaxCasasDecimais;
                 e.Handled = Possui2CasasDecimais && !char.IsControl(e.KeyChar);
             }
-
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
             {
                 e.Handled = true;
@@ -101,7 +96,6 @@ namespace Sistema_de_Reservas_para_Hoteis
                         return Decimal.Parse(numero);
                 }
             }
-
             numero += ",00";
             return Decimal.Parse(numero);
         }
@@ -137,7 +131,6 @@ namespace Sistema_de_Reservas_para_Hoteis
                 { "PrecoEstadia", String.IsNullOrWhiteSpace(TextoPreco.Text) ? Validacoes.codigoDeErro : ConverterEmDecimalComVirgula(TextoPreco.Text) },
                 { "PagamentoEfetuado", !BotaoTrue.Checked && !BotaoFalse.Checked ? "" : BotaoTrue.Checked.ToString() }
             };
-
             return reservaDict;
         }
 
@@ -172,7 +165,6 @@ namespace Sistema_de_Reservas_para_Hoteis
         private void AoClicarCancelarCadastro(object sender, EventArgs e)
         {
             string mensagem = "Você realmente deseja cancelar?";
-
             var remover = MessageBox.Show(mensagem, "Confirmação de cancelamento", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (remover.Equals(DialogResult.Yes))
             {

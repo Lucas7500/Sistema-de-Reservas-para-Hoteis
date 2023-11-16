@@ -30,7 +30,6 @@ namespace Sistema_de_Reservas_para_Hoteis
             {
                 MessageBox.Show("A reserva foi editada com sucesso!");
             }
-
             AtualizarLista();
         }
 
@@ -43,7 +42,6 @@ namespace Sistema_de_Reservas_para_Hoteis
         private static bool SomenteUmaLinhaSelecionada()
         {
             int qtdLinhasSelecionadas = TelaDaLista.SelectedRows.Count;
-
             if (qtdLinhasSelecionadas == umaLinhaSelecionada)
             {
                 return true;
@@ -71,7 +69,6 @@ namespace Sistema_de_Reservas_para_Hoteis
             int indexLinha = TelaDaLista.SelectedRows[primeiroElemento].Index;
             int idLinhaSelecionada = (int)TelaDaLista.Rows[indexLinha].Cells[primeiroElemento].Value;
             Reserva reservaSelecionada = listaReservas.Find(x => x.Id == idLinhaSelecionada);
-
             return reservaSelecionada;
         }
 
