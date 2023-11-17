@@ -18,6 +18,6 @@ namespace Sistema_de_Reservas_para_Hoteis
         public DateTime CheckIn { get; set; }
         public DateTime CheckOut { get; set; }
         public decimal PrecoEstadia { get; set; }
-        public bool? PagamentoEfetuado { get; set; }
+        public bool PagamentoEfetuado { get; set; }
     }
 }

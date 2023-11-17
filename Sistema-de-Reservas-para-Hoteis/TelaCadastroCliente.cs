@@ -97,23 +97,28 @@ namespace Sistema_de_Reservas_para_Hoteis
                 }
             }
             numero += ",00";
+            
             return Decimal.Parse(numero);
         }
 
         private void PreencherTelaDeCadastro(Reserva reserva)
         {
-            TextoNome.Text = reserva.Nome;
-            TextoCPF.Text = reserva.Cpf;
-            TextoTelefone.Text = reserva.Telefone;
-            TextoIdade.Text = reserva.Idade.ToString();
-            CaixaSexo.SelectedItem = reserva.Sexo;
-            DataCheckIn.Value = reserva.CheckIn;
-            DataCheckOut.Value = reserva.CheckOut;
-            TextoPreco.Text = reserva.PrecoEstadia.ToString();
-            if (reserva.PagamentoEfetuado != null)
+            try
             {
-                BotaoTrue.Checked = (bool)reserva.PagamentoEfetuado;
-                BotaoFalse.Checked = (bool)!reserva.PagamentoEfetuado;
+                TextoNome.Text = reserva.Nome;
+                TextoCPF.Text = reserva.Cpf;
+                TextoTelefone.Text = reserva.Telefone;
+                TextoIdade.Text = reserva.Idade.ToString();
+                CaixaSexo.SelectedItem = reserva.Sexo;
+                DataCheckIn.Value = reserva.CheckIn;
+                DataCheckOut.Value = reserva.CheckOut;
+                TextoPreco.Text = reserva.PrecoEstadia.ToString();
+                BotaoTrue.Checked = reserva.PagamentoEfetuado;
+                BotaoFalse.Checked = !reserva.PagamentoEfetuado;
+            }
+            catch
+            {
+                TelaListaDeReservas.MensagemErroInesperado();
             }
         }
 
@@ -131,20 +136,28 @@ namespace Sistema_de_Reservas_para_Hoteis
                 { "PrecoEstadia", String.IsNullOrWhiteSpace(TextoPreco.Text) ? Validacoes.codigoDeErro : ConverterEmDecimalComVirgula(TextoPreco.Text) },
                 { "PagamentoEfetuado", !BotaoTrue.Checked && !BotaoFalse.Checked ? "" : BotaoTrue.Checked.ToString() }
             };
+            
             return reservaDict;
         }
 
-        public void AtribuirValoresReserva(Reserva reserva)
+        private void AtribuirValoresReserva(Reserva reserva)
         {
-            reserva.Nome = TextoNome.Text;
-            reserva.Cpf = TextoCPF.Text;
-            reserva.Telefone = TextoTelefone.Text;
-            reserva.Idade = String.IsNullOrWhiteSpace(TextoIdade.Text) ? Validacoes.codigoDeErro : int.Parse(TextoIdade.Text);
-            reserva.Sexo = (GeneroEnum)CaixaSexo.SelectedItem;
-            reserva.CheckIn = Convert.ToDateTime(DataCheckIn.Value.Date);
-            reserva.CheckOut = Convert.ToDateTime(DataCheckOut.Value.Date);
-            reserva.PrecoEstadia = String.IsNullOrWhiteSpace(TextoPreco.Text) ? Validacoes.codigoDeErro : ConverterEmDecimalComVirgula(TextoPreco.Text);
-            reserva.PagamentoEfetuado = !BotaoTrue.Checked && !BotaoFalse.Checked ? null : BotaoTrue.Checked;
+            try
+            {
+                reserva.Nome = TextoNome.Text;
+                reserva.Cpf = TextoCPF.Text;
+                reserva.Telefone = TextoTelefone.Text;
+                reserva.Idade = int.Parse(TextoIdade.Text);
+                reserva.Sexo = (GeneroEnum) CaixaSexo.SelectedItem;
+                reserva.CheckIn = Convert.ToDateTime(DataCheckIn.Value.Date);
+                reserva.CheckOut = Convert.ToDateTime(DataCheckOut.Value.Date);
+                reserva.PrecoEstadia = ConverterEmDecimalComVirgula(TextoPreco.Text);
+                reserva.PagamentoEfetuado = BotaoTrue.Checked;
+            }
+            catch
+            {
+                TelaListaDeReservas.MensagemErroInesperado();
+            }
         }
 
         private void AoClicarAdicionarCadastro(object sender, EventArgs e)

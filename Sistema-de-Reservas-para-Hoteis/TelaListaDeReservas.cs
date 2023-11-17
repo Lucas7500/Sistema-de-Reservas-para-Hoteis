@@ -19,18 +19,33 @@ namespace Sistema_de_Reservas_para_Hoteis
 
         public static void AdicionarReservaNaLista(Reserva reserva)
         {
-            if (reserva.Id == idNulo)
+            try
             {
-                id++;
-                reserva.Id = id;
-                listaReservas.Add(reserva);
-                MessageBox.Show("Reserva foi feita com Sucesso!");
+                if (reserva.Id == idNulo)
+                {
+                    id++;
+                    reserva.Id = id;
+                    listaReservas.Add(reserva);
+                    MessageBox.Show("Reserva foi feita com Sucesso!");
+                }
+                else
+                {
+                    MessageBox.Show("A reserva foi editada com sucesso!");
+                }
+                
+                AtualizarLista();
             }
-            else
+            catch
             {
-                MessageBox.Show("A reserva foi editada com sucesso!");
+                MensagemErroInesperado();
             }
-            AtualizarLista();
+        }
+
+        public static void MensagemErroInesperado()
+        {
+            string mensagem = "Ocorreu um erro inesperado.";
+            string titulo = "Aviso";
+            MessageBox.Show(mensagem, titulo, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private static void AtualizarLista()
@@ -52,7 +67,7 @@ namespace Sistema_de_Reservas_para_Hoteis
             }
         }
 
-        private static bool ListaEhNula()
+        private static bool ListaEhVazia()
         {
             if (listaReservas.Count == listaNula)
             {
@@ -64,57 +79,89 @@ namespace Sistema_de_Reservas_para_Hoteis
             }
         }
 
+        private static void MensagemErroListaVazia(string acao)
+        {
+            MessageBox.Show($"Seu programa não possui nenhuma reserva para {acao}.");
+        }
+
+        private static void MensagemErroNenhumaLinhaSelecionada(string acao)
+        {
+            MessageBox.Show($"Selecione uma linha para {acao}!");
+        }
+
         private static Reserva RetornaReservaSelecionada()
         {
             int indexLinha = TelaDaLista.SelectedRows[primeiroElemento].Index;
             int idLinhaSelecionada = (int)TelaDaLista.Rows[indexLinha].Cells[primeiroElemento].Value;
             Reserva reservaSelecionada = listaReservas.Find(x => x.Id == idLinhaSelecionada);
+           
             return reservaSelecionada;
         }
 
         private void AoClicarAbrirTelaDeCadastro(object sender, EventArgs e)
         {
-            Reserva reserva = new();
-            TelaCadastroCliente TelaCadastro = new(reserva);
-            TelaCadastro.ShowDialog();
+            try
+            {
+                Reserva reserva = new();
+                TelaCadastroCliente TelaCadastro = new(reserva);
+                TelaCadastro.ShowDialog();
+            }
+            catch 
+            {
+                MensagemErroInesperado();
+            }
         }
 
         private void AoClicarEditarElementoSelecionado(object sender, EventArgs e)
         {
-            if (ListaEhNula())
+            try
             {
-                MessageBox.Show("Seu programa não possui nenhuma reserva para ser editada.");
+                if (ListaEhVazia())
+                {
+                    MensagemErroListaVazia("editar");
+                }
+                else if (SomenteUmaLinhaSelecionada())
+                {
+                    TelaCadastroCliente TelaCadastro = new(RetornaReservaSelecionada());
+                    TelaCadastro.ShowDialog();
+                }
+                else
+                {
+                    MensagemErroNenhumaLinhaSelecionada("editar");
+                }
             }
-            else if (SomenteUmaLinhaSelecionada())
+            catch
             {
-                TelaCadastroCliente TelaCadastro = new(RetornaReservaSelecionada());
-                TelaCadastro.ShowDialog();
-            }
-            else
-            {
-                MessageBox.Show("Selecione uma linha para editar!");
+                MensagemErroInesperado();
             }
         }
 
         private void AoClicarDeletarElementoSelecionado(object sender, EventArgs e)
         {
-            if (ListaEhNula())
+            try
             {
-                MessageBox.Show("Seu programa não possui nenhuma reserva para ser deletada.");
-            }
-            else if (SomenteUmaLinhaSelecionada())
-            {
-                string mensagem = $"Você tem certeza que quer deletar a reserva do cliente {RetornaReservaSelecionada().Nome} ?";
-                var deletar = MessageBox.Show(mensagem, "Confirmação de remoção", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-                if (deletar.Equals(DialogResult.Yes))
+                if (ListaEhVazia())
                 {
-                    listaReservas.Remove(RetornaReservaSelecionada());
-                    AtualizarLista();
+                    MensagemErroListaVazia("deletar");
+                }
+                else if (SomenteUmaLinhaSelecionada())
+                {
+                    string mensagem = $"Você tem certeza que quer deletar a reserva de {RetornaReservaSelecionada().Nome} ?";
+                    var deletar = MessageBox.Show(mensagem, "Confirmação de remoção", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                    if (deletar.Equals(DialogResult.Yes))
+                    {
+                        listaReservas.Remove(RetornaReservaSelecionada());
+                        AtualizarLista();
+                    }
+                }
+                else
+                {
+                    MensagemErroNenhumaLinhaSelecionada("deletar");
                 }
             }
-            else
+            catch
             {
-                MessageBox.Show("Selecione uma linha para deletar!");
+                MensagemErroInesperado();
             }
         }
     }
