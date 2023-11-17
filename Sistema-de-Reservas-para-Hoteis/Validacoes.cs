@@ -85,7 +85,7 @@ namespace Sistema_de_Reservas_para_Hoteis
                 ListaExcessoes.Add(MensagemExcessao.PrecoNaoPreenchido);
             }
 
-            if (pagamentoEfetuado == "")
+            if (String.IsNullOrEmpty(pagamentoEfetuado))
             {
                 ListaExcessoes.Add(MensagemExcessao.PagamentoNaoInformado);
             }

@@ -62,7 +62,7 @@
             BotaoAdicionar.TabIndex = 1;
             BotaoAdicionar.Text = "Adicionar";
             BotaoAdicionar.UseVisualStyleBackColor = true;
-            BotaoAdicionar.Click += AoClicarAdicionarAbrirTelaDeCadastro;
+            BotaoAdicionar.Click += AoClicarAbrirTelaDeCadastro;
             // 
             // BotaoEditar
             // 
@@ -82,6 +82,7 @@
             BotaoDeletar.TabIndex = 3;
             BotaoDeletar.Text = "Deletar";
             BotaoDeletar.UseVisualStyleBackColor = true;
+            BotaoDeletar.Click += AoClicarDeletarElementoSelecionado;
             // 
             // TelaDaLista
             // 
