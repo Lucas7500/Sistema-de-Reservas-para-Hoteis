@@ -14,7 +14,7 @@ namespace Sistema_de_Reservas_para_Hoteis
 {
     public partial class TelaCadastroCliente : Form
     {
-        private readonly Reserva reserva = new();
+        private readonly Reserva reservaCopia = new();
         const int idNulo = 0;
         public TelaCadastroCliente(Reserva reservaParametro)
         {
@@ -25,7 +25,7 @@ namespace Sistema_de_Reservas_para_Hoteis
                 DataCheckIn.MinDate = reservaParametro.CheckIn;
                 DataCheckOut.MinDate = reservaParametro.CheckOut;
                 PreencherTelaDeCadastro(reservaParametro);
-                reserva = reservaParametro;
+                reservaCopia = (Reserva)reservaParametro.ShallowCopy();
             }
             else
             {
@@ -33,6 +33,8 @@ namespace Sistema_de_Reservas_para_Hoteis
                 DataCheckOut.MinDate = DateTime.Now;
             }
         }
+
+        private readonly IRepositorio repositorio = new Repositorio();
 
         private void PermitirApenasNumerosNaIdade(object sender, KeyPressEventArgs e)
         {
@@ -97,7 +99,7 @@ namespace Sistema_de_Reservas_para_Hoteis
                 }
             }
             numero += ",00";
-            
+
             return Decimal.Parse(numero);
         }
 
@@ -136,7 +138,7 @@ namespace Sistema_de_Reservas_para_Hoteis
                 { "PrecoEstadia", String.IsNullOrWhiteSpace(TextoPreco.Text) ? Validacoes.codigoDeErro : ConverterEmDecimalComVirgula(TextoPreco.Text) },
                 { "PagamentoEfetuado", !BotaoTrue.Checked && !BotaoFalse.Checked ? "" : BotaoTrue.Checked.ToString() }
             };
-            
+
             return reservaDict;
         }
 
@@ -148,7 +150,7 @@ namespace Sistema_de_Reservas_para_Hoteis
                 reserva.Cpf = TextoCPF.Text;
                 reserva.Telefone = TextoTelefone.Text;
                 reserva.Idade = int.Parse(TextoIdade.Text);
-                reserva.Sexo = (GeneroEnum) CaixaSexo.SelectedItem;
+                reserva.Sexo = (GeneroEnum)CaixaSexo.SelectedItem;
                 reserva.CheckIn = Convert.ToDateTime(DataCheckIn.Value.Date);
                 reserva.CheckOut = Convert.ToDateTime(DataCheckOut.Value.Date);
                 reserva.PrecoEstadia = ConverterEmDecimalComVirgula(TextoPreco.Text);
@@ -165,8 +167,8 @@ namespace Sistema_de_Reservas_para_Hoteis
             try
             {
                 Validacoes.ValidarCampos(LerEntradasDoUsuario());
-                AtribuirValoresReserva(reserva);
-                TelaListaDeReservas.AdicionarReservaNaLista(reserva);
+                AtribuirValoresReserva(reservaCopia);
+                TelaListaDeReservas.AdicionarReservaNaLista(reservaCopia);
                 this.Close();
             }
             catch (Exception erro)
