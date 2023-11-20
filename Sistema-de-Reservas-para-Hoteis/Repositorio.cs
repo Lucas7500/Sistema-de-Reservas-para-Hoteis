@@ -24,6 +24,7 @@ namespace Sistema_de_Reservas_para_Hoteis
 
         public void Criar(Reserva reserva)
         {
+            reserva.Id = Singleton.IncrementarId();
             listaReservas.Add(reserva);
         }
         public void Atualizar(Reserva copiaReserva)

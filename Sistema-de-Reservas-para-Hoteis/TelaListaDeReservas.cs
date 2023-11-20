@@ -21,7 +21,6 @@ namespace Sistema_de_Reservas_para_Hoteis
             {
                 if (reserva.Id == idNulo)
                 {
-                    reserva.Id = Singleton.IncrementarId();
                     repositorio.Criar(reserva);
                     MessageBox.Show("Reserva foi criada com Sucesso!");
                 }
