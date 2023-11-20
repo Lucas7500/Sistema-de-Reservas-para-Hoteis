@@ -9,6 +9,7 @@ namespace Sistema_de_Reservas_para_Hoteis
             InitializeComponent();
         }
 
+        private static readonly IRepositorio repositorio = new Repositorio();
         const int primeiroElemento = 0;
         const int umaLinhaSelecionada = 1;
         const int idNulo = 0;
@@ -20,16 +21,16 @@ namespace Sistema_de_Reservas_para_Hoteis
             {
                 if (reserva.Id == idNulo)
                 {
-                    reserva.Id = Singleton.IncrementarId();
-                    Singleton.RetornaLista().Add(reserva);
-                    MessageBox.Show("Reserva foi feita com Sucesso!");
+                    repositorio.Criar(reserva);
+                    MessageBox.Show("Reserva foi criada com Sucesso!");
                 }
                 else
                 {
+                    repositorio.Atualizar(reserva);
                     MessageBox.Show("A reserva foi editada com sucesso!");
                 }
-                
-                AtualizarLista();
+
+                AtualizarGrid();
             }
             catch
             {
@@ -44,10 +45,10 @@ namespace Sistema_de_Reservas_para_Hoteis
             MessageBox.Show(mensagem, titulo, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
-        private static void AtualizarLista()
+        private static void AtualizarGrid()
         {
             TelaDaLista.DataSource = null;
-            TelaDaLista.DataSource = Singleton.RetornaLista();
+            TelaDaLista.DataSource = repositorio.ObterTodos();
         }
 
         private static bool SomenteUmaLinhaSelecionada()
@@ -65,7 +66,7 @@ namespace Sistema_de_Reservas_para_Hoteis
 
         private static bool ListaEhVazia()
         {
-            if (Singleton.RetornaLista().Count == listaNula)
+            if (repositorio.ObterTodos().Count == listaNula)
             {
                 return true;
             }
@@ -85,13 +86,12 @@ namespace Sistema_de_Reservas_para_Hoteis
             MessageBox.Show($"Selecione uma linha para {acao}!");
         }
 
-        private static Reserva RetornaReservaSelecionada()
+        private static int RetornaIdReservaSelecionada()
         {
             int indexLinha = TelaDaLista.SelectedRows[primeiroElemento].Index;
             int idLinhaSelecionada = (int)TelaDaLista.Rows[indexLinha].Cells[primeiroElemento].Value;
-            Reserva reservaSelecionada = Singleton.RetornaLista().Find(x => x.Id == idLinhaSelecionada);
-           
-            return reservaSelecionada;
+
+            return idLinhaSelecionada;
         }
 
         private void AoClicarAbrirTelaDeCadastro(object sender, EventArgs e)
@@ -102,7 +102,7 @@ namespace Sistema_de_Reservas_para_Hoteis
                 TelaCadastroCliente TelaCadastro = new(reserva);
                 TelaCadastro.ShowDialog();
             }
-            catch 
+            catch
             {
                 MensagemErroInesperado();
             }
@@ -118,7 +118,8 @@ namespace Sistema_de_Reservas_para_Hoteis
                 }
                 else if (SomenteUmaLinhaSelecionada())
                 {
-                    TelaCadastroCliente TelaCadastro = new(RetornaReservaSelecionada());
+                    Reserva reservaSelecionada = repositorio.ObterPorId(RetornaIdReservaSelecionada());
+                    TelaCadastroCliente TelaCadastro = new(reservaSelecionada);
                     TelaCadastro.ShowDialog();
                 }
                 else
@@ -142,12 +143,13 @@ namespace Sistema_de_Reservas_para_Hoteis
                 }
                 else if (SomenteUmaLinhaSelecionada())
                 {
-                    string mensagem = $"Você tem certeza que quer deletar a reserva de {RetornaReservaSelecionada().Nome} ?";
-                    var deletar = MessageBox.Show(mensagem, "Confirmação de remoção", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                    Reserva reservaSelecionada = repositorio.ObterPorId(RetornaIdReservaSelecionada());
+                    string mensagem = $"Você tem certeza que quer deletar a reserva de {reservaSelecionada.Nome}?", titulo = "Confirmação de remoção";
+                    var deletar = MessageBox.Show(mensagem, titulo, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                     if (deletar.Equals(DialogResult.Yes))
                     {
-                        Singleton.RetornaLista().Remove(RetornaReservaSelecionada());
-                        AtualizarLista();
+                        repositorio.Remover(RetornaIdReservaSelecionada());
+                        AtualizarGrid();
                     }
                 }
                 else

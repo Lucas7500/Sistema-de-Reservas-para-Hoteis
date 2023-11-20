@@ -9,6 +9,11 @@ namespace Sistema_de_Reservas_para_Hoteis
 {
     public class Reserva
     {
+        public object ShallowCopy()
+        {
+            return this.MemberwiseClone();
+        }
+
         public int Id { get; set; }
         public string Nome { get; set; } = string.Empty;
         public string Cpf { get; set; } = string.Empty;
