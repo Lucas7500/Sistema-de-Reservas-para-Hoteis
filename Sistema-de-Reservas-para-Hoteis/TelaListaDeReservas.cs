@@ -6,12 +6,9 @@ namespace Sistema_de_Reservas_para_Hoteis
     {
         public TelaListaDeReservas()
         {
-            _ = CultureInfo.InvariantCulture;
             InitializeComponent();
         }
 
-        private static readonly List<Reserva> listaReservas = new();
-        static int id = 0;
         const int primeiroElemento = 0;
         const int umaLinhaSelecionada = 1;
         const int idNulo = 0;
@@ -23,9 +20,8 @@ namespace Sistema_de_Reservas_para_Hoteis
             {
                 if (reserva.Id == idNulo)
                 {
-                    id++;
-                    reserva.Id = id;
-                    listaReservas.Add(reserva);
+                    reserva.Id = Singleton.IncrementarId();
+                    Singleton.RetornaLista().Add(reserva);
                     MessageBox.Show("Reserva foi feita com Sucesso!");
                 }
                 else
@@ -51,7 +47,7 @@ namespace Sistema_de_Reservas_para_Hoteis
         private static void AtualizarLista()
         {
             TelaDaLista.DataSource = null;
-            TelaDaLista.DataSource = listaReservas;
+            TelaDaLista.DataSource = Singleton.RetornaLista();
         }
 
         private static bool SomenteUmaLinhaSelecionada()
@@ -69,7 +65,7 @@ namespace Sistema_de_Reservas_para_Hoteis
 
         private static bool ListaEhVazia()
         {
-            if (listaReservas.Count == listaNula)
+            if (Singleton.RetornaLista().Count == listaNula)
             {
                 return true;
             }
@@ -93,7 +89,7 @@ namespace Sistema_de_Reservas_para_Hoteis
         {
             int indexLinha = TelaDaLista.SelectedRows[primeiroElemento].Index;
             int idLinhaSelecionada = (int)TelaDaLista.Rows[indexLinha].Cells[primeiroElemento].Value;
-            Reserva reservaSelecionada = listaReservas.Find(x => x.Id == idLinhaSelecionada);
+            Reserva reservaSelecionada = Singleton.RetornaLista().Find(x => x.Id == idLinhaSelecionada);
            
             return reservaSelecionada;
         }
@@ -150,7 +146,7 @@ namespace Sistema_de_Reservas_para_Hoteis
                     var deletar = MessageBox.Show(mensagem, "Confirmação de remoção", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                     if (deletar.Equals(DialogResult.Yes))
                     {
-                        listaReservas.Remove(RetornaReservaSelecionada());
+                        Singleton.RetornaLista().Remove(RetornaReservaSelecionada());
                         AtualizarLista();
                     }
                 }
