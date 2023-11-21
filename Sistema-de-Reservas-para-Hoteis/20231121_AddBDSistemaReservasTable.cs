@@ -2,21 +2,22 @@
 
 namespace Sistema_de_Reservas_para_Hoteis
 {
+    [Migration(20231121103700)]
     public class AddTabelaReservas : Migration
     {
         public override void Up()
         {
             Create.Table("TabelaReservas")
-                .WithColumn("Id").AsInt64().PrimaryKey().Identity()
-                .WithColumn("Nome").AsString()
-                .WithColumn("Cpf").AsString()
-                .WithColumn("Telefone").AsString()
-                .WithColumn("Idade").AsInt32()
-                .WithColumn("Sexo").AsInt16()
-                .WithColumn("CheckIn").AsDateTime()
-                .WithColumn("CheckOut").AsDateTime()
-                .WithColumn("PrecoEstadia").AsDecimal()
-                .WithColumn("PagamentoEfetuado").AsBoolean();
+                .WithColumn("Id").AsInt64().PrimaryKey().Identity().NotNullable()
+                .WithColumn("Nome").AsString().NotNullable()
+                .WithColumn("Cpf").AsString().NotNullable()
+                .WithColumn("Telefone").AsString().NotNullable()
+                .WithColumn("Idade").AsInt32().NotNullable()
+                .WithColumn("Sexo").AsInt16().NotNullable()
+                .WithColumn("CheckIn").AsDateTime().NotNullable()
+                .WithColumn("CheckOut").AsDateTime().NotNullable()
+                .WithColumn("PrecoEstadia").AsDecimal().NotNullable()
+                .WithColumn("PagamentoEfetuado").AsBoolean().NotNullable();
         }
 
         public override void Down()
@@ -24,5 +25,4 @@ namespace Sistema_de_Reservas_para_Hoteis
             Delete.Table("TabelaReservas");
         }
     }
-}
 }
