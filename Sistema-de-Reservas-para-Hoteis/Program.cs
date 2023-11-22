@@ -24,7 +24,7 @@ namespace Sistema_de_Reservas_para_Hoteis
                 .AddFluentMigratorCore()
                 .ConfigureRunner(rb => rb
                     .AddSqlServer()
-                    .WithGlobalConnectionString("Data Source=DESKTOP-4LLB66I;Initial Catalog=BDSistemaReservas;User ID=sa;Password=sap@123;Encrypt=False")
+                    .WithGlobalConnectionString(System.Configuration.ConfigurationManager.ConnectionStrings["BDSistemaReservas"].ConnectionString)
                     .ScanIn(typeof(AddTabelaReservas).Assembly).For.Migrations())
                 .AddLogging(lb => lb.AddFluentMigratorConsole())
                 .BuildServiceProvider(false);
