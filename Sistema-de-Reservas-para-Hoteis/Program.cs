@@ -1,5 +1,6 @@
 using FluentMigrator.Runner;
 using Microsoft.Extensions.DependencyInjection;
+using Sistema_de_Reservas_para_Hoteis.Migrations;
 
 namespace Sistema_de_Reservas_para_Hoteis
 {

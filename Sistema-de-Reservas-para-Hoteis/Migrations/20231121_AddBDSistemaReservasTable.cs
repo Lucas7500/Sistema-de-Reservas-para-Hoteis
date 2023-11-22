@@ -1,6 +1,6 @@
 ﻿using FluentMigrator;
 
-namespace Sistema_de_Reservas_para_Hoteis
+namespace Sistema_de_Reservas_para_Hoteis.Migrations
 {
     [Migration(20231121103700)]
     public class AddTabelaReservas : Migration
