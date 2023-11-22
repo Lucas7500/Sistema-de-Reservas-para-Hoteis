@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Sistema_de_Reservas_para_Hoteis.Enums;
+﻿using Sistema_de_Reservas_para_Hoteis.Enums;
 
 namespace Sistema_de_Reservas_para_Hoteis
 {
