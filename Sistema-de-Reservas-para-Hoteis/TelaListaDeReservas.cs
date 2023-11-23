@@ -5,9 +5,11 @@ namespace Sistema_de_Reservas_para_Hoteis
         public TelaListaDeReservas()
         {
             InitializeComponent();
+            AtualizarGrid();
         }
 
         private static readonly IRepositorio repositorio = new Repositorio();
+        private static readonly IRepositorio repositorioBD = new RepositorioBancoDeDados();
         const int primeiroElemento = 0;
         const int umaLinhaSelecionada = 1;
         const int idNulo = 0;
@@ -19,7 +21,7 @@ namespace Sistema_de_Reservas_para_Hoteis
             {
                 if (reserva.Id == idNulo)
                 {
-                    repositorio.Criar(reserva);
+                    repositorioBD.Criar(reserva);
                     MessageBox.Show("Reserva foi criada com Sucesso!");
                 }
                 else
@@ -29,24 +31,22 @@ namespace Sistema_de_Reservas_para_Hoteis
                 }
 
                 AtualizarGrid();
-            }
-            catch
-            {
-                MensagemErroInesperado();
-            }
         }
-
-        public static void MensagemErroInesperado()
+            catch (Exception erro)
+            {
+                MensagemErroInesperado(erro.Message);
+            }  
+        }
+        public static void MensagemErroInesperado(string mensagem)
         {
-            string mensagem = "Ocorreu um erro inesperado.";
-            string titulo = "Aviso";
+            string titulo = "Ocorreu um erro inesperado";
             MessageBox.Show(mensagem, titulo, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private static void AtualizarGrid()
         {
             TelaDaLista.DataSource = null;
-            TelaDaLista.DataSource = repositorio.ObterTodos();
+            TelaDaLista.DataSource = repositorioBD.ObterTodos();
         }
 
         private static bool SomenteUmaLinhaSelecionada()
@@ -64,7 +64,7 @@ namespace Sistema_de_Reservas_para_Hoteis
 
         private static bool ListaEhVazia()
         {
-            if (repositorio.ObterTodos().Count == listaNula)
+            if (repositorioBD.ObterTodos().Count == listaNula)
             {
                 return true;
             }
@@ -100,9 +100,9 @@ namespace Sistema_de_Reservas_para_Hoteis
                 TelaCadastroCliente TelaCadastro = new(reserva);
                 TelaCadastro.ShowDialog();
             }
-            catch
+            catch (Exception erro)
             {
-                MensagemErroInesperado();
+                MensagemErroInesperado(erro.Message);
             }
         }
 
@@ -125,9 +125,9 @@ namespace Sistema_de_Reservas_para_Hoteis
                     MensagemErroNenhumaLinhaSelecionada("editar");
                 }
             }
-            catch
+            catch (Exception erro)
             {
-                MensagemErroInesperado();
+                MensagemErroInesperado(erro.Message);
             }
         }
 
@@ -141,12 +141,12 @@ namespace Sistema_de_Reservas_para_Hoteis
                 }
                 else if (SomenteUmaLinhaSelecionada())
                 {
-                    Reserva reservaSelecionada = repositorio.ObterPorId(RetornaIdReservaSelecionada());
+                    Reserva reservaSelecionada = repositorioBD.ObterPorId(RetornaIdReservaSelecionada());
                     string mensagem = $"Você tem certeza que quer deletar a reserva de {reservaSelecionada.Nome}?", titulo = "Confirmação de remoção";
                     var deletar = MessageBox.Show(mensagem, titulo, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                     if (deletar.Equals(DialogResult.Yes))
                     {
-                        repositorio.Remover(RetornaIdReservaSelecionada());
+                        repositorioBD.Remover(RetornaIdReservaSelecionada());
                         AtualizarGrid();
                     }
                 }
@@ -155,9 +155,9 @@ namespace Sistema_de_Reservas_para_Hoteis
                     MensagemErroNenhumaLinhaSelecionada("deletar");
                 }
             }
-            catch
+            catch (Exception erro)
             {
-                MensagemErroInesperado();
+                MensagemErroInesperado(erro.Message);      
             }
         }
     }

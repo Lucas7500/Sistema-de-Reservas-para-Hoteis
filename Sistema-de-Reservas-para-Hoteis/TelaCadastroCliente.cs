@@ -24,8 +24,6 @@ namespace Sistema_de_Reservas_para_Hoteis
             }
         }
 
-        private readonly IRepositorio repositorio = new Repositorio();
-
         private void PermitirApenasNumerosNaIdade(object sender, KeyPressEventArgs e)
         {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
@@ -108,9 +106,9 @@ namespace Sistema_de_Reservas_para_Hoteis
                 BotaoTrue.Checked = reserva.PagamentoEfetuado;
                 BotaoFalse.Checked = !reserva.PagamentoEfetuado;
             }
-            catch
+            catch (Exception erro)
             {
-                TelaListaDeReservas.MensagemErroInesperado();
+               TelaListaDeReservas.MensagemErroInesperado(erro.Message);
             }
         }
 
@@ -146,9 +144,9 @@ namespace Sistema_de_Reservas_para_Hoteis
                 reserva.PrecoEstadia = ConverterEmDecimalComVirgula(TextoPreco.Text);
                 reserva.PagamentoEfetuado = BotaoTrue.Checked;
             }
-            catch
+            catch (Exception erro)
             {
-                TelaListaDeReservas.MensagemErroInesperado();
+                TelaListaDeReservas.MensagemErroInesperado(erro.Message);
             }
         }
 

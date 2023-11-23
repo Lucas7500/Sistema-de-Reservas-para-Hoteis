@@ -32,6 +32,5 @@
             Reserva reserva = ObterPorId(id);
             listaReservas.Remove(reserva);
         }
-
     }
 }
