@@ -108,7 +108,7 @@ namespace Sistema_de_Reservas_para_Hoteis
             }
             catch (Exception erro)
             {
-               TelaListaDeReservas.MensagemErroInesperado(erro.Message);
+                MensagemExcessao.MensagemErroInesperado(erro.Message);
             }
         }
 
@@ -146,7 +146,7 @@ namespace Sistema_de_Reservas_para_Hoteis
             }
             catch (Exception erro)
             {
-                TelaListaDeReservas.MensagemErroInesperado(erro.Message);
+                MensagemExcessao.MensagemErroInesperado(erro.Message);
             }
         }
 

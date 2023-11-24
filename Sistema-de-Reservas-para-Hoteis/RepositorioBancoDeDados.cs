@@ -6,7 +6,6 @@ namespace Sistema_de_Reservas_para_Hoteis
     internal class RepositorioBancoDeDados : IRepositorio
     {
         private static readonly string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["BDSistemaReservas"].ConnectionString;
-        readonly SqlConnection connection = new (connectionString);
 
         private static Reserva CriarReserva(SqlDataReader leitor)
         {
@@ -27,89 +26,128 @@ namespace Sistema_de_Reservas_para_Hoteis
 
         public List<Reserva> ObterTodos()
         {
-            connection.Open();
-            SqlCommand obterLinhasBD = new("SELECT * FROM TabelaReservas", connection);
-            var leitor = obterLinhasBD.ExecuteReader();
             List<Reserva> listaReservas = new();
 
-            while (leitor.Read())
+            using SqlConnection connection = new(connectionString);
             {
-                listaReservas.Add(CriarReserva(leitor));
-            }
+                connection.Open();
+                SqlCommand obterLinhasBD = new("SELECT * FROM TabelaReservas", connection);
+                var leitor = obterLinhasBD.ExecuteReader();
 
-            connection.Close();
+                while (leitor.Read())
+                {
+                    listaReservas.Add(CriarReserva(leitor));
+                }
+            }
 
             return listaReservas;
         }
 
         public Reserva ObterPorId(int id)
         {
-            connection.Open();
-            SqlCommand obterObjetoPorId = new($"SELECT * FROM TabelaReservas WHERE Id={id}", connection);
-            var leitor = obterObjetoPorId.ExecuteReader();
             Reserva reservaSelecionada = new();
 
-            while (leitor.Read())
+            using SqlConnection connection = new(connectionString);
             {
-                reservaSelecionada = CriarReserva(leitor);
-            }
+                try
+                {
+                    connection.Open();
+                    SqlCommand obterObjetoPorId = new($"SELECT * FROM TabelaReservas WHERE Id={id}", connection);
+                    var leitor = obterObjetoPorId.ExecuteReader();
 
-            connection.Close();
+                    while (leitor.Read())
+                    {
+                        reservaSelecionada = CriarReserva(leitor);
+                    }
+                }
+                catch
+                {
+                    throw new Exception(message: "Erro ao Obter Reserva Selecionada do Banco De Dados");
+                }
+            }
 
             return reservaSelecionada;
         }
 
         public void Criar(Reserva reserva)
         {
-            connection.Open();
-            SqlCommand inserirReservaNaTabela = new($@"
-            INSERT INTO 
-                TabelaReservas (Nome, Cpf, Telefone, Idade, Sexo, CheckIn, CheckOut, PrecoEstadia, PagamentoEfetuado) 
-            VALUES 
-            (
-                '{reserva.Nome}', 
-                '{reserva.Cpf}', 
-                '{reserva.Telefone}', 
-                '{reserva.Idade}', 
-                '{reserva.Sexo}', 
-                '{reserva.CheckIn.Date:dd-MM-yyy}', 
-                '{reserva.CheckOut.Date:dd-MM-yyy}', 
-                '{reserva.PrecoEstadia.ToString().Replace(',', '.')}', 
-                '{reserva.PagamentoEfetuado}'
-            )", connection);
+            using SqlConnection connection = new(connectionString);
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand inserirReservaNaTabela = new($@"
+                INSERT INTO 
+                    TabelaReservas 
+                    (Nome, Cpf, Telefone, Idade, Sexo, CheckIn, CheckOut, PrecoEstadia, PagamentoEfetuado) 
+                VALUES 
+                (
+                    '{reserva.Nome}', 
+                    '{reserva.Cpf}', 
+                    '{reserva.Telefone}', 
+                    '{reserva.Idade}', 
+                    '{reserva.Sexo}', 
+                    '{reserva.CheckIn.Date:dd-MM-yyy}', 
+                    '{reserva.CheckOut.Date:dd-MM-yyy}', 
+                    '{reserva.PrecoEstadia.ToString().Replace(',', '.')}', 
+                    '{reserva.PagamentoEfetuado}'
+                )", connection);
 
-            inserirReservaNaTabela.ExecuteNonQuery();
-            connection.Close();
+                    inserirReservaNaTabela.ExecuteNonQuery();
+                }
+                catch
+                {
+                    throw new Exception(message: "Erro ao Adicionar Reserva no Banco de Dados");
+                }
+            }
         }
         public void Atualizar(Reserva copiaReserva)
         {
-            connection.Open();
-            SqlCommand editarReservaNaTabela = new($@"
-            UPDATE 
-                TabelaReservas 
-            SET 
-                Nome='{copiaReserva.Nome}', 
-                Cpf='{copiaReserva.Cpf}', 
-                Telefone='{copiaReserva.Telefone}', 
-                Idade='{copiaReserva.Idade}', 
-                Sexo='{copiaReserva.Sexo}', 
-                CheckIn='{copiaReserva.CheckIn.Date:dd-MM-yyyy}', 
-                CheckOut='{copiaReserva.CheckOut.Date:dd-MM-yyyy}', 
-                PrecoEstadia='{copiaReserva.PrecoEstadia.ToString().Replace(',', '.')}', 
-                PagamentoEfetuado='{copiaReserva.PagamentoEfetuado}' 
-                WHERE Id={copiaReserva.Id}
-            ", connection);
+            using SqlConnection connection = new(connectionString);
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand editarReservaNaTabela = new($@"
+                UPDATE 
+                    TabelaReservas 
+                SET 
+                    Nome='{copiaReserva.Nome}', 
+                    Cpf='{copiaReserva.Cpf}', 
+                    Telefone='{copiaReserva.Telefone}', 
+                    Idade='{copiaReserva.Idade}', 
+                    Sexo='{copiaReserva.Sexo}', 
+                    CheckIn='{copiaReserva.CheckIn.Date:dd-MM-yyyy}', 
+                    CheckOut='{copiaReserva.CheckOut.Date:dd-MM-yyyy}', 
+                    PrecoEstadia='{copiaReserva.PrecoEstadia.ToString().Replace(',', '.')}', 
+                    PagamentoEfetuado='{copiaReserva.PagamentoEfetuado}' 
+                    WHERE Id={copiaReserva.Id}
+                ", connection);
 
-            editarReservaNaTabela.ExecuteNonQuery();
-            connection.Close();
+                    editarReservaNaTabela.ExecuteNonQuery();
+                }
+                catch
+                {
+                    throw new Exception(message: "Erro ao Editar Reserva do Banco de Dados");
+                }
+            }
         }
 
         public void Remover(int id)
         {
-            connection.Open();
-            SqlCommand deletarReserva = new($"DELETE FROM TabelaReservas WHERE Id={id}", connection);
-            deletarReserva.ExecuteNonQuery();
-            connection.Close();
+            using SqlConnection connection = new(connectionString);
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand deletarReserva = new($"DELETE FROM TabelaReservas WHERE Id={id}", connection);
+                    deletarReserva.ExecuteNonQuery();
+                }
+                catch
+                {
+                    throw new Exception(message: "Erro ao Remover Reserva do Banco de Dados");
+                }
+            }
         }
     }
 }

@@ -8,7 +8,7 @@ namespace Sistema_de_Reservas_para_Hoteis
             AtualizarGrid();
         }
 
-        private static readonly IRepositorio repositorioBD = new RepositorioBancoDeDados();
+        private static readonly IRepositorio repositorio = new RepositorioBancoDeDados();
         const int primeiroElemento = 0;
         const int umaLinhaSelecionada = 1;
         const int idNulo = 0;
@@ -20,32 +20,27 @@ namespace Sistema_de_Reservas_para_Hoteis
             {
                 if (reserva.Id == idNulo)
                 {
-                    repositorioBD.Criar(reserva);
+                    repositorio.Criar(reserva);
                     MessageBox.Show("Reserva foi criada com Sucesso!");
                 }
                 else
                 {
-                    repositorioBD.Atualizar(reserva);
+                    repositorio.Atualizar(reserva);
                     MessageBox.Show("A reserva foi editada com sucesso!");
                 }
 
                 AtualizarGrid();
-        }
+            }
             catch (Exception erro)
             {
-                MensagemErroInesperado(erro.Message);
-            }  
-        }
-        public static void MensagemErroInesperado(string mensagem)
-        {
-            string titulo = "Ocorreu um erro inesperado";
-            MessageBox.Show(mensagem, titulo, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MensagemExcessao.MensagemErroInesperado(erro.Message);
+            }
         }
 
         private static void AtualizarGrid()
         {
             TelaDaLista.DataSource = null;
-            TelaDaLista.DataSource = repositorioBD.ObterTodos();
+            TelaDaLista.DataSource = repositorio.ObterTodos();
         }
 
         private static bool SomenteUmaLinhaSelecionada()
@@ -63,7 +58,7 @@ namespace Sistema_de_Reservas_para_Hoteis
 
         private static bool ListaEhVazia()
         {
-            if (repositorioBD.ObterTodos().Count == listaNula)
+            if (repositorio.ObterTodos().Count == listaNula)
             {
                 return true;
             }
@@ -71,16 +66,6 @@ namespace Sistema_de_Reservas_para_Hoteis
             {
                 return false;
             }
-        }
-
-        private static void MensagemErroListaVazia(string acao)
-        {
-            MessageBox.Show($"Seu programa não possui nenhuma reserva para {acao}.");
-        }
-
-        private static void MensagemErroNenhumaLinhaSelecionada(string acao)
-        {
-            MessageBox.Show($"Selecione uma linha para {acao}!");
         }
 
         private static int RetornaIdReservaSelecionada()
@@ -101,7 +86,7 @@ namespace Sistema_de_Reservas_para_Hoteis
             }
             catch (Exception erro)
             {
-                MensagemErroInesperado(erro.Message);
+                MensagemExcessao.MensagemErroInesperado(erro.Message);
             }
         }
 
@@ -111,22 +96,22 @@ namespace Sistema_de_Reservas_para_Hoteis
             {
                 if (ListaEhVazia())
                 {
-                    MensagemErroListaVazia("editar");
+                    MensagemExcessao.MensagemErroListaVazia("editar");
                 }
                 else if (SomenteUmaLinhaSelecionada())
                 {
-                    Reserva reservaSelecionada = repositorioBD.ObterPorId(RetornaIdReservaSelecionada());
+                    Reserva reservaSelecionada = repositorio.ObterPorId(RetornaIdReservaSelecionada());
                     TelaCadastroCliente TelaCadastro = new(reservaSelecionada);
                     TelaCadastro.ShowDialog();
                 }
                 else
                 {
-                    MensagemErroNenhumaLinhaSelecionada("editar");
+                    MensagemExcessao.MensagemErroNenhumaLinhaSelecionada("editar");
                 }
             }
             catch (Exception erro)
             {
-                MensagemErroInesperado(erro.Message);
+                MensagemExcessao.MensagemErroInesperado(erro.Message);
             }
         }
 
@@ -136,27 +121,27 @@ namespace Sistema_de_Reservas_para_Hoteis
             {
                 if (ListaEhVazia())
                 {
-                    MensagemErroListaVazia("deletar");
+                    MensagemExcessao.MensagemErroListaVazia("deletar");
                 }
                 else if (SomenteUmaLinhaSelecionada())
                 {
-                    Reserva reservaSelecionada = repositorioBD.ObterPorId(RetornaIdReservaSelecionada());
+                    Reserva reservaSelecionada = repositorio.ObterPorId(RetornaIdReservaSelecionada());
                     string mensagem = $"Você tem certeza que quer deletar a reserva de {reservaSelecionada.Nome}?", titulo = "Confirmação de remoção";
                     var deletar = MessageBox.Show(mensagem, titulo, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                     if (deletar.Equals(DialogResult.Yes))
                     {
-                        repositorioBD.Remover(RetornaIdReservaSelecionada());
+                        repositorio.Remover(RetornaIdReservaSelecionada());
                         AtualizarGrid();
                     }
                 }
                 else
                 {
-                    MensagemErroNenhumaLinhaSelecionada("deletar");
+                    MensagemExcessao.MensagemErroNenhumaLinhaSelecionada("deletar");
                 }
             }
             catch (Exception erro)
             {
-                MensagemErroInesperado(erro.Message);      
+                MensagemExcessao.MensagemErroInesperado(erro.Message);
             }
         }
     }

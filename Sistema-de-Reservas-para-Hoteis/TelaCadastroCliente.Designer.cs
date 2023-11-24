@@ -258,6 +258,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(369, 266);
+            ControlBox = false;
             Controls.Add(SinalDoReal);
             Controls.Add(TextoIdade);
             Controls.Add(BotaoFalse);
