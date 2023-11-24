@@ -5,9 +5,10 @@ namespace Sistema_de_Reservas_para_Hoteis
         public TelaListaDeReservas()
         {
             InitializeComponent();
+            AtualizarGrid();
         }
 
-        private static readonly IRepositorio repositorio = new Repositorio();
+        private static readonly IRepositorio repositorio = new RepositorioBancoDeDados();
         const int primeiroElemento = 0;
         const int umaLinhaSelecionada = 1;
         const int idNulo = 0;
@@ -30,17 +31,10 @@ namespace Sistema_de_Reservas_para_Hoteis
 
                 AtualizarGrid();
             }
-            catch
+            catch (Exception erro)
             {
-                MensagemErroInesperado();
+                MensagemExcessao.MensagemErroInesperado(erro.Message);
             }
-        }
-
-        public static void MensagemErroInesperado()
-        {
-            string mensagem = "Ocorreu um erro inesperado.";
-            string titulo = "Aviso";
-            MessageBox.Show(mensagem, titulo, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private static void AtualizarGrid()
@@ -74,16 +68,6 @@ namespace Sistema_de_Reservas_para_Hoteis
             }
         }
 
-        private static void MensagemErroListaVazia(string acao)
-        {
-            MessageBox.Show($"Seu programa não possui nenhuma reserva para {acao}.");
-        }
-
-        private static void MensagemErroNenhumaLinhaSelecionada(string acao)
-        {
-            MessageBox.Show($"Selecione uma linha para {acao}!");
-        }
-
         private static int RetornaIdReservaSelecionada()
         {
             int indexLinha = TelaDaLista.SelectedRows[primeiroElemento].Index;
@@ -100,9 +84,9 @@ namespace Sistema_de_Reservas_para_Hoteis
                 TelaCadastroCliente TelaCadastro = new(reserva);
                 TelaCadastro.ShowDialog();
             }
-            catch
+            catch (Exception erro)
             {
-                MensagemErroInesperado();
+                MensagemExcessao.MensagemErroInesperado(erro.Message);
             }
         }
 
@@ -112,7 +96,7 @@ namespace Sistema_de_Reservas_para_Hoteis
             {
                 if (ListaEhVazia())
                 {
-                    MensagemErroListaVazia("editar");
+                    MensagemExcessao.MensagemErroListaVazia("editar");
                 }
                 else if (SomenteUmaLinhaSelecionada())
                 {
@@ -122,12 +106,12 @@ namespace Sistema_de_Reservas_para_Hoteis
                 }
                 else
                 {
-                    MensagemErroNenhumaLinhaSelecionada("editar");
+                    MensagemExcessao.MensagemErroNenhumaLinhaSelecionada("editar");
                 }
             }
-            catch
+            catch (Exception erro)
             {
-                MensagemErroInesperado();
+                MensagemExcessao.MensagemErroInesperado(erro.Message);
             }
         }
 
@@ -137,7 +121,7 @@ namespace Sistema_de_Reservas_para_Hoteis
             {
                 if (ListaEhVazia())
                 {
-                    MensagemErroListaVazia("deletar");
+                    MensagemExcessao.MensagemErroListaVazia("deletar");
                 }
                 else if (SomenteUmaLinhaSelecionada())
                 {
@@ -152,12 +136,12 @@ namespace Sistema_de_Reservas_para_Hoteis
                 }
                 else
                 {
-                    MensagemErroNenhumaLinhaSelecionada("deletar");
+                    MensagemExcessao.MensagemErroNenhumaLinhaSelecionada("deletar");
                 }
             }
-            catch
+            catch (Exception erro)
             {
-                MensagemErroInesperado();
+                MensagemExcessao.MensagemErroInesperado(erro.Message);
             }
         }
     }

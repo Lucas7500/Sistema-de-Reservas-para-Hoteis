@@ -1,6 +1,6 @@
 ﻿using FluentMigrator;
 
-namespace Sistema_de_Reservas_para_Hoteis
+namespace Sistema_de_Reservas_para_Hoteis.Migrations
 {
     [Migration(20231121103700)]
     public class AddTabelaReservas : Migration
@@ -8,14 +8,14 @@ namespace Sistema_de_Reservas_para_Hoteis
         public override void Up()
         {
             Create.Table("TabelaReservas")
-                .WithColumn("Id").AsInt64().PrimaryKey().Identity().NotNullable()
+                .WithColumn("Id").AsInt32().PrimaryKey().Identity().NotNullable()
                 .WithColumn("Nome").AsString().NotNullable()
                 .WithColumn("Cpf").AsString().NotNullable()
                 .WithColumn("Telefone").AsString().NotNullable()
                 .WithColumn("Idade").AsInt32().NotNullable()
-                .WithColumn("Sexo").AsInt16().NotNullable()
-                .WithColumn("CheckIn").AsDateTime().NotNullable()
-                .WithColumn("CheckOut").AsDateTime().NotNullable()
+                .WithColumn("Sexo").AsString().NotNullable()
+                .WithColumn("CheckIn").AsDate().NotNullable()
+                .WithColumn("CheckOut").AsDate().NotNullable()
                 .WithColumn("PrecoEstadia").AsDecimal().NotNullable()
                 .WithColumn("PagamentoEfetuado").AsBoolean().NotNullable();
         }
