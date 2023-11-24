@@ -1,6 +1,6 @@
 using FluentMigrator.Runner;
 using Microsoft.Extensions.DependencyInjection;
-using Sistema_de_Reservas_para_Hoteis.Migrations;
+using System.Reflection;
 
 namespace Sistema_de_Reservas_para_Hoteis
 {
@@ -26,7 +26,7 @@ namespace Sistema_de_Reservas_para_Hoteis
                 .ConfigureRunner(rb => rb
                     .AddSqlServer()
                     .WithGlobalConnectionString(System.Configuration.ConfigurationManager.ConnectionStrings["BDSistemaReservas"].ConnectionString)
-                    .ScanIn(typeof(AddTabelaReservas).Assembly).For.Migrations())
+                    .ScanIn(Assembly.GetExecutingAssembly()).For.Migrations())
                 .AddLogging(lb => lb.AddFluentMigratorConsole())
                 .BuildServiceProvider(false);
         }
