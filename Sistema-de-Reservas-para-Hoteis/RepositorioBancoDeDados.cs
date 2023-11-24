@@ -7,6 +7,13 @@ namespace Sistema_de_Reservas_para_Hoteis
     {
         private static readonly string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["BDSistemaReservas"].ConnectionString;
 
+        private static SqlConnection Connection()
+        {
+            SqlConnection connection = new(connectionString);
+            connection.Open();
+            return connection;
+        }
+
         private static Reserva CriarReserva(SqlDataReader leitor)
         {
             return new Reserva()
@@ -28,9 +35,8 @@ namespace Sistema_de_Reservas_para_Hoteis
         {
             List<Reserva> listaReservas = new();
 
-            using SqlConnection connection = new(connectionString);
+            using (var connection = Connection())
             {
-                connection.Open();
                 SqlCommand obterLinhasBD = new("SELECT * FROM TabelaReservas", connection);
                 var leitor = obterLinhasBD.ExecuteReader();
 
@@ -47,11 +53,10 @@ namespace Sistema_de_Reservas_para_Hoteis
         {
             Reserva reservaSelecionada = new();
 
-            using SqlConnection connection = new(connectionString);
+            using (var connection = Connection())
             {
                 try
                 {
-                    connection.Open();
                     SqlCommand obterObjetoPorId = new($"SELECT * FROM TabelaReservas WHERE Id={id}", connection);
                     var leitor = obterObjetoPorId.ExecuteReader();
 
@@ -71,12 +76,11 @@ namespace Sistema_de_Reservas_para_Hoteis
 
         public void Criar(Reserva reserva)
         {
-            using SqlConnection connection = new(connectionString);
+            using var connection = Connection();
+            
+            try
             {
-                try
-                {
-                    connection.Open();
-                    SqlCommand inserirReservaNaTabela = new($@"
+                SqlCommand inserirReservaNaTabela = new($@"
                 INSERT INTO 
                     TabelaReservas 
                     (Nome, Cpf, Telefone, Idade, Sexo, CheckIn, CheckOut, PrecoEstadia, PagamentoEfetuado) 
@@ -93,22 +97,20 @@ namespace Sistema_de_Reservas_para_Hoteis
                     '{reserva.PagamentoEfetuado}'
                 )", connection);
 
-                    inserirReservaNaTabela.ExecuteNonQuery();
-                }
-                catch
-                {
-                    throw new Exception(message: "Erro ao Adicionar Reserva no Banco de Dados");
-                }
+                inserirReservaNaTabela.ExecuteNonQuery();
+            }
+            catch
+            {
+                throw new Exception(message: "Erro ao Adicionar Reserva no Banco de Dados");
             }
         }
         public void Atualizar(Reserva copiaReserva)
         {
-            using SqlConnection connection = new(connectionString);
+            using var connection = Connection();
+
+            try
             {
-                try
-                {
-                    connection.Open();
-                    SqlCommand editarReservaNaTabela = new($@"
+                SqlCommand editarReservaNaTabela = new($@"
                 UPDATE 
                     TabelaReservas 
                 SET 
@@ -124,29 +126,26 @@ namespace Sistema_de_Reservas_para_Hoteis
                     WHERE Id={copiaReserva.Id}
                 ", connection);
 
-                    editarReservaNaTabela.ExecuteNonQuery();
-                }
-                catch
-                {
-                    throw new Exception(message: "Erro ao Editar Reserva do Banco de Dados");
-                }
+                editarReservaNaTabela.ExecuteNonQuery();
+            }
+            catch
+            {
+                throw new Exception(message: "Erro ao Editar Reserva do Banco de Dados");
             }
         }
 
         public void Remover(int id)
         {
-            using SqlConnection connection = new(connectionString);
+            using var connection = Connection();
+
+            try
             {
-                try
-                {
-                    connection.Open();
-                    SqlCommand deletarReserva = new($"DELETE FROM TabelaReservas WHERE Id={id}", connection);
-                    deletarReserva.ExecuteNonQuery();
-                }
-                catch
-                {
-                    throw new Exception(message: "Erro ao Remover Reserva do Banco de Dados");
-                }
+                SqlCommand deletarReserva = new($"DELETE FROM TabelaReservas WHERE Id={id}", connection);
+                deletarReserva.ExecuteNonQuery();
+            }
+            catch
+            {
+                throw new Exception(message: "Erro ao Remover Reserva do Banco de Dados");
             }
         }
     }
