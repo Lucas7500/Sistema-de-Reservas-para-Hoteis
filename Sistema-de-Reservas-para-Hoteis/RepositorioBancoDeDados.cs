@@ -78,7 +78,7 @@ namespace Sistema_de_Reservas_para_Hoteis
                 '{reserva.PagamentoEfetuado}'
             )", connection);
 
-            inserirReservaNaTabela.ExecuteReader();
+            inserirReservaNaTabela.ExecuteNonQuery();
             connection.Close();
         }
         public void Atualizar(Reserva copiaReserva)
@@ -100,7 +100,7 @@ namespace Sistema_de_Reservas_para_Hoteis
                 WHERE Id={copiaReserva.Id}
             ", connection);
 
-            editarReservaNaTabela.ExecuteReader();
+            editarReservaNaTabela.ExecuteNonQuery();
             connection.Close();
         }
 
@@ -108,7 +108,7 @@ namespace Sistema_de_Reservas_para_Hoteis
         {
             connection.Open();
             SqlCommand deletarReserva = new($"DELETE FROM TabelaReservas WHERE Id={id}", connection);
-            deletarReserva.ExecuteReader();
+            deletarReserva.ExecuteNonQuery();
             connection.Close();
         }
     }
