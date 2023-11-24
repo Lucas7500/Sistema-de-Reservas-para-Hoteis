@@ -8,7 +8,6 @@ namespace Sistema_de_Reservas_para_Hoteis
             AtualizarGrid();
         }
 
-        private static readonly IRepositorio repositorio = new Repositorio();
         private static readonly IRepositorio repositorioBD = new RepositorioBancoDeDados();
         const int primeiroElemento = 0;
         const int umaLinhaSelecionada = 1;
@@ -26,7 +25,7 @@ namespace Sistema_de_Reservas_para_Hoteis
                 }
                 else
                 {
-                    repositorio.Atualizar(reserva);
+                    repositorioBD.Atualizar(reserva);
                     MessageBox.Show("A reserva foi editada com sucesso!");
                 }
 
@@ -116,7 +115,7 @@ namespace Sistema_de_Reservas_para_Hoteis
                 }
                 else if (SomenteUmaLinhaSelecionada())
                 {
-                    Reserva reservaSelecionada = repositorio.ObterPorId(RetornaIdReservaSelecionada());
+                    Reserva reservaSelecionada = repositorioBD.ObterPorId(RetornaIdReservaSelecionada());
                     TelaCadastroCliente TelaCadastro = new(reservaSelecionada);
                     TelaCadastro.ShowDialog();
                 }

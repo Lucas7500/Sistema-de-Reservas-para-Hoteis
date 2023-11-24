@@ -69,7 +69,11 @@ namespace Sistema_de_Reservas_para_Hoteis
         }
         public void Atualizar(Reserva copiaReserva)
         {
-            
+            using SqlConnection connection = new(connectionString);
+            connection.Open();
+            SqlCommand editarReservaNaTabela = new($"UPDATE TabelaReservas SET Nome='{copiaReserva.Nome}', Cpf='{copiaReserva.Cpf}', Telefone='{copiaReserva.Telefone}', Idade='{copiaReserva.Idade}', Sexo='{copiaReserva.Sexo}', CheckIn='{copiaReserva.CheckIn.Date:dd-MM-yyyy}', CheckOut='{copiaReserva.CheckOut.Date:dd-MM-yyyy}', PrecoEstadia='{copiaReserva.PrecoEstadia.ToString().Replace(',', '.')}', PagamentoEfetuado='{copiaReserva.PagamentoEfetuado}' WHERE Id={copiaReserva.Id}", connection);
+            editarReservaNaTabela.ExecuteReader();
+            connection.Close();
         }
 
         public void Remover(int id)
