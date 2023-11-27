@@ -1,5 +1,6 @@
 using FluentMigrator.Runner;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using System.Reflection;
 
 namespace Sistema_de_Reservas_para_Hoteis
@@ -15,8 +16,12 @@ namespace Sistema_de_Reservas_para_Hoteis
                 UpdateDatabase(scope.ServiceProvider);
             }
 
+            var builder = CriaHostBuilder();
+            var servicesProvider = builder.Build().Services;
+            var repositorio = servicesProvider.GetService<IRepositorio>();
+
             ApplicationConfiguration.Initialize();
-            Application.Run(new TelaListaDeReservas());
+            Application.Run(new TelaListaDeReservas(repositorio));
         }
 
         private static ServiceProvider CreateServices()
@@ -36,6 +41,14 @@ namespace Sistema_de_Reservas_para_Hoteis
             var runner = serviceProvider.GetRequiredService<IMigrationRunner>();
 
             runner.MigrateUp();
+        }
+
+        static IHostBuilder CriaHostBuilder()
+        {
+            return Host.CreateDefaultBuilder()
+                .ConfigureServices((context, services) => {
+                    services.AddScoped<IRepositorio, RepositorioSqlServer>();
+                });
         }
     }
 }

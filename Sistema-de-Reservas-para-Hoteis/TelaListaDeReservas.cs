@@ -2,13 +2,15 @@ namespace Sistema_de_Reservas_para_Hoteis
 {
     public partial class TelaListaDeReservas : Form
     {
-        public TelaListaDeReservas()
+        private static IRepositorio repositorio;
+
+        public TelaListaDeReservas(IRepositorio repositorioUtilizado)
         {
+            repositorio = repositorioUtilizado;
             InitializeComponent();
             AtualizarGrid();
         }
 
-        private static readonly IRepositorio repositorio = new RepositorioBancoDeDados();
         const int primeiroElemento = 0;
         const int umaLinhaSelecionada = 1;
         const int idNulo = 0;
