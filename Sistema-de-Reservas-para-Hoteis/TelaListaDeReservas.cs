@@ -42,7 +42,10 @@ namespace Sistema_de_Reservas_para_Hoteis
         private static void AtualizarGrid()
         {
             TelaDaLista.DataSource = null;
-            TelaDaLista.DataSource = repositorio.ObterTodos();
+            if (repositorio.ObterTodos().Any())
+            {
+                TelaDaLista.DataSource = repositorio.ObterTodos();
+            }
         }
 
         private static bool SomenteUmaLinhaSelecionada()

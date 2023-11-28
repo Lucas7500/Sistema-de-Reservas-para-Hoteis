@@ -29,10 +29,12 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             BotaoAdicionar = new Button();
             BotaoEditar = new Button();
             BotaoDeletar = new Button();
             TelaDaLista = new DataGridView();
+            reservaBindingSource = new BindingSource(components);
             idDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             nomeDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             cpfDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
@@ -43,20 +45,13 @@
             checkOutDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             precoEstadiaDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             pagamentoEfetuadoDataGridViewCheckBoxColumn = new DataGridViewCheckBoxColumn();
-            reservaBindingSource3 = new BindingSource(components);
-            reservaBindingSource = new BindingSource(components);
-            reservaBindingSource1 = new BindingSource(components);
-            reservaBindingSource2 = new BindingSource(components);
             ((System.ComponentModel.ISupportInitialize)TelaDaLista).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)reservaBindingSource3).BeginInit();
             ((System.ComponentModel.ISupportInitialize)reservaBindingSource).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)reservaBindingSource1).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)reservaBindingSource2).BeginInit();
             SuspendLayout();
             // 
             // BotaoAdicionar
             // 
-            BotaoAdicionar.Location = new Point(439, 404);
+            BotaoAdicionar.Location = new Point(490, 404);
             BotaoAdicionar.Name = "BotaoAdicionar";
             BotaoAdicionar.Size = new Size(110, 35);
             BotaoAdicionar.TabIndex = 1;
@@ -66,7 +61,7 @@
             // 
             // BotaoEditar
             // 
-            BotaoEditar.Location = new Point(564, 404);
+            BotaoEditar.Location = new Point(615, 404);
             BotaoEditar.Name = "BotaoEditar";
             BotaoEditar.Size = new Size(110, 35);
             BotaoEditar.TabIndex = 2;
@@ -76,7 +71,7 @@
             // 
             // BotaoDeletar
             // 
-            BotaoDeletar.Location = new Point(689, 404);
+            BotaoDeletar.Location = new Point(741, 405);
             BotaoDeletar.Name = "BotaoDeletar";
             BotaoDeletar.Size = new Size(110, 35);
             BotaoDeletar.TabIndex = 3;
@@ -90,127 +85,125 @@
             TelaDaLista.AllowUserToResizeColumns = false;
             TelaDaLista.AllowUserToResizeRows = false;
             TelaDaLista.AutoGenerateColumns = false;
+            TelaDaLista.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            TelaDaLista.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             TelaDaLista.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             TelaDaLista.Columns.AddRange(new DataGridViewColumn[] { idDataGridViewTextBoxColumn, nomeDataGridViewTextBoxColumn, cpfDataGridViewTextBoxColumn, telefoneDataGridViewTextBoxColumn, idadeDataGridViewTextBoxColumn, sexoDataGridViewTextBoxColumn, checkInDataGridViewTextBoxColumn, checkOutDataGridViewTextBoxColumn, precoEstadiaDataGridViewTextBoxColumn, pagamentoEfetuadoDataGridViewCheckBoxColumn });
-            TelaDaLista.DataSource = reservaBindingSource3;
-            TelaDaLista.Location = new Point(12, 12);
+            TelaDaLista.DataSource = reservaBindingSource;
+            TelaDaLista.Location = new Point(8, 18);
             TelaDaLista.Name = "TelaDaLista";
             TelaDaLista.ReadOnly = true;
-            TelaDaLista.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             TelaDaLista.RowTemplate.Height = 25;
             TelaDaLista.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            TelaDaLista.Size = new Size(787, 380);
+            TelaDaLista.Size = new Size(843, 381);
             TelaDaLista.TabIndex = 4;
+            // 
+            // reservaBindingSource
+            // 
+            reservaBindingSource.DataSource = typeof(Reserva);
             // 
             // idDataGridViewTextBoxColumn
             // 
             idDataGridViewTextBoxColumn.DataPropertyName = "Id";
-            idDataGridViewTextBoxColumn.FillWeight = 50.9854622F;
+            idDataGridViewTextBoxColumn.FillWeight = 49.0693741F;
             idDataGridViewTextBoxColumn.HeaderText = "Id";
+            idDataGridViewTextBoxColumn.MinimumWidth = 40;
             idDataGridViewTextBoxColumn.Name = "idDataGridViewTextBoxColumn";
             idDataGridViewTextBoxColumn.ReadOnly = true;
-            idDataGridViewTextBoxColumn.Width = 30;
             // 
             // nomeDataGridViewTextBoxColumn
             // 
             nomeDataGridViewTextBoxColumn.DataPropertyName = "Nome";
-            nomeDataGridViewTextBoxColumn.FillWeight = 105.936462F;
+            nomeDataGridViewTextBoxColumn.FillWeight = 558.3756F;
             nomeDataGridViewTextBoxColumn.HeaderText = "Nome";
+            nomeDataGridViewTextBoxColumn.MinimumWidth = 110;
             nomeDataGridViewTextBoxColumn.Name = "nomeDataGridViewTextBoxColumn";
             nomeDataGridViewTextBoxColumn.ReadOnly = true;
-            nomeDataGridViewTextBoxColumn.Width = 110;
             // 
             // cpfDataGridViewTextBoxColumn
             // 
             cpfDataGridViewTextBoxColumn.DataPropertyName = "Cpf";
-            cpfDataGridViewTextBoxColumn.FillWeight = 105.936462F;
+            cpfDataGridViewTextBoxColumn.FillWeight = 49.0693741F;
             cpfDataGridViewTextBoxColumn.HeaderText = "CPF";
+            cpfDataGridViewTextBoxColumn.MinimumWidth = 85;
             cpfDataGridViewTextBoxColumn.Name = "cpfDataGridViewTextBoxColumn";
             cpfDataGridViewTextBoxColumn.ReadOnly = true;
             // 
             // telefoneDataGridViewTextBoxColumn
             // 
             telefoneDataGridViewTextBoxColumn.DataPropertyName = "Telefone";
-            telefoneDataGridViewTextBoxColumn.FillWeight = 105.936462F;
+            telefoneDataGridViewTextBoxColumn.FillWeight = 49.0693741F;
             telefoneDataGridViewTextBoxColumn.HeaderText = "Telefone";
+            telefoneDataGridViewTextBoxColumn.MinimumWidth = 85;
             telefoneDataGridViewTextBoxColumn.Name = "telefoneDataGridViewTextBoxColumn";
             telefoneDataGridViewTextBoxColumn.ReadOnly = true;
             // 
             // idadeDataGridViewTextBoxColumn
             // 
             idadeDataGridViewTextBoxColumn.DataPropertyName = "Idade";
-            idadeDataGridViewTextBoxColumn.FillWeight = 101.522842F;
+            idadeDataGridViewTextBoxColumn.FillWeight = 49.0693741F;
             idadeDataGridViewTextBoxColumn.HeaderText = "Idade";
+            idadeDataGridViewTextBoxColumn.MinimumWidth = 40;
             idadeDataGridViewTextBoxColumn.Name = "idadeDataGridViewTextBoxColumn";
             idadeDataGridViewTextBoxColumn.ReadOnly = true;
-            idadeDataGridViewTextBoxColumn.Width = 50;
             // 
             // sexoDataGridViewTextBoxColumn
             // 
             sexoDataGridViewTextBoxColumn.DataPropertyName = "Sexo";
-            sexoDataGridViewTextBoxColumn.FillWeight = 105.936462F;
+            sexoDataGridViewTextBoxColumn.FillWeight = 49.0693741F;
             sexoDataGridViewTextBoxColumn.HeaderText = "Sexo";
+            sexoDataGridViewTextBoxColumn.MinimumWidth = 62;
             sexoDataGridViewTextBoxColumn.Name = "sexoDataGridViewTextBoxColumn";
             sexoDataGridViewTextBoxColumn.ReadOnly = true;
-            sexoDataGridViewTextBoxColumn.Width = 70;
             // 
             // checkInDataGridViewTextBoxColumn
             // 
             checkInDataGridViewTextBoxColumn.DataPropertyName = "CheckIn";
-            checkInDataGridViewTextBoxColumn.FillWeight = 105.936462F;
-            checkInDataGridViewTextBoxColumn.HeaderText = "Check-In";
+            checkInDataGridViewTextBoxColumn.FillWeight = 49.0693741F;
+            checkInDataGridViewTextBoxColumn.HeaderText = "Check-in";
+            checkInDataGridViewTextBoxColumn.MinimumWidth = 66;
             checkInDataGridViewTextBoxColumn.Name = "checkInDataGridViewTextBoxColumn";
             checkInDataGridViewTextBoxColumn.ReadOnly = true;
-            checkInDataGridViewTextBoxColumn.Width = 70;
             // 
             // checkOutDataGridViewTextBoxColumn
             // 
             checkOutDataGridViewTextBoxColumn.DataPropertyName = "CheckOut";
-            checkOutDataGridViewTextBoxColumn.FillWeight = 105.936462F;
-            checkOutDataGridViewTextBoxColumn.HeaderText = "Check-Out";
+            checkOutDataGridViewTextBoxColumn.FillWeight = 49.0693741F;
+            checkOutDataGridViewTextBoxColumn.HeaderText = "Check-out";
+            checkOutDataGridViewTextBoxColumn.MinimumWidth = 66;
             checkOutDataGridViewTextBoxColumn.Name = "checkOutDataGridViewTextBoxColumn";
             checkOutDataGridViewTextBoxColumn.ReadOnly = true;
-            checkOutDataGridViewTextBoxColumn.Width = 70;
             // 
             // precoEstadiaDataGridViewTextBoxColumn
             // 
             precoEstadiaDataGridViewTextBoxColumn.DataPropertyName = "PrecoEstadia";
-            precoEstadiaDataGridViewTextBoxColumn.FillWeight = 105.936462F;
+            precoEstadiaDataGridViewTextBoxColumn.FillWeight = 49.0693741F;
             precoEstadiaDataGridViewTextBoxColumn.HeaderText = "Preço da Estadia";
+            precoEstadiaDataGridViewTextBoxColumn.MinimumWidth = 76;
             precoEstadiaDataGridViewTextBoxColumn.Name = "precoEstadiaDataGridViewTextBoxColumn";
             precoEstadiaDataGridViewTextBoxColumn.ReadOnly = true;
-            precoEstadiaDataGridViewTextBoxColumn.Width = 60;
             // 
             // pagamentoEfetuadoDataGridViewCheckBoxColumn
             // 
             pagamentoEfetuadoDataGridViewCheckBoxColumn.DataPropertyName = "PagamentoEfetuado";
-            pagamentoEfetuadoDataGridViewCheckBoxColumn.FillWeight = 105.936462F;
-            pagamentoEfetuadoDataGridViewCheckBoxColumn.HeaderText = "Pagamento Efetuado?";
+            pagamentoEfetuadoDataGridViewCheckBoxColumn.FillWeight = 49.0693741F;
+            pagamentoEfetuadoDataGridViewCheckBoxColumn.HeaderText = "Pagamento Efetuado";
+            pagamentoEfetuadoDataGridViewCheckBoxColumn.MinimumWidth = 74;
             pagamentoEfetuadoDataGridViewCheckBoxColumn.Name = "pagamentoEfetuadoDataGridViewCheckBoxColumn";
             pagamentoEfetuadoDataGridViewCheckBoxColumn.ReadOnly = true;
-            pagamentoEfetuadoDataGridViewCheckBoxColumn.Width = 84;
-            // 
-            // reservaBindingSource3
-            // 
-            reservaBindingSource3.DataSource = typeof(Reserva);
-            // 
-            // reservaBindingSource
-            // 
-            reservaBindingSource.DataSource = typeof(Reserva);
-            // 
-            // reservaBindingSource1
-            // 
-            reservaBindingSource1.DataSource = typeof(Reserva);
-            // 
-            // reservaBindingSource2
-            // 
-            reservaBindingSource2.DataSource = typeof(Reserva);
             // 
             // TelaListaDeReservas
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(815, 451);
+            ClientSize = new Size(857, 451);
             Controls.Add(TelaDaLista);
             Controls.Add(BotaoDeletar);
             Controls.Add(BotaoEditar);
@@ -221,10 +214,7 @@
             Name = "TelaListaDeReservas";
             Text = "Reserva de Hotel";
             ((System.ComponentModel.ISupportInitialize)TelaDaLista).EndInit();
-            ((System.ComponentModel.ISupportInitialize)reservaBindingSource3).EndInit();
             ((System.ComponentModel.ISupportInitialize)reservaBindingSource).EndInit();
-            ((System.ComponentModel.ISupportInitialize)reservaBindingSource1).EndInit();
-            ((System.ComponentModel.ISupportInitialize)reservaBindingSource2).EndInit();
             ResumeLayout(false);
         }
 
@@ -233,9 +223,6 @@
         private Button BotaoEditar;
         private Button BotaoDeletar;
         private BindingSource reservaBindingSource;
-        private BindingSource reservaBindingSource3;
-        private BindingSource reservaBindingSource1;
-        private BindingSource reservaBindingSource2;
         private DataGridViewTextBoxColumn idDataGridViewTextBoxColumn;
         private DataGridViewTextBoxColumn nomeDataGridViewTextBoxColumn;
         private DataGridViewTextBoxColumn cpfDataGridViewTextBoxColumn;
