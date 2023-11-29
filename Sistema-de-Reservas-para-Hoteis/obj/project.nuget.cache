@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "uswL0Dm5REKyAPQgcFaPQjTDlqvNNugkOxopFsMetNVmE5SKjIaSq6hw0Hxfzdk8KwyKmFqB0jhivB9LKs147Q==",
+  "dgSpecHash": "gia5N7YvUm0enp/VGChH0fbKhpLg620k/mg2eY7SkFHXrnAzmvr20oxAZtTzYpY7w3Dvxez42F4Ny4JDp2ygHg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\usuario\\source\\repos\\Sistema-de-Reservas-para-Hoteis\\Sistema-de-Reservas-para-Hoteis\\Sistema-de-Reservas-para-Hoteis.csproj",
+  "projectFilePath": "C:\\Users\\usuario\\source\\repos\\Sistema-de-Reservas-para-Hoteis\\Sistema-de-Reservas-para-Hoteis\\Interacao.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\usuario\\.nuget\\packages\\fluentmigrator\\3.3.2\\fluentmigrator.3.3.2.nupkg.sha512",
     "C:\\Users\\usuario\\.nuget\\packages\\fluentmigrator.abstractions\\3.3.2\\fluentmigrator.abstractions.3.3.2.nupkg.sha512",

@@ -1,9 +1,10 @@
-﻿using Sistema_de_Reservas_para_Hoteis.Enums;
+﻿using Dominio.Enums;
+using Dominio;
 using System.Data.SqlClient;
 
-namespace Sistema_de_Reservas_para_Hoteis
+namespace Infraestrutura
 {
-    internal class RepositorioSqlServer : IRepositorio
+    public class RepositorioSqlServer : IRepositorio
     {
         private static readonly string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["BDSistemaReservas"].ConnectionString;
 

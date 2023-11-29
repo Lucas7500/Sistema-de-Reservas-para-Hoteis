@@ -1,4 +1,7 @@
-namespace Sistema_de_Reservas_para_Hoteis
+using Dominio;
+using Infraestrutura;
+
+namespace Interacao
 {
     public partial class TelaListaDeReservas : Form
     {

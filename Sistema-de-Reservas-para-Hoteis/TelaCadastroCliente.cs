@@ -1,6 +1,7 @@
-﻿using Sistema_de_Reservas_para_Hoteis.Enums;
+﻿using Dominio;
+using Dominio.Enums;
 
-namespace Sistema_de_Reservas_para_Hoteis
+namespace Interacao
 {
     public partial class TelaCadastroCliente : Form
     {

@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace Sistema_de_Reservas_para_Hoteis
+namespace Dominio
 {
     public class Validacoes
     {

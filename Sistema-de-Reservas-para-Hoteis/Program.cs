@@ -2,8 +2,9 @@ using FluentMigrator.Runner;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Reflection;
+using Infraestrutura;
 
-namespace Sistema_de_Reservas_para_Hoteis
+namespace Interacao
 {
     internal static class Program
     {

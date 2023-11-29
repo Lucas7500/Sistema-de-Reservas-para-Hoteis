@@ -1,4 +1,6 @@
-﻿namespace Sistema_de_Reservas_para_Hoteis
+﻿using Dominio;
+
+namespace Interacao
 {
     partial class TelaListaDeReservas
     {

@@ -1,6 +1,8 @@
-﻿namespace Sistema_de_Reservas_para_Hoteis
+﻿using Dominio;
+
+namespace Infraestrutura
 {
-    internal class RepositorioListaSingleton : IRepositorio
+    public class RepositorioListaSingleton : IRepositorio
     {
         protected List<Reserva> listaReservas = Singleton.RetornaLista();
 

@@ -1528,6 +1528,34 @@
             "rid": "win"
           }
         }
+      },
+      "Dominio/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "compile": {
+          "bin/placeholder/Dominio.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Dominio.dll": {}
+        }
+      },
+      "Infraestrutura/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "dependencies": {
+          "Dominio": "1.0.0",
+          "FluentMigrator": "3.3.2",
+          "FluentMigrator.Runner": "3.3.2",
+          "Microsoft.Extensions.Hosting": "8.0.0",
+          "Microsoft.Extensions.Hosting.Abstractions": "8.0.0",
+          "System.Data.SqlClient": "4.8.5"
+        },
+        "compile": {
+          "bin/placeholder/Infraestrutura.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Infraestrutura.dll": {}
+        }
       }
     }
   },
@@ -4015,12 +4043,24 @@
         "useSharedDesignerContext.txt",
         "version.txt"
       ]
+    },
+    "Dominio/1.0.0": {
+      "type": "project",
+      "path": "../Dominio/Dominio.csproj",
+      "msbuildProject": "../Dominio/Dominio.csproj"
+    },
+    "Infraestrutura/1.0.0": {
+      "type": "project",
+      "path": "../Infraestrutura/Infraestrutura.csproj",
+      "msbuildProject": "../Infraestrutura/Infraestrutura.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net7.0-windows7.0": [
+      "Dominio >= 1.0.0",
       "FluentMigrator >= 3.3.2",
       "FluentMigrator.Runner >= 3.3.2",
+      "Infraestrutura >= 1.0.0",
       "Microsoft.Extensions.Hosting >= 8.0.0",
       "Microsoft.Extensions.Hosting.Abstractions >= 8.0.0",
       "System.Data.SqlClient >= 4.8.5"
@@ -4032,9 +4072,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\usuario\\source\\repos\\Sistema-de-Reservas-para-Hoteis\\Sistema-de-Reservas-para-Hoteis\\Sistema-de-Reservas-para-Hoteis.csproj",
-      "projectName": "Sistema-de-Reservas-para-Hoteis",
-      "projectPath": "C:\\Users\\usuario\\source\\repos\\Sistema-de-Reservas-para-Hoteis\\Sistema-de-Reservas-para-Hoteis\\Sistema-de-Reservas-para-Hoteis.csproj",
+      "projectUniqueName": "C:\\Users\\usuario\\source\\repos\\Sistema-de-Reservas-para-Hoteis\\Sistema-de-Reservas-para-Hoteis\\Interacao.csproj",
+      "projectName": "Interacao",
+      "projectPath": "C:\\Users\\usuario\\source\\repos\\Sistema-de-Reservas-para-Hoteis\\Sistema-de-Reservas-para-Hoteis\\Interacao.csproj",
       "packagesPath": "C:\\Users\\usuario\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\usuario\\source\\repos\\Sistema-de-Reservas-para-Hoteis\\Sistema-de-Reservas-para-Hoteis\\obj\\",
       "projectStyle": "PackageReference",
@@ -4052,7 +4092,14 @@
       "frameworks": {
         "net7.0-windows7.0": {
           "targetAlias": "net7.0-windows",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\usuario\\source\\repos\\Sistema-de-Reservas-para-Hoteis\\Dominio\\Dominio.csproj": {
+              "projectPath": "C:\\Users\\usuario\\source\\repos\\Sistema-de-Reservas-para-Hoteis\\Dominio\\Dominio.csproj"
+            },
+            "C:\\Users\\usuario\\source\\repos\\Sistema-de-Reservas-para-Hoteis\\Infraestrutura\\Infraestrutura.csproj": {
+              "projectPath": "C:\\Users\\usuario\\source\\repos\\Sistema-de-Reservas-para-Hoteis\\Infraestrutura\\Infraestrutura.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
