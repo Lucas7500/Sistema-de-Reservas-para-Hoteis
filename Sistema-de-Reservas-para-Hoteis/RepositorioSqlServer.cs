@@ -3,7 +3,7 @@ using System.Data.SqlClient;
 
 namespace Sistema_de_Reservas_para_Hoteis
 {
-    internal class RepositorioBancoDeDados : IRepositorio
+    internal class RepositorioSqlServer : IRepositorio
     {
         private static readonly string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["BDSistemaReservas"].ConnectionString;
 
@@ -80,23 +80,22 @@ namespace Sistema_de_Reservas_para_Hoteis
             
             try
             {
-                SqlCommand inserirReservaNaTabela = new($@"
-                INSERT INTO 
-                    TabelaReservas 
-                    (Nome, Cpf, Telefone, Idade, Sexo, CheckIn, CheckOut, PrecoEstadia, PagamentoEfetuado) 
-                VALUES 
-                (
-                    '{reserva.Nome}', 
-                    '{reserva.Cpf}', 
-                    '{reserva.Telefone}', 
-                    '{reserva.Idade}', 
-                    '{reserva.Sexo}', 
-                    '{reserva.CheckIn.Date:dd-MM-yyy}', 
-                    '{reserva.CheckOut.Date:dd-MM-yyy}', 
-                    '{reserva.PrecoEstadia.ToString().Replace(',', '.')}', 
-                    '{reserva.PagamentoEfetuado}'
-                )", connection);
+                string comandoCriar = @"INSERT INTO TabelaReservas
+                (Nome, Cpf, Telefone, Idade, Sexo, CheckIn, CheckOut, PrecoEstadia, PagamentoEfetuado)
+                VALUES (@nome, @cpf, @telefone, @idade, @sexo, @checkin, @checkout, @precoestadia, @pagamentoefetuado)";
 
+                SqlCommand inserirReservaNaTabela = new(comandoCriar, connection);
+
+                inserirReservaNaTabela.Parameters.AddWithValue("@nome", reserva.Nome);
+                inserirReservaNaTabela.Parameters.AddWithValue("@cpf", reserva.Cpf);
+                inserirReservaNaTabela.Parameters.AddWithValue("@telefone", reserva.Telefone);
+                inserirReservaNaTabela.Parameters.AddWithValue("@idade", reserva.Idade);
+                inserirReservaNaTabela.Parameters.AddWithValue("@sexo", reserva.Sexo);
+                inserirReservaNaTabela.Parameters.AddWithValue("@checkin", reserva.CheckIn.Date.ToString("dd-MM-yyyy"));
+                inserirReservaNaTabela.Parameters.AddWithValue("@checkout", reserva.CheckOut.Date.ToString("dd-MM-yyyy"));
+                inserirReservaNaTabela.Parameters.AddWithValue("@precoestadia", reserva.PrecoEstadia.ToString().Replace(',', '.'));
+                inserirReservaNaTabela.Parameters.AddWithValue("@pagamentoefetuado", reserva.PagamentoEfetuado);
+                
                 inserirReservaNaTabela.ExecuteNonQuery();
             }
             catch
@@ -110,22 +109,24 @@ namespace Sistema_de_Reservas_para_Hoteis
 
             try
             {
-                SqlCommand editarReservaNaTabela = new($@"
-                UPDATE 
-                    TabelaReservas 
-                SET 
-                    Nome='{copiaReserva.Nome}', 
-                    Cpf='{copiaReserva.Cpf}', 
-                    Telefone='{copiaReserva.Telefone}', 
-                    Idade='{copiaReserva.Idade}', 
-                    Sexo='{copiaReserva.Sexo}', 
-                    CheckIn='{copiaReserva.CheckIn.Date:dd-MM-yyyy}', 
-                    CheckOut='{copiaReserva.CheckOut.Date:dd-MM-yyyy}', 
-                    PrecoEstadia='{copiaReserva.PrecoEstadia.ToString().Replace(',', '.')}', 
-                    PagamentoEfetuado='{copiaReserva.PagamentoEfetuado}' 
-                    WHERE Id={copiaReserva.Id}
-                ", connection);
+                string comandoEditar = @"UPDATE TabelaReservas
+                SET Nome=@nome, Cpf=@cpf, Telefone=@telefone, Idade=@idade, Sexo=@sexo, CheckIn=@checkin,
+                CheckOut=@checkout, PrecoEstadia=@precoestadia, PagamentoEfetuado=@pagamentoefetuado
+                WHERE id=@id";
 
+                SqlCommand editarReservaNaTabela = new(comandoEditar, connection);
+
+                editarReservaNaTabela.Parameters.AddWithValue("@nome", copiaReserva.Nome);
+                editarReservaNaTabela.Parameters.AddWithValue("@cpf", copiaReserva.Cpf);
+                editarReservaNaTabela.Parameters.AddWithValue("@telefone", copiaReserva.Telefone);
+                editarReservaNaTabela.Parameters.AddWithValue("@idade", copiaReserva.Idade);
+                editarReservaNaTabela.Parameters.AddWithValue("@sexo", copiaReserva.Sexo);
+                editarReservaNaTabela.Parameters.AddWithValue("@checkin", copiaReserva.CheckIn.Date.ToString("dd-MM-yyyy"));
+                editarReservaNaTabela.Parameters.AddWithValue("@checkout", copiaReserva.CheckOut.Date.ToString("dd-MM-yyyy"));
+                editarReservaNaTabela.Parameters.AddWithValue("@precoestadia", copiaReserva.PrecoEstadia.ToString().Replace(',', '.'));
+                editarReservaNaTabela.Parameters.AddWithValue("@pagamentoefetuado", copiaReserva.PagamentoEfetuado);
+                editarReservaNaTabela.Parameters.AddWithValue("@id", copiaReserva.Id);
+                
                 editarReservaNaTabela.ExecuteNonQuery();
             }
             catch

@@ -1,6 +1,6 @@
 ﻿namespace Sistema_de_Reservas_para_Hoteis
 {
-    internal interface IRepositorio
+    public interface IRepositorio
     {
         public List<Reserva> ObterTodos();
         public Reserva ObterPorId(int id);
