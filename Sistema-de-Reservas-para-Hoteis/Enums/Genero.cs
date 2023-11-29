@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Sistema_de_Reservas_para_Hoteis.Enums
 {
-        public enum GeneroEnum
-        {
-            Masculino,
-            Feminino
-        }
+    public enum GeneroEnum
+    {
+        Masculino,
+        Feminino
+    }
 }

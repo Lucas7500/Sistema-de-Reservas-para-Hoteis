@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Sistema_de_Reservas_para_Hoteis
+﻿namespace Sistema_de_Reservas_para_Hoteis
 {
-    static internal class MensagemExcessao
+    public class MensagemExcessao
     {
         public const string NomeNulo = "* Informe o Nome do cliente.";
         public const string NomePequeno = "* O Nome não pode conter menos que 3 caracteres.";
@@ -21,5 +15,21 @@ namespace Sistema_de_Reservas_para_Hoteis
         public const string CheckOutEmDatasPassadas = "* O Check-out não pode ser realizado antes do Check-in.";
         public const string PrecoNaoPreenchido = "* Informe o Preço da Estadia.";
         public const string PagamentoNaoInformado = "* Informe se o Preço já foi pago.";
+
+        public static void MensagemErroInesperado(string mensagem)
+        {
+            string titulo = "Ocorreu um Erro Inesperado";
+            MessageBox.Show(mensagem, titulo, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        public static void MensagemErroListaVazia(string acao)
+        {
+            MessageBox.Show($"Seu programa não possui nenhuma reserva para {acao}.");
+        }
+
+        public static void MensagemErroNenhumaLinhaSelecionada(string acao)
+        {
+            MessageBox.Show($"Selecione uma linha para {acao}!");
+        }
     }
 }

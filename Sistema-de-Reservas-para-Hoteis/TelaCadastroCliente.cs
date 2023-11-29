@@ -1,14 +1,4 @@
 ﻿using Sistema_de_Reservas_para_Hoteis.Enums;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace Sistema_de_Reservas_para_Hoteis
 {
@@ -33,8 +23,6 @@ namespace Sistema_de_Reservas_para_Hoteis
                 DataCheckOut.MinDate = DateTime.Now;
             }
         }
-
-        private readonly IRepositorio repositorio = new Repositorio();
 
         private void PermitirApenasNumerosNaIdade(object sender, KeyPressEventArgs e)
         {
@@ -118,9 +106,9 @@ namespace Sistema_de_Reservas_para_Hoteis
                 BotaoTrue.Checked = reserva.PagamentoEfetuado;
                 BotaoFalse.Checked = !reserva.PagamentoEfetuado;
             }
-            catch
+            catch (Exception erro)
             {
-                TelaListaDeReservas.MensagemErroInesperado();
+                MensagemExcessao.MensagemErroInesperado(erro.Message);
             }
         }
 
@@ -156,9 +144,9 @@ namespace Sistema_de_Reservas_para_Hoteis
                 reserva.PrecoEstadia = ConverterEmDecimalComVirgula(TextoPreco.Text);
                 reserva.PagamentoEfetuado = BotaoTrue.Checked;
             }
-            catch
+            catch (Exception erro)
             {
-                TelaListaDeReservas.MensagemErroInesperado();
+                MensagemExcessao.MensagemErroInesperado(erro.Message);
             }
         }
 
