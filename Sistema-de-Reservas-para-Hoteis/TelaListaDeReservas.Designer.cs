@@ -53,7 +53,7 @@ namespace Interacao
             // 
             // BotaoAdicionar
             // 
-            BotaoAdicionar.Location = new Point(490, 404);
+            BotaoAdicionar.Location = new Point(496, 405);
             BotaoAdicionar.Name = "BotaoAdicionar";
             BotaoAdicionar.Size = new Size(110, 35);
             BotaoAdicionar.TabIndex = 1;
@@ -63,7 +63,7 @@ namespace Interacao
             // 
             // BotaoEditar
             // 
-            BotaoEditar.Location = new Point(615, 404);
+            BotaoEditar.Location = new Point(621, 404);
             BotaoEditar.Name = "BotaoEditar";
             BotaoEditar.Size = new Size(110, 35);
             BotaoEditar.TabIndex = 2;
@@ -73,7 +73,7 @@ namespace Interacao
             // 
             // BotaoDeletar
             // 
-            BotaoDeletar.Location = new Point(741, 405);
+            BotaoDeletar.Location = new Point(746, 405);
             BotaoDeletar.Name = "BotaoDeletar";
             BotaoDeletar.Size = new Size(110, 35);
             BotaoDeletar.TabIndex = 3;
@@ -104,7 +104,7 @@ namespace Interacao
             TelaDaLista.ReadOnly = true;
             TelaDaLista.RowTemplate.Height = 25;
             TelaDaLista.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            TelaDaLista.Size = new Size(843, 381);
+            TelaDaLista.Size = new Size(848, 381);
             TelaDaLista.TabIndex = 4;
             // 
             // reservaBindingSource
@@ -205,7 +205,7 @@ namespace Interacao
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(857, 451);
+            ClientSize = new Size(862, 451);
             Controls.Add(TelaDaLista);
             Controls.Add(BotaoDeletar);
             Controls.Add(BotaoEditar);
@@ -235,6 +235,6 @@ namespace Interacao
         private DataGridViewTextBoxColumn checkOutDataGridViewTextBoxColumn;
         private DataGridViewTextBoxColumn precoEstadiaDataGridViewTextBoxColumn;
         private DataGridViewCheckBoxColumn pagamentoEfetuadoDataGridViewCheckBoxColumn;
-        private static DataGridView TelaDaLista;
+        private DataGridView TelaDaLista;
     }
 }

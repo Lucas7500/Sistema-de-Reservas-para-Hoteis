@@ -3,7 +3,7 @@
 namespace Infraestrutura.Migrations
 {
     [Migration(20231124132600)]
-    public class UpdateTabelaReservas : Migration
+    public class _20231124132600UpdateTabelaReservas : Migration
     {
         public override void Up()
         {

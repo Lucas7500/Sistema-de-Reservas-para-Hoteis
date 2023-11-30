@@ -38,7 +38,7 @@ namespace Interacao
             }
             catch (Exception erro)
             {
-                MensagemExcessao.MensagemErroInesperado(erro.Message);
+                MessageBox.Show(erro.Message, MensagemExcessao.TITULO_ERRO_INESPERADO, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -94,7 +94,7 @@ namespace Interacao
             }
             catch (Exception erro)
             {
-                MensagemExcessao.MensagemErroInesperado(erro.Message);
+                MessageBox.Show(erro.Message, MensagemExcessao.TITULO_ERRO_INESPERADO, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -104,7 +104,7 @@ namespace Interacao
             {
                 if (ListaEhVazia())
                 {
-                    MensagemExcessao.MensagemErroListaVazia("editar");
+                    MessageBox.Show(MensagemExcessao.MensagemErroListaVazia("editar"));
                 }
                 else if (SomenteUmaLinhaSelecionada())
                 {
@@ -114,12 +114,12 @@ namespace Interacao
                 }
                 else
                 {
-                    MensagemExcessao.MensagemErroNenhumaLinhaSelecionada("editar");
+                    MessageBox.Show(MensagemExcessao.MensagemErroNenhumaLinhaSelecionada("editar"));
                 }
             }
             catch (Exception erro)
             {
-                MensagemExcessao.MensagemErroInesperado(erro.Message);
+                MessageBox.Show(erro.Message, MensagemExcessao.TITULO_ERRO_INESPERADO, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -129,7 +129,7 @@ namespace Interacao
             {
                 if (ListaEhVazia())
                 {
-                    MensagemExcessao.MensagemErroListaVazia("deletar");
+                    MessageBox.Show(MensagemExcessao.MensagemErroListaVazia("deletar"));
                 }
                 else if (SomenteUmaLinhaSelecionada())
                 {
@@ -144,12 +144,12 @@ namespace Interacao
                 }
                 else
                 {
-                    MensagemExcessao.MensagemErroNenhumaLinhaSelecionada("deletar");
+                    MessageBox.Show(MensagemExcessao.MensagemErroNenhumaLinhaSelecionada("deletar"));
                 }
             }
             catch (Exception erro)
             {
-                MensagemExcessao.MensagemErroInesperado(erro.Message);
+                MessageBox.Show(erro.Message, MensagemExcessao.TITULO_ERRO_INESPERADO, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

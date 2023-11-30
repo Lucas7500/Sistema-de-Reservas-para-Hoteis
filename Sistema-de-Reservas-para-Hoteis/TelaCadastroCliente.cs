@@ -7,6 +7,7 @@ namespace Interacao
     {
         private readonly Reserva reservaCopia = new();
         const int idNulo = 0;
+
         public TelaCadastroCliente(Reserva reservaParametro)
         {
             InitializeComponent();
@@ -109,26 +110,22 @@ namespace Interacao
             }
             catch (Exception erro)
             {
-                MensagemExcessao.MensagemErroInesperado(erro.Message);
+                MessageBox.Show(erro.Message, MensagemExcessao.TITULO_ERRO_INESPERADO, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private Dictionary<string, dynamic> LerEntradasDoUsuario()
         {
-            Dictionary<string, dynamic> reservaDict = new()
+            return new Dictionary<string, dynamic>
             {
                 { "Nome", TextoNome.Text },
                 { "Cpf", TextoCPF.Text },
                 { "Telefone", TextoTelefone.Text },
-                { "Idade", String.IsNullOrWhiteSpace(TextoIdade.Text) ? Validacoes.codigoDeErro : int.Parse(TextoIdade.Text) },
-                { "Sexo", CaixaSexo.Text },
+                { "Idade", String.IsNullOrWhiteSpace(TextoIdade.Text) ? (int)ValoresValidacaoEnum.codigoDeErro : int.Parse(TextoIdade.Text) },
                 { "CheckIn", Convert.ToDateTime(DataCheckIn.Value.Date) },
                 { "CheckOut", Convert.ToDateTime(DataCheckOut.Value.Date) },
-                { "PrecoEstadia", String.IsNullOrWhiteSpace(TextoPreco.Text) ? Validacoes.codigoDeErro : ConverterEmDecimalComVirgula(TextoPreco.Text) },
-                { "PagamentoEfetuado", !BotaoTrue.Checked && !BotaoFalse.Checked ? "" : BotaoTrue.Checked.ToString() }
+                { "PrecoEstadia", String.IsNullOrWhiteSpace(TextoPreco.Text) ? (int)ValoresValidacaoEnum.codigoDeErro : ConverterEmDecimalComVirgula(TextoPreco.Text) }
             };
-
-            return reservaDict;
         }
 
         private void AtribuirValoresReserva(Reserva reserva)
@@ -147,7 +144,7 @@ namespace Interacao
             }
             catch (Exception erro)
             {
-                MensagemExcessao.MensagemErroInesperado(erro.Message);
+                MessageBox.Show(erro.Message, MensagemExcessao.TITULO_ERRO_INESPERADO, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -155,7 +152,7 @@ namespace Interacao
         {
             try
             {
-                Validacoes.ValidarCampos(LerEntradasDoUsuario());
+                ValidacaoCampos.ValidarCampos(LerEntradasDoUsuario());
                 AtribuirValoresReserva(reservaCopia);
                 TelaListaDeReservas.AdicionarReservaNaLista(reservaCopia);
                 this.Close();
@@ -168,8 +165,9 @@ namespace Interacao
 
         private void AoClicarCancelarCadastro(object sender, EventArgs e)
         {
-            string mensagem = "Você realmente deseja cancelar?";
-            var remover = MessageBox.Show(mensagem, "Confirmação de cancelamento", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            string mensagem = "Você realmente deseja cancelar?", titulo = "Confirmação de cancelamento";
+
+            var remover = MessageBox.Show(mensagem, titulo, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (remover.Equals(DialogResult.Yes))
             {
                 this.Close();
