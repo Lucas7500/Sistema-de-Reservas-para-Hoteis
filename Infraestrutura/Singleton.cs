@@ -5,7 +5,7 @@ namespace Infraestrutura
     public sealed class Singleton
     {
         private static List<Reserva>? _listaReservas = null;
-        private static int Id { get; set; } = 0;
+        private static int _Id { get; set; } = 0;
 
         public static List<Reserva> RetornaLista()
         {
@@ -19,8 +19,8 @@ namespace Infraestrutura
 
         public static int IncrementarId()
         {
-            Id++;
-            return Id;
+            _Id++;
+            return _Id;
         }
     }
 }

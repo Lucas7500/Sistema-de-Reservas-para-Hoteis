@@ -5,7 +5,7 @@ namespace Dominio
 {
     public class ValidacaoCampos
     {
-        private static readonly List<string> ListaExcessoes = new();
+        private static readonly List<string> _ListaExcessoes = new();
 
         public static void ValidarCampos(Dictionary<string, dynamic> reservaDict)
         {
@@ -23,10 +23,10 @@ namespace Dominio
             ValidarCheckIn(checkIn, checkOut);
             ValidarPrecoEstadia(precoEstadia);
 
-            if (ListaExcessoes.Any())
+            if (_ListaExcessoes.Any())
             {
-                string erros = String.Join("\n\n", ListaExcessoes);
-                ListaExcessoes.Clear();
+                string erros = String.Join("\n\n", _ListaExcessoes);
+                _ListaExcessoes.Clear();
                 throw new Exception(message: erros);
             }
         }
@@ -37,15 +37,15 @@ namespace Dominio
 
             if (String.IsNullOrWhiteSpace(nome))
             {
-                ListaExcessoes.Add(MensagemExcessao.NOME_NULO);
+                _ListaExcessoes.Add(MensagemExcessao.NOME_NULO);
             }
             else if (nome.Length < (int)ValoresValidacaoEnum.tamanhoMinimoNome)
             {
-                ListaExcessoes.Add(MensagemExcessao.NOME_PEQUENO);
+                _ListaExcessoes.Add(MensagemExcessao.NOME_PEQUENO);
             }
             else if (!Regex.IsMatch(nome, regexNome))
             {
-                ListaExcessoes.Add(MensagemExcessao.NOME_CONTEM_NUMEROS);
+                _ListaExcessoes.Add(MensagemExcessao.NOME_CONTEM_NUMEROS_OU_CARACTERES_INVALIDOS);
             }
         }
 
@@ -55,11 +55,11 @@ namespace Dominio
 
             if (numerosCPF.Length == (int)ValoresValidacaoEnum.ehVazio)
             {
-                ListaExcessoes.Add(MensagemExcessao.CPF_NAO_PREENCHIDO);
+                _ListaExcessoes.Add(MensagemExcessao.CPF_NAO_PREENCHIDO);
             }
             else if (numerosCPF.Length != (int)ValoresValidacaoEnum.tamanhoNumerosCpf)
             {
-                ListaExcessoes.Add(MensagemExcessao.CPF_INVALIDO);
+                _ListaExcessoes.Add(MensagemExcessao.CPF_INVALIDO);
             }
         }
         
@@ -69,25 +69,25 @@ namespace Dominio
 
             if (numerosTelefone.Length == (int)ValoresValidacaoEnum.ehVazio)
             {
-                ListaExcessoes.Add(MensagemExcessao.TELEFONE_NAO_PREENCHIDO);
+                _ListaExcessoes.Add(MensagemExcessao.TELEFONE_NAO_PREENCHIDO);
             }
             else if (numerosTelefone.Length != (int)ValoresValidacaoEnum.tamanhoNumerosTelefone)
             {
-                ListaExcessoes.Add(MensagemExcessao.TELEFONE_INVALIDO);
+                _ListaExcessoes.Add(MensagemExcessao.TELEFONE_INVALIDO);
             }
         }
         
         private static void ValidarIdade(int idade)
         {
-            bool menordeIdade = idade < (int)ValoresValidacaoEnum.idadeAdulto;
+            bool menordeIdade = idade < (int)ValoresValidacaoEnum.maiorDeIdade;
 
             if (idade == (int)ValoresValidacaoEnum.codigoDeErro)
             {
-                ListaExcessoes.Add(MensagemExcessao.IDADE_NAO_PREENCHIDA);
+                _ListaExcessoes.Add(MensagemExcessao.IDADE_NAO_PREENCHIDA);
             }
             else if (menordeIdade)
             {
-                ListaExcessoes.Add(MensagemExcessao.MENOR_DE_IDADE);
+                _ListaExcessoes.Add(MensagemExcessao.MENOR_DE_IDADE);
             }
         }
         
@@ -99,7 +99,7 @@ namespace Dominio
 
             if (dataCheckOutAntesDoCheckIn)
             {
-                ListaExcessoes.Add(MensagemExcessao.CHECKOUT_EM_DATAS_PASSADAS);
+                _ListaExcessoes.Add(MensagemExcessao.CHECKOUT_EM_DATAS_PASSADAS);
             }
         }
         
@@ -107,7 +107,7 @@ namespace Dominio
         {
             if (precoEstadia == (int)ValoresValidacaoEnum.codigoDeErro)
             {
-                ListaExcessoes.Add(MensagemExcessao.PRECO_DA_ESTADIA_NAO_PREENCHIDO);
+                _ListaExcessoes.Add(MensagemExcessao.PRECO_DA_ESTADIA_NAO_PREENCHIDO);
             }
         }   
     }

@@ -235,6 +235,6 @@ namespace Interacao
         private DataGridViewTextBoxColumn checkOutDataGridViewTextBoxColumn;
         private DataGridViewTextBoxColumn precoEstadiaDataGridViewTextBoxColumn;
         private DataGridViewCheckBoxColumn pagamentoEfetuadoDataGridViewCheckBoxColumn;
-        private DataGridView TelaDaLista;
+        private static DataGridView TelaDaLista;
     }
 }

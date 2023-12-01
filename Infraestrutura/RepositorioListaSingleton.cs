@@ -4,11 +4,11 @@ namespace Infraestrutura
 {
     public class RepositorioListaSingleton : IRepositorio
     {
-        protected List<Reserva> listaReservas = Singleton.RetornaLista();
+        protected List<Reserva> _listaReservas = Singleton.RetornaLista();
 
         public List<Reserva> ObterTodos()
         {
-            return listaReservas;
+            return _listaReservas;
         }
 
         public Reserva ObterPorId(int id)
@@ -17,7 +17,7 @@ namespace Infraestrutura
 
             try
             {
-                reservaSelecionada = listaReservas.Find(x => x.Id == id);
+                reservaSelecionada = _listaReservas.Find(x => x.Id == id);
             }
             catch
             {
@@ -32,7 +32,7 @@ namespace Infraestrutura
             try
             {
                 reserva.Id = Singleton.IncrementarId();
-                listaReservas.Add(reserva);
+                _listaReservas.Add(reserva);
             }
             catch
             {
@@ -43,8 +43,8 @@ namespace Infraestrutura
         {
             try
             {
-                var reservaNaLista = listaReservas.FindIndex(x => x.Id == copiaReserva.Id);
-                listaReservas[reservaNaLista] = copiaReserva;
+                var reservaNaLista = _listaReservas.FindIndex(x => x.Id == copiaReserva.Id);
+                _listaReservas[reservaNaLista] = copiaReserva;
             }
             catch
             {
@@ -57,7 +57,7 @@ namespace Infraestrutura
             try
             {
                 Reserva reserva = ObterPorId(id);
-                listaReservas.Remove(reserva);
+                _listaReservas.Remove(reserva);
             }
             catch
             {

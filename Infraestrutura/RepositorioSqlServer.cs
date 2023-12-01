@@ -6,11 +6,11 @@ namespace Infraestrutura
 {
     public class RepositorioSqlServer : IRepositorio
     {
-        private static readonly string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["BDSistemaReservas"].ConnectionString;
+        private static readonly string _connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["BDSistemaReservas"].ConnectionString;
 
         private static SqlConnection Connection()
         {
-            SqlConnection connection = new(connectionString);
+            SqlConnection connection = new(_connectionString);
             connection.Open();
             return connection;
         }

@@ -5,11 +5,11 @@ namespace Interacao
 {
     public partial class TelaListaDeReservas : Form
     {
-        private static IRepositorio repositorio;
+        private static IRepositorio _repositorio;
 
         public TelaListaDeReservas(IRepositorio repositorioUtilizado)
         {
-            repositorio = repositorioUtilizado;
+            _repositorio = repositorioUtilizado;
             InitializeComponent();
             AtualizarGrid();
         }
@@ -25,12 +25,12 @@ namespace Interacao
             {
                 if (reserva.Id == idNulo)
                 {
-                    repositorio.Criar(reserva);
+                    _repositorio.Criar(reserva);
                     MessageBox.Show("Reserva foi criada com Sucesso!");
                 }
                 else
                 {
-                    repositorio.Atualizar(reserva);
+                    _repositorio.Atualizar(reserva);
                     MessageBox.Show("A reserva foi editada com sucesso!");
                 }
 
@@ -45,9 +45,9 @@ namespace Interacao
         private static void AtualizarGrid()
         {
             TelaDaLista.DataSource = null;
-            if (repositorio.ObterTodos().Any())
+            if (_repositorio.ObterTodos().Any())
             {
-                TelaDaLista.DataSource = repositorio.ObterTodos();
+                TelaDaLista.DataSource = _repositorio.ObterTodos();
             }
         }
 
@@ -66,7 +66,7 @@ namespace Interacao
 
         private static bool ListaEhVazia()
         {
-            if (repositorio.ObterTodos().Count == listaNula)
+            if (_repositorio.ObterTodos().Count == listaNula)
             {
                 return true;
             }
@@ -108,7 +108,7 @@ namespace Interacao
                 }
                 else if (SomenteUmaLinhaSelecionada())
                 {
-                    Reserva reservaSelecionada = repositorio.ObterPorId(RetornaIdReservaSelecionada());
+                    Reserva reservaSelecionada = _repositorio.ObterPorId(RetornaIdReservaSelecionada());
                     TelaCadastroCliente TelaCadastro = new(reservaSelecionada);
                     TelaCadastro.ShowDialog();
                 }
@@ -133,12 +133,12 @@ namespace Interacao
                 }
                 else if (SomenteUmaLinhaSelecionada())
                 {
-                    Reserva reservaSelecionada = repositorio.ObterPorId(RetornaIdReservaSelecionada());
+                    Reserva reservaSelecionada = _repositorio.ObterPorId(RetornaIdReservaSelecionada());
                     string mensagem = $"Você tem certeza que quer deletar a reserva de {reservaSelecionada.Nome}?", titulo = "Confirmação de remoção";
                     var deletar = MessageBox.Show(mensagem, titulo, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                     if (deletar.Equals(DialogResult.Yes))
                     {
-                        repositorio.Remover(RetornaIdReservaSelecionada());
+                        _repositorio.Remover(RetornaIdReservaSelecionada());
                         AtualizarGrid();
                     }
                 }

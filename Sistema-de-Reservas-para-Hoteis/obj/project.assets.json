@@ -4172,6 +4172,8 @@
       "Dominio >= 1.0.0",
       "FluentMigrator >= 3.3.2",
       "FluentMigrator.Runner >= 3.3.2",
+      "FluentValidation >= 11.8.1",
+      "FluentValidation.AspNetCore >= 11.3.0",
       "Infraestrutura >= 1.0.0",
       "Microsoft.Extensions.Hosting >= 8.0.0",
       "Microsoft.Extensions.Hosting.Abstractions >= 8.0.0",
@@ -4231,6 +4233,14 @@
           "FluentMigrator.Runner": {
             "target": "Package",
             "version": "[3.3.2, )"
+          },
+          "FluentValidation": {
+            "target": "Package",
+            "version": "[11.8.1, )"
+          },
+          "FluentValidation.AspNetCore": {
+            "target": "Package",
+            "version": "[11.3.0, )"
           },
           "Microsoft.Extensions.Hosting": {
             "target": "Package",

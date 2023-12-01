@@ -1,23 +1,27 @@
 ﻿using Dominio;
 using Dominio.Enums;
+using FluentValidation;
+using FluentValidation.Results;
 
 namespace Interacao
 {
     public partial class TelaCadastroCliente : Form
     {
-        private readonly Reserva reservaCopia = new();
+        private readonly Reserva _reservaCopia = new();
+        private static IValidator<Reserva> _validacaoReserva;
         const int idNulo = 0;
 
-        public TelaCadastroCliente(Reserva reservaParametro)
+        public TelaCadastroCliente(Reserva reservaParametro, IValidator<Reserva> validacaoReserva)
         {
             InitializeComponent();
             CaixaSexo.DataSource = Enum.GetValues(typeof(GeneroEnum));
+            _validator = validacaoReserva;
             if (reservaParametro.Id > idNulo)
             {
                 DataCheckIn.MinDate = reservaParametro.CheckIn;
                 DataCheckOut.MinDate = reservaParametro.CheckOut;
                 PreencherTelaDeCadastro(reservaParametro);
-                reservaCopia = (Reserva)reservaParametro.ShallowCopy();
+                _reservaCopia = (Reserva)reservaParametro.ShallowCopy();
             }
             else
             {
@@ -153,8 +157,10 @@ namespace Interacao
             try
             {
                 ValidacaoCampos.ValidarCampos(LerEntradasDoUsuario());
-                AtribuirValoresReserva(reservaCopia);
-                TelaListaDeReservas.AdicionarReservaNaLista(reservaCopia);
+                AtribuirValoresReserva(_reservaCopia);
+                _validacaoReserva.ValidateAndThrow(_reservaCopia);
+                TelaListaDeReservas.AdicionarReservaNaLista(_reservaCopia);
+
                 this.Close();
             }
             catch (Exception erro)
