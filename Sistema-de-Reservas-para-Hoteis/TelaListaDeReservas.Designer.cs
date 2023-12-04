@@ -32,11 +32,12 @@ namespace Interacao
         {
             components = new System.ComponentModel.Container();
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             BotaoAdicionar = new Button();
             BotaoEditar = new Button();
             BotaoDeletar = new Button();
             TelaDaLista = new DataGridView();
-            reservaBindingSource = new BindingSource(components);
             idDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             nomeDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             cpfDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
@@ -47,6 +48,7 @@ namespace Interacao
             checkOutDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             precoEstadiaDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             pagamentoEfetuadoDataGridViewCheckBoxColumn = new DataGridViewCheckBoxColumn();
+            reservaBindingSource = new BindingSource(components);
             ((System.ComponentModel.ISupportInitialize)TelaDaLista).BeginInit();
             ((System.ComponentModel.ISupportInitialize)reservaBindingSource).BeginInit();
             SuspendLayout();
@@ -59,7 +61,7 @@ namespace Interacao
             BotaoAdicionar.TabIndex = 1;
             BotaoAdicionar.Text = "Adicionar";
             BotaoAdicionar.UseVisualStyleBackColor = true;
-            BotaoAdicionar.Click += AoClicarAbrirTelaDeCadastro;
+            BotaoAdicionar.Click += AoClicarAdicionarAbrirTelaDeCadastro;
             // 
             // BotaoEditar
             // 
@@ -99,17 +101,29 @@ namespace Interacao
             TelaDaLista.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             TelaDaLista.Columns.AddRange(new DataGridViewColumn[] { idDataGridViewTextBoxColumn, nomeDataGridViewTextBoxColumn, cpfDataGridViewTextBoxColumn, telefoneDataGridViewTextBoxColumn, idadeDataGridViewTextBoxColumn, sexoDataGridViewTextBoxColumn, checkInDataGridViewTextBoxColumn, checkOutDataGridViewTextBoxColumn, precoEstadiaDataGridViewTextBoxColumn, pagamentoEfetuadoDataGridViewCheckBoxColumn });
             TelaDaLista.DataSource = reservaBindingSource;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = SystemColors.Window;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = Color.Black;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
+            TelaDaLista.DefaultCellStyle = dataGridViewCellStyle2;
             TelaDaLista.Location = new Point(8, 18);
             TelaDaLista.Name = "TelaDaLista";
             TelaDaLista.ReadOnly = true;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = SystemColors.Control;
+            dataGridViewCellStyle3.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = Color.Black;
+            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
+            TelaDaLista.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             TelaDaLista.RowTemplate.Height = 25;
             TelaDaLista.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             TelaDaLista.Size = new Size(848, 381);
             TelaDaLista.TabIndex = 4;
-            // 
-            // reservaBindingSource
-            // 
-            reservaBindingSource.DataSource = typeof(Reserva);
             // 
             // idDataGridViewTextBoxColumn
             // 
@@ -200,6 +214,10 @@ namespace Interacao
             pagamentoEfetuadoDataGridViewCheckBoxColumn.MinimumWidth = 74;
             pagamentoEfetuadoDataGridViewCheckBoxColumn.Name = "pagamentoEfetuadoDataGridViewCheckBoxColumn";
             pagamentoEfetuadoDataGridViewCheckBoxColumn.ReadOnly = true;
+            // 
+            // reservaBindingSource
+            // 
+            reservaBindingSource.DataSource = typeof(Reserva);
             // 
             // TelaListaDeReservas
             // 

@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using Dominio.Constantes;
 using Dominio.Enums;
 
 namespace Dominio
@@ -25,7 +26,7 @@ namespace Dominio
 
             if (_ListaExcessoes.Any())
             {
-                string erros = String.Join("\n\n", _ListaExcessoes);
+                string erros = String.Join("\n", _ListaExcessoes);
                 _ListaExcessoes.Clear();
                 throw new Exception(message: erros);
             }
@@ -37,15 +38,15 @@ namespace Dominio
 
             if (String.IsNullOrWhiteSpace(nome))
             {
-                _ListaExcessoes.Add(MensagemExcessao.NOME_NULO);
+                _ListaExcessoes.Add(MensagemExcessao.NOME_NAO_PREENCHIDO);
             }
-            else if (nome.Length < (int)ValoresValidacaoEnum.tamanhoMinimoNome)
+            else if (nome.Length < ConstantesValidacao.TAMANHO_MINIMO_NOME)
             {
-                _ListaExcessoes.Add(MensagemExcessao.NOME_PEQUENO);
+                _ListaExcessoes.Add(MensagemExcessao.NOME_CURTO);
             }
             else if (!Regex.IsMatch(nome, regexNome))
             {
-                _ListaExcessoes.Add(MensagemExcessao.NOME_CONTEM_NUMEROS_OU_CARACTERES_INVALIDOS);
+                _ListaExcessoes.Add(MensagemExcessao.NOME_FORMATO_INCORRETO);
             }
         }
 
@@ -53,11 +54,11 @@ namespace Dominio
         {
             string numerosCPF = new(cpf.Where(char.IsDigit).ToArray());
 
-            if (numerosCPF.Length == (int)ValoresValidacaoEnum.ehVazio)
+            if (numerosCPF.Length == ConstantesValidacao.EH_VAZIO)
             {
                 _ListaExcessoes.Add(MensagemExcessao.CPF_NAO_PREENCHIDO);
             }
-            else if (numerosCPF.Length != (int)ValoresValidacaoEnum.tamanhoNumerosCpf)
+            else if (numerosCPF.Length != ConstantesValidacao.TAMANHO_NUMEROS_CPF)
             {
                 _ListaExcessoes.Add(MensagemExcessao.CPF_INVALIDO);
             }
@@ -67,11 +68,11 @@ namespace Dominio
         {
             string numerosTelefone = new(telefone.Where(char.IsDigit).ToArray());
 
-            if (numerosTelefone.Length == (int)ValoresValidacaoEnum.ehVazio)
+            if (numerosTelefone.Length == ConstantesValidacao.EH_VAZIO)
             {
                 _ListaExcessoes.Add(MensagemExcessao.TELEFONE_NAO_PREENCHIDO);
             }
-            else if (numerosTelefone.Length != (int)ValoresValidacaoEnum.tamanhoNumerosTelefone)
+            else if (numerosTelefone.Length != ConstantesValidacao.TAMANHO_NUMEROS_TELEFONE)
             {
                 _ListaExcessoes.Add(MensagemExcessao.TELEFONE_INVALIDO);
             }
@@ -79,9 +80,9 @@ namespace Dominio
         
         private static void ValidarIdade(int idade)
         {
-            bool menordeIdade = idade < (int)ValoresValidacaoEnum.maiorDeIdade;
+            bool menordeIdade = idade < ConstantesValidacao.MAIOR_DE_IDADE;
 
-            if (idade == (int)ValoresValidacaoEnum.codigoDeErro)
+            if (idade == ConstantesValidacao.CODIGO_DE_ERRO)
             {
                 _ListaExcessoes.Add(MensagemExcessao.IDADE_NAO_PREENCHIDA);
             }
@@ -105,7 +106,7 @@ namespace Dominio
         
         private static void ValidarPrecoEstadia(decimal precoEstadia)
         {
-            if (precoEstadia == (int)ValoresValidacaoEnum.codigoDeErro)
+            if (precoEstadia == ConstantesValidacao.CODIGO_DE_ERRO)
             {
                 _ListaExcessoes.Add(MensagemExcessao.PRECO_DA_ESTADIA_NAO_PREENCHIDO);
             }

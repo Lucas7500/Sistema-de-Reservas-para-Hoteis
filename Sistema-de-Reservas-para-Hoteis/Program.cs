@@ -40,7 +40,7 @@ namespace Interacao
             return Host.CreateDefaultBuilder()
                 .ConfigureServices((context, services) => {
                     services.AddScoped<TelaListaDeReservas>();
-                    services.AddScoped<IRepositorio, RepositorioListaSingleton>();
+                    services.AddScoped<IRepositorio, RepositorioSqlServer>();
                     services.AddScoped<IValidator<Reserva>, ValidacaoReserva>();
                     services.ExecutarMigracoes();
                 });

@@ -2,6 +2,8 @@
 using Dominio.Enums;
 using FluentValidation;
 using FluentValidation.Results;
+using Dominio.Extensoes;
+using Dominio.Constantes;
 
 namespace Interacao
 {
@@ -15,7 +17,7 @@ namespace Interacao
         {
             InitializeComponent();
             CaixaSexo.DataSource = Enum.GetValues(typeof(GeneroEnum));
-            _validator = validacaoReserva;
+            _validacaoReserva = validacaoReserva;
             if (reservaParametro.Id > idNulo)
             {
                 DataCheckIn.MinDate = reservaParametro.CheckIn;
@@ -125,10 +127,10 @@ namespace Interacao
                 { "Nome", TextoNome.Text },
                 { "Cpf", TextoCPF.Text },
                 { "Telefone", TextoTelefone.Text },
-                { "Idade", String.IsNullOrWhiteSpace(TextoIdade.Text) ? (int)ValoresValidacaoEnum.codigoDeErro : int.Parse(TextoIdade.Text) },
+                { "Idade", String.IsNullOrWhiteSpace(TextoIdade.Text) ? ConstantesValidacao.CODIGO_DE_ERRO : int.Parse(TextoIdade.Text) },
                 { "CheckIn", Convert.ToDateTime(DataCheckIn.Value.Date) },
                 { "CheckOut", Convert.ToDateTime(DataCheckOut.Value.Date) },
-                { "PrecoEstadia", String.IsNullOrWhiteSpace(TextoPreco.Text) ? (int)ValoresValidacaoEnum.codigoDeErro : ConverterEmDecimalComVirgula(TextoPreco.Text) }
+                { "PrecoEstadia", String.IsNullOrWhiteSpace(TextoPreco.Text) ? ConstantesValidacao.CODIGO_DE_ERRO : ConverterEmDecimalComVirgula(TextoPreco.Text) }
             };
         }
 
@@ -158,14 +160,15 @@ namespace Interacao
             {
                 ValidacaoCampos.ValidarCampos(LerEntradasDoUsuario());
                 AtribuirValoresReserva(_reservaCopia);
-                _validacaoReserva.ValidateAndThrow(_reservaCopia);
+                _validacaoReserva.ValidateAndThrowArgumentException(_reservaCopia);
                 TelaListaDeReservas.AdicionarReservaNaLista(_reservaCopia);
 
                 this.Close();
             }
             catch (Exception erro)
             {
-                MessageBox.Show(erro.Message, "Erro no Cadastro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                string titulo = "Erro no Cadastro";
+                MessageBox.Show(erro.Message, titulo, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

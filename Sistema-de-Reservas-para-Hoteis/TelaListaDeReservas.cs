@@ -1,4 +1,6 @@
 using Dominio;
+using Dominio.Constantes;
+using FluentValidation;
 using Infraestrutura;
 
 namespace Interacao
@@ -6,10 +8,12 @@ namespace Interacao
     public partial class TelaListaDeReservas : Form
     {
         private static IRepositorio _repositorio;
+        private static IValidator<Reserva> _validacaoReserva;
 
-        public TelaListaDeReservas(IRepositorio repositorioUtilizado)
+        public TelaListaDeReservas(IRepositorio repositorioUtilizado, IValidator<Reserva> validacaoReserva)
         {
             _repositorio = repositorioUtilizado;
+            _validacaoReserva = validacaoReserva;
             InitializeComponent();
             AtualizarGrid();
         }
@@ -84,13 +88,17 @@ namespace Interacao
             return idLinhaSelecionada;
         }
 
-        private void AoClicarAbrirTelaDeCadastro(object sender, EventArgs e)
+        private static void AbrirNovaTelaDeCadastro(Reserva reserva)
+        {
+            TelaCadastroCliente TelaCadastro = new(reserva, _validacaoReserva);
+            TelaCadastro.ShowDialog();
+        }
+
+        private void AoClicarAdicionarAbrirTelaDeCadastro(object sender, EventArgs e)
         {
             try
             {
-                Reserva reserva = new();
-                TelaCadastroCliente TelaCadastro = new(reserva);
-                TelaCadastro.ShowDialog();
+                AbrirNovaTelaDeCadastro(new Reserva());
             }
             catch (Exception erro)
             {
@@ -109,8 +117,7 @@ namespace Interacao
                 else if (SomenteUmaLinhaSelecionada())
                 {
                     Reserva reservaSelecionada = _repositorio.ObterPorId(RetornaIdReservaSelecionada());
-                    TelaCadastroCliente TelaCadastro = new(reservaSelecionada);
-                    TelaCadastro.ShowDialog();
+                    AbrirNovaTelaDeCadastro(reservaSelecionada);
                 }
                 else
                 {
