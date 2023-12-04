@@ -32,6 +32,23 @@ namespace Infraestrutura
             };
         }
 
+        private void CpfEhUnico(Reserva reserva)
+        {
+            using var connection = Connection();
+
+            SqlCommand verificaBD = new("SELECT * FROM TabelaReservas", connection);
+
+            var leitor = verificaBD.ExecuteReader();
+
+            while (leitor.Read())
+            {
+                if (((string)leitor["Cpf"]).Equals(reserva.Cpf))
+                {
+                    ;
+                }
+            }
+        }
+
         public List<Reserva> ObterTodos()
         {
             List<Reserva> listaReservas = new();
@@ -104,6 +121,7 @@ namespace Infraestrutura
                 throw new Exception(message: "Erro ao Adicionar Reserva no Banco de Dados");
             }
         }
+        
         public void Atualizar(Reserva copiaReserva)
         {
             using var connection = Connection();

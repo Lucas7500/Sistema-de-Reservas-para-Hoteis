@@ -23,7 +23,7 @@ namespace Interacao
         const int idNulo = 0;
         const int listaNula = 0;
 
-        public static void AdicionarReservaNaLista(Reserva reserva)
+        public static void AdicionarReservaNoFormulario(Reserva reserva)
         {
             try
             {

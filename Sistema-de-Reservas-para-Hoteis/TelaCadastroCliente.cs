@@ -161,7 +161,7 @@ namespace Interacao
                 ValidacaoCampos.ValidarCampos(LerEntradasDoUsuario());
                 AtribuirValoresReserva(_reservaCopia);
                 _validacaoReserva.ValidateAndThrowArgumentException(_reservaCopia);
-                TelaListaDeReservas.AdicionarReservaNaLista(_reservaCopia);
+                TelaListaDeReservas.AdicionarReservaNoFormulario(_reservaCopia);
 
                 this.Close();
             }
