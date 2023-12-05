@@ -5,17 +5,18 @@ using System.Text.RegularExpressions;
 
 namespace Dominio
 {
-    public class ValidacaoReserva : AbstractValidator<Reserva>
+    public class ReservaFluentValidation : AbstractValidator<Reserva>
     {
-        public ValidacaoReserva()
+        public ReservaFluentValidation()
         {
             RuleLevelCascadeMode = CascadeMode.Stop;
+            string regexNome = "^[a-zA-ZA-ZáàâãéèêíìîóòõôúùûçÁÀÃÂÉÈÊÍÌÎÓÒÔÕÚÙÛÇ ]*$";
 
             RuleFor(reserva => reserva.Nome)
                 .NotEmpty().WithMessage(MensagemExcessao.NOME_NAO_PREENCHIDO)
-                .Matches(PadroesRegex.REGEX_NOME).WithMessage(MensagemExcessao.NOME_FORMATO_INCORRETO)
-                .MinimumLength(ConstantesValidacao.TAMANHO_MINIMO_NOME).WithMessage(MensagemExcessao.NOME_CURTO)
-                .MaximumLength(ConstantesValidacao.TAMANHO_MAXIMO_NOME).WithMessage(MensagemExcessao.NOME_LONGO);
+                .Matches(regexNome).WithMessage(MensagemExcessao.NOME_FORMATO_INCORRETO)
+                .MinimumLength(ValoresPadrao.TAMANHO_MINIMO_NOME).WithMessage(MensagemExcessao.NOME_CURTO)
+                .MaximumLength(ValoresPadrao.TAMANHO_MAXIMO_NOME).WithMessage(MensagemExcessao.NOME_LONGO);
 
             RuleFor(reserva => reserva.Cpf)
             .Must(CpfEstaPreenchido).WithMessage(MensagemExcessao.CPF_NAO_PREENCHIDO)
@@ -27,8 +28,8 @@ namespace Dominio
 
             RuleFor(reserva => reserva.Idade)
                 .NotEmpty().WithMessage(MensagemExcessao.IDADE_NAO_PREENCHIDA)
-                .LessThan(ConstantesValidacao.VALOR_MAXIMO_IDADE).WithMessage(MensagemExcessao.IDADE_INVALIDA)
-                .GreaterThanOrEqualTo(ConstantesValidacao.MAIOR_DE_IDADE).WithMessage(MensagemExcessao.MENOR_DE_IDADE);
+                .LessThan(ValoresPadrao.VALOR_MAXIMO_IDADE).WithMessage(MensagemExcessao.IDADE_INVALIDA)
+                .GreaterThanOrEqualTo(ValoresPadrao.MAIOR_DE_IDADE).WithMessage(MensagemExcessao.MENOR_DE_IDADE);
 
             RuleFor(reserva => reserva.Sexo)
                 .NotNull().WithMessage(MensagemExcessao.SEXO_NULO)
@@ -43,8 +44,8 @@ namespace Dominio
 
             RuleFor(reserva => reserva.PrecoEstadia)
                 .NotEmpty().WithMessage(MensagemExcessao.PRECO_DA_ESTADIA_NAO_PREENCHIDO)
-                .LessThanOrEqualTo(ConstantesValidacao.VALOR_MAXIMO_PRECO).WithMessage(MensagemExcessao.PRECO_DA_ESTADIA_ACIMA_DO_VALOR_MAXIMO)
-                .GreaterThanOrEqualTo(ConstantesValidacao.PRECO_NEGATIVO_OU_ZERO).WithMessage(MensagemExcessao.PRECO_DA_ESTADIA_MENOR_IGUAL_A_ZERO);
+                .LessThanOrEqualTo(ValoresPadrao.VALOR_MAXIMO_PRECO).WithMessage(MensagemExcessao.PRECO_DA_ESTADIA_ACIMA_DO_VALOR_MAXIMO)
+                .GreaterThanOrEqualTo(ValoresPadrao.PRECO_NEGATIVO_OU_ZERO).WithMessage(MensagemExcessao.PRECO_DA_ESTADIA_MENOR_IGUAL_A_ZERO);
 
             RuleFor(reserva => reserva.PagamentoEfetuado)
                 .NotNull().WithMessage(MensagemExcessao.PAGAMENTO_EFETUADO_NULO);
@@ -54,7 +55,7 @@ namespace Dominio
         {
             string numerosTelefone = new(telefone.Where(char.IsDigit).ToArray());
 
-            if (numerosTelefone.Length == ConstantesValidacao.EH_VAZIO)
+            if (numerosTelefone.Length == ValoresPadrao.EH_VAZIO)
             {
                 return false;
             }
@@ -66,7 +67,7 @@ namespace Dominio
         {
             string numerosTelefone = new(telefone.Where(char.IsDigit).ToArray());
 
-            if (numerosTelefone.Length != ConstantesValidacao.TAMANHO_NUMEROS_TELEFONE)
+            if (numerosTelefone.Length != ValoresPadrao.TAMANHO_NUMEROS_TELEFONE)
             {
                 return false;
             }
@@ -79,7 +80,7 @@ namespace Dominio
         {
             string numerosCpf = new(cpf.Where(char.IsDigit).ToArray());
 
-            if (numerosCpf.Length == ConstantesValidacao.EH_VAZIO)
+            if (numerosCpf.Length == ValoresPadrao.EH_VAZIO)
             {
                 return false;
             }

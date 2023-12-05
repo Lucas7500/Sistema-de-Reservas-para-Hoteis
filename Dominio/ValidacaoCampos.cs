@@ -40,7 +40,7 @@ namespace Dominio
             {
                 _ListaExcessoes.Add(MensagemExcessao.NOME_NAO_PREENCHIDO);
             }
-            else if (nome.Length < ConstantesValidacao.TAMANHO_MINIMO_NOME)
+            else if (nome.Length < ValoresPadrao.TAMANHO_MINIMO_NOME)
             {
                 _ListaExcessoes.Add(MensagemExcessao.NOME_CURTO);
             }
@@ -54,11 +54,11 @@ namespace Dominio
         {
             string numerosCPF = new(cpf.Where(char.IsDigit).ToArray());
 
-            if (numerosCPF.Length == ConstantesValidacao.EH_VAZIO)
+            if (numerosCPF.Length == ValoresPadrao.EH_VAZIO)
             {
                 _ListaExcessoes.Add(MensagemExcessao.CPF_NAO_PREENCHIDO);
             }
-            else if (numerosCPF.Length != ConstantesValidacao.TAMANHO_NUMEROS_CPF)
+            else if (numerosCPF.Length != ValoresPadrao.TAMANHO_NUMEROS_CPF)
             {
                 _ListaExcessoes.Add(MensagemExcessao.CPF_INVALIDO);
             }
@@ -68,11 +68,11 @@ namespace Dominio
         {
             string numerosTelefone = new(telefone.Where(char.IsDigit).ToArray());
 
-            if (numerosTelefone.Length == ConstantesValidacao.EH_VAZIO)
+            if (numerosTelefone.Length == ValoresPadrao.EH_VAZIO)
             {
                 _ListaExcessoes.Add(MensagemExcessao.TELEFONE_NAO_PREENCHIDO);
             }
-            else if (numerosTelefone.Length != ConstantesValidacao.TAMANHO_NUMEROS_TELEFONE)
+            else if (numerosTelefone.Length != ValoresPadrao.TAMANHO_NUMEROS_TELEFONE)
             {
                 _ListaExcessoes.Add(MensagemExcessao.TELEFONE_INVALIDO);
             }
@@ -80,9 +80,9 @@ namespace Dominio
         
         private static void ValidarIdade(int idade)
         {
-            bool menordeIdade = idade < ConstantesValidacao.MAIOR_DE_IDADE;
+            bool menordeIdade = idade < ValoresPadrao.MAIOR_DE_IDADE;
 
-            if (idade == ConstantesValidacao.CODIGO_DE_ERRO)
+            if (idade == ValoresPadrao.CODIGO_DE_ERRO)
             {
                 _ListaExcessoes.Add(MensagemExcessao.IDADE_NAO_PREENCHIDA);
             }
@@ -106,7 +106,7 @@ namespace Dominio
         
         private static void ValidarPrecoEstadia(decimal precoEstadia)
         {
-            if (precoEstadia == ConstantesValidacao.CODIGO_DE_ERRO)
+            if (precoEstadia == ValoresPadrao.CODIGO_DE_ERRO)
             {
                 _ListaExcessoes.Add(MensagemExcessao.PRECO_DA_ESTADIA_NAO_PREENCHIDO);
             }

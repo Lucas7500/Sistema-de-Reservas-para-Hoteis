@@ -2,7 +2,7 @@
 
 namespace Infraestrutura
 {
-    public sealed class Singleton
+    public sealed class ReservaSingleton
     {
         private static List<Reserva>? _listaReservas = null;
         private static int _Id { get; set; } = 0;

@@ -11,14 +11,13 @@ namespace Interacao
     {
         private readonly Reserva _reservaCopia = new();
         private static IValidator<Reserva> _validacaoReserva;
-        const int idNulo = 0;
 
         public TelaCadastroCliente(Reserva reservaParametro, IValidator<Reserva> validacaoReserva)
         {
             InitializeComponent();
             CaixaSexo.DataSource = Enum.GetValues(typeof(GeneroEnum));
             _validacaoReserva = validacaoReserva;
-            if (reservaParametro.Id > idNulo)
+            if (reservaParametro.Id > ValoresPadrao.ID_NULO)
             {
                 DataCheckIn.MinDate = reservaParametro.CheckIn;
                 DataCheckOut.MinDate = reservaParametro.CheckOut;
@@ -63,10 +62,9 @@ namespace Interacao
             }
             if (PossuiVirgula)
             {
-                int IndexCasasDecimais = 1, MaxCasasDecimais = 2;
                 string[] preco = TextoPreco.Text.Split(',');
-                string CasasDecimais = preco[IndexCasasDecimais];
-                bool Possui2CasasDecimais = CasasDecimais.Length == MaxCasasDecimais;
+                string CasasDecimais = preco[ValoresPadrao.INDEX_CASAS_DECIMAIS];
+                bool Possui2CasasDecimais = CasasDecimais.Length == ValoresPadrao.MAX_CASAS_DECIMAIS;
                 e.Handled = Possui2CasasDecimais && !char.IsControl(e.KeyChar);
             }
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
@@ -127,10 +125,10 @@ namespace Interacao
                 { "Nome", TextoNome.Text },
                 { "Cpf", TextoCPF.Text },
                 { "Telefone", TextoTelefone.Text },
-                { "Idade", String.IsNullOrWhiteSpace(TextoIdade.Text) ? ConstantesValidacao.CODIGO_DE_ERRO : int.Parse(TextoIdade.Text) },
+                { "Idade", String.IsNullOrWhiteSpace(TextoIdade.Text) ? ValoresPadrao.CODIGO_DE_ERRO : int.Parse(TextoIdade.Text) },
                 { "CheckIn", Convert.ToDateTime(DataCheckIn.Value.Date) },
                 { "CheckOut", Convert.ToDateTime(DataCheckOut.Value.Date) },
-                { "PrecoEstadia", String.IsNullOrWhiteSpace(TextoPreco.Text) ? ConstantesValidacao.CODIGO_DE_ERRO : ConverterEmDecimalComVirgula(TextoPreco.Text) }
+                { "PrecoEstadia", String.IsNullOrWhiteSpace(TextoPreco.Text) ? ValoresPadrao.CODIGO_DE_ERRO : ConverterEmDecimalComVirgula(TextoPreco.Text) }
             };
         }
 

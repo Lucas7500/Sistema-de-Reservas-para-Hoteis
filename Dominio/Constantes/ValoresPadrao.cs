@@ -1,6 +1,6 @@
 ﻿namespace Dominio.Constantes
 {
-    public class ConstantesValidacao
+    public class ValoresPadrao
     {
         public const int CODIGO_DE_ERRO = -1;
         public const int TAMANHO_MINIMO_NOME = 3;
@@ -12,5 +12,12 @@
         public const int VALOR_MAXIMO_IDADE = 200;
         public const int PRECO_NEGATIVO_OU_ZERO = 0;
         public const decimal VALOR_MAXIMO_PRECO = 9999999999.99M;
+        public const int PRIMEIRO_ELEMENTO = 0;
+        public const int UMA_LINHA_SELECIONADA = 1;
+        public const int ID_NULO = 0;
+        public const int LISTA_NULA = 0;
+        public const int INDEX_CASAS_DECIMAIS = 1;
+        public const int MAX_CASAS_DECIMAIS = 2;
+
     }
 }

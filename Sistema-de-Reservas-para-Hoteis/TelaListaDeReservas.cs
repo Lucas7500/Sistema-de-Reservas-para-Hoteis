@@ -18,16 +18,11 @@ namespace Interacao
             AtualizarGrid();
         }
 
-        const int primeiroElemento = 0;
-        const int umaLinhaSelecionada = 1;
-        const int idNulo = 0;
-        const int listaNula = 0;
-
         public static bool AdicionarReservaNoFormulario(Reserva reserva)
         {
             try
             {
-                if (reserva.Id == idNulo)
+                if (reserva.Id == ValoresPadrao.ID_NULO)
                 {
                     _repositorio.Criar(reserva);
                     MessageBox.Show("Reserva foi criada com Sucesso!");
@@ -51,6 +46,7 @@ namespace Interacao
         private static void AtualizarGrid()
         {
             TelaDaLista.DataSource = null;
+
             if (_repositorio.ObterTodos().Any())
             {
                 TelaDaLista.DataSource = _repositorio.ObterTodos();
@@ -60,7 +56,8 @@ namespace Interacao
         private static bool SomenteUmaLinhaSelecionada()
         {
             int qtdLinhasSelecionadas = TelaDaLista.SelectedRows.Count;
-            if (qtdLinhasSelecionadas == umaLinhaSelecionada)
+
+            if (qtdLinhasSelecionadas == ValoresPadrao.UMA_LINHA_SELECIONADA)
             {
                 return true;
             }
@@ -72,7 +69,7 @@ namespace Interacao
 
         private static bool ListaEhVazia()
         {
-            if (_repositorio.ObterTodos().Count == listaNula)
+            if (_repositorio.ObterTodos().Count == ValoresPadrao.LISTA_NULA)
             {
                 return true;
             }
@@ -84,8 +81,8 @@ namespace Interacao
 
         private static int RetornaIdReservaSelecionada()
         {
-            int indexLinha = TelaDaLista.SelectedRows[primeiroElemento].Index;
-            int idLinhaSelecionada = (int)TelaDaLista.Rows[indexLinha].Cells[primeiroElemento].Value;
+            int indexLinha = TelaDaLista.SelectedRows[ValoresPadrao.PRIMEIRO_ELEMENTO].Index;
+            int idLinhaSelecionada = (int)TelaDaLista.Rows[indexLinha].Cells[ValoresPadrao.PRIMEIRO_ELEMENTO].Value;
 
             return idLinhaSelecionada;
         }

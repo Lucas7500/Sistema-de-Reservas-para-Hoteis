@@ -41,7 +41,7 @@ namespace Interacao
                 .ConfigureServices((context, services) => {
                     services.AddScoped<TelaListaDeReservas>();
                     services.AddScoped<IRepositorio, RepositorioSqlServer>();
-                    services.AddScoped<IValidator<Reserva>, ValidacaoReserva>();
+                    services.AddScoped<IValidator<Reserva>, ReservaFluentValidation>();
                     services.ExecutarMigracoes();
                 });
         }

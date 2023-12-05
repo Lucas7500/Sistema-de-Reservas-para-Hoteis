@@ -2,8 +2,8 @@
 
 namespace Infraestrutura.Migrations
 {
-    [Migration(20231121103700)]
-    public class _20231121103700AddTabelaReservas : Migration
+    [Migration(20231205124100)]
+    public class _20231205124100AddTabelaReservas : Migration
     {
         public override void Up()
         {
@@ -16,7 +16,7 @@ namespace Infraestrutura.Migrations
                 .WithColumn("Sexo").AsString().NotNullable()
                 .WithColumn("CheckIn").AsDate().NotNullable()
                 .WithColumn("CheckOut").AsDate().NotNullable()
-                .WithColumn("PrecoEstadia").AsDecimal().NotNullable()
+                .WithColumn("PrecoEstadia").AsDecimal(12, 2).NotNullable()
                 .WithColumn("PagamentoEfetuado").AsBoolean().NotNullable();
         }
 
