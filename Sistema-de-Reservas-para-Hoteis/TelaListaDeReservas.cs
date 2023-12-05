@@ -23,7 +23,7 @@ namespace Interacao
         const int idNulo = 0;
         const int listaNula = 0;
 
-        public static void AdicionarReservaNoFormulario(Reserva reserva)
+        public static bool AdicionarReservaNoFormulario(Reserva reserva)
         {
             try
             {
@@ -39,10 +39,12 @@ namespace Interacao
                 }
 
                 AtualizarGrid();
+                return true;
             }
             catch (Exception erro)
             {
                 MessageBox.Show(erro.Message, MensagemExcessao.TITULO_ERRO_INESPERADO, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
             }
         }
 

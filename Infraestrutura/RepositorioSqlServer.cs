@@ -32,7 +32,7 @@ namespace Infraestrutura
             };
         }
 
-        private void CpfEhUnico(Reserva reserva)
+        private static void VerificaSeCpfEhUnico(Reserva reserva)
         {
             using var connection = Connection();
 
@@ -42,9 +42,10 @@ namespace Infraestrutura
 
             while (leitor.Read())
             {
-                if (((string)leitor["Cpf"]).Equals(reserva.Cpf))
+                if (((string)leitor["Cpf"]).Equals(reserva.Cpf) && (int)leitor["Id"] != reserva.Id)
                 {
-                    ;
+                    string mensagemErro = "Esse cpf já está registrado no sistema!";
+                    throw new Exception(message: mensagemErro);
                 }
             }
         }
@@ -94,6 +95,7 @@ namespace Infraestrutura
 
         public void Criar(Reserva reserva)
         {
+            VerificaSeCpfEhUnico(reserva);
             using var connection = Connection();
             
             try
@@ -124,6 +126,7 @@ namespace Infraestrutura
         
         public void Atualizar(Reserva copiaReserva)
         {
+            VerificaSeCpfEhUnico(copiaReserva);
             using var connection = Connection();
 
             try

@@ -104,7 +104,7 @@ namespace Dominio
 
             if (resto < 2)
             {
-                if (primeiroDigitoVerificador != '0') return false;
+                if (primeiroDigitoVerificador != 0) return false;
             }
             else
             {

@@ -161,9 +161,12 @@ namespace Interacao
                 ValidacaoCampos.ValidarCampos(LerEntradasDoUsuario());
                 AtribuirValoresReserva(_reservaCopia);
                 _validacaoReserva.ValidateAndThrowArgumentException(_reservaCopia);
-                TelaListaDeReservas.AdicionarReservaNoFormulario(_reservaCopia);
+                
+                if (TelaListaDeReservas.AdicionarReservaNoFormulario(_reservaCopia))
+                {
+                    this.Close();
+                }
 
-                this.Close();
             }
             catch (Exception erro)
             {
