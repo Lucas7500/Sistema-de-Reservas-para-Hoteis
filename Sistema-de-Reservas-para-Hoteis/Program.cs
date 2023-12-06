@@ -1,11 +1,10 @@
 using Dominio;
 using FluentMigrator.Runner;
+using FluentValidation;
 using Infraestrutura;
 using Infraestrutura.Extensoes;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using FluentValidation;
-using FluentValidation.AspNetCore;
 
 namespace Interacao
 {
@@ -40,7 +39,7 @@ namespace Interacao
             return Host.CreateDefaultBuilder()
                 .ConfigureServices((context, services) => {
                     services.AddScoped<TelaListaDeReservas>();
-                    services.AddScoped<IRepositorio, RepositorioSqlServer>();
+                    services.AddScoped<IRepositorio, RepositorioLinq2DB>();
                     services.AddScoped<IValidator<Reserva>, ReservaFluentValidation>();
                     services.ExecutarMigracoes();
                 });
