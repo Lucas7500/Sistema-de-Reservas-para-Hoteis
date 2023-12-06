@@ -1,4 +1,6 @@
-﻿namespace Sistema_de_Reservas_para_Hoteis
+﻿using Dominio;
+
+namespace Interacao
 {
     partial class TelaListaDeReservas
     {
@@ -30,11 +32,12 @@
         {
             components = new System.ComponentModel.Container();
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             BotaoAdicionar = new Button();
             BotaoEditar = new Button();
             BotaoDeletar = new Button();
             TelaDaLista = new DataGridView();
-            reservaBindingSource = new BindingSource(components);
             idDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             nomeDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             cpfDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
@@ -45,23 +48,24 @@
             checkOutDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             precoEstadiaDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             pagamentoEfetuadoDataGridViewCheckBoxColumn = new DataGridViewCheckBoxColumn();
+            reservaBindingSource = new BindingSource(components);
             ((System.ComponentModel.ISupportInitialize)TelaDaLista).BeginInit();
             ((System.ComponentModel.ISupportInitialize)reservaBindingSource).BeginInit();
             SuspendLayout();
             // 
             // BotaoAdicionar
             // 
-            BotaoAdicionar.Location = new Point(490, 404);
+            BotaoAdicionar.Location = new Point(496, 405);
             BotaoAdicionar.Name = "BotaoAdicionar";
             BotaoAdicionar.Size = new Size(110, 35);
             BotaoAdicionar.TabIndex = 1;
             BotaoAdicionar.Text = "Adicionar";
             BotaoAdicionar.UseVisualStyleBackColor = true;
-            BotaoAdicionar.Click += AoClicarAbrirTelaDeCadastro;
+            BotaoAdicionar.Click += AoClicarAdicionarAbrirTelaDeCadastro;
             // 
             // BotaoEditar
             // 
-            BotaoEditar.Location = new Point(615, 404);
+            BotaoEditar.Location = new Point(621, 404);
             BotaoEditar.Name = "BotaoEditar";
             BotaoEditar.Size = new Size(110, 35);
             BotaoEditar.TabIndex = 2;
@@ -71,7 +75,7 @@
             // 
             // BotaoDeletar
             // 
-            BotaoDeletar.Location = new Point(741, 405);
+            BotaoDeletar.Location = new Point(746, 405);
             BotaoDeletar.Name = "BotaoDeletar";
             BotaoDeletar.Size = new Size(110, 35);
             BotaoDeletar.TabIndex = 3;
@@ -97,17 +101,29 @@
             TelaDaLista.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             TelaDaLista.Columns.AddRange(new DataGridViewColumn[] { idDataGridViewTextBoxColumn, nomeDataGridViewTextBoxColumn, cpfDataGridViewTextBoxColumn, telefoneDataGridViewTextBoxColumn, idadeDataGridViewTextBoxColumn, sexoDataGridViewTextBoxColumn, checkInDataGridViewTextBoxColumn, checkOutDataGridViewTextBoxColumn, precoEstadiaDataGridViewTextBoxColumn, pagamentoEfetuadoDataGridViewCheckBoxColumn });
             TelaDaLista.DataSource = reservaBindingSource;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = SystemColors.Window;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = Color.Black;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
+            TelaDaLista.DefaultCellStyle = dataGridViewCellStyle2;
             TelaDaLista.Location = new Point(8, 18);
             TelaDaLista.Name = "TelaDaLista";
             TelaDaLista.ReadOnly = true;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = SystemColors.Control;
+            dataGridViewCellStyle3.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = Color.Black;
+            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
+            TelaDaLista.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             TelaDaLista.RowTemplate.Height = 25;
             TelaDaLista.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            TelaDaLista.Size = new Size(843, 381);
+            TelaDaLista.Size = new Size(848, 381);
             TelaDaLista.TabIndex = 4;
-            // 
-            // reservaBindingSource
-            // 
-            reservaBindingSource.DataSource = typeof(Reserva);
             // 
             // idDataGridViewTextBoxColumn
             // 
@@ -199,11 +215,15 @@
             pagamentoEfetuadoDataGridViewCheckBoxColumn.Name = "pagamentoEfetuadoDataGridViewCheckBoxColumn";
             pagamentoEfetuadoDataGridViewCheckBoxColumn.ReadOnly = true;
             // 
+            // reservaBindingSource
+            // 
+            reservaBindingSource.DataSource = typeof(Reserva);
+            // 
             // TelaListaDeReservas
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(857, 451);
+            ClientSize = new Size(862, 451);
             Controls.Add(TelaDaLista);
             Controls.Add(BotaoDeletar);
             Controls.Add(BotaoEditar);

@@ -1,15 +1,16 @@
-﻿using Sistema_de_Reservas_para_Hoteis.Enums;
+﻿using Dominio.Enums;
+using Dominio;
 using System.Data.SqlClient;
 
-namespace Sistema_de_Reservas_para_Hoteis
+namespace Infraestrutura
 {
-    internal class RepositorioSqlServer : IRepositorio
+    public class RepositorioSqlServer : IRepositorio
     {
-        private static readonly string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["BDSistemaReservas"].ConnectionString;
+        private static readonly string _connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["BDSistemaReservas"].ConnectionString;
 
         private static SqlConnection Connection()
         {
-            SqlConnection connection = new(connectionString);
+            SqlConnection connection = new(_connectionString);
             connection.Open();
             return connection;
         }
@@ -29,6 +30,24 @@ namespace Sistema_de_Reservas_para_Hoteis
                 PrecoEstadia = Math.Round((decimal)leitor["PrecoEstadia"], 2),
                 PagamentoEfetuado = (bool)leitor["PagamentoEfetuado"]
             };
+        }
+
+        private static void VerificaSeCpfEhUnico(Reserva reserva)
+        {
+            using var connection = Connection();
+
+            SqlCommand verificaBD = new("SELECT * FROM TabelaReservas", connection);
+
+            var leitor = verificaBD.ExecuteReader();
+
+            while (leitor.Read())
+            {
+                if (((string)leitor["Cpf"]).Equals(reserva.Cpf) && (int)leitor["Id"] != reserva.Id)
+                {
+                    string mensagemErro = "Esse cpf já está registrado no sistema!";
+                    throw new Exception(message: mensagemErro);
+                }
+            }
         }
 
         public List<Reserva> ObterTodos()
@@ -76,6 +95,7 @@ namespace Sistema_de_Reservas_para_Hoteis
 
         public void Criar(Reserva reserva)
         {
+            VerificaSeCpfEhUnico(reserva);
             using var connection = Connection();
             
             try
@@ -103,8 +123,10 @@ namespace Sistema_de_Reservas_para_Hoteis
                 throw new Exception(message: "Erro ao Adicionar Reserva no Banco de Dados");
             }
         }
+        
         public void Atualizar(Reserva copiaReserva)
         {
+            VerificaSeCpfEhUnico(copiaReserva);
             using var connection = Connection();
 
             try
