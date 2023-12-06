@@ -1,21 +1,28 @@
-﻿using Sistema_de_Reservas_para_Hoteis.Enums;
+﻿using Dominio;
+using Dominio.Enums;
+using FluentValidation;
+using FluentValidation.Results;
+using Dominio.Extensoes;
+using Dominio.Constantes;
 
-namespace Sistema_de_Reservas_para_Hoteis
+namespace Interacao
 {
     public partial class TelaCadastroCliente : Form
     {
-        private readonly Reserva reservaCopia = new();
-        const int idNulo = 0;
-        public TelaCadastroCliente(Reserva reservaParametro)
+        private readonly Reserva _reservaCopia = new();
+        private static IValidator<Reserva> _validacaoReserva;
+
+        public TelaCadastroCliente(Reserva reservaParametro, IValidator<Reserva> validacaoReserva)
         {
             InitializeComponent();
             CaixaSexo.DataSource = Enum.GetValues(typeof(GeneroEnum));
-            if (reservaParametro.Id > idNulo)
+            _validacaoReserva = validacaoReserva;
+            if (reservaParametro.Id > ValoresPadrao.ID_NULO)
             {
                 DataCheckIn.MinDate = reservaParametro.CheckIn;
                 DataCheckOut.MinDate = reservaParametro.CheckOut;
                 PreencherTelaDeCadastro(reservaParametro);
-                reservaCopia = (Reserva)reservaParametro.ShallowCopy();
+                _reservaCopia = (Reserva)reservaParametro.ShallowCopy();
             }
             else
             {
@@ -55,10 +62,9 @@ namespace Sistema_de_Reservas_para_Hoteis
             }
             if (PossuiVirgula)
             {
-                int IndexCasasDecimais = 1, MaxCasasDecimais = 2;
                 string[] preco = TextoPreco.Text.Split(',');
-                string CasasDecimais = preco[IndexCasasDecimais];
-                bool Possui2CasasDecimais = CasasDecimais.Length == MaxCasasDecimais;
+                string CasasDecimais = preco[ValoresPadrao.INDEX_CASAS_DECIMAIS];
+                bool Possui2CasasDecimais = CasasDecimais.Length == ValoresPadrao.MAX_CASAS_DECIMAIS;
                 e.Handled = Possui2CasasDecimais && !char.IsControl(e.KeyChar);
             }
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
@@ -108,26 +114,22 @@ namespace Sistema_de_Reservas_para_Hoteis
             }
             catch (Exception erro)
             {
-                MensagemExcessao.MensagemErroInesperado(erro.Message);
+                MessageBox.Show(erro.Message, MensagemExcessao.TITULO_ERRO_INESPERADO, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private Dictionary<string, dynamic> LerEntradasDoUsuario()
         {
-            Dictionary<string, dynamic> reservaDict = new()
+            return new Dictionary<string, dynamic>
             {
                 { "Nome", TextoNome.Text },
                 { "Cpf", TextoCPF.Text },
                 { "Telefone", TextoTelefone.Text },
-                { "Idade", String.IsNullOrWhiteSpace(TextoIdade.Text) ? Validacoes.codigoDeErro : int.Parse(TextoIdade.Text) },
-                { "Sexo", CaixaSexo.Text },
+                { "Idade", String.IsNullOrWhiteSpace(TextoIdade.Text) ? ValoresPadrao.CODIGO_DE_ERRO : int.Parse(TextoIdade.Text) },
                 { "CheckIn", Convert.ToDateTime(DataCheckIn.Value.Date) },
                 { "CheckOut", Convert.ToDateTime(DataCheckOut.Value.Date) },
-                { "PrecoEstadia", String.IsNullOrWhiteSpace(TextoPreco.Text) ? Validacoes.codigoDeErro : ConverterEmDecimalComVirgula(TextoPreco.Text) },
-                { "PagamentoEfetuado", !BotaoTrue.Checked && !BotaoFalse.Checked ? "" : BotaoTrue.Checked.ToString() }
+                { "PrecoEstadia", String.IsNullOrWhiteSpace(TextoPreco.Text) ? ValoresPadrao.CODIGO_DE_ERRO : ConverterEmDecimalComVirgula(TextoPreco.Text) }
             };
-
-            return reservaDict;
         }
 
         private void AtribuirValoresReserva(Reserva reserva)
@@ -146,7 +148,7 @@ namespace Sistema_de_Reservas_para_Hoteis
             }
             catch (Exception erro)
             {
-                MensagemExcessao.MensagemErroInesperado(erro.Message);
+                MessageBox.Show(erro.Message, MensagemExcessao.TITULO_ERRO_INESPERADO, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -154,21 +156,28 @@ namespace Sistema_de_Reservas_para_Hoteis
         {
             try
             {
-                Validacoes.ValidarCampos(LerEntradasDoUsuario());
-                AtribuirValoresReserva(reservaCopia);
-                TelaListaDeReservas.AdicionarReservaNaLista(reservaCopia);
-                this.Close();
+                ValidacaoCampos.ValidarCampos(LerEntradasDoUsuario());
+                AtribuirValoresReserva(_reservaCopia);
+                _validacaoReserva.ValidateAndThrowArgumentException(_reservaCopia);
+                
+                if (TelaListaDeReservas.AdicionarReservaNoFormulario(_reservaCopia))
+                {
+                    this.Close();
+                }
+
             }
             catch (Exception erro)
             {
-                MessageBox.Show(erro.Message, "Erro no Cadastro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                string titulo = "Erro no Cadastro";
+                MessageBox.Show(erro.Message, titulo, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void AoClicarCancelarCadastro(object sender, EventArgs e)
         {
-            string mensagem = "Você realmente deseja cancelar?";
-            var remover = MessageBox.Show(mensagem, "Confirmação de cancelamento", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            string mensagem = "Você realmente deseja cancelar?", titulo = "Confirmação de cancelamento";
+
+            var remover = MessageBox.Show(mensagem, titulo, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (remover.Equals(DialogResult.Yes))
             {
                 this.Close();

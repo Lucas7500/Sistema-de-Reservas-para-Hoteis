@@ -1,9 +1,12 @@
-﻿namespace Sistema_de_Reservas_para_Hoteis
+﻿using Dominio;
+using Dominio.Constantes;
+
+namespace Infraestrutura
 {
-    public sealed class Singleton
+    public sealed class ReservaSingleton
     {
         private static List<Reserva>? _listaReservas = null;
-        private static int Id { get; set; } = 0;
+        private static int Id { get; set; } = ValoresPadrao.ID_NULO;
 
         public static List<Reserva> RetornaLista()
         {

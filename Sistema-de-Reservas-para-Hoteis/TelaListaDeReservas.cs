@@ -1,57 +1,63 @@
-namespace Sistema_de_Reservas_para_Hoteis
+using Dominio;
+using Dominio.Constantes;
+using FluentValidation;
+using Infraestrutura;
+
+namespace Interacao
 {
     public partial class TelaListaDeReservas : Form
     {
-        private static IRepositorio repositorio;
+        private static IRepositorio _repositorio;
+        private static IValidator<Reserva> _validacaoReserva;
 
-        public TelaListaDeReservas(IRepositorio repositorioUtilizado)
+        public TelaListaDeReservas(IRepositorio repositorioUtilizado, IValidator<Reserva> validacaoReserva)
         {
-            repositorio = repositorioUtilizado;
+            _repositorio = repositorioUtilizado;
+            _validacaoReserva = validacaoReserva;
             InitializeComponent();
             AtualizarGrid();
         }
 
-        const int primeiroElemento = 0;
-        const int umaLinhaSelecionada = 1;
-        const int idNulo = 0;
-        const int listaNula = 0;
-
-        public static void AdicionarReservaNaLista(Reserva reserva)
+        public static bool AdicionarReservaNoFormulario(Reserva reserva)
         {
             try
             {
-                if (reserva.Id == idNulo)
+                if (reserva.Id == ValoresPadrao.ID_NULO)
                 {
-                    repositorio.Criar(reserva);
+                    _repositorio.Criar(reserva);
                     MessageBox.Show("Reserva foi criada com Sucesso!");
                 }
                 else
                 {
-                    repositorio.Atualizar(reserva);
+                    _repositorio.Atualizar(reserva);
                     MessageBox.Show("A reserva foi editada com sucesso!");
                 }
 
                 AtualizarGrid();
+                return true;
             }
             catch (Exception erro)
             {
-                MensagemExcessao.MensagemErroInesperado(erro.Message);
+                MessageBox.Show(erro.Message, MensagemExcessao.TITULO_ERRO_INESPERADO, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
             }
         }
 
         private static void AtualizarGrid()
         {
             TelaDaLista.DataSource = null;
-            if (repositorio.ObterTodos().Any())
+
+            if (_repositorio.ObterTodos().Any())
             {
-                TelaDaLista.DataSource = repositorio.ObterTodos();
+                TelaDaLista.DataSource = _repositorio.ObterTodos();
             }
         }
 
         private static bool SomenteUmaLinhaSelecionada()
         {
             int qtdLinhasSelecionadas = TelaDaLista.SelectedRows.Count;
-            if (qtdLinhasSelecionadas == umaLinhaSelecionada)
+
+            if (qtdLinhasSelecionadas == ValoresPadrao.UMA_LINHA_SELECIONADA)
             {
                 return true;
             }
@@ -63,7 +69,7 @@ namespace Sistema_de_Reservas_para_Hoteis
 
         private static bool ListaEhVazia()
         {
-            if (repositorio.ObterTodos().Count == listaNula)
+            if (_repositorio.ObterTodos().Count == ValoresPadrao.LISTA_NULA)
             {
                 return true;
             }
@@ -75,23 +81,27 @@ namespace Sistema_de_Reservas_para_Hoteis
 
         private static int RetornaIdReservaSelecionada()
         {
-            int indexLinha = TelaDaLista.SelectedRows[primeiroElemento].Index;
-            int idLinhaSelecionada = (int)TelaDaLista.Rows[indexLinha].Cells[primeiroElemento].Value;
+            int indexLinha = TelaDaLista.SelectedRows[ValoresPadrao.PRIMEIRO_ELEMENTO].Index;
+            int idLinhaSelecionada = (int)TelaDaLista.Rows[indexLinha].Cells[ValoresPadrao.PRIMEIRO_ELEMENTO].Value;
 
             return idLinhaSelecionada;
         }
 
-        private void AoClicarAbrirTelaDeCadastro(object sender, EventArgs e)
+        private static void AbrirNovaTelaDeCadastro(Reserva reserva)
+        {
+            TelaCadastroCliente TelaCadastro = new(reserva, _validacaoReserva);
+            TelaCadastro.ShowDialog();
+        }
+
+        private void AoClicarAdicionarAbrirTelaDeCadastro(object sender, EventArgs e)
         {
             try
             {
-                Reserva reserva = new();
-                TelaCadastroCliente TelaCadastro = new(reserva);
-                TelaCadastro.ShowDialog();
+                AbrirNovaTelaDeCadastro(new Reserva());
             }
             catch (Exception erro)
             {
-                MensagemExcessao.MensagemErroInesperado(erro.Message);
+                MessageBox.Show(erro.Message, MensagemExcessao.TITULO_ERRO_INESPERADO, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -101,22 +111,21 @@ namespace Sistema_de_Reservas_para_Hoteis
             {
                 if (ListaEhVazia())
                 {
-                    MensagemExcessao.MensagemErroListaVazia("editar");
+                    MessageBox.Show(MensagemExcessao.MensagemErroListaVazia("editar"));
                 }
                 else if (SomenteUmaLinhaSelecionada())
                 {
-                    Reserva reservaSelecionada = repositorio.ObterPorId(RetornaIdReservaSelecionada());
-                    TelaCadastroCliente TelaCadastro = new(reservaSelecionada);
-                    TelaCadastro.ShowDialog();
+                    Reserva reservaSelecionada = _repositorio.ObterPorId(RetornaIdReservaSelecionada());
+                    AbrirNovaTelaDeCadastro(reservaSelecionada);
                 }
                 else
                 {
-                    MensagemExcessao.MensagemErroNenhumaLinhaSelecionada("editar");
+                    MessageBox.Show(MensagemExcessao.MensagemErroNenhumaLinhaSelecionada("editar"));
                 }
             }
             catch (Exception erro)
             {
-                MensagemExcessao.MensagemErroInesperado(erro.Message);
+                MessageBox.Show(erro.Message, MensagemExcessao.TITULO_ERRO_INESPERADO, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -126,27 +135,27 @@ namespace Sistema_de_Reservas_para_Hoteis
             {
                 if (ListaEhVazia())
                 {
-                    MensagemExcessao.MensagemErroListaVazia("deletar");
+                    MessageBox.Show(MensagemExcessao.MensagemErroListaVazia("deletar"));
                 }
                 else if (SomenteUmaLinhaSelecionada())
                 {
-                    Reserva reservaSelecionada = repositorio.ObterPorId(RetornaIdReservaSelecionada());
+                    Reserva reservaSelecionada = _repositorio.ObterPorId(RetornaIdReservaSelecionada());
                     string mensagem = $"Você tem certeza que quer deletar a reserva de {reservaSelecionada.Nome}?", titulo = "Confirmação de remoção";
                     var deletar = MessageBox.Show(mensagem, titulo, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                     if (deletar.Equals(DialogResult.Yes))
                     {
-                        repositorio.Remover(RetornaIdReservaSelecionada());
+                        _repositorio.Remover(RetornaIdReservaSelecionada());
                         AtualizarGrid();
                     }
                 }
                 else
                 {
-                    MensagemExcessao.MensagemErroNenhumaLinhaSelecionada("deletar");
+                    MessageBox.Show(MensagemExcessao.MensagemErroNenhumaLinhaSelecionada("deletar"));
                 }
             }
             catch (Exception erro)
             {
-                MensagemExcessao.MensagemErroInesperado(erro.Message);
+                MessageBox.Show(erro.Message, MensagemExcessao.TITULO_ERRO_INESPERADO, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

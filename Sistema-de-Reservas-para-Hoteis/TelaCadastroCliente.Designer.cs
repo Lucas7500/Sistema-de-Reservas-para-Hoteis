@@ -1,4 +1,4 @@
-﻿namespace Sistema_de_Reservas_para_Hoteis
+﻿namespace Interacao
 {
     partial class TelaCadastroCliente
     {
@@ -144,6 +144,7 @@
             // BotaoFalse
             // 
             BotaoFalse.AutoSize = true;
+            BotaoFalse.Checked = true;
             BotaoFalse.Location = new Point(286, 168);
             BotaoFalse.Name = "BotaoFalse";
             BotaoFalse.Size = new Size(47, 19);
@@ -159,7 +160,6 @@
             BotaoTrue.Name = "BotaoTrue";
             BotaoTrue.Size = new Size(45, 19);
             BotaoTrue.TabIndex = 9;
-            BotaoTrue.TabStop = true;
             BotaoTrue.Text = "Sim";
             BotaoTrue.UseVisualStyleBackColor = true;
             // 
@@ -189,6 +189,7 @@
             // 
             // CaixaSexo
             // 
+            CaixaSexo.DropDownStyle = ComboBoxStyle.DropDownList;
             CaixaSexo.FormattingEnabled = true;
             CaixaSexo.Location = new Point(233, 90);
             CaixaSexo.Name = "CaixaSexo";

@@ -1,9 +1,9 @@
 ﻿using FluentMigrator;
 
-namespace Sistema_de_Reservas_para_Hoteis.Migrations
+namespace Infraestrutura.Migrations
 {
-    [Migration(20231121103700)]
-    public class AddTabelaReservas : Migration
+    [Migration(20231205124100)]
+    public class _20231205124100AddTabelaReservas : Migration
     {
         public override void Up()
         {
@@ -16,7 +16,7 @@ namespace Sistema_de_Reservas_para_Hoteis.Migrations
                 .WithColumn("Sexo").AsString().NotNullable()
                 .WithColumn("CheckIn").AsDate().NotNullable()
                 .WithColumn("CheckOut").AsDate().NotNullable()
-                .WithColumn("PrecoEstadia").AsDecimal().NotNullable()
+                .WithColumn("PrecoEstadia").AsDecimal(12, 2).NotNullable()
                 .WithColumn("PagamentoEfetuado").AsBoolean().NotNullable();
         }
 

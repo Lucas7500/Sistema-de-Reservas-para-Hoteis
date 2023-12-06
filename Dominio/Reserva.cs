@@ -1,6 +1,6 @@
-﻿using Sistema_de_Reservas_para_Hoteis.Enums;
+﻿using Dominio.Enums;
 
-namespace Sistema_de_Reservas_para_Hoteis
+namespace Dominio
 {
     public class Reserva
     {

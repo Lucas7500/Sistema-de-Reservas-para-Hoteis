@@ -1,12 +1,14 @@
-﻿namespace Sistema_de_Reservas_para_Hoteis
+﻿using Dominio;
+
+namespace Infraestrutura
 {
-    internal class RepositorioListaSingleton : IRepositorio
+    public class RepositorioListaSingleton : IRepositorio
     {
-        protected List<Reserva> listaReservas = Singleton.RetornaLista();
+        protected List<Reserva> _listaReservas = ReservaSingleton.RetornaLista();
 
         public List<Reserva> ObterTodos()
         {
-            return listaReservas;
+            return _listaReservas;
         }
 
         public Reserva ObterPorId(int id)
@@ -15,7 +17,7 @@
 
             try
             {
-                reservaSelecionada = listaReservas.Find(x => x.Id == id);
+                reservaSelecionada = _listaReservas.First(x => x.Id == id);
             }
             catch
             {
@@ -29,8 +31,8 @@
         {
             try
             {
-                reserva.Id = Singleton.IncrementarId();
-                listaReservas.Add(reserva);
+                reserva.Id = ReservaSingleton.IncrementarId();
+                _listaReservas.Add(reserva);
             }
             catch
             {
@@ -41,8 +43,8 @@
         {
             try
             {
-                var reservaNaLista = listaReservas.FindIndex(x => x.Id == copiaReserva.Id);
-                listaReservas[reservaNaLista] = copiaReserva;
+                var reservaNaLista = _listaReservas.FindIndex(x => x.Id == copiaReserva.Id);
+                _listaReservas[reservaNaLista] = copiaReserva;
             }
             catch
             {
@@ -55,7 +57,7 @@
             try
             {
                 Reserva reserva = ObterPorId(id);
-                listaReservas.Remove(reserva);
+                _listaReservas.Remove(reserva);
             }
             catch
             {

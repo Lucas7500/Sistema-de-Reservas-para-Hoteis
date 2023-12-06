@@ -1,39 +1,31 @@
+using Dominio;
 using FluentMigrator.Runner;
+using Infraestrutura;
+using Infraestrutura.Extensoes;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.Reflection;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 
-namespace Sistema_de_Reservas_para_Hoteis
+namespace Interacao
 {
     internal static class Program
     {
         [STAThread]
         static void Main()
         {
-            using (var serviceProvider = CreateServices())
-            using (var scope = serviceProvider.CreateScope())
-            {
-                UpdateDatabase(scope.ServiceProvider);
-            }
+            ApplicationConfiguration.Initialize();
 
             var builder = CriaHostBuilder();
-            var servicesProvider = builder.Build().Services;
-            var repositorio = servicesProvider.GetService<IRepositorio>();
+            using var build = builder.Build();
+            var servicesProvider = build.Services;
+            var scope = servicesProvider.CreateScope();
 
-            ApplicationConfiguration.Initialize();
-            Application.Run(new TelaListaDeReservas(repositorio));
-        }
+            UpdateDatabase(scope.ServiceProvider);
 
-        private static ServiceProvider CreateServices()
-        {
-            return new ServiceCollection()
-                .AddFluentMigratorCore()
-                .ConfigureRunner(rb => rb
-                    .AddSqlServer()
-                    .WithGlobalConnectionString(System.Configuration.ConfigurationManager.ConnectionStrings["BDSistemaReservas"].ConnectionString)
-                    .ScanIn(Assembly.GetExecutingAssembly()).For.Migrations())
-                .AddLogging(lb => lb.AddFluentMigratorConsole())
-                .BuildServiceProvider(false);
+            var form = servicesProvider.GetRequiredService<TelaListaDeReservas>();
+
+            Application.Run(form);
         }
 
         private static void UpdateDatabase(IServiceProvider serviceProvider)
@@ -47,7 +39,10 @@ namespace Sistema_de_Reservas_para_Hoteis
         {
             return Host.CreateDefaultBuilder()
                 .ConfigureServices((context, services) => {
+                    services.AddScoped<TelaListaDeReservas>();
                     services.AddScoped<IRepositorio, RepositorioSqlServer>();
+                    services.AddScoped<IValidator<Reserva>, ReservaFluentValidation>();
+                    services.ExecutarMigracoes();
                 });
         }
     }
