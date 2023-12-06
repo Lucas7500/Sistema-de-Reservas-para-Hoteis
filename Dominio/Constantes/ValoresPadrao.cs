@@ -18,6 +18,5 @@
         public const int LISTA_NULA = 0;
         public const int INDEX_CASAS_DECIMAIS = 1;
         public const int MAX_CASAS_DECIMAIS = 2;
-
     }
 }

@@ -1,11 +1,12 @@
 ﻿using Dominio;
+using Dominio.Constantes;
 
 namespace Infraestrutura
 {
     public sealed class ReservaSingleton
     {
         private static List<Reserva>? _listaReservas = null;
-        private static int _Id { get; set; } = 0;
+        private static int Id { get; set; } = ValoresPadrao.ID_NULO;
 
         public static List<Reserva> RetornaLista()
         {
@@ -19,8 +20,8 @@ namespace Infraestrutura
 
         public static int IncrementarId()
         {
-            _Id++;
-            return _Id;
+            Id++;
+            return Id;
         }
     }
 }
