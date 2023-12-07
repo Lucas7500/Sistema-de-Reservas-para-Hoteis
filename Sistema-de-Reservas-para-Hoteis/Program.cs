@@ -1,11 +1,10 @@
 using Dominio;
 using FluentMigrator.Runner;
+using FluentValidation;
 using Infraestrutura;
 using Infraestrutura.Extensoes;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using FluentValidation;
-using FluentValidation.AspNetCore;
 
 namespace Interacao
 {

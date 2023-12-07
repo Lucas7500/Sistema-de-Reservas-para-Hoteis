@@ -394,6 +394,19 @@
           }
         }
       },
+      "linq2db/5.3.2": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/linq2db.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/linq2db.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Microsoft.CSharp/4.5.0": {
         "type": "package",
         "compile": {
@@ -1584,7 +1597,8 @@
         "framework": ".NETCoreApp,Version=v7.0",
         "dependencies": {
           "FluentValidation": "11.8.1",
-          "FluentValidation.AspNetCore": "11.3.0"
+          "FluentValidation.AspNetCore": "11.3.0",
+          "linq2db": "5.3.2"
         },
         "compile": {
           "bin/placeholder/Dominio.dll": {}
@@ -1603,7 +1617,8 @@
           "Microsoft.Extensions.Hosting": "8.0.0",
           "Microsoft.Extensions.Hosting.Abstractions": "8.0.0",
           "System.Configuration.ConfigurationManager": "8.0.0",
-          "System.Data.SqlClient": "4.8.5"
+          "System.Data.SqlClient": "4.8.5",
+          "linq2db": "5.3.2"
         },
         "compile": {
           "bin/placeholder/Infraestrutura.dll": {}
@@ -2017,6 +2032,34 @@
         "lib/netstandard2.0/FluentValidation.DependencyInjectionExtensions.xml",
         "lib/netstandard2.1/FluentValidation.DependencyInjectionExtensions.dll",
         "lib/netstandard2.1/FluentValidation.DependencyInjectionExtensions.xml"
+      ]
+    },
+    "linq2db/5.3.2": {
+      "sha512": "Reznvf9daTApcuPCpHB5PTPIQvsYJ9Di4XzTEm0Sx4lFW+m6KRgyXc1WdKIcQB4irWrzQer+GMGIBS+XwJfCCg==",
+      "type": "package",
+      "path": "linq2db/5.3.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "MIT-LICENSE.txt",
+        "README.md",
+        "images/icon.png",
+        "lib/net45/linq2db.dll",
+        "lib/net45/linq2db.xml",
+        "lib/net46/linq2db.dll",
+        "lib/net46/linq2db.xml",
+        "lib/net472/linq2db.dll",
+        "lib/net472/linq2db.xml",
+        "lib/net6.0/linq2db.dll",
+        "lib/net6.0/linq2db.xml",
+        "lib/netcoreapp3.1/linq2db.dll",
+        "lib/netcoreapp3.1/linq2db.xml",
+        "lib/netstandard2.0/linq2db.dll",
+        "lib/netstandard2.0/linq2db.xml",
+        "lib/netstandard2.1/linq2db.dll",
+        "lib/netstandard2.1/linq2db.xml",
+        "linq2db.5.3.2.nupkg.sha512",
+        "linq2db.nuspec"
       ]
     },
     "Microsoft.CSharp/4.5.0": {

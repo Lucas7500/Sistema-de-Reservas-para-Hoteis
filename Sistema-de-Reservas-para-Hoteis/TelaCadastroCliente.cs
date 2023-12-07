@@ -4,6 +4,7 @@ using FluentValidation;
 using FluentValidation.Results;
 using Dominio.Extensoes;
 using Dominio.Constantes;
+using System.Text.RegularExpressions;
 
 namespace Interacao
 {
@@ -41,12 +42,10 @@ namespace Interacao
 
         private void PermitirApenasLetrasNoNome(object sender, KeyPressEventArgs e)
         {
-            if (!char.IsControl(e.KeyChar) && !char.IsAsciiLetter(e.KeyChar))
+            string regexNome = "^[a-zA-ZA-ZáàâãéèêíìîóòõôúùûçÁÀÃÂÉÈÊÍÌÎÓÒÔÕÚÙÛÇ ]*$";
+
+            if (!char.IsControl(e.KeyChar) && !Regex.IsMatch(e.KeyChar.ToString(), regexNome))
             {
-                if (e.KeyChar == ' ')
-                {
-                    return;
-                }
                 e.Handled = true;
             }
         }
