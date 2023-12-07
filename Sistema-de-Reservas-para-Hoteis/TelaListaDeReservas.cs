@@ -2,6 +2,7 @@ using Dominio;
 using Dominio.Constantes;
 using FluentValidation;
 using Infraestrutura;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Interacao
 {
@@ -47,10 +48,18 @@ namespace Interacao
         {
             TelaDaLista.DataSource = null;
 
-            if (_repositorio.ObterTodos().Any())
+            try
             {
-                TelaDaLista.DataSource = _repositorio.ObterTodos();
+                if (_repositorio.ObterTodos().Any())
+                {
+                    TelaDaLista.DataSource = _repositorio.ObterTodos();
+                }
             }
+            catch (Exception erro)
+            {
+                MessageBox.Show(erro.Message, MensagemExcessao.TITULO_ERRO_INESPERADO, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
         }
 
         private static bool SomenteUmaLinhaSelecionada()

@@ -34,72 +34,96 @@ namespace Infraestrutura
 
         private static void VerificaSeCpfEhUnico(Reserva reserva)
         {
-            using var connection = Connection();
+            bool cpfNaoEhUnico = false;
 
-            SqlCommand verificaBD = new("SELECT * FROM TabelaReservas", connection);
-
-            var leitor = verificaBD.ExecuteReader();
-
-            while (leitor.Read())
+            try
             {
-                if (((string)leitor["Cpf"]).Equals(reserva.Cpf) && (int)leitor["Id"] != reserva.Id)
+                using var connection = Connection();
+
+                SqlCommand verificaBD = new("SELECT * FROM TabelaReservas", connection);
+
+                var leitor = verificaBD.ExecuteReader();
+
+                while (leitor.Read())
                 {
-                    string mensagemErro = "Esse cpf já está registrado no sistema!";
-                    throw new Exception(message: mensagemErro);
+                    if (((string)leitor["Cpf"]).Equals(reserva.Cpf) && (int)leitor["Id"] != reserva.Id)
+                    {
+                        cpfNaoEhUnico = true;
+                        break;
+                    }
                 }
+            }
+            catch
+            {
+                string mensagemErro = "Erro ao verificar se o CPF é único!";
+                throw new Exception(message: mensagemErro);
+            }
+
+            if (cpfNaoEhUnico)
+            {
+                string mensagemErro = "Esse cpf já está registrado no sistema!";
+                throw new Exception(message: mensagemErro);
             }
         }
 
         public List<Reserva> ObterTodos()
         {
-            List<Reserva> listaReservas = new();
-
-            using (var connection = Connection())
+            try
             {
-                SqlCommand obterLinhasBD = new("SELECT * FROM TabelaReservas", connection);
-                var leitor = obterLinhasBD.ExecuteReader();
+                List<Reserva> listaReservas = new();
 
-                while (leitor.Read())
+                using (var connection = Connection())
                 {
-                    listaReservas.Add(CriarReserva(leitor));
+                    SqlCommand obterLinhasBD = new("SELECT * FROM TabelaReservas", connection);
+                    var leitor = obterLinhasBD.ExecuteReader();
+
+                    while (leitor.Read())
+                    {
+                        listaReservas.Add(CriarReserva(leitor));
+                    }
                 }
+
+                return listaReservas;
+            }
+            catch
+            {
+                string mensagemErro = "Erro ao obter os elementos do banco de dados!";
+                throw new Exception(message: mensagemErro);
             }
 
-            return listaReservas;
         }
 
         public Reserva ObterPorId(int id)
         {
             Reserva reservaSelecionada = new();
 
-            using (var connection = Connection())
+            try
             {
-                try
-                {
-                    SqlCommand obterObjetoPorId = new($"SELECT * FROM TabelaReservas WHERE Id={id}", connection);
-                    var leitor = obterObjetoPorId.ExecuteReader();
+                using var connection = Connection();
+                SqlCommand obterObjetoPorId = new($"SELECT * FROM TabelaReservas WHERE Id={id}", connection);
+                var leitor = obterObjetoPorId.ExecuteReader();
 
-                    while (leitor.Read())
-                    {
-                        reservaSelecionada = CriarReserva(leitor);
-                    }
-                }
-                catch
+
+                while (leitor.Read())
                 {
-                    throw new Exception(message: "Erro ao Obter Reserva Selecionada do Banco De Dados");
+                    reservaSelecionada = CriarReserva(leitor);
                 }
+
+                return reservaSelecionada;
             }
-
-            return reservaSelecionada;
+            catch
+            {
+                throw new Exception(message: "Erro ao Obter Reserva Selecionada do Banco De Dados");
+            }
         }
 
         public void Criar(Reserva reserva)
         {
             VerificaSeCpfEhUnico(reserva);
-            using var connection = Connection();
-            
+
             try
             {
+                using var connection = Connection();
                 string comandoCriar = @"INSERT INTO TabelaReservas
                 (Nome, Cpf, Telefone, Idade, Sexo, CheckIn, CheckOut, PrecoEstadia, PagamentoEfetuado)
                 VALUES (@nome, @cpf, @telefone, @idade, @sexo, @checkin, @checkout, @precoestadia, @pagamentoefetuado)";
@@ -115,7 +139,7 @@ namespace Infraestrutura
                 inserirReservaNaTabela.Parameters.AddWithValue("@checkout", reserva.CheckOut.Date.ToString("dd-MM-yyyy"));
                 inserirReservaNaTabela.Parameters.AddWithValue("@precoestadia", reserva.PrecoEstadia.ToString().Replace(',', '.'));
                 inserirReservaNaTabela.Parameters.AddWithValue("@pagamentoefetuado", reserva.PagamentoEfetuado);
-                
+
                 inserirReservaNaTabela.ExecuteNonQuery();
             }
             catch
@@ -123,14 +147,14 @@ namespace Infraestrutura
                 throw new Exception(message: "Erro ao Adicionar Reserva no Banco de Dados");
             }
         }
-        
+
         public void Atualizar(Reserva copiaReserva)
         {
             VerificaSeCpfEhUnico(copiaReserva);
-            using var connection = Connection();
 
             try
             {
+                using var connection = Connection();
                 string comandoEditar = @"UPDATE TabelaReservas
                 SET Nome=@nome, Cpf=@cpf, Telefone=@telefone, Idade=@idade, Sexo=@sexo, CheckIn=@checkin,
                 CheckOut=@checkout, PrecoEstadia=@precoestadia, PagamentoEfetuado=@pagamentoefetuado
@@ -148,7 +172,7 @@ namespace Infraestrutura
                 editarReservaNaTabela.Parameters.AddWithValue("@precoestadia", copiaReserva.PrecoEstadia.ToString().Replace(',', '.'));
                 editarReservaNaTabela.Parameters.AddWithValue("@pagamentoefetuado", copiaReserva.PagamentoEfetuado);
                 editarReservaNaTabela.Parameters.AddWithValue("@id", copiaReserva.Id);
-                
+
                 editarReservaNaTabela.ExecuteNonQuery();
             }
             catch
@@ -159,10 +183,9 @@ namespace Infraestrutura
 
         public void Remover(int id)
         {
-            using var connection = Connection();
-
             try
             {
+                using var connection = Connection();
                 SqlCommand deletarReserva = new($"DELETE FROM TabelaReservas WHERE Id={id}", connection);
                 deletarReserva.ExecuteNonQuery();
             }

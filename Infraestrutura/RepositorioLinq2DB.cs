@@ -17,15 +17,30 @@ namespace Infraestrutura
 
         private static void VerificaSeCpfEhUnico(Reserva reserva)
         {
-            using var conexaoLinq2Db = Connection();
+            bool cpfNaoEhUnico = false;
 
-            var reservaMesmoCpf = conexaoLinq2Db.GetTable<Reserva>().FirstOrDefault(x => x.Cpf == reserva.Cpf);
-
-            if (reservaMesmoCpf == null)
+            try
             {
-                return;
+                using var conexaoLinq2Db = Connection();
+
+                var reservaMesmoCpf = conexaoLinq2Db.GetTable<Reserva>().FirstOrDefault(x => x.Cpf == reserva.Cpf);
+
+                if (reservaMesmoCpf == null)
+                {
+                    return;
+                }
+                else if (reservaMesmoCpf.Id != reserva.Id)
+                {
+                    cpfNaoEhUnico = true;
+                }
             }
-            else if (reservaMesmoCpf.Id != reserva.Id)
+            catch
+            {
+                string mensagemErro = "Erro ao verificar se o CPF é único!";
+                throw new Exception(message: mensagemErro);
+            }
+
+            if (cpfNaoEhUnico)
             {
                 string mensagemErro = "Esse CPF já está registrado no sistema!";
                 throw new Exception(message: mensagemErro);
@@ -34,29 +49,41 @@ namespace Infraestrutura
 
         public List<Reserva> ObterTodos()
         {
-            List<Reserva> listaReservas = new();
-
-            using (var conexaoLinq2Db = Connection())
-            {
+            try
+            { 
+                List<Reserva> listaReservas = new();
+                using var conexaoLinq2Db = Connection();
                 listaReservas = conexaoLinq2Db.GetTable<Reserva>().ToList();
+                return listaReservas;
             }
-
-            return listaReservas;
+            catch
+            {
+                string mensagemErro = "Erro ao obter os elementos do banco de dados!";
+                throw new Exception(message: mensagemErro);
+            }
         }
 
         public Reserva ObterPorId(int id)
         {
-            using var conexaoLinq2Db = Connection();
-            return conexaoLinq2Db.GetTable<Reserva>().First(x => x.Id == id);
+            try
+            {
+                using var conexaoLinq2Db = Connection();
+                return conexaoLinq2Db.GetTable<Reserva>().First(x => x.Id == id);
+            }
+            catch
+            {
+                string mensagemErro = "Erro ao obter o elemento por id!";
+                throw new Exception(message: mensagemErro);
+            }
         }
 
         public void Criar(Reserva reserva)
         {
             VerificaSeCpfEhUnico(reserva);
 
-            using var conexaoLinq2Db = Connection();
             try
             {
+                using var conexaoLinq2Db = Connection();
                 conexaoLinq2Db.Insert(reserva);
             }
             catch
@@ -67,9 +94,9 @@ namespace Infraestrutura
 
         public void Remover(int id)
         {
-            using var conexaoLinq2Db = Connection();
             try
             {
+                using var conexaoLinq2Db = Connection();
                 conexaoLinq2Db.Delete(ObterPorId(id));
             }
             catch
@@ -82,9 +109,9 @@ namespace Infraestrutura
         {
             VerificaSeCpfEhUnico(copiaReserva);
 
-            using var conexaoLinq2Db = Connection();
             try
             {
+                using var conexaoLinq2Db = Connection();
                 conexaoLinq2Db.Update(copiaReserva);
             }
             catch
