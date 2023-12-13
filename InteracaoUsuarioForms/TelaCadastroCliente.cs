@@ -1,12 +1,11 @@
 ﻿using Dominio;
-using Dominio.Enums;
-using FluentValidation;
-using FluentValidation.Results;
-using Dominio.Extensoes;
 using Dominio.Constantes;
+using Dominio.Enums;
+using Dominio.Extensoes;
+using FluentValidation;
 using System.Text.RegularExpressions;
 
-namespace Interacao
+namespace InteracaoUsuarioForms
 {
     public partial class TelaCadastroCliente : Form
     {
