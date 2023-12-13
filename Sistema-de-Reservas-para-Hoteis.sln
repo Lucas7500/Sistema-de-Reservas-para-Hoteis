@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infraestrutura", "Infraestr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InteracaoUsuarioForms", "InteracaoUsuarioForms\InteracaoUsuarioForms.csproj", "{3DAE4BA7-FE19-4008-9CCA-10037266978D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InteracaoUsuarioSAPUI5", "InteracaoUsuarioSAPUI5\InteracaoUsuarioSAPUI5.csproj", "{1FEBAA4B-16C2-4F65-92A8-E44F616FCCDB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{3DAE4BA7-FE19-4008-9CCA-10037266978D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3DAE4BA7-FE19-4008-9CCA-10037266978D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3DAE4BA7-FE19-4008-9CCA-10037266978D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FEBAA4B-16C2-4F65-92A8-E44F616FCCDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FEBAA4B-16C2-4F65-92A8-E44F616FCCDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FEBAA4B-16C2-4F65-92A8-E44F616FCCDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FEBAA4B-16C2-4F65-92A8-E44F616FCCDB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
