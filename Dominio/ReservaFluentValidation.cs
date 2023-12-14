@@ -1,7 +1,6 @@
 ﻿using Dominio.Constantes;
 using Dominio.Enums;
 using FluentValidation;
-using System.Text.RegularExpressions;
 
 namespace Dominio
 {
