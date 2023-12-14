@@ -1,4 +1,4 @@
-﻿namespace Interacao
+﻿namespace InteracaoUsuarioForms
 {
     partial class TelaCadastroCliente
     {

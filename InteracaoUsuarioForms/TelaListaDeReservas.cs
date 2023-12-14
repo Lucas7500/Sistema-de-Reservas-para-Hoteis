@@ -4,7 +4,7 @@ using FluentValidation;
 using Infraestrutura;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace Interacao
+namespace InteracaoUsuarioForms
 {
     public partial class TelaListaDeReservas : Form
     {

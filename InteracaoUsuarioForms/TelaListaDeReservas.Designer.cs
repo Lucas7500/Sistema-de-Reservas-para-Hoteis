@@ -1,6 +1,6 @@
 ﻿using Dominio;
 
-namespace Interacao
+namespace InteracaoUsuarioForms
 {
     partial class TelaListaDeReservas
     {

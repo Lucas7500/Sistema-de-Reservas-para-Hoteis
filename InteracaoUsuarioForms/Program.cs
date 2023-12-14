@@ -6,7 +6,7 @@ using Infraestrutura.Extensoes;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace Interacao
+namespace InteracaoUsuarioForms
 {
     internal static class Program
     {
@@ -37,7 +37,8 @@ namespace Interacao
         static IHostBuilder CriaHostBuilder()
         {
             return Host.CreateDefaultBuilder()
-                .ConfigureServices((context, services) => {
+                .ConfigureServices((context, services) =>
+                {
                     services.AddScoped<TelaListaDeReservas>();
                     services.AddScoped<IRepositorio, RepositorioSqlServer>();
                     services.AddScoped<IValidator<Reserva>, ReservaFluentValidation>();
