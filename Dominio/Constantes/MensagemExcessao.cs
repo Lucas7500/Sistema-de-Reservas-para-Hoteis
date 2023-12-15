@@ -29,6 +29,7 @@
         public const string ERRO_CRIAR_BD = "Erro ao criar reserva no banco de dados!";
         public const string ERRO_ATUALIZAR_BD = "Erro ao atualizar reserva no banco de dados!";
         public const string ERRO_REMOVER_BD = "Erro ao remover reserva do banco de dados!";
+        public const string RESERVA_INVALIDA_OU_INEXISTENTE = "A reserva a ser atualizada é inválida ou inexistente!";
 
         public static string MensagemErroListaVazia(string acao)
         {

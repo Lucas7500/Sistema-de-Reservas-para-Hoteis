@@ -1,8 +1,8 @@
 ﻿using Dominio;
+using Dominio.Constantes;
 using Dominio.Extensoes;
 using FluentValidation;
 using Infraestrutura;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 namespace InteracaoUsuarioSAPUI5.Controllers
 {
@@ -10,8 +10,14 @@ namespace InteracaoUsuarioSAPUI5.Controllers
     [ApiController]
     public class ReservaController : ControllerBase
     {
-        private static readonly IRepositorio _repositorio = new RepositorioLinq2DB();
-        private static readonly IValidator<Reserva> _validacao = new ReservaFluentValidation(_repositorio);
+        private readonly IRepositorio _repositorio;
+        private readonly IValidator<Reserva> _validador;
+
+        public ReservaController(IRepositorio repositorio, IValidator<Reserva> validador)
+        {
+            _repositorio = repositorio;
+            _validador = validador;
+        }
 
         [HttpGet]
         public OkObjectResult ObterTodos()
@@ -22,12 +28,13 @@ namespace InteracaoUsuarioSAPUI5.Controllers
             }
             catch (Exception erro)
             {
+                NotFound(erro.Message);
                 throw new Exception(message: erro.Message);
             }
         }
 
         [HttpGet("{id}")]
-        public OkObjectResult ObterPorId(int id)
+        public OkObjectResult ObterPorId([FromRoute] int id)
         {
             try
             {
@@ -35,6 +42,7 @@ namespace InteracaoUsuarioSAPUI5.Controllers
             }
             catch (Exception erro)
             {
+                NotFound(erro.Message);
                 throw new Exception(message: erro.Message);
             }
         }
@@ -48,39 +56,41 @@ namespace InteracaoUsuarioSAPUI5.Controllers
                 {
                     throw new Exception();
                 }
-                _validacao.ValidateAndThrowArgumentException(reserva);
+                _validador.ValidateAndThrowArgumentException(reserva);
                 _repositorio.Criar(reserva);
-                
+
                 return Created($"reserva/{reserva.Id}", reserva);
             }
             catch (Exception erro)
             {
+                BadRequest(erro.Message);
                 throw new Exception(message: erro.Message);
             }
         }
 
-        [HttpPut]
-        public NoContentResult AtualizarReserva([FromBody] Reserva reserva)
+        [HttpPut("{id}")]
+        public NoContentResult AtualizarReserva([FromRoute] int id, [FromBody] Reserva reserva)
         {
             try
             {
-                if (reserva == null)
+                if (reserva == null || reserva.Id != id)
                 {
-                    throw new Exception();
+                    throw new Exception(message: MensagemExcessao.RESERVA_INVALIDA_OU_INEXISTENTE);
                 }
-                _validacao.ValidateAndThrowArgumentException(reserva);
+                _validador.ValidateAndThrowArgumentException(reserva);
                 _repositorio.Atualizar(reserva);
 
                 return NoContent();
             }
             catch (Exception erro)
             {
+                BadRequest(erro.Message);
                 throw new Exception(message: erro.Message);
             }
         }
 
         [HttpDelete("{id}")]
-        public NoContentResult RemoverReserva(int id)
+        public NoContentResult RemoverReserva([FromRoute] int id)
         {
             try
             {
@@ -90,6 +100,7 @@ namespace InteracaoUsuarioSAPUI5.Controllers
             }
             catch (Exception erro)
             {
+                BadRequest(erro.Message);
                 throw new Exception(message: erro.Message);
             }
         }
