@@ -38,16 +38,14 @@ namespace InteracaoUsuarioSAPUI5.Controllers
             return Created($"reserva/{reserva.Id}", reserva);
         }
 
-        [HttpPut("{id}")]
-        public IActionResult AtualizarReserva(int id)
+        [HttpPut]
+        public IActionResult AtualizarReserva([FromBody] Reserva reserva)
         {
-            var reserva = ObterPorId(id);
-
             if (reserva == null)
             {
                 return BadRequest();
             }
-            _validacao.ValidateAndThrowArgumentException(reserva);
+            //_validacao.ValidateAndThrowArgumentException(reserva);
             _repositorio.Atualizar(reserva);
             return Created($"reserva/{reserva.Id}", reserva);
         }

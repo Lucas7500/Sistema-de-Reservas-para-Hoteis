@@ -92,19 +92,6 @@ namespace Infraestrutura
             }
         }
 
-        public void Remover(int id)
-        {
-            try
-            {
-                using var conexaoLinq2Db = Connection();
-                conexaoLinq2Db.Delete(ObterPorId(id));
-            }
-            catch
-            {
-                throw new Exception(message: "Erro ao Remover Reserva do Banco de Dados");
-            }
-        }
-
         public void Atualizar(Reserva copiaReserva)
         {
             VerificaSeCpfEhUnico(copiaReserva);
@@ -117,6 +104,19 @@ namespace Infraestrutura
             catch
             {
                 throw new Exception(message: "Erro ao Editar Reserva do Banco de Dados");
+            }
+        }
+
+        public void Remover(int id)
+        {
+            try
+            {
+                using var conexaoLinq2Db = Connection();
+                conexaoLinq2Db.Delete(ObterPorId(id));
+            }
+            catch
+            {
+                throw new Exception(message: "Erro ao Remover Reserva do Banco de Dados");
             }
         }
     }
