@@ -1,60 +1,94 @@
-﻿using Infraestrutura;
-using Microsoft.AspNetCore.Mvc;
-using FluentValidation;
-using Dominio;
+﻿using Dominio;
 using Dominio.Extensoes;
-
+using FluentValidation;
+using Infraestrutura;
+using Microsoft.AspNetCore.Mvc;
 namespace InteracaoUsuarioSAPUI5.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class Crud : ControllerBase
     {
-        private readonly IRepositorio _repositorio = new RepositorioLinq2DB();
-        private readonly IValidator<Reserva> _validacao = new ReservaFluentValidation();
+        private static readonly IRepositorio _repositorio = new RepositorioLinq2DB();
+        private static readonly IValidator<Reserva> _validacao = new ReservaFluentValidation(_repositorio);
 
         [HttpGet]
         public List<Reserva> ObterTodos()
         {
-            return _repositorio.ObterTodos();
+            try
+            {
+                return _repositorio.ObterTodos();
+            }
+            catch (Exception erro)
+            {
+                throw new Exception(message: erro.Message);
+            }
         }
 
         [HttpGet("{id}")]
         public Reserva ObterPorId(int id)
         {
-            return _repositorio.ObterPorId(id);
+            try
+            {
+                return _repositorio.ObterPorId(id);
+            }
+            catch (Exception erro)
+            {
+                throw new Exception(message: erro.Message);
+            }
         }
 
         [HttpPost]
-        public IActionResult AdicionarReserva([FromBody] Reserva reserva)
+        public CreatedResult CriarReserva([FromBody] Reserva reserva)
         {
-            if (reserva == null)
+            try
             {
-                return BadRequest();
-            }
+                if (reserva == null)
+                {
+                    throw new Exception();
+                }
 
-            //_validacao.ValidateAndThrowArgumentException(reserva);
-            _repositorio.Criar(reserva);
-            return Created($"reserva/{reserva.Id}", reserva);
+                _validacao.ValidateAndThrowArgumentException(reserva);
+                _repositorio.Criar(reserva);
+                return Created($"reserva/{reserva.Id}", reserva);
+            }
+            catch (Exception erro)
+            {
+                throw new Exception(message: erro.Message);
+            }
         }
 
         [HttpPut]
-        public IActionResult AtualizarReserva([FromBody] Reserva reserva)
+        public OkResult AtualizarReserva([FromBody] Reserva reserva)
         {
-            if (reserva == null)
+            try
             {
-                return BadRequest();
+                if (reserva == null)
+                {
+                    throw new Exception();
+                }
+                _validacao.ValidateAndThrowArgumentException(reserva);
+                _repositorio.Atualizar(reserva);
+                return Ok();
             }
-            //_validacao.ValidateAndThrowArgumentException(reserva);
-            _repositorio.Atualizar(reserva);
-            return Created($"reserva/{reserva.Id}", reserva);
+            catch (Exception erro)
+            {
+                throw new Exception(message: erro.Message);
+            }
         }
 
         [HttpDelete("{id}")]
-        public IActionResult RemoverReserva(int id)
+        public OkResult RemoverReserva(int id)
         {
-            _repositorio.Remover(id);
-            return Ok();
+            try
+            {
+                _repositorio.Remover(id);
+                return Ok();
+            }
+            catch (Exception erro)
+            {
+                throw new Exception(message: erro.Message);
+            }
         }
     }
 }

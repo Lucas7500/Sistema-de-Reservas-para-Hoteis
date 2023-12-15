@@ -1,4 +1,5 @@
 ﻿using Dominio;
+using Dominio.Constantes;
 using LinqToDB;
 using LinqToDB.Data;
 
@@ -26,8 +27,7 @@ namespace Infraestrutura
             }
             catch
             {
-                string mensagemErro = "Erro ao obter os elementos do banco de dados!";
-                throw new Exception(message: mensagemErro);
+                throw new Exception(message: MensagemExcessao.ERRO_OBTER_TODOS_BD);
             }
         }
 
@@ -40,8 +40,7 @@ namespace Infraestrutura
             }
             catch
             {
-                string mensagemErro = "Erro ao obter o elemento por id!";
-                throw new Exception(message: mensagemErro);
+                throw new Exception(message: MensagemExcessao.ERRO_OBTER_POR_ID_BD);
             }
         }
 
@@ -54,7 +53,7 @@ namespace Infraestrutura
             }
             catch
             {
-                throw new Exception(message: "Erro ao Adicionar Reserva no Banco de Dados");
+                throw new Exception(message: MensagemExcessao.ERRO_CRIAR_BD);
             }
         }
 
@@ -67,7 +66,7 @@ namespace Infraestrutura
             }
             catch
             {
-                throw new Exception(message: "Erro ao Editar Reserva do Banco de Dados");
+                throw new Exception(message: MensagemExcessao.ERRO_ATUALIZAR_BD);
             }
         }
 
@@ -80,7 +79,7 @@ namespace Infraestrutura
             }
             catch
             {
-                throw new Exception(message: "Erro ao Remover Reserva do Banco de Dados");
+                throw new Exception(message: MensagemExcessao.ERRO_REMOVER_BD);
             }
         }
     }
