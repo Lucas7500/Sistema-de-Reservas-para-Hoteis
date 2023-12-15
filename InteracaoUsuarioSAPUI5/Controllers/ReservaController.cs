@@ -2,22 +2,23 @@
 using Dominio.Extensoes;
 using FluentValidation;
 using Infraestrutura;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 namespace InteracaoUsuarioSAPUI5.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class Crud : ControllerBase
+    public class ReservaController : ControllerBase
     {
         private static readonly IRepositorio _repositorio = new RepositorioLinq2DB();
         private static readonly IValidator<Reserva> _validacao = new ReservaFluentValidation(_repositorio);
 
         [HttpGet]
-        public List<Reserva> ObterTodos()
+        public OkObjectResult ObterTodos()
         {
             try
             {
-                return _repositorio.ObterTodos();
+                return Ok(_repositorio.ObterTodos());
             }
             catch (Exception erro)
             {
@@ -26,11 +27,11 @@ namespace InteracaoUsuarioSAPUI5.Controllers
         }
 
         [HttpGet("{id}")]
-        public Reserva ObterPorId(int id)
+        public OkObjectResult ObterPorId(int id)
         {
             try
             {
-                return _repositorio.ObterPorId(id);
+                return Ok(_repositorio.ObterPorId(id));
             }
             catch (Exception erro)
             {
@@ -49,6 +50,7 @@ namespace InteracaoUsuarioSAPUI5.Controllers
                 }
                 _validacao.ValidateAndThrowArgumentException(reserva);
                 _repositorio.Criar(reserva);
+                
                 return Created($"reserva/{reserva.Id}", reserva);
             }
             catch (Exception erro)
@@ -58,7 +60,7 @@ namespace InteracaoUsuarioSAPUI5.Controllers
         }
 
         [HttpPut]
-        public OkResult AtualizarReserva([FromBody] Reserva reserva)
+        public NoContentResult AtualizarReserva([FromBody] Reserva reserva)
         {
             try
             {
@@ -68,7 +70,8 @@ namespace InteracaoUsuarioSAPUI5.Controllers
                 }
                 _validacao.ValidateAndThrowArgumentException(reserva);
                 _repositorio.Atualizar(reserva);
-                return Ok();
+
+                return NoContent();
             }
             catch (Exception erro)
             {
@@ -77,12 +80,13 @@ namespace InteracaoUsuarioSAPUI5.Controllers
         }
 
         [HttpDelete("{id}")]
-        public OkResult RemoverReserva(int id)
+        public NoContentResult RemoverReserva(int id)
         {
             try
             {
                 _repositorio.Remover(id);
-                return Ok();
+
+                return NoContent();
             }
             catch (Exception erro)
             {
