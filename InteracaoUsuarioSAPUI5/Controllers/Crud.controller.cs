@@ -47,7 +47,6 @@ namespace InteracaoUsuarioSAPUI5.Controllers
                 {
                     throw new Exception();
                 }
-
                 _validacao.ValidateAndThrowArgumentException(reserva);
                 _repositorio.Criar(reserva);
                 return Created($"reserva/{reserva.Id}", reserva);
