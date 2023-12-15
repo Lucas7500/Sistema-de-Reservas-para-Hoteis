@@ -8,6 +8,7 @@
         public const string NOME_FORMATO_INCORRETO = "- O nome do cliente está em um formato incorreto!";
         public const string CPF_NAO_PREENCHIDO = "- Informe o CPF do cliente!";
         public const string CPF_INVALIDO = "- O CPF digitado é inválido!";
+        public const string CPF_JA_REGISTRADO = "- O CPF digitado já está registrado no sistema!";
         public const string TELEFONE_NAO_PREENCHIDO = "- Informe o Telefone do cliente!";
         public const string TELEFONE_INVALIDO = "- O Telefone digitado é inválido!";
         public const string IDADE_NAO_PREENCHIDA = "- Informe a Idade do cliente!";

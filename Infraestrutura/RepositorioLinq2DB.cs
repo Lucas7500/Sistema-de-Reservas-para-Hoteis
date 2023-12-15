@@ -15,38 +15,6 @@ namespace Infraestrutura
             return conexaoLinq2Db;
         }
 
-        private static void VerificaSeCpfEhUnico(Reserva reserva)
-        {
-            bool cpfNaoEhUnico = false;
-
-            try
-            {
-                using var conexaoLinq2Db = Connection();
-
-                var reservaMesmoCpf = conexaoLinq2Db.GetTable<Reserva>().FirstOrDefault(x => x.Cpf == reserva.Cpf);
-
-                if (reservaMesmoCpf == null)
-                {
-                    return;
-                }
-                else if (reservaMesmoCpf.Id != reserva.Id)
-                {
-                    cpfNaoEhUnico = true;
-                }
-            }
-            catch
-            {
-                string mensagemErro = "Erro ao verificar se o CPF é único!";
-                throw new Exception(message: mensagemErro);
-            }
-
-            if (cpfNaoEhUnico)
-            {
-                string mensagemErro = "Esse CPF já está registrado no sistema!";
-                throw new Exception(message: mensagemErro);
-            }
-        }
-
         public List<Reserva> ObterTodos()
         {
             try
@@ -79,8 +47,6 @@ namespace Infraestrutura
 
         public void Criar(Reserva reserva)
         {
-            VerificaSeCpfEhUnico(reserva);
-
             try
             {
                 using var conexaoLinq2Db = Connection();
@@ -94,8 +60,6 @@ namespace Infraestrutura
 
         public void Atualizar(Reserva copiaReserva)
         {
-            VerificaSeCpfEhUnico(copiaReserva);
-
             try
             {
                 using var conexaoLinq2Db = Connection();

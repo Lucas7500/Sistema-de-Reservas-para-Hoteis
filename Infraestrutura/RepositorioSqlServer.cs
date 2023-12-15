@@ -32,40 +32,6 @@ namespace Infraestrutura
             };
         }
 
-        private static void VerificaSeCpfEhUnico(Reserva reserva)
-        {
-            bool cpfNaoEhUnico = false;
-
-            try
-            {
-                using var connection = Connection();
-
-                SqlCommand verificaBD = new("SELECT * FROM TabelaReservas", connection);
-
-                var leitor = verificaBD.ExecuteReader();
-
-                while (leitor.Read())
-                {
-                    if (((string)leitor["Cpf"]).Equals(reserva.Cpf) && (int)leitor["Id"] != reserva.Id)
-                    {
-                        cpfNaoEhUnico = true;
-                        break;
-                    }
-                }
-            }
-            catch
-            {
-                string mensagemErro = "Erro ao verificar se o CPF é único!";
-                throw new Exception(message: mensagemErro);
-            }
-
-            if (cpfNaoEhUnico)
-            {
-                string mensagemErro = "Esse cpf já está registrado no sistema!";
-                throw new Exception(message: mensagemErro);
-            }
-        }
-
         public List<Reserva> ObterTodos()
         {
             try
@@ -119,8 +85,6 @@ namespace Infraestrutura
 
         public void Criar(Reserva reserva)
         {
-            VerificaSeCpfEhUnico(reserva);
-
             try
             {
                 using var connection = Connection();
@@ -150,8 +114,6 @@ namespace Infraestrutura
 
         public void Atualizar(Reserva copiaReserva)
         {
-            VerificaSeCpfEhUnico(copiaReserva);
-
             try
             {
                 using var connection = Connection();

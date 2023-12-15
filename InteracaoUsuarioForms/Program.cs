@@ -40,7 +40,7 @@ namespace InteracaoUsuarioForms
                 .ConfigureServices((context, services) =>
                 {
                     services.AddScoped<TelaListaDeReservas>();
-                    services.AddScoped<IRepositorio, RepositorioSqlServer>();
+                    services.AddScoped<IRepositorio, RepositorioListaSingleton>();
                     services.AddScoped<IValidator<Reserva>, ReservaFluentValidation>();
                     services.ExecutarMigracoes();
                 });
