@@ -1,4 +1,5 @@
 <mvc:View
+    controllerName="reservas.hoteis.controller.Listagem"
     xmlns="sap.ui.webc.main"
     xmlns:mvc="sap.ui.core.mvc">
     <Table
