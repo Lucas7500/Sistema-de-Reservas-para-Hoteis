@@ -1,0 +1,80 @@
+<mvc:View
+    xmlns="sap.ui.webc.main"
+    xmlns:mvc="sap.ui.core.mvc">
+    <Table
+        id="idProductsTable"
+        stickyColumnHeader="true"
+        rowClick="handleRowClick"
+        mode="SingleSelect"
+        selectionChange="handleSelectionChange"
+        rows="{
+					path: '/ProductCollection',
+					sorter: {
+						path: 'Name'
+					}
+				}">
+        <columns>
+            <TableColumn>
+                <Label text="Id" />
+            </TableColumn>
+            <TableColumn>
+                <Label text="Nome" />
+            </TableColumn>
+            <TableColumn>
+                <Label text="CPF" />
+            </TableColumn>
+            <TableColumn>
+                <Label text="Telefone" />
+            </TableColumn>
+            <TableColumn>
+                <Label text="Idade" />
+            </TableColumn>
+            <TableColumn>
+                <Label text="Sexo" />
+            </TableColumn>
+            <TableColumn>
+                <Label text="Check-in" />
+            </TableColumn>
+            <TableColumn>
+                <Label text="Check-out" />
+            </TableColumn>
+            <TableColumn>
+                <Label text="Preço da Estadia" />
+            </TableColumn>
+            <TableColumn>
+                <Label text="Pagamento foi Efetuado?" />
+            </TableColumn>
+        </columns>
+        <rows>
+            <TableRow type="Active">
+                <cells>
+                    <TableCell>
+                        <content>
+                            <Label text="{Name} ({ProductId})" />
+                        </content>
+                    </TableCell>
+                    <TableCell>
+                        <content>
+                            <Label text="{SupplierName}" />
+                        </content>
+                    </TableCell>
+                    <TableCell>
+                        <content>
+                            <Label text="{Width} x {Depth} x {Height} {DimUnit}" />
+                        </content>
+                    </TableCell>
+                    <TableCell>
+                        <content>
+                            <Label text="{WeightMeasure} {WeightUnit}" />
+                        </content>
+                    </TableCell>
+                    <TableCell>
+                        <content>
+                            <Label text="{Price} {CurrencyCode}" />
+                        </content>
+                    </TableCell>
+                </cells>
+            </TableRow>
+        </rows>
+    </Table>
+</mvc:View>

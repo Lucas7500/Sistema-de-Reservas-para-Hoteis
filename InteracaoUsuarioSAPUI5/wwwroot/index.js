@@ -1,9 +1,13 @@
 sap.ui.define([
-    "sap/ui/core/mvc/XMLView"
-], (XMLView) => {
+    "sap/ui/core/ComponentContainer"
+], (ComponentContainer) => {
     "use strict";
-
-    XMLView.create({
-        viewName: "reservas.hoteis.view.App"
-    }).then((oView) => oView.placeAt("content"));
+ 
+    new ComponentContainer({
+        name: "reservas.hoteis",
+        settings: {
+            id: "hoteis"
+        },
+        async: true
+    }).placeAt("content");
 });

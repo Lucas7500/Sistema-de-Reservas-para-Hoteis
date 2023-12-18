@@ -1,0 +1,11 @@
+<mvc:View
+    xmlns="sap.m"
+    xmlns:mvc="sap.ui.core.mvc"
+    displayBlock="true">
+    <Page title="{i18n>tituloTelaListagem}">
+        <content>
+            <mvc:XMLView viewName="reservas.hoteis.view.PainelBusca"/>
+            <mvc:XMLView viewName="reservas.hoteis.view.Listagem"/>
+        </content>
+    </Page>
+</mvc:View>

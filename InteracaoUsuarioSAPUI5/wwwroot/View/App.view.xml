@@ -1,8 +1,11 @@
 <mvc:View
-   controllerName="reservas.hoteis.controller.App"
-   xmlns="sap.m"
-   xmlns:mvc="sap.ui.core.mvc">
-   <Button
-      text="BOTÃO DA SORTE"
-      press=".aoClicarAdicionarReserva"/>
+    controllerName="reservas.hoteis.controller.App"
+    xmlns="sap.m"
+    xmlns:mvc="sap.ui.core.mvc"
+    displayBlock="true">
+    <Shell>
+        <App
+            class="myAppDemoWT"
+            id="app" />
+    </Shell>
 </mvc:View>
