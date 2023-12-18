@@ -1,15 +1,18 @@
 ﻿using Dominio.Constantes;
 using Dominio.Enums;
 using FluentValidation;
-using System.Text.RegularExpressions;
+using Infraestrutura;
 
 namespace Dominio
 {
     public class ReservaFluentValidation : AbstractValidator<Reserva>
     {
-        public ReservaFluentValidation()
+        private static IRepositorio _repositorio;
+
+        public ReservaFluentValidation(IRepositorio repositorio)
         {
             RuleLevelCascadeMode = CascadeMode.Stop;
+            _repositorio = repositorio;
             string regexNome = "^[a-zA-ZA-ZáàâãéèêíìîóòõôúùûçÁÀÃÂÉÈÊÍÌÎÓÒÔÕÚÙÛÇ ]*$";
 
             RuleFor(reserva => reserva.Nome)
@@ -21,6 +24,9 @@ namespace Dominio
             RuleFor(reserva => reserva.Cpf)
             .Must(CpfEstaPreenchido).WithMessage(MensagemExcessao.CPF_NAO_PREENCHIDO)
             .Must(CpfEhValido).WithMessage(MensagemExcessao.CPF_INVALIDO);
+
+            RuleFor(reserva => reserva)
+                .Must(CpfEhUnico).WithMessage(MensagemExcessao.CPF_JA_REGISTRADO);
 
             RuleFor(reserva => reserva.Telefone)
                 .Must(TelefoneEstaPreeenchido).WithMessage(MensagemExcessao.TELEFONE_NAO_PREENCHIDO)
@@ -49,6 +55,18 @@ namespace Dominio
 
             RuleFor(reserva => reserva.PagamentoEfetuado)
                 .NotNull().WithMessage(MensagemExcessao.PAGAMENTO_EFETUADO_NULO);
+        }
+
+        private bool CpfEhUnico(Reserva reserva)
+        {
+            var reservaMesmoCpf = _repositorio.ObterTodos().FirstOrDefault(reservaMesmoCpf => reservaMesmoCpf.Cpf == reserva.Cpf);
+
+            if (reservaMesmoCpf == null || reservaMesmoCpf.Id == reserva.Id)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         private bool TelefoneEstaPreeenchido(string telefone)

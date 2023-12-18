@@ -1,4 +1,5 @@
 ﻿using Dominio;
+using Dominio.Constantes;
 
 namespace Infraestrutura
 {
@@ -8,7 +9,14 @@ namespace Infraestrutura
 
         public List<Reserva> ObterTodos()
         {
-            return _listaReservas;
+            try
+            {
+                return _listaReservas;
+            }
+            catch
+            {
+                throw new Exception(message: MensagemExcessao.ERRO_OBTER_TODOS_BD);
+            }
         }
 
         public Reserva ObterPorId(int id)
@@ -21,7 +29,7 @@ namespace Infraestrutura
             }
             catch
             {
-                throw new Exception(message: "Erro ao Obter Reserva Selecionada da Lista Singleton");
+                throw new Exception(message: MensagemExcessao.ERRO_OBTER_POR_ID_BD);
             }
 
             return reservaSelecionada;
@@ -36,7 +44,7 @@ namespace Infraestrutura
             }
             catch
             {
-                throw new Exception(message: "Erro Ao Adicionar Reserva na Lista Singleton");
+                throw new Exception(message: MensagemExcessao.ERRO_CRIAR_BD);
             }
         }
         public void Atualizar(Reserva copiaReserva)
@@ -48,7 +56,7 @@ namespace Infraestrutura
             }
             catch
             {
-                throw new Exception(message: "Erro ao Editar Reserva da Lista Singleton");
+                throw new Exception(message: MensagemExcessao.ERRO_ATUALIZAR_BD);
             }
         }
 
@@ -61,7 +69,7 @@ namespace Infraestrutura
             }
             catch
             {
-                throw new Exception(message: "Erro ao Remover Reserva da Lista Singleton");
+                throw new Exception(message: MensagemExcessao.ERRO_REMOVER_BD);
             }
         }
     }

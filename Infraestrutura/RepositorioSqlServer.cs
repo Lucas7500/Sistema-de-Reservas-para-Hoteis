@@ -1,6 +1,7 @@
 ﻿using Dominio.Enums;
 using Dominio;
 using System.Data.SqlClient;
+using Dominio.Constantes;
 
 namespace Infraestrutura
 {
@@ -32,40 +33,6 @@ namespace Infraestrutura
             };
         }
 
-        private static void VerificaSeCpfEhUnico(Reserva reserva)
-        {
-            bool cpfNaoEhUnico = false;
-
-            try
-            {
-                using var connection = Connection();
-
-                SqlCommand verificaBD = new("SELECT * FROM TabelaReservas", connection);
-
-                var leitor = verificaBD.ExecuteReader();
-
-                while (leitor.Read())
-                {
-                    if (((string)leitor["Cpf"]).Equals(reserva.Cpf) && (int)leitor["Id"] != reserva.Id)
-                    {
-                        cpfNaoEhUnico = true;
-                        break;
-                    }
-                }
-            }
-            catch
-            {
-                string mensagemErro = "Erro ao verificar se o CPF é único!";
-                throw new Exception(message: mensagemErro);
-            }
-
-            if (cpfNaoEhUnico)
-            {
-                string mensagemErro = "Esse cpf já está registrado no sistema!";
-                throw new Exception(message: mensagemErro);
-            }
-        }
-
         public List<Reserva> ObterTodos()
         {
             try
@@ -87,8 +54,7 @@ namespace Infraestrutura
             }
             catch
             {
-                string mensagemErro = "Erro ao obter os elementos do banco de dados!";
-                throw new Exception(message: mensagemErro);
+                throw new Exception(message: MensagemExcessao.ERRO_OBTER_TODOS_BD);
             }
 
         }
@@ -113,14 +79,12 @@ namespace Infraestrutura
             }
             catch
             {
-                throw new Exception(message: "Erro ao Obter Reserva Selecionada do Banco De Dados");
+                throw new Exception(message: MensagemExcessao.ERRO_OBTER_POR_ID_BD);
             }
         }
 
         public void Criar(Reserva reserva)
         {
-            VerificaSeCpfEhUnico(reserva);
-
             try
             {
                 using var connection = Connection();
@@ -144,14 +108,12 @@ namespace Infraestrutura
             }
             catch
             {
-                throw new Exception(message: "Erro ao Adicionar Reserva no Banco de Dados");
+                throw new Exception(message: MensagemExcessao.ERRO_CRIAR_BD);
             }
         }
 
         public void Atualizar(Reserva copiaReserva)
         {
-            VerificaSeCpfEhUnico(copiaReserva);
-
             try
             {
                 using var connection = Connection();
@@ -177,7 +139,7 @@ namespace Infraestrutura
             }
             catch
             {
-                throw new Exception(message: "Erro ao Editar Reserva do Banco de Dados");
+                throw new Exception(message: MensagemExcessao.ERRO_ATUALIZAR_BD);
             }
         }
 
@@ -191,7 +153,7 @@ namespace Infraestrutura
             }
             catch
             {
-                throw new Exception(message: "Erro ao Remover Reserva do Banco de Dados");
+                throw new Exception(message: MensagemExcessao.ERRO_REMOVER_BD);
             }
         }
     }

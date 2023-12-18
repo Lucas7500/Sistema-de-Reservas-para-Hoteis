@@ -8,6 +8,7 @@
         public const string NOME_FORMATO_INCORRETO = "- O nome do cliente está em um formato incorreto!";
         public const string CPF_NAO_PREENCHIDO = "- Informe o CPF do cliente!";
         public const string CPF_INVALIDO = "- O CPF digitado é inválido!";
+        public const string CPF_JA_REGISTRADO = "- O CPF digitado já está registrado no sistema!";
         public const string TELEFONE_NAO_PREENCHIDO = "- Informe o Telefone do cliente!";
         public const string TELEFONE_INVALIDO = "- O Telefone digitado é inválido!";
         public const string IDADE_NAO_PREENCHIDA = "- Informe a Idade do cliente!";
@@ -22,8 +23,13 @@
         public const string PRECO_DA_ESTADIA_MENOR_IGUAL_A_ZERO = "- O preço da estadia não pode ser negativo ou zero!";
         public const string PRECO_DA_ESTADIA_ACIMA_DO_VALOR_MAXIMO= "- O preço da estadia está acima do máximo permitido!";
         public const string PAGAMENTO_EFETUADO_NULO = "- Informe se o preço da estadia foi pago!";
-        
         public const string TITULO_ERRO_INESPERADO = "Ocorreu um Erro Inesperado";
+        public const string ERRO_OBTER_TODOS_BD = "Erro ao obter todos os elementos do banco de dados!";
+        public const string ERRO_OBTER_POR_ID_BD = "Erro ao obter o elemento por id no banco de dados!";
+        public const string ERRO_CRIAR_BD = "Erro ao criar reserva no banco de dados!";
+        public const string ERRO_ATUALIZAR_BD = "Erro ao atualizar reserva no banco de dados!";
+        public const string ERRO_REMOVER_BD = "Erro ao remover reserva do banco de dados!";
+        public const string RESERVA_INVALIDA_OU_INEXISTENTE = "A reserva a ser atualizada é inválida ou inexistente!";
 
         public static string MensagemErroListaVazia(string acao)
         {
