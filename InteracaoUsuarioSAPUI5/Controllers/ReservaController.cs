@@ -28,7 +28,6 @@ namespace InteracaoUsuarioSAPUI5.Controllers
             }
             catch (Exception erro)
             {
-                NotFound(erro.Message);
                 throw new Exception(message: erro.Message);
             }
         }
@@ -42,7 +41,6 @@ namespace InteracaoUsuarioSAPUI5.Controllers
             }
             catch (Exception erro)
             {
-                NotFound(erro.Message);
                 throw new Exception(message: erro.Message);
             }
         }
@@ -56,6 +54,7 @@ namespace InteracaoUsuarioSAPUI5.Controllers
                 {
                     throw new Exception();
                 }
+                reserva.Id = ValoresPadrao.ID_NULO;
                 _validador.ValidateAndThrowArgumentException(reserva);
                 _repositorio.Criar(reserva);
 
@@ -63,7 +62,6 @@ namespace InteracaoUsuarioSAPUI5.Controllers
             }
             catch (Exception erro)
             {
-                BadRequest(erro.Message);
                 throw new Exception(message: erro.Message);
             }
         }
@@ -84,7 +82,6 @@ namespace InteracaoUsuarioSAPUI5.Controllers
             }
             catch (Exception erro)
             {
-                BadRequest(erro.Message);
                 throw new Exception(message: erro.Message);
             }
         }
@@ -100,7 +97,6 @@ namespace InteracaoUsuarioSAPUI5.Controllers
             }
             catch (Exception erro)
             {
-                BadRequest(erro.Message);
                 throw new Exception(message: erro.Message);
             }
         }
