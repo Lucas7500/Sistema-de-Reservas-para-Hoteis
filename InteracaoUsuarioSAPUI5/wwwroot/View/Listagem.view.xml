@@ -3,47 +3,47 @@
     xmlns="sap.ui.webc.main"
     xmlns:mvc="sap.ui.core.mvc">
     <Table
-        id="idProductsTable"
+        id="TabelaReservas"
         stickyColumnHeader="true"
         rowClick="handleRowClick"
         mode="SingleSelect"
         selectionChange="handleSelectionChange"
         rows="{
-					path: '/ProductCollection',
+					path: '',
 					sorter: {
-						path: 'Name'
+						path: 'id'
 					}
 				}">
         <columns>
             <TableColumn>
-                <Label text="Id" />
+                <Label text="{i18n>tituloColunaId}" />
             </TableColumn>
             <TableColumn>
-                <Label text="Nome" />
+                <Label text="{i18n>tituloColunaNome}" />
             </TableColumn>
             <TableColumn>
-                <Label text="CPF" />
+                <Label text="{i18n>tituloColunaCpf}" />
             </TableColumn>
             <TableColumn>
-                <Label text="Telefone" />
+                <Label text="{i18n>tituloColunaTelefone}" />
             </TableColumn>
             <TableColumn>
-                <Label text="Idade" />
+                <Label text="{i18n>tituloColunaIdade}" />
             </TableColumn>
             <TableColumn>
-                <Label text="Sexo" />
+                <Label text="{i18n>tituloColunaSexo}" />
             </TableColumn>
             <TableColumn>
-                <Label text="Check-in" />
+                <Label text="{i18n>tituloColunaCheckIn}" />
             </TableColumn>
             <TableColumn>
-                <Label text="Check-out" />
+                <Label text="{i18n>tituloColunaCheckOut}" />
             </TableColumn>
             <TableColumn>
-                <Label text="Preço da Estadia" />
+                <Label text="{i18n>tituloColunaPrecoEstadia}" />
             </TableColumn>
             <TableColumn>
-                <Label text="Pagamento foi Efetuado?" />
+                <Label text="{i18n>tituloColunaPagamentoEfetuado}" />
             </TableColumn>
         </columns>
         <rows>
@@ -51,27 +51,52 @@
                 <cells>
                     <TableCell>
                         <content>
-                            <Label text="{Name} ({ProductId})" />
+                            <Label text="{id}" />
                         </content>
                     </TableCell>
                     <TableCell>
                         <content>
-                            <Label text="{SupplierName}" />
+                            <Label text="{nome}" />
                         </content>
                     </TableCell>
                     <TableCell>
                         <content>
-                            <Label text="{Width} x {Depth} x {Height} {DimUnit}" />
+                            <Label text="{cpf}" />
                         </content>
                     </TableCell>
                     <TableCell>
                         <content>
-                            <Label text="{WeightMeasure} {WeightUnit}" />
+                            <Label text="{telefone}" />
                         </content>
                     </TableCell>
                     <TableCell>
                         <content>
-                            <Label text="{Price} {CurrencyCode}" />
+                            <Label text="{idade}" />
+                        </content>
+                    </TableCell>
+                    <TableCell>
+                        <content>
+                            <Label text="{sexo}" />
+                        </content>
+                    </TableCell>
+                    <TableCell>
+                        <content>
+                            <Label text="{checkIn}" />
+                        </content>
+                    </TableCell>
+                    <TableCell>
+                        <content>
+                            <Label text="{checkOut}" />
+                        </content>
+                    </TableCell>
+                    <TableCell>
+                        <content>
+                            <Label text="{precoEstadia}" />
+                        </content>
+                    </TableCell>
+                    <TableCell>
+                        <content>
+                            <Label text="{pagamentoEfetuado}" />
                         </content>
                     </TableCell>
                 </cells>
