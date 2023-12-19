@@ -8,7 +8,7 @@ sap.ui.define([
         onInit() {
             fetch('/api/Reserva', { method: 'GET' })
                 .then(response => response.json())
-                .then(response => this.getView().setModel(new JSONModel(response)))
+                .then(response => this.getView().setModel(new JSONModel(response), "TabelaReservas"))
                 .catch(err => console.log(err.message))
         }
     });

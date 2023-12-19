@@ -1,106 +1,62 @@
 <mvc:View
     controllerName="reservas.hoteis.controller.Listagem"
-    xmlns="sap.ui.webc.main"
+    xmlns="sap.m"
     xmlns:mvc="sap.ui.core.mvc">
-    <Table
-        id="TabelaReservas"
-        stickyColumnHeader="true"
-        rowClick="handleRowClick"
-        mode="SingleSelect"
-        selectionChange="handleSelectionChange"
-        rows="{
-					path: '',
-					sorter: {
-						path: 'id'
-					}
-				}">
-        <columns>
-            <TableColumn>
-                <Label text="{i18n>tituloColunaId}" />
-            </TableColumn>
-            <TableColumn>
-                <Label text="{i18n>tituloColunaNome}" />
-            </TableColumn>
-            <TableColumn>
-                <Label text="{i18n>tituloColunaCpf}" />
-            </TableColumn>
-            <TableColumn>
-                <Label text="{i18n>tituloColunaTelefone}" />
-            </TableColumn>
-            <TableColumn>
-                <Label text="{i18n>tituloColunaIdade}" />
-            </TableColumn>
-            <TableColumn>
-                <Label text="{i18n>tituloColunaSexo}" />
-            </TableColumn>
-            <TableColumn>
-                <Label text="{i18n>tituloColunaCheckIn}" />
-            </TableColumn>
-            <TableColumn>
-                <Label text="{i18n>tituloColunaCheckOut}" />
-            </TableColumn>
-            <TableColumn>
-                <Label text="{i18n>tituloColunaPrecoEstadia}" />
-            </TableColumn>
-            <TableColumn>
-                <Label text="{i18n>tituloColunaPagamentoEfetuado}" />
-            </TableColumn>
-        </columns>
-        <rows>
-            <TableRow type="Active">
-                <cells>
-                    <TableCell>
-                        <content>
-                            <Label text="{id}" />
-                        </content>
-                    </TableCell>
-                    <TableCell>
-                        <content>
-                            <Label text="{nome}" />
-                        </content>
-                    </TableCell>
-                    <TableCell>
-                        <content>
-                            <Label text="{cpf}" />
-                        </content>
-                    </TableCell>
-                    <TableCell>
-                        <content>
-                            <Label text="{telefone}" />
-                        </content>
-                    </TableCell>
-                    <TableCell>
-                        <content>
-                            <Label text="{idade}" />
-                        </content>
-                    </TableCell>
-                    <TableCell>
-                        <content>
-                            <Label text="{sexo}" />
-                        </content>
-                    </TableCell>
-                    <TableCell>
-                        <content>
-                            <Label text="{checkIn}" />
-                        </content>
-                    </TableCell>
-                    <TableCell>
-                        <content>
-                            <Label text="{checkOut}" />
-                        </content>
-                    </TableCell>
-                    <TableCell>
-                        <content>
-                            <Label text="{precoEstadia}" />
-                        </content>
-                    </TableCell>
-                    <TableCell>
-                        <content>
-                            <Label text="{pagamentoEfetuado}" />
-                        </content>
-                    </TableCell>
-                </cells>
-            </TableRow>
-        </rows>
-    </Table>
+    <Panel accessibleRole="Region">
+        <Table
+            id="TabelaReservas"
+            class="sapUiResponsiveMargin"
+            width="auto"
+            items="{TabelaReservas>/}">
+            <columns>
+                <Column>
+                    <Text text="{i18n>tituloColunaId}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>tituloColunaNome}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>tituloColunaCpf}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>tituloColunaTelefone}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>tituloColunaIdade}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>tituloColunaSexo}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>tituloColunaCheckIn}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>tituloColunaCheckOut}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>tituloColunaPrecoEstadia}" />
+                </Column>
+                <Column>
+                    <Text text="{i18n>tituloColunaPagamentoEfetuado}" />
+                </Column>
+            </columns>
+            <items>
+                <ColumnListItem>
+                    <cells>
+                        <ObjectNumber number="{TabelaReservas>id}" />
+                        <ObjectIdentifier title="{TabelaReservas>nome}" />
+                        <ObjectIdentifier title="{TabelaReservas>cpf}" />
+                        <ObjectIdentifier title="{TabelaReservas>telefone}" />
+                        <ObjectIdentifier title="{TabelaReservas>idade}" />
+                        <ObjectIdentifier title="{TabelaReservas>sexo}" />
+                        <ObjectIdentifier title="{TabelaReservas>checkIn}" />
+                        <ObjectIdentifier title="{TabelaReservas>checkOut}" />
+                        <ObjectNumber number="{TabelaReservas>precoEstadia}" />
+                        <ObjectIdentifier title="{TabelaReservas>pagamentoEfetuado}" />
+
+                    </cells>
+                </ColumnListItem>
+            </items>
+        </Table>
+    </Panel>
 </mvc:View>
