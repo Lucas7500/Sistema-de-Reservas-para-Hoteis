@@ -8,7 +8,6 @@
         expandable="{device>/system/phone}"
         expanded="{= !${device>/system/phone} }"
         accessibleRole="Region">
-
         <headerToolbar>
             <Toolbar>
                 <Button
