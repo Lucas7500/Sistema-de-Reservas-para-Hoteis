@@ -4,9 +4,9 @@ sap.ui.define([
     "../model/formatter",
     "sap/ui/model/Filter",
     "sap/ui/model/FilterOperator",
-    "../Repositorios/RepositorioReservasHoteis"
-
-], (Controller, JSONModel, formatter, Filter, FilterOperator, RepositorioReservasHoteis) => {
+    "../Repositorios/RepositorioReservasHoteis",
+    "sap/m/MessageToast"
+], (Controller, JSONModel, formatter, Filter, FilterOperator, RepositorioReservasHoteis, MessageToast) => {
     "use strict";
 
     return Controller.extend("reservas.hoteis.controller.Listagem", {
@@ -29,6 +29,9 @@ sap.ui.define([
            const oList = this.byId("TabelaReservas");
            const oBinding = oList.getBinding("items");
            oBinding.filter(aFilter);
-        }
+        },
+        aoClicarAdicionarReserva() {
+            MessageToast.show("Botão tá funfando ainda");
+         }
     });
 });
