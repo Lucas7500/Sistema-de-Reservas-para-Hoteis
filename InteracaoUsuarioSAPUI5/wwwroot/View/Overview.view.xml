@@ -4,7 +4,6 @@
     displayBlock="true">
     <Page title="{i18n>tituloTelaListagem}">
         <content>
-            <mvc:XMLView viewName="reservas.hoteis.view.PainelBusca"/>
             <mvc:XMLView viewName="reservas.hoteis.view.Listagem"/>
         </content>
     </Page>

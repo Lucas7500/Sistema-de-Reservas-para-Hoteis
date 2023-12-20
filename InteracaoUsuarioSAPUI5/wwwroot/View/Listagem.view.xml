@@ -2,41 +2,71 @@
     controllerName="reservas.hoteis.controller.Listagem"
     xmlns="sap.m"
     xmlns:mvc="sap.ui.core.mvc">
-    <Panel accessibleRole="Region">
+    <Panel
+        class="sapUiResponsiveMargin"
+        width="auto"
+        expandable="{device>/system/phone}"
+        expanded="{= !${device>/system/phone} }"
+        accessibleRole="Region">
+        <headerToolbar>
+            <Toolbar>
+                <Button
+                    icon="sap-icon://add"
+                    text="{i18n>tituloBotaoAdicionar}"
+                    press=".aoClicarAdicionarReserva" />
+                <ToolbarSpacer />
+                <SearchField
+                    width="50%"
+                    search=".aoPesquisarFiltrarReservas" />
+            </Toolbar>
+        </headerToolbar>
         <Table
             id="TabelaReservas"
             class="sapUiResponsiveMargin"
             width="auto"
             items="{TabelaReservas>/}">
             <columns>
-                <Column>
+                <Column
+                    hAlign="Center"
+                    width="3rem">
                     <ObjectIdentifier title="{i18n>tituloColunaId}" />
                 </Column>
-                <Column>
+                <Column
+                    hAlign="Center">
                     <ObjectIdentifier title="{i18n>tituloColunaNome}" />
                 </Column>
-                <Column>
+                <Column
+                    hAlign="Center">
                     <ObjectIdentifier title="{i18n>tituloColunaCpf}" />
                 </Column>
-                <Column>
+                <Column
+                    hAlign="Center">
                     <ObjectIdentifier title="{i18n>tituloColunaTelefone}" />
                 </Column>
-                <Column>
+                <Column
+                    hAlign="Center"
+                    width="4rem">
                     <ObjectIdentifier title="{i18n>tituloColunaIdade}" />
                 </Column>
-                <Column>
+                <Column
+                    hAlign="Center"
+                    width="5rem">
                     <ObjectIdentifier title="{i18n>tituloColunaSexo}" />
                 </Column>
-                <Column>
+                <Column
+                    hAlign="Center">
                     <ObjectIdentifier title="{i18n>tituloColunaCheckIn}" />
                 </Column>
-                <Column>
+                <Column
+                    hAlign="Center">
                     <ObjectIdentifier title="{i18n>tituloColunaCheckOut}" />
                 </Column>
-                <Column>
+                <Column
+                    hAlign="Center">
                     <ObjectIdentifier title="{i18n>tituloColunaPrecoEstadia}" />
                 </Column>
-                <Column>
+                <Column
+                    hAlign="Center">
                     <ObjectIdentifier title="{i18n>tituloColunaPagamentoEfetuado}" />
                 </Column>
             </columns>
@@ -50,11 +80,7 @@
                         <Text text="{TabelaReservas>idade}" />
                         <Text
                             text="{
-                            parts: [
-                                'TabelaReservas>sexo',
-                                'i18n>sexo0',
-                                'i18n>sexo1'
-                            ],
+                            path: 'TabelaReservas>sexo',
                             formatter: '.formatter.formataSexo'
                         }" />
                         <Text
@@ -93,11 +119,7 @@
                             unit="{view>/currency}" />
                         <Text
                             text="{
-                            parts: [
-                                'TabelaReservas>pagamentoEfetuado',
-                                'i18n>pagamentoEfetuadoTrue',
-                                'i18n>pagamentoEfetuadoFalse'
-                            ],
+                            path: 'TabelaReservas>pagamentoEfetuado',
                             formatter: '.formatter.formataPagamentoEfetuado'
                         }" />
                     </cells>

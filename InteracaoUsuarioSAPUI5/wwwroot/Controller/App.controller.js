@@ -1,7 +1,6 @@
 sap.ui.define([
-   "sap/ui/core/mvc/Controller",
-   "sap/m/MessageToast"
-], (Controller, MesssageToast) => {
+   "sap/ui/core/mvc/Controller"
+], function (Controller) {
    "use strict";
 
    return Controller.extend("reservas.hoteis.controller.App", {

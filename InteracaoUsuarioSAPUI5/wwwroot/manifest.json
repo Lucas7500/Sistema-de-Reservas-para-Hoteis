@@ -34,7 +34,8 @@
                 "settings": {
                     "bundleName": "reservas.hoteis.i18n.i18n",
                     "supportedLocales": [
-                        ""
+                        "pt",
+                        "en"
                     ],
                     "fallbackLocale": ""
                 }

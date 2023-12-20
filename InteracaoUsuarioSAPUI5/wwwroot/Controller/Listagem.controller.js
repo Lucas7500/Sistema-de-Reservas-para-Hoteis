@@ -2,8 +2,11 @@ sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/model/json/JSONModel",
     "../model/formatter",
+    "sap/ui/model/Filter",
+    "sap/ui/model/FilterOperator",
+    "../Repositorios/RepositorioReservasHoteis"
 
-], (Controller, JSONModel, formatter) => {
+], (Controller, JSONModel, formatter, Filter, FilterOperator, RepositorioReservasHoteis) => {
     "use strict";
 
     return Controller.extend("reservas.hoteis.controller.Listagem", {
@@ -14,13 +17,18 @@ sap.ui.define([
             });
             this.getView().setModel(oViewModel, "view");
 
-            this.ObterTodos();
+            RepositorioReservasHoteis.obterTodos(this);
         },
-        ObterTodos() {
-            fetch('/api/Reserva', { method: 'GET' })
-                .then(response => response.json())
-                .then(response => this.getView().setModel(new JSONModel(response), "TabelaReservas"))
-                .catch(err => console.log(err.message))
+        aoPesquisarFiltrarReservas(oEvent) {
+           const aFilter = [];
+           const sQuery = oEvent.getParameter("query");
+           if (sQuery) {
+              aFilter.push(new Filter("nome", FilterOperator.Contains, sQuery));
+           }
+  
+           const oList = this.byId("TabelaReservas");
+           const oBinding = oList.getBinding("items");
+           oBinding.filter(aFilter);
         }
     });
 });
