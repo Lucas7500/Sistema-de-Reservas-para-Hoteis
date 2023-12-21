@@ -3,6 +3,8 @@ sap.ui.define([
 ], function (Controller) {
    "use strict";
 
-   return Controller.extend("reservas.hoteis.controller.App", {
+   const CaminhoRotaApp = "reservas.hoteis.controller.App";
+   
+   return Controller.extend(CaminhoRotaApp, {
    });
 });

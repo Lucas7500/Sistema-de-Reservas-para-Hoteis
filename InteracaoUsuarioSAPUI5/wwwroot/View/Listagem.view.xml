@@ -107,15 +107,8 @@
                         }" />
                         <Text
                             text="{
-                            parts: [
-                                'TabelaReservas>precoEstadia',
-                                'view>/currency'
-                            ],
-                            type: 'sap.ui.model.type.Currency',
-                            formatOptions: {
-                                showMeasure: true,
-                                currencyCode: false
-                            }
+                            path: 'TabelaReservas>precoEstadia',
+                            formatter: '.formatter.formataPrecoEstadia'
                         }" />
                         <Text
                             text="{

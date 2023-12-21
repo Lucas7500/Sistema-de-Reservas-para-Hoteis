@@ -11,7 +11,7 @@
 		data-sap-ui-libs="sap.m"
 		data-sap-ui-compatVersion="edge"
 		data-sap-ui-async="true"
-		data-sap-ui-onInit="module:reservas/hoteis/index"
+		data-sap-ui-onInit="module:sap/ui/core/ComponentSupport"
 		data-sap-ui-resourceroots='{
 			"reservas.hoteis": "./"
 		}'>
@@ -19,6 +19,11 @@
 	</script>
 </head>
 
-<body class="sapUiBody" id="content"></body>
+<body class="sapUiBody" id="content">
+	<div 
+		data-sap-ui-component data-name="reservas.hoteis" 
+		data-id="container"
+		 data-settings='{"id" : "hoteis"}'></div>
+</body>
 
 </html>

@@ -1,37 +1,45 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
-    "sap/ui/model/json/JSONModel",
     "../model/formatter",
     "sap/ui/model/Filter",
     "sap/ui/model/FilterOperator",
     "../Repositorios/RepositorioReservasHoteis",
     "sap/m/MessageToast"
-], (Controller, JSONModel, formatter, Filter, FilterOperator, RepositorioReservasHoteis, MessageToast) => {
+], (Controller, formatter, Filter, FilterOperator, RepositorioReservasHoteis, MessageToast) => {
     "use strict";
 
-    return Controller.extend("reservas.hoteis.controller.Listagem", {
+    const caminhoRotaListagem = "reservas.hoteis.controller.Listagem";
+
+    return Controller.extend(caminhoRotaListagem, {
         formatter: formatter,
         onInit() {
-            const oViewModel = new JSONModel({
-                currency: "BRL"
-            });
-            this.getView().setModel(oViewModel, "view");
+            this._aoCoincidirRota();
+        },
 
+        _aoCoincidirRota() {
             RepositorioReservasHoteis.obterTodos(this);
         },
+
         aoPesquisarFiltrarReservas(oEvent) {
-           const aFilter = [];
-           const sQuery = oEvent.getParameter("query");
-           if (sQuery) {
-              aFilter.push(new Filter("nome", FilterOperator.Contains, sQuery));
-           }
-  
-           const oList = this.byId("TabelaReservas");
-           const oBinding = oList.getBinding("items");
-           oBinding.filter(aFilter);
+            const idTabela = "TabelaReservas";
+            const propriedadeFiltrada = "nome";
+            const parametroBinding = "items";
+            const parametroQuery = "query"
+
+            const arrayFiltrado = [];
+            const stringQuery = oEvent.getParameter(parametroQuery);
+            if (stringQuery) {
+                arrayFiltrado.push(new Filter(propriedadeFiltrada, FilterOperator.Contains, stringQuery));
+            }
+
+            const listaReservas = this.byId(idTabela);
+            const objetoBinding = listaReservas.getBinding(parametroBinding);
+            objetoBinding.filter(arrayFiltrado);
         },
+
         aoClicarAdicionarReserva() {
-            MessageToast.show("Botão tá funfando ainda");
-         }
+            const mensagemTeste = "Botão tá funfando ainda";
+            MessageToast.show(mensagemTeste);
+        }
     });
 });
