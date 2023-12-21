@@ -9,20 +9,20 @@
         expanded="{= !${device>/system/phone} }"
         accessibleRole="Region">
         <headerToolbar>
-            <Toolbar>
+            <Toolbar
+                class="sapUiTinyMarginEnd">
                 <Button
                     icon="sap-icon://add"
                     text="{i18n>tituloBotaoAdicionar}"
                     press=".aoClicarAdicionarReserva" />
                 <ToolbarSpacer />
                 <SearchField
-                    width="50%"
+                    width="30%"
                     search=".aoPesquisarFiltrarReservas" />
             </Toolbar>
         </headerToolbar>
         <Table
             id="TabelaReservas"
-            class="sapUiResponsiveMargin"
             width="auto"
             items="{TabelaReservas>/}">
             <columns>
