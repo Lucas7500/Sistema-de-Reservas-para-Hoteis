@@ -1,6 +1,7 @@
 <mvc:View
     controllerName="reservas.hoteis.controller.Listagem"
     xmlns="sap.m"
+    xmlns:core="sap.ui.core"
     xmlns:mvc="sap.ui.core.mvc">
     <Panel
         class="sapUiResponsiveMargin"
@@ -12,6 +13,7 @@
             <Toolbar
                 class="sapUiTinyMarginEnd">
                 <Button
+                    type="Emphasized"
                     icon="sap-icon://add"
                     text="{i18n>tituloBotaoAdicionar}"
                     press=".aoClicarAdicionarReserva" />
@@ -28,7 +30,7 @@
             <columns>
                 <Column
                     hAlign="Center"
-                    width="3rem">
+                    width="5rem">
                     <ObjectIdentifier title="{i18n>tituloColunaId}" />
                 </Column>
                 <Column
@@ -73,9 +75,11 @@
             <items>
                 <ColumnListItem>
                     <cells>
-                        <Text text="{TabelaReservas>id}" />
+                        <ObjectIdentifier
+                            badgeNotes="true"
+                            title="{TabelaReservas>id}" />
                         <ObjectIdentifier title="{TabelaReservas>nome}" />
-                        <Text text="{TabelaReservas>cpf}" />
+                        <ObjectIdentifier title="{TabelaReservas>cpf}" />
                         <Text text="{TabelaReservas>telefone}" />
                         <Text text="{TabelaReservas>idade}" />
                         <Text

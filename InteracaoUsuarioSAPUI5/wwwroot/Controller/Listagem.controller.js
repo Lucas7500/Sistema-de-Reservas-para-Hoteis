@@ -13,28 +13,17 @@ sap.ui.define([
     return Controller.extend(caminhoRotaListagem, {
         formatter: formatter,
         onInit() {
-            this._aoCoincidirRota();
+            const minhaRota = 'overview';
+            
+            let rota = this.getOwnerComponent().getRouter();
+            rota.getRoute(minhaRota).attachPatternMatched(this._aoCoincidirRota, this);
         },
 
         _aoCoincidirRota() {
-            RepositorioReservasHoteis.obterTodos(this);
+            RepositorioReservasHoteis.obterTodos(this.getView());
         },
 
-        aoPesquisarFiltrarReservas(oEvent) {
-            const idTabela = "TabelaReservas";
-            const propriedadeFiltrada = "nome";
-            const parametroBinding = "items";
-            const parametroQuery = "query"
-
-            const arrayFiltrado = [];
-            const stringQuery = oEvent.getParameter(parametroQuery);
-            if (stringQuery) {
-                arrayFiltrado.push(new Filter(propriedadeFiltrada, FilterOperator.Contains, stringQuery));
-            }
-
-            const listaReservas = this.byId(idTabela);
-            const objetoBinding = listaReservas.getBinding(parametroBinding);
-            objetoBinding.filter(arrayFiltrado);
+        aoPesquisarFiltrarReservas(objetoPesquisa) {
         },
 
         aoClicarAdicionarReserva() {
