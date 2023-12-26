@@ -23,7 +23,7 @@ sap.ui.define([], () => {
             const duasCasasDecimais = 2;
             const charPonto = '.';
             const charVirgula = ',';
-            let stringPrecoEstadia = `R$ ${precoEstadia.toFixed(duasCasasDecimais)}`
+            let stringPrecoEstadia = `R$ ${Number(precoEstadia).toFixed(duasCasasDecimais)}`
 
             return stringPrecoEstadia.replace(charPonto, charVirgula);
         },

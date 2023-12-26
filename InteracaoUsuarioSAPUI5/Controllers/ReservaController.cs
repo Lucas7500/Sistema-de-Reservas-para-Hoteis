@@ -18,13 +18,25 @@ namespace InteracaoUsuarioSAPUI5.Controllers
             _repositorio = repositorio;
             _validador = validador;
         }
-
+        
         [HttpGet]
-        public OkObjectResult ObterTodos()
+        public OkObjectResult ObterTodos([FromQuery] string? filtro)
         {
             try
             {
-                return Ok(_repositorio.ObterTodos());
+                List<Reserva> reservas = new();
+
+                if (!string.IsNullOrEmpty(filtro))
+                {
+                    reservas.AddRange(_repositorio.ObterTodos().Where(reserva => reserva.Nome.Contains(filtro, StringComparison.OrdinalIgnoreCase) ||
+                                                                                    reserva.Cpf.Contains(filtro, StringComparison.OrdinalIgnoreCase)));
+                }
+                else
+                {
+                    reservas = _repositorio.ObterTodos();
+                }
+
+                return Ok(reservas);
             }
             catch (Exception erro)
             {

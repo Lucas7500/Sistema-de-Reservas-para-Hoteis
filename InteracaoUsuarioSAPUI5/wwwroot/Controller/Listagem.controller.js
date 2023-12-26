@@ -3,11 +3,12 @@ sap.ui.define([
     "../model/formatter",
     "sap/ui/model/json/JSONModel",
     "../Repositorios/RepositorioReservasHoteis",
-    "sap/m/MessageToast"
-], (Controller, formatter, JSONModel, RepositorioReservasHoteis, MessageToast) => {
+	"sap/ui/core/routing/History"
+], (Controller, formatter, JSONModel, RepositorioReservasHoteis, History) => {
     "use strict";
 
     const caminhoRotaListagem = "reservas.hoteis.controller.Listagem";
+    const MODELO_LISTAGEM = "TabelaReservas";
 
     return Controller.extend(caminhoRotaListagem, {
         formatter: formatter,
@@ -19,20 +20,44 @@ sap.ui.define([
         },
 
         _aoCoincidirRota() {
-            this._definirModelo();
+            this._carregarLista();
         },
 
-        _definirModelo() {
+        _carregarLista() {
             RepositorioReservasHoteis.obterTodos()
-                .then(response => this.getView().setModel(new JSONModel(response), "TabelaReservas"));
+                .then(response => this.getView().setModel(new JSONModel(response), MODELO_LISTAGEM));
         },
 
-        aoPesquisarFiltrarReservas(objetoPesquisa) {
+        aoPesquisarFiltrarReservas(filtro) {
+            const parametroQuery = "query";
+            let stringFiltro = filtro.getParameter(parametroQuery);
+
+            RepositorioReservasHoteis.obterTodos(stringFiltro)
+                .then(response => this.getView().setModel(new JSONModel(response), MODELO_LISTAGEM));
         },
 
-        aoClicarAdicionarReserva() {
-            const mensagemTeste = "Botão tá funfando ainda";
-            MessageToast.show(mensagemTeste);
+        aoClicarAbrirAdicionar() {
+            let rota = this.getOwnerComponent().getRouter();
+            const paginaAdicionar = "adicionar";
+            rota.navTo(paginaAdicionar);
+        },
+
+        aoClicarAbrirDetalhes() {
+            let rota = this.getOwnerComponent().getRouter();
+            const paginaDetalhes = "detalhes";
+            rota.navTo(paginaDetalhes);
+        },
+        
+        voltarPagina() {
+            const oHistory = History.getInstance();
+			const sPreviousHash = oHistory.getPreviousHash();
+
+			if (sPreviousHash !== undefined) {
+				window.history.go(-1);
+			} else {
+				const oRouter = this.getOwnerComponent().getRouter();
+				oRouter.navTo("overview", {}, true);
+            }
         }
     });
 });

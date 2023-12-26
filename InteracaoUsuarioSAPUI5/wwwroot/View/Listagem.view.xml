@@ -16,7 +16,7 @@
                     type="Emphasized"
                     icon="sap-icon://add"
                     text="{i18n>tituloBotaoAdicionar}"
-                    press=".aoClicarAdicionarReserva" />
+                    press=".aoClicarAbrirAdicionar" />
                 <ToolbarSpacer />
                 <SearchField
                     width="30%"
@@ -24,7 +24,7 @@
             </Toolbar>
         </headerToolbar>
         <Table
-            id="TabelaReservas"
+            id="idTabelaReservas"
             width="auto"
             items="{TabelaReservas>/}">
             <columns>
@@ -73,7 +73,9 @@
                 </Column>
             </columns>
             <items>
-                <ColumnListItem>
+                <ColumnListItem
+                    type="Navigation"
+                    press=".aoClicarAbrirDetalhes" >
                     <cells>
                         <ObjectIdentifier
                             badgeNotes="true"

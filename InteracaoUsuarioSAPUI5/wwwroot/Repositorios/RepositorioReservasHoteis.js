@@ -4,21 +4,27 @@ sap.ui.define([
     "use strict";
 
     return {
-        obterTodos() {
-            const caminhoRotaObterTodos = '/api/Reserva';
+        async obterTodos(filtro="") {
+            const caminhoRotaObterTodos = `/api/Reserva?filtro=${filtro}`;
             const metodoObterTodos = 'GET';
 
-            return fetch(caminhoRotaObterTodos, { method: metodoObterTodos })
-                .then(response => response.json())
-                .catch(erro => console.log(erro.message))
+            try {
+                const response = await fetch(caminhoRotaObterTodos, { method: metodoObterTodos });
+                return await response.json();
+            } catch (erro) {
+                return console.log(erro.message);
+            }
         },
-        obterPorId(id) {
+        async obterPorId(id) {
             const caminhoRotaObterPorId = `/api/Reserva/${id}`;
             const metodoObterPorId = 'GET';
 
-            fetch(caminhoRotaObterPorId, { method: metodoObterPorId })
-                .then(response => response.json())
-                .catch(erro => console.log(erro.message))
+            try {
+                const response = await fetch(caminhoRotaObterPorId, { method: metodoObterPorId });
+                return await response.json();
+            } catch (erro) {
+                return console.log(erro.message);
+            }
         }
     }
 })

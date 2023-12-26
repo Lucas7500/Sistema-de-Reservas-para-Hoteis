@@ -60,12 +60,30 @@
                     "pattern": "",
                     "name": "overview",
                     "target": "overview"
+                },
+                {
+                    "pattern": "adicionar",
+                    "name": "adicionar",
+                    "target": "adicionar"
+                },
+                {
+                    "pattern": "detalhes",
+                    "name": "detalhes",
+                    "target": "detalhes"
                 }
             ],
             "targets": {
                 "overview": {
                     "id": "overview",
                     "name": "Overview"
+                },
+                "adicionar": {
+                    "id": "adicionar",
+                    "name": "Adicionar"
+                },
+                "detalhes": {
+                    "id": "detalhes",
+                    "name": "Detalhes"
                 }
             }
         },
