@@ -1,11 +1,10 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "../model/formatter",
-    "sap/ui/model/Filter",
-    "sap/ui/model/FilterOperator",
+    "sap/ui/model/json/JSONModel",
     "../Repositorios/RepositorioReservasHoteis",
     "sap/m/MessageToast"
-], (Controller, formatter, Filter, FilterOperator, RepositorioReservasHoteis, MessageToast) => {
+], (Controller, formatter, JSONModel, RepositorioReservasHoteis, MessageToast) => {
     "use strict";
 
     const caminhoRotaListagem = "reservas.hoteis.controller.Listagem";
@@ -20,7 +19,12 @@ sap.ui.define([
         },
 
         _aoCoincidirRota() {
-            RepositorioReservasHoteis.obterTodos(this.getView());
+            this._definirModelo();
+        },
+
+        _definirModelo() {
+            RepositorioReservasHoteis.obterTodos()
+                .then(response => this.getView().setModel(new JSONModel(response), "TabelaReservas"));
         },
 
         aoPesquisarFiltrarReservas(objetoPesquisa) {
