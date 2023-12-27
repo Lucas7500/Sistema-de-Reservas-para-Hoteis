@@ -2,8 +2,8 @@ sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "../model/formatter",
     "sap/ui/model/json/JSONModel",
-    "../Repositorios/RepositorioReservasHoteis",
-], (Controller, formatter, JSONModel, RepositorioReservasHoteis) => {
+    "../Repositorios/ReservaRepository",
+], (Controller, formatter, JSONModel, ReservaRepository) => {
     "use strict";
 
     const caminhoRotaListagem = "reservas.hoteis.controller.Listagem";
@@ -23,7 +23,7 @@ sap.ui.define([
         },
 
         _carregarLista() {
-            RepositorioReservasHoteis.obterTodos()
+            ReservaRepository.obterTodos()
                 .then(response => this.getView().setModel(new JSONModel(response), MODELO_LISTAGEM));
         },
 
@@ -31,7 +31,7 @@ sap.ui.define([
             const parametroQuery = "query";
             let stringFiltro = filtro.getParameter(parametroQuery);
 
-            RepositorioReservasHoteis.obterTodos(stringFiltro)
+            ReservaRepository.obterTodos(stringFiltro)
                 .then(response => this.getView().setModel(new JSONModel(response), MODELO_LISTAGEM));
         },
 
