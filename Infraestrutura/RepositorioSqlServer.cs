@@ -90,6 +90,7 @@ namespace Infraestrutura
                 using var connection = Connection();
                 string comandoCriar = @"INSERT INTO TabelaReservas
                 (Nome, Cpf, Telefone, Idade, Sexo, CheckIn, CheckOut, PrecoEstadia, PagamentoEfetuado)
+                OUTPUT INSERTED.ID
                 VALUES (@nome, @cpf, @telefone, @idade, @sexo, @checkin, @checkout, @precoestadia, @pagamentoefetuado)";
 
                 SqlCommand inserirReservaNaTabela = new(comandoCriar, connection);
@@ -104,7 +105,7 @@ namespace Infraestrutura
                 inserirReservaNaTabela.Parameters.AddWithValue("@precoestadia", reserva.PrecoEstadia.ToString().Replace(',', '.'));
                 inserirReservaNaTabela.Parameters.AddWithValue("@pagamentoefetuado", reserva.PagamentoEfetuado);
 
-                inserirReservaNaTabela.ExecuteNonQuery();
+                reserva.Id = Convert.ToInt32(inserirReservaNaTabela.ExecuteScalar());
             }
             catch
             {

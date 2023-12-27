@@ -3,8 +3,7 @@ sap.ui.define([
     "../model/formatter",
     "sap/ui/model/json/JSONModel",
     "../Repositorios/RepositorioReservasHoteis",
-	"sap/ui/core/routing/History"
-], (Controller, formatter, JSONModel, RepositorioReservasHoteis, History) => {
+], (Controller, formatter, JSONModel, RepositorioReservasHoteis) => {
     "use strict";
 
     const caminhoRotaListagem = "reservas.hoteis.controller.Listagem";
@@ -46,18 +45,6 @@ sap.ui.define([
             let rota = this.getOwnerComponent().getRouter();
             const paginaDetalhes = "detalhes";
             rota.navTo(paginaDetalhes);
-        },
-        
-        voltarPagina() {
-            const oHistory = History.getInstance();
-			const sPreviousHash = oHistory.getPreviousHash();
-
-			if (sPreviousHash !== undefined) {
-				window.history.go(-1);
-			} else {
-				const oRouter = this.getOwnerComponent().getRouter();
-				oRouter.navTo("overview", {}, true);
-            }
         }
     });
 });

@@ -26,7 +26,10 @@
         <Table
             id="idTabelaReservas"
             width="auto"
-            items="{TabelaReservas>/}">
+            items="{TabelaReservas>/}"
+            growing="true"
+            growingThreshold="9"
+            growingScrollToLoad="false">
             <columns>
                 <Column
                     hAlign="Center"
@@ -75,7 +78,7 @@
             <items>
                 <ColumnListItem
                     type="Navigation"
-                    press=".aoClicarAbrirDetalhes" >
+                    press=".aoClicarAbrirDetalhes">
                     <cells>
                         <ObjectIdentifier
                             badgeNotes="true"

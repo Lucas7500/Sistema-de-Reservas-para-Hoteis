@@ -28,8 +28,9 @@ namespace InteracaoUsuarioSAPUI5.Controllers
 
                 if (!string.IsNullOrEmpty(filtro))
                 {
-                    reservas.AddRange(_repositorio.ObterTodos().Where(reserva => reserva.Nome.Contains(filtro, StringComparison.OrdinalIgnoreCase) ||
-                                                                                    reserva.Cpf.Contains(filtro, StringComparison.OrdinalIgnoreCase)));
+                    reservas.AddRange(_repositorio.ObterTodos().Where(reserva => 
+                    reserva.Nome.Contains(filtro, StringComparison.OrdinalIgnoreCase) ||
+                    reserva.Cpf.Contains(filtro, StringComparison.OrdinalIgnoreCase)));
                 }
                 else
                 {

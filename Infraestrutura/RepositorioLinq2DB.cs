@@ -49,7 +49,7 @@ namespace Infraestrutura
             try
             {
                 using var conexaoLinq2Db = Connection();
-                conexaoLinq2Db.Insert(reserva);
+                reserva.Id = conexaoLinq2Db.InsertWithInt32Identity(reserva);
             }
             catch
             {
