@@ -9,7 +9,8 @@
             <Panel
                 class="sapUiResponsiveMargin"
                 width="auto"
-                accessibleRole="Region">
+                accessibleRole="Region"
+                stickyHeader="true">
                 <headerToolbar>
                     <Toolbar
                         style="Clear"
