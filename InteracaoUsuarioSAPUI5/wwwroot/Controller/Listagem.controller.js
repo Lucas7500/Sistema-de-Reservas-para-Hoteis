@@ -12,7 +12,7 @@ sap.ui.define([
     return Controller.extend(caminhoRotaListagem, {
         formatter: formatter,
         onInit() {
-            const minhaRota = 'overview';
+            const minhaRota = 'listagem';
             
             let rota = this.getOwnerComponent().getRouter();
             rota.getRoute(minhaRota).attachPatternMatched(this._aoCoincidirRota, this);

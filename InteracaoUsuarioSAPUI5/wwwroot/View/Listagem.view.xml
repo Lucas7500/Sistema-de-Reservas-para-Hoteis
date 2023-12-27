@@ -3,99 +3,102 @@
     xmlns="sap.m"
     xmlns:core="sap.ui.core"
     xmlns:mvc="sap.ui.core.mvc">
-    <Panel
-        class="sapUiResponsiveMargin"
-        width="auto"
-        expandable="{device>/system/phone}"
-        expanded="{= !${device>/system/phone} }"
-        accessibleRole="Region">
-        <headerToolbar>
-            <Toolbar
-                class="sapUiTinyMarginEnd">
-                <Button
-                    type="Emphasized"
-                    icon="sap-icon://add"
-                    text="{i18n>tituloBotaoAdicionar}"
-                    press=".aoClicarAbrirAdicionar" />
-                <ToolbarSpacer />
-                <SearchField
-                placeholder="{i18n>placeholderCampoPesquisaFiltro}"
-                    width="30%"
-                    search=".aoPesquisarFiltrarReservas" />
-            </Toolbar>
-        </headerToolbar>
-        <Table
-            id="idTabelaReservas"
-            width="auto"
-            items="{TabelaReservas>/}"
-            growing="true"
-            growingThreshold="9"
-            growingScrollToLoad="false">
-            <columns>
-                <Column
-                    hAlign="Center"
-                    width="5rem">
-                    <ObjectIdentifier title="{i18n>tituloColunaId}" />
-                </Column>
-                <Column
-                    hAlign="Center">
-                    <ObjectIdentifier title="{i18n>tituloColunaNome}" />
-                </Column>
-                <Column
-                    hAlign="Center">
-                    <ObjectIdentifier title="{i18n>tituloColunaCpf}" />
-                </Column>
-                <Column
-                    hAlign="Center">
-                    <ObjectIdentifier title="{i18n>tituloColunaTelefone}" />
-                </Column>
-                <Column
-                    hAlign="Center"
-                    width="4rem">
-                    <ObjectIdentifier title="{i18n>tituloColunaIdade}" />
-                </Column>
-                <Column
-                    hAlign="Center"
-                    width="5rem">
-                    <ObjectIdentifier title="{i18n>tituloColunaSexo}" />
-                </Column>
-                <Column
-                    hAlign="Center">
-                    <ObjectIdentifier title="{i18n>tituloColunaCheckIn}" />
-                </Column>
-                <Column
-                    hAlign="Center">
-                    <ObjectIdentifier title="{i18n>tituloColunaCheckOut}" />
-                </Column>
-                <Column
-                    hAlign="Center">
-                    <ObjectIdentifier title="{i18n>tituloColunaPrecoEstadia}" />
-                </Column>
-                <Column
-                    hAlign="Center"
-                    width="6rem">
-                    <ObjectIdentifier title="{i18n>tituloColunaPagamentoEfetuado}" />
-                </Column>
-            </columns>
-            <items>
-                <ColumnListItem
-                    type="Navigation"
-                    press=".aoClicarAbrirDetalhes">
-                    <cells>
-                        <ObjectIdentifier
-                            badgeNotes="true"
-                            title="{TabelaReservas>id}" />
-                        <ObjectIdentifier title="{TabelaReservas>nome}" />
-                        <ObjectIdentifier title="{TabelaReservas>cpf}" />
-                        <Text text="{TabelaReservas>telefone}" />
-                        <Text text="{TabelaReservas>idade}" />
-                        <Text
-                            text="{
+    <App id="app">
+        <Page title="{i18n>tituloTelaListagem}">
+            <Panel
+                title="aaaaaa"
+                class="sapUiResponsiveMargin"
+                width="auto"
+                expandable="{device>/system/phone}"
+                expanded="{= !${device>/system/phone} }"
+                accessibleRole="Region">
+                <headerToolbar>
+                    <Toolbar
+                        class="sapUiTinyMarginEnd">
+                        <Button
+                            type="Emphasized"
+                            icon="sap-icon://add"
+                            text="{i18n>tituloBotaoAdicionar}"
+                            press=".aoClicarAbrirAdicionar" />
+                        <ToolbarSpacer />
+                        <SearchField
+                            placeholder="{i18n>placeholderCampoPesquisaFiltro}"
+                            width="30%"
+                            search=".aoPesquisarFiltrarReservas" />
+                    </Toolbar>
+                </headerToolbar>
+                <Table
+                    id="idTabelaReservas"
+                    width="auto"
+                    items="{TabelaReservas>/}"
+                    growing="true"
+                    growingThreshold="9"
+                    growingScrollToLoad="false">
+                    <columns>
+                        <Column
+                            hAlign="Center"
+                            width="5rem">
+                            <ObjectIdentifier title="{i18n>tituloColunaId}" />
+                        </Column>
+                        <Column
+                            hAlign="Center">
+                            <ObjectIdentifier title="{i18n>tituloColunaNome}" />
+                        </Column>
+                        <Column
+                            hAlign="Center">
+                            <ObjectIdentifier title="{i18n>tituloColunaCpf}" />
+                        </Column>
+                        <Column
+                            hAlign="Center">
+                            <ObjectIdentifier title="{i18n>tituloColunaTelefone}" />
+                        </Column>
+                        <Column
+                            hAlign="Center"
+                            width="4rem">
+                            <ObjectIdentifier title="{i18n>tituloColunaIdade}" />
+                        </Column>
+                        <Column
+                            hAlign="Center"
+                            width="5rem">
+                            <ObjectIdentifier title="{i18n>tituloColunaSexo}" />
+                        </Column>
+                        <Column
+                            hAlign="Center">
+                            <ObjectIdentifier title="{i18n>tituloColunaCheckIn}" />
+                        </Column>
+                        <Column
+                            hAlign="Center">
+                            <ObjectIdentifier title="{i18n>tituloColunaCheckOut}" />
+                        </Column>
+                        <Column
+                            hAlign="Center">
+                            <ObjectIdentifier title="{i18n>tituloColunaPrecoEstadia}" />
+                        </Column>
+                        <Column
+                            hAlign="Center"
+                            width="6rem">
+                            <ObjectIdentifier title="{i18n>tituloColunaPagamentoEfetuado}" />
+                        </Column>
+                    </columns>
+                    <items>
+                        <ColumnListItem
+                            type="Navigation"
+                            press=".aoClicarAbrirDetalhes">
+                            <cells>
+                                <ObjectIdentifier
+                                    badgeNotes="true"
+                                    title="{TabelaReservas>id}" />
+                                <ObjectIdentifier title="{TabelaReservas>nome}" />
+                                <ObjectIdentifier title="{TabelaReservas>cpf}" />
+                                <Text text="{TabelaReservas>telefone}" />
+                                <Text text="{TabelaReservas>idade}" />
+                                <Text
+                                    text="{
                             path: 'TabelaReservas>sexo',
                             formatter: '.formatter.formataSexo'
                         }" />
-                        <Text
-                            text="{
+                                <Text
+                                    text="{
                                 path: 'TabelaReservas>checkIn',
                                 type: 'sap.ui.model.type.Date',
                             formatOptions: {
@@ -105,8 +108,8 @@
                                 }
                             }
                         }" />
-                        <Text
-                            text="{
+                                <Text
+                                    text="{
                                 path: 'TabelaReservas>checkOut',
                                 type: 'sap.ui.model.type.Date',
                             formatOptions: {
@@ -116,19 +119,21 @@
                                 }
                             }
                         }" />
-                        <Text
-                            text="{
+                                <Text
+                                    text="{
                             path: 'TabelaReservas>precoEstadia',
                             formatter: '.formatter.formataPrecoEstadia'
                         }" />
-                        <Text
-                            text="{
+                                <Text
+                                    text="{
                             path: 'TabelaReservas>pagamentoEfetuado',
                             formatter: '.formatter.formataPagamentoEfetuado'
                         }" />
-                    </cells>
-                </ColumnListItem>
-            </items>
-        </Table>
-    </Panel>
+                            </cells>
+                        </ColumnListItem>
+                    </items>
+                </Table>
+            </Panel>
+        </Page>
+    </App>
 </mvc:View>

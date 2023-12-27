@@ -42,7 +42,7 @@
             }
         },
         "rootView": {
-            "viewName": "reservas.hoteis.view.App",
+            "viewName": "reservas.hoteis.view.Listagem",
             "type": "XML",
             "id": "app"
         },
@@ -58,8 +58,8 @@
             "routes": [
                 {
                     "pattern": "",
-                    "name": "overview",
-                    "target": "overview"
+                    "name": "listagem",
+                    "target": "listagem"
                 },
                 {
                     "pattern": "adicionar",
@@ -73,9 +73,9 @@
                 }
             ],
             "targets": {
-                "overview": {
-                    "id": "overview",
-                    "name": "Overview"
+                "listagem": {
+                    "id": "listagem",
+                    "name": "Listagem"
                 },
                 "adicionar": {
                     "id": "adicionar",
