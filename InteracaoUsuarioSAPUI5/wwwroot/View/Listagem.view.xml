@@ -19,6 +19,7 @@
                     press=".aoClicarAbrirAdicionar" />
                 <ToolbarSpacer />
                 <SearchField
+                placeholder="{i18n>placeholderCampoPesquisaFiltro}"
                     width="30%"
                     search=".aoPesquisarFiltrarReservas" />
             </Toolbar>
@@ -71,7 +72,8 @@
                     <ObjectIdentifier title="{i18n>tituloColunaPrecoEstadia}" />
                 </Column>
                 <Column
-                    hAlign="Center">
+                    hAlign="Center"
+                    width="6rem">
                     <ObjectIdentifier title="{i18n>tituloColunaPagamentoEfetuado}" />
                 </Column>
             </columns>
