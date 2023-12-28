@@ -7,15 +7,15 @@ sap.ui.define([
     "use strict";
 
     const caminhoRotaListagem = "reservas.hoteis.controller.Listagem";
-    const MODELO_LISTAGEM = "TabelaReservas";
+    const MODELO_LISTA = "TabelaReservas";
 
     return Controller.extend(caminhoRotaListagem, {
         formatter: formatter,
         onInit() {
-            const minhaRota = 'listagem';
-            
+            const rotaLista = 'listagem';
+
             let rota = this.getOwnerComponent().getRouter();
-            rota.getRoute(minhaRota).attachPatternMatched(this._aoCoincidirRota, this);
+            rota.getRoute(rotaLista).attachPatternMatched(this._aoCoincidirRota, this);
         },
 
         _aoCoincidirRota() {
@@ -24,7 +24,8 @@ sap.ui.define([
 
         _carregarLista() {
             ReservaRepository.obterTodos()
-                .then(response => this.getView().setModel(new JSONModel(response), MODELO_LISTAGEM));
+                .then(async response => await response.json())
+                .then(response => this.getView().setModel(new JSONModel(response), MODELO_LISTA));
         },
 
         aoPesquisarFiltrarReservas(filtro) {
@@ -32,19 +33,20 @@ sap.ui.define([
             let stringFiltro = filtro.getParameter(parametroQuery);
 
             ReservaRepository.obterTodos(stringFiltro)
-                .then(response => this.getView().setModel(new JSONModel(response), MODELO_LISTAGEM));
+                .then(async response => await response.json())
+                .then(response => this.getView().setModel(new JSONModel(response), MODELO_LISTA));
         },
 
         aoClicarAbrirAdicionar() {
-            let rota = this.getOwnerComponent().getRouter();
+            let rotaAdicionar = this.getOwnerComponent().getRouter();
             const paginaAdicionar = "adicionar";
-            rota.navTo(paginaAdicionar);
+            rotaAdicionar.navTo(paginaAdicionar);
         },
 
         aoClicarAbrirDetalhes() {
-            let rota = this.getOwnerComponent().getRouter();
+            let rotaDetalhes = this.getOwnerComponent().getRouter();
             const paginaDetalhes = "detalhes";
-            rota.navTo(paginaDetalhes);
+            rotaDetalhes.navTo(paginaDetalhes);
         }
     });
 });

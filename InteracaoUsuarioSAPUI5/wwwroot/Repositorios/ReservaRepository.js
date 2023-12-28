@@ -1,27 +1,25 @@
-sap.ui.define([
-    "sap/ui/model/json/JSONModel"
-],(JSONModel) => {
+sap.ui.define([],() => {
     "use strict";
 
+    const endpointReservaController = '/api/Reserva';
+
     return {
-        async obterTodos(filtro="") {
-            const caminhoRotaObterTodos = `/api/Reserva?filtro=${filtro}`;
-            const metodoObterTodos = 'GET';
+         async obterTodos(filtro="") {
+            let filtroVazio = "";
+            let metodoObterTodos = (filtro == filtroVazio);
+            let caminhoRotaObterTodos = metodoObterTodos ? `${endpointReservaController}` : `${endpointReservaController}?filtro=${filtro}`;
 
             try {
-                const response = await fetch(caminhoRotaObterTodos, { method: metodoObterTodos });
-                return await response.json();
+                return await fetch(caminhoRotaObterTodos);
             } catch (erro) {
                 return console.log(erro.message);
             }
         },
         async obterPorId(id) {
-            const caminhoRotaObterPorId = `/api/Reserva/${id}`;
-            const metodoObterPorId = 'GET';
+            const caminhoRotaObterPorId = `${endpointReservaController}/${id}`;
 
             try {
-                const response = await fetch(caminhoRotaObterPorId, { method: metodoObterPorId });
-                return await response.json();
+                return await fetch(caminhoRotaObterPorId);
             } catch (erro) {
                 return console.log(erro.message);
             }
