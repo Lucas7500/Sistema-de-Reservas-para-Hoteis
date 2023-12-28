@@ -14,8 +14,9 @@ sap.ui.define([
 			if (sPreviousHash !== undefined) {
 				window.history.go(-1);
 			} else {
+                const rotaLista = "listagem";
 				const oRouter = this.getOwnerComponent().getRouter();
-				oRouter.navTo("overview", {}, true);
+				oRouter.navTo(rotaLista, {}, true);
             }
         }
     })

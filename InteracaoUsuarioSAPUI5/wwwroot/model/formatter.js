@@ -8,13 +8,13 @@ sap.ui.define([], () => {
             const textoSexoMasculino = "sexo0";
             const textoSexoFeminino = "sexo1";
 
-            const resourceBundle = this.getOwnerComponent().getModel(PARAMETRO_MODEL).getResourceBundle();
+            const resourceBundle = this.getOwnerComponent()
+                .getModel(PARAMETRO_MODEL)
+                .getResourceBundle();
 
-            let valorSexoMasculino = 0;
-            let textoSexo = (sexo == valorSexoMasculino) ? textoSexoMasculino : textoSexoFeminino;
-
-            return resourceBundle.getText(textoSexo);
+            return resourceBundle.getText(sexo ? textoSexoFeminino : textoSexoMasculino)
         },
+
         formataPrecoEstadia(precoEstadia) {
             const duasCasasDecimais = 2;
             const charPonto = '.';
@@ -24,16 +24,16 @@ sap.ui.define([], () => {
 
             return stringPrecoEstadia.replace(charPonto, charVirgula);
         },
+
         formataPagamentoEfetuado(pagamentoEfetuado) {
             const textoPagamentoFoiEfetuado = "pagamentoEfetuadoTrue";
             const textoPagamentoNaoFoiEfetuado = "pagamentoEfetuadoFalse";
 
-            const resourceBundle = this.getOwnerComponent().getModel(PARAMETRO_MODEL).getResourceBundle();
+            const resourceBundle = this.getOwnerComponent()
+                .getModel(PARAMETRO_MODEL)
+                .getResourceBundle();
 
-            let valorPagamentoFoiEfetuado = true;
-            let textoPagamentoEfetuado = (pagamentoEfetuado == valorPagamentoFoiEfetuado) ? textoPagamentoFoiEfetuado : textoPagamentoNaoFoiEfetuado;
-
-            return resourceBundle.getText(textoPagamentoEfetuado);
+            return resourceBundle.getText(pagamentoEfetuado ? textoPagamentoFoiEfetuado : textoPagamentoNaoFoiEfetuado);
         }
     }
 });

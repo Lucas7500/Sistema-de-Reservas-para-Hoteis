@@ -23,30 +23,49 @@ sap.ui.define([
         },
 
         _carregarLista() {
-            ReservaRepository.obterTodos()
-                .then(async response => await response.json())
-                .then(response => this.getView().setModel(new JSONModel(response), MODELO_LISTA));
+            try {
+                ReservaRepository.obterTodos()
+                    .then(response => response.json())
+                    .then(response => this.getView().setModel(new JSONModel(response), MODELO_LISTA));
+            } catch (error) {
+                console.error(error);    
+            }
         },
-
+        
         aoPesquisarFiltrarReservas(filtro) {
-            const parametroQuery = "query";
-            let stringFiltro = filtro.getParameter(parametroQuery);
-
-            ReservaRepository.obterTodos(stringFiltro)
-                .then(async response => await response.json())
+            try {
+                const parametroQuery = "query";
+                let stringFiltro = filtro.getParameter(parametroQuery);
+                
+                ReservaRepository.obterTodos(stringFiltro)
+                .then(response => response.json())
                 .then(response => this.getView().setModel(new JSONModel(response), MODELO_LISTA));
+            } catch (error) {
+                console.error(error);    
+            }
         },
-
+        
         aoClicarAbrirAdicionar() {
-            let rotaAdicionar = this.getOwnerComponent().getRouter();
-            const paginaAdicionar = "adicionar";
-            rotaAdicionar.navTo(paginaAdicionar);
+            try {
+                let rota = this.getOwnerComponent().getRouter();
+                const rotaAdicionar = "adicionar";
+                rota.navTo(rotaAdicionar);
+            } catch (error) {
+                console.error(error);    
+            }
         },
-
-        aoClicarAbrirDetalhes() {
-            let rotaDetalhes = this.getOwnerComponent().getRouter();
-            const paginaDetalhes = "detalhes";
-            rotaDetalhes.navTo(paginaDetalhes);
+        
+        aoClicarAbrirDetalhes(linhaReserva) {
+            try {
+                const reserva = linhaReserva.getSource();
+                let rota = this.getOwnerComponent().getRouter();
+                const rotaDetalhes = "detalhes";
+                rota.navTo(rotaDetalhes, {
+                    id: window.encodeURIComponent(reserva.getBindingContext("TabelaReservas").getPath().substr(1))
+                });
+            } catch (error) {
+                console.error(error);    
+            }
         }
     });
 });
