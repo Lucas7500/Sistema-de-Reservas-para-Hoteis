@@ -25,36 +25,49 @@ sap.ui.define([
         _carregarLista() {
             try {
                 ReservaRepository.obterTodos()
-                    .then(response => response.json())
-                    .then(response => this.getView().setModel(new JSONModel(response), MODELO_LISTA));
+                    .then(response => {
+                        const statusOk = 200;
+                        
+                        if (response == statusOk) {
+                            response.json();
+                        } else {
+                            return Promise.reject(response);
+                        }
+                    })
+                    .then(response => this.getView().setModel(new JSONModel(response), MODELO_LISTA))
+                    .catch((erro) => {
+                        //mostrar o erro em tela;
+                        console.log(erro.status)
+                        // console.log("Erro: ")
+                    });
             } catch (error) {
-                console.error(error);    
+                console.error(error);
             }
         },
-        
+
         aoPesquisarFiltrarReservas(filtro) {
             try {
                 const parametroQuery = "query";
                 let stringFiltro = filtro.getParameter(parametroQuery);
-                
+
                 ReservaRepository.obterTodos(stringFiltro)
-                .then(response => response.json())
-                .then(response => this.getView().setModel(new JSONModel(response), MODELO_LISTA));
+                    .then(response => response.json())
+                    .then(response => this.getView().setModel(new JSONModel(response), MODELO_LISTA));
             } catch (error) {
-                console.error(error);    
+                console.error(error);
             }
         },
-        
+
         aoClicarAbrirAdicionar() {
             try {
                 let rota = this.getOwnerComponent().getRouter();
                 const rotaAdicionar = "adicionar";
                 rota.navTo(rotaAdicionar);
             } catch (error) {
-                console.error(error);    
+                console.error(error);
             }
         },
-        
+
         aoClicarAbrirDetalhes(linhaReserva) {
             try {
                 const reserva = linhaReserva.getSource();
@@ -64,7 +77,7 @@ sap.ui.define([
                     id: window.encodeURIComponent(reserva.getBindingContext("TabelaReservas").getPath().substr(1))
                 });
             } catch (error) {
-                console.error(error);    
+                console.error(error);
             }
         }
     });

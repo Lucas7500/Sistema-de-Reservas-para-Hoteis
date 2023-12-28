@@ -23,7 +23,7 @@ namespace InteracaoUsuarioForms
         {
             try
             {
-                if (reserva.Id == ValoresPadrao.ID_NULO)
+                if (reserva.Id == ValoresPadrao.ID_ZERO)
                 {
                     _repositorio.Criar(reserva);
                     MessageBox.Show("Reserva foi criada com Sucesso!");
