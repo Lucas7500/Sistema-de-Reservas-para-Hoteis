@@ -10,7 +10,7 @@ sap.ui.define([
         },
 
         init() {
-            UIComponent.prototype.init.apply(this, arguments);
+            UIComponent.prototype.init.apply(this);
             this.getRouter().initialize();
         }
     });
