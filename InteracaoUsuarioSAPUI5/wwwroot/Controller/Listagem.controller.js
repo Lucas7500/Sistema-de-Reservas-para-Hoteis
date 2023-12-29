@@ -43,7 +43,7 @@ sap.ui.define([
                     .then(response => this.getView().setModel(new JSONModel(response), MODELO_LISTA))
                     .catch(async erro => {
                         let mensagemErro = await erro.text();
-
+                        
                         console.error(erro);
                         this._mostrarMensagemErro(mensagemErro);
                     })

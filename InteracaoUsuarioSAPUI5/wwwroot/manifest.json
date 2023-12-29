@@ -42,7 +42,7 @@
             }
         },
         "rootView": {
-            "viewName": "reservas.hoteis.view.Listagem",
+            "viewName": "reservas.hoteis.view.App",
             "type": "XML",
             "id": "app"
         },
