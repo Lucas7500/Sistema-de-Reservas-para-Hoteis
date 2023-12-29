@@ -122,10 +122,16 @@ sap.ui.define([
         aoClicarAbrirDetalhes(linhaReserva) {
             try {
                 const reserva = linhaReserva.getSource();
+                
+                let indiceReserva = window
+                                    .encodeURIComponent(reserva.getBindingContext("TabelaReservas")
+                                    .getPath()
+                                    .substr(1));
                 let rota = this.getOwnerComponent().getRouter();
+                
                 const rotaDetalhes = "detalhes";
                 rota.navTo(rotaDetalhes, {
-                    id: window.encodeURIComponent(reserva.getBindingContext("TabelaReservas").getPath().substr(1))
+                    id: reserva.getBindingContext("TabelaReservas").oModel.oData[indiceReserva].id
                 });
             } catch (erro) {
                 console.error(erro);
