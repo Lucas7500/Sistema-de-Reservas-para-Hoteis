@@ -5,6 +5,7 @@ using FluentValidation;
 using Infraestrutura;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
+using System.Net;
 namespace InteracaoUsuarioSAPUI5.Controllers
 {
     [Route("api/[controller]")]
@@ -24,7 +25,7 @@ namespace InteracaoUsuarioSAPUI5.Controllers
         }
 
         [HttpGet]
-        public OkObjectResult ObterTodos([FromQuery] string? filtro)
+        public IActionResult ObterTodos([FromQuery] string? filtro)
         {
             try
             {
@@ -42,12 +43,12 @@ namespace InteracaoUsuarioSAPUI5.Controllers
             }
             catch (Exception erro)
             {
-                throw new Exception(message: erro.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, erro.Message);
             }
         }
 
         [HttpGet("{id}")]
-        public OkObjectResult ObterPorId([FromRoute] int id)
+        public IActionResult ObterPorId([FromRoute] int id)
         {
             try
             {
@@ -55,12 +56,12 @@ namespace InteracaoUsuarioSAPUI5.Controllers
             }
             catch (Exception erro)
             {
-                throw new Exception(message: erro.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, erro.Message);
             }
         }
 
         [HttpPost]
-        public CreatedResult CriarReserva([FromBody][Required] Reserva reserva)
+        public IActionResult CriarReserva([FromBody][Required] Reserva reserva)
         {
             try
             {
@@ -72,12 +73,12 @@ namespace InteracaoUsuarioSAPUI5.Controllers
             }
             catch (Exception erro)
             {
-                throw new Exception(message: erro.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, erro.Message);
             }
         }
 
         [HttpPut("{id}")]
-        public NoContentResult AtualizarReserva([FromBody][Required] Reserva reserva)
+        public IActionResult AtualizarReserva([FromBody][Required] Reserva reserva)
         {
             try
             {
@@ -88,12 +89,12 @@ namespace InteracaoUsuarioSAPUI5.Controllers
             }
             catch (Exception erro)
             {
-                throw new Exception(message: erro.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, erro.Message);
             }
         }
 
         [HttpDelete("{id}")]
-        public NoContentResult RemoverReserva([FromRoute] int id)
+        public IActionResult RemoverReserva([FromRoute] int id)
         {
             try
             {
@@ -102,7 +103,7 @@ namespace InteracaoUsuarioSAPUI5.Controllers
             }
             catch (Exception erro)
             {
-                throw new Exception(message: erro.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, erro.Message);
             }
         }
     }

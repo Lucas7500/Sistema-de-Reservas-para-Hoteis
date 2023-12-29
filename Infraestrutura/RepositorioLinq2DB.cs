@@ -18,69 +18,35 @@ namespace Infraestrutura
 
         public List<Reserva> ObterTodos()
         {
-            try
-            { 
-                List<Reserva> listaReservas = new();
-                using var conexaoLinq2Db = Connection();
-                listaReservas = conexaoLinq2Db.GetTable<Reserva>().ToList();
-                return listaReservas;
-            }
-            catch
-            {
-                throw new Exception(message: MensagemExcessao.ERRO_OBTER_TODOS_BD);
-            }
+            using var conexaoLinq2Db = Connection();
+            List<Reserva> listaReservas = new();
+            listaReservas = conexaoLinq2Db.GetTable<Reserva>().ToList();
+
+            return listaReservas;
         }
 
         public Reserva ObterPorId(int id)
         {
-            try
-            {
-                using var conexaoLinq2Db = Connection();
-                return conexaoLinq2Db.GetTable<Reserva>().First(x => x.Id == id);
-            }
-            catch
-            {
-                throw new Exception(message: MensagemExcessao.ERRO_OBTER_POR_ID_BD);
-            }
+            using var conexaoLinq2Db = Connection();
+            return conexaoLinq2Db.GetTable<Reserva>().First(x => x.Id == id);
         }
 
         public void Criar(Reserva reserva)
         {
-            try
-            {
-                using var conexaoLinq2Db = Connection();
-                reserva.Id = conexaoLinq2Db.InsertWithInt32Identity(reserva);
-            }
-            catch
-            {
-                throw new Exception(message: MensagemExcessao.ERRO_CRIAR_BD);
-            }
+            using var conexaoLinq2Db = Connection();
+            reserva.Id = conexaoLinq2Db.InsertWithInt32Identity(reserva);
         }
 
         public void Atualizar(Reserva copiaReserva)
         {
-            try
-            {
-                using var conexaoLinq2Db = Connection();
-                conexaoLinq2Db.Update(copiaReserva);
-            }
-            catch
-            {
-                throw new Exception(message: MensagemExcessao.ERRO_ATUALIZAR_BD);
-            }
+            using var conexaoLinq2Db = Connection();
+            conexaoLinq2Db.Update(copiaReserva);
         }
 
         public void Remover(int id)
         {
-            try
-            {
-                using var conexaoLinq2Db = Connection();
-                conexaoLinq2Db.Delete(ObterPorId(id));
-            }
-            catch
-            {
-                throw new Exception(message: MensagemExcessao.ERRO_REMOVER_BD);
-            }
+            using var conexaoLinq2Db = Connection();
+            conexaoLinq2Db.Delete(ObterPorId(id));
         }
     }
 }

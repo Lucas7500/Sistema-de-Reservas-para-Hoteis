@@ -18,7 +18,7 @@ sap.ui.define([
         formatter: formatter,
         onInit() {
             const rotaLista = 'listagem';
-            alert("aaaaaaaaa")
+
             let rota = this.getOwnerComponent().getRouter();
             rota.getRoute(rotaLista).attachPatternMatched(this._aoCoincidirRota, this);
         },
@@ -41,8 +41,11 @@ sap.ui.define([
                         }
                     })
                     .then(response => this.getView().setModel(new JSONModel(response), MODELO_LISTA))
-                    .catch(erro => {
-                        this._mostrarMensagemErro();
+                    .catch(async erro => {
+                        let mensagemErro = await erro.text();
+
+                        console.error(erro);
+                        this._mostrarMensagemErro(mensagemErro);
                     })
             }
             catch (erro) {
@@ -50,17 +53,18 @@ sap.ui.define([
             }
         },
 
-        _mostrarMensagemErro() {
+        _mostrarMensagemErro(mensagemErro) {
             var ButtonType = mobileLibrary.ButtonType;
             var DialogType = mobileLibrary.DialogType;
             var ValueState = coreLibrary.ValueState;
+            const tituloDialog = "Erro";
 
             if (!this.oErrorMessageDialog) {
                 this.oErrorMessageDialog = new Dialog({
                     type: DialogType.Message,
-                    title: "Error",
+                    title: tituloDialog,
                     state: ValueState.Warning,
-                    content: new Text({ text: "The only error you can make is to not even try." }),
+                    content: new Text({ text: mensagemErro }),
                     beginButton: new Button({
                         type: ButtonType.Emphasized,
                         text: "OK",
