@@ -1,6 +1,6 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
-	"sap/ui/core/routing/History"
+    "sap/ui/core/routing/History"
 ], (Controller, History) => {
     "use strict";
 
@@ -9,14 +9,14 @@ sap.ui.define([
     return Controller.extend(caminhoRotaAdicionar, {
         voltarPagina() {
             const oHistory = History.getInstance();
-			const sPreviousHash = oHistory.getPreviousHash();
+            const sPreviousHash = oHistory.getPreviousHash();
 
-			if (sPreviousHash !== undefined) {
-				window.history.go(-1);
-			} else {
+            if (sPreviousHash !== undefined) {
+                window.history.go(-1);
+            } else {
                 const rotaLista = "listagem";
-				const oRouter = this.getOwnerComponent().getRouter();
-				oRouter.navTo(rotaLista, {}, true);
+                const oRouter = this.getOwnerComponent().getRouter();
+                oRouter.navTo(rotaLista, {}, true);
             }
         }
     })

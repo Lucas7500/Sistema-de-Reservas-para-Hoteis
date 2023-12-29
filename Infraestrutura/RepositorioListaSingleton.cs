@@ -1,5 +1,6 @@
 ﻿using Dominio;
 using Dominio.Constantes;
+using System.Linq;
 
 namespace Infraestrutura
 {
@@ -14,16 +15,15 @@ namespace Infraestrutura
 
         public Reserva ObterPorId(int id)
         {
-            Reserva reservaSelecionada = new();
-            reservaSelecionada = _listaReservas.First(x => x.Id == id);
+            var reserva = _listaReservas.FirstOrDefault(x => x.Id == id);
 
-            return reservaSelecionada;
+            return reserva;
         }
 
-        public void Criar(Reserva reserva)
+        public void Criar(Reserva reservaParaCriacao)
         {
-            reserva.Id = ReservaSingleton.IncrementarId();
-            _listaReservas.Add(reserva);
+            reservaParaCriacao.Id = ReservaSingleton.IncrementarId();
+            _listaReservas.Add(reservaParaCriacao);
         }
         public void Atualizar(Reserva copiaReserva)
         {

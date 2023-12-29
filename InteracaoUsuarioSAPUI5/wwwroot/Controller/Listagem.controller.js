@@ -11,10 +11,10 @@ sap.ui.define([
 ], (Controller, formatter, JSONModel, ReservaRepository, coreLibrary, Dialog, Button, mobileLibrary, Text) => {
     "use strict";
 
-    const caminhoRotaListagem = "reservas.hoteis.controller.Listagem";
+    const CAMINHO_ROTA_LISTAGEM = "reservas.hoteis.controller.Listagem";
     const MODELO_LISTA = "TabelaReservas";
 
-    return Controller.extend(caminhoRotaListagem, {
+    return Controller.extend(CAMINHO_ROTA_LISTAGEM, {
         formatter: formatter,
         onInit() {
             const rotaLista = 'listagem';
@@ -43,13 +43,14 @@ sap.ui.define([
                     .then(response => this.getView().setModel(new JSONModel(response), MODELO_LISTA))
                     .catch(async erro => {
                         let mensagemErro = await erro.text();
-                        
+
                         console.error(erro);
                         this._mostrarMensagemErro(mensagemErro);
                     })
             }
             catch (erro) {
                 console.error(erro);
+                this._mostrarMensagemErro(erro.message);
             }
         },
 
@@ -84,10 +85,26 @@ sap.ui.define([
                 let stringFiltro = filtro.getParameter(parametroQuery);
 
                 ReservaRepository.obterTodos(stringFiltro)
-                    .then(response => response.json())
-                    .then(response => this.getView().setModel(new JSONModel(response), MODELO_LISTA));
-            } catch (error) {
-                console.error(error);
+                    .then(response => {
+                        const statusOk = 200
+
+                        if (response.status == statusOk) {
+                            return response.json();
+                        }
+                        else {
+                            return Promise.reject(response);
+                        }
+                    })
+                    .then(response => this.getView().setModel(new JSONModel(response), MODELO_LISTA))
+                    .catch(async erro => {
+                        let mensagemErro = await erro.text();
+
+                        console.error(erro);
+                        this._mostrarMensagemErro(mensagemErro);
+                    })
+            } catch (erro) {
+                console.error(erro);
+                this._mostrarMensagemErro(erro.message);
             }
         },
 
@@ -96,8 +113,9 @@ sap.ui.define([
                 let rota = this.getOwnerComponent().getRouter();
                 const rotaAdicionar = "adicionar";
                 rota.navTo(rotaAdicionar);
-            } catch (error) {
-                console.error(error);
+            } catch (erro) {
+                console.error(erro);
+                this._mostrarMensagemErro(erro.message);
             }
         },
 
@@ -109,8 +127,9 @@ sap.ui.define([
                 rota.navTo(rotaDetalhes, {
                     id: window.encodeURIComponent(reserva.getBindingContext("TabelaReservas").getPath().substr(1))
                 });
-            } catch (error) {
-                console.error(error);
+            } catch (erro) {
+                console.error(erro);
+                this._mostrarMensagemErro(erro.message);
             }
         }
     });
