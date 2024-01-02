@@ -10,12 +10,15 @@ sap.ui.define([
 
     return Controller.extend(caminhoRotaDetalhes, {
         onInit() {
+            const rotaDetalhes = 'detalhes';
+
             let rota = this.getOwnerComponent().getRouter();
-            rota.getRoute('detalhes').attachPatternMatched(this._aoCoincidirRota, this);
+            rota.getRoute(rotaDetalhes).attachPatternMatched(this._aoCoincidirRota, this);
         },
 
         _aoCoincidirRota(oEvent) {
-            let idReserva = oEvent.getParameter("arguments").id;
+            const parametroArgumentos = "arguments";
+            let idReserva = oEvent.getParameter(parametroArgumentos).id;
             
             ReservaRepository.obterPorId(idReserva)
             .then(response => response.json())
@@ -30,6 +33,7 @@ sap.ui.define([
                 window.history.go(-1);
             } else {
                 const rotaLista = "listagem";
+                
                 const oRouter = this.getOwnerComponent().getRouter();
                 oRouter.navTo(rotaLista, {}, true);
             }

@@ -61,6 +61,7 @@ sap.ui.define([
             const tituloDialog = "Erro";
 
             if (!this.oErrorMessageDialog) {
+                const textoBotao = "OK";
                 this.oErrorMessageDialog = new Dialog({
                     type: DialogType.Message,
                     title: tituloDialog,
@@ -68,7 +69,7 @@ sap.ui.define([
                     content: new Text({ text: mensagemErro }),
                     beginButton: new Button({
                         type: ButtonType.Emphasized,
-                        text: "OK",
+                        text: textoBotao,
                         press: function () {
                             this.oErrorMessageDialog.close();
                         }.bind(this)
