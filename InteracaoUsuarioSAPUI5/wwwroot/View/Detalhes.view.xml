@@ -2,10 +2,27 @@
     controllerName="reservas.hoteis.controller.Detalhes"
     xmlns="sap.m"
     xmlns:mvc="sap.ui.core.mvc">
-    <Page
-        title="{i18n>tituloDetalhes}"
-        showNavButton="true"
-        navButtonPress=".voltarPagina">
+    <Page>
+        <customHeader>
+            <Toolbar>
+                <Button
+                    icon="sap-icon://nav-back"
+                    title="{i18n>tituloDetalhes}"
+                    press=".voltarPagina" 
+                    type="Transparent" />
+                <ObjectIdentifier title="{i18n>tituloDetalhes}" />
+                <ToolbarSpacer />
+                <Button
+                    icon="sap-icon://edit"
+                    text="{i18n>tituloBotaoEditar}"
+                    class="sapUiTinyMargin"
+                    type="Transparent" />
+                <Button
+                    icon="sap-icon://delete"
+                    text="{i18n>tituloBotaoRemover}"
+                    type="Transparent" />
+            </Toolbar>
+        </customHeader>
         <Panel
             class="sapUiSmallMargin"
             backgroundDesign="Transparent">
