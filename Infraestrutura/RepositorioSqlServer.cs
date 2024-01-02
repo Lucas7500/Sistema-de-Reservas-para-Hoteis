@@ -68,7 +68,7 @@ namespace Infraestrutura
             return reservaSelecionada;
         }
 
-        public void Criar(Reserva reserva)
+        public void Criar(Reserva reservaParaCriacao)
         {
             using var connection = Connection();
             string comandoCriar = @"INSERT INTO TabelaReservas
@@ -78,20 +78,20 @@ namespace Infraestrutura
 
             SqlCommand inserirReservaNaTabela = new(comandoCriar, connection);
 
-            inserirReservaNaTabela.Parameters.AddWithValue("@nome", reserva.Nome);
-            inserirReservaNaTabela.Parameters.AddWithValue("@cpf", reserva.Cpf);
-            inserirReservaNaTabela.Parameters.AddWithValue("@telefone", reserva.Telefone);
-            inserirReservaNaTabela.Parameters.AddWithValue("@idade", reserva.Idade);
-            inserirReservaNaTabela.Parameters.AddWithValue("@sexo", reserva.Sexo);
-            inserirReservaNaTabela.Parameters.AddWithValue("@checkin", reserva.CheckIn.Date.ToString("dd-MM-yyyy"));
-            inserirReservaNaTabela.Parameters.AddWithValue("@checkout", reserva.CheckOut.Date.ToString("dd-MM-yyyy"));
-            inserirReservaNaTabela.Parameters.AddWithValue("@precoestadia", reserva.PrecoEstadia.ToString().Replace(',', '.'));
-            inserirReservaNaTabela.Parameters.AddWithValue("@pagamentoefetuado", reserva.PagamentoEfetuado);
+            inserirReservaNaTabela.Parameters.AddWithValue("@nome", reservaParaCriacao.Nome);
+            inserirReservaNaTabela.Parameters.AddWithValue("@cpf", reservaParaCriacao.Cpf);
+            inserirReservaNaTabela.Parameters.AddWithValue("@telefone", reservaParaCriacao.Telefone);
+            inserirReservaNaTabela.Parameters.AddWithValue("@idade", reservaParaCriacao.Idade);
+            inserirReservaNaTabela.Parameters.AddWithValue("@sexo", reservaParaCriacao.Sexo);
+            inserirReservaNaTabela.Parameters.AddWithValue("@checkin", reservaParaCriacao.CheckIn.Date.ToString("dd-MM-yyyy"));
+            inserirReservaNaTabela.Parameters.AddWithValue("@checkout", reservaParaCriacao.CheckOut.Date.ToString("dd-MM-yyyy"));
+            inserirReservaNaTabela.Parameters.AddWithValue("@precoestadia", reservaParaCriacao.PrecoEstadia.ToString().Replace(',', '.'));
+            inserirReservaNaTabela.Parameters.AddWithValue("@pagamentoefetuado", reservaParaCriacao.PagamentoEfetuado);
 
-            reserva.Id = Convert.ToInt32(inserirReservaNaTabela.ExecuteScalar());
+            reservaParaCriacao.Id = Convert.ToInt32(inserirReservaNaTabela.ExecuteScalar());
         }
 
-        public void Atualizar(Reserva copiaReserva)
+        public void Atualizar(Reserva reservaParaAtualizar)
         {
             using var connection = Connection();
             string comandoEditar = @"UPDATE TabelaReservas
@@ -101,16 +101,16 @@ namespace Infraestrutura
 
             SqlCommand editarReservaNaTabela = new(comandoEditar, connection);
 
-            editarReservaNaTabela.Parameters.AddWithValue("@nome", copiaReserva.Nome);
-            editarReservaNaTabela.Parameters.AddWithValue("@cpf", copiaReserva.Cpf);
-            editarReservaNaTabela.Parameters.AddWithValue("@telefone", copiaReserva.Telefone);
-            editarReservaNaTabela.Parameters.AddWithValue("@idade", copiaReserva.Idade);
-            editarReservaNaTabela.Parameters.AddWithValue("@sexo", copiaReserva.Sexo);
-            editarReservaNaTabela.Parameters.AddWithValue("@checkin", copiaReserva.CheckIn.Date.ToString("dd-MM-yyyy"));
-            editarReservaNaTabela.Parameters.AddWithValue("@checkout", copiaReserva.CheckOut.Date.ToString("dd-MM-yyyy"));
-            editarReservaNaTabela.Parameters.AddWithValue("@precoestadia", copiaReserva.PrecoEstadia.ToString().Replace(',', '.'));
-            editarReservaNaTabela.Parameters.AddWithValue("@pagamentoefetuado", copiaReserva.PagamentoEfetuado);
-            editarReservaNaTabela.Parameters.AddWithValue("@id", copiaReserva.Id);
+            editarReservaNaTabela.Parameters.AddWithValue("@nome", reservaParaAtualizar.Nome);
+            editarReservaNaTabela.Parameters.AddWithValue("@cpf", reservaParaAtualizar.Cpf);
+            editarReservaNaTabela.Parameters.AddWithValue("@telefone", reservaParaAtualizar.Telefone);
+            editarReservaNaTabela.Parameters.AddWithValue("@idade", reservaParaAtualizar.Idade);
+            editarReservaNaTabela.Parameters.AddWithValue("@sexo", reservaParaAtualizar.Sexo);
+            editarReservaNaTabela.Parameters.AddWithValue("@checkin", reservaParaAtualizar.CheckIn.Date.ToString("dd-MM-yyyy"));
+            editarReservaNaTabela.Parameters.AddWithValue("@checkout", reservaParaAtualizar.CheckOut.Date.ToString("dd-MM-yyyy"));
+            editarReservaNaTabela.Parameters.AddWithValue("@precoestadia", reservaParaAtualizar.PrecoEstadia.ToString().Replace(',', '.'));
+            editarReservaNaTabela.Parameters.AddWithValue("@pagamentoefetuado", reservaParaAtualizar.PagamentoEfetuado);
+            editarReservaNaTabela.Parameters.AddWithValue("@id", reservaParaAtualizar.Id);
 
             editarReservaNaTabela.ExecuteNonQuery();
         }

@@ -61,15 +61,15 @@ namespace InteracaoUsuarioSAPUI5.Controllers
         }
 
         [HttpPost]
-        public IActionResult CriarReserva([FromBody][Required] Reserva reserva)
+        public IActionResult CriarReserva([FromBody][Required] Reserva reservaPataCriacao)
         {
             try
             {
-                reserva.Id = ValoresPadrao.ID_ZERO;
-                _validador.ValidateAndThrowArgumentException(reserva);
-                _repositorio.Criar(reserva);
+                reservaPataCriacao.Id = ValoresPadrao.ID_ZERO;
+                _validador.ValidateAndThrowArgumentException(reservaPataCriacao);
+                _repositorio.Criar(reservaPataCriacao);
 
-                return Created($"reserva/{reserva.Id}", reserva);
+                return Created($"reserva/{reservaPataCriacao.Id}", reservaPataCriacao);
             }
             catch (Exception erro)
             {
@@ -78,12 +78,12 @@ namespace InteracaoUsuarioSAPUI5.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult AtualizarReserva([FromBody][Required] Reserva reserva)
+        public IActionResult AtualizarReserva([FromBody][Required] Reserva reservaParaAtualizar)
         {
             try
             {
-                _validador.ValidateAndThrowArgumentException(reserva);
-                _repositorio.Atualizar(reserva);
+                _validador.ValidateAndThrowArgumentException(reservaParaAtualizar);
+                _repositorio.Atualizar(reservaParaAtualizar);
 
                 return NoContent();
             }

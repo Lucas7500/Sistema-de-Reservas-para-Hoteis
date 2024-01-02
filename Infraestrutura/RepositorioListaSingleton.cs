@@ -25,10 +25,10 @@ namespace Infraestrutura
             reservaParaCriacao.Id = ReservaSingleton.IncrementarId();
             _listaReservas.Add(reservaParaCriacao);
         }
-        public void Atualizar(Reserva copiaReserva)
+        public void Atualizar(Reserva reservaParaAtualizar)
         {
-            var reservaNaLista = _listaReservas.FindIndex(x => x.Id == copiaReserva.Id);
-            _listaReservas[reservaNaLista] = copiaReserva;
+            var reservaNaLista = _listaReservas.FindIndex(x => x.Id == reservaParaAtualizar.Id);
+            _listaReservas[reservaNaLista] = reservaParaAtualizar;
         }
 
         public void Remover(int id)
