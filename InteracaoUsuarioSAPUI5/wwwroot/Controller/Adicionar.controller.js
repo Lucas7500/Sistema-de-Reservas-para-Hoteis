@@ -4,9 +4,9 @@ sap.ui.define([
 ], (Controller, History) => {
     "use strict";
 
-    const caminhoRotaAdicionar = "reservas.hoteis.controller.Adicionar";
+    const CAMINHO_ROTA_ADICIONAR = "reservas.hoteis.controller.Adicionar";
 
-    return Controller.extend(caminhoRotaAdicionar, {
+    return Controller.extend(CAMINHO_ROTA_ADICIONAR, {
         voltarPagina() {
             const oHistory = History.getInstance();
             const sPreviousHash = oHistory.getPreviousHash();

@@ -11,8 +11,9 @@ sap.ui.define([
 ], (Controller, Formatter, JSONModel, ReservaRepository, CoreLibrary, Dialog, Button, MobileLibrary, Text) => {
     "use strict";
 
-    const CAMINHO_ROTA_LISTAGEM = "reservas.hoteis.controller.Listagem";
+    const STATUS_OK = 200;
     const MODELO_LISTA = "TabelaReservas";
+    const CAMINHO_ROTA_LISTAGEM = "reservas.hoteis.controller.Listagem";
 
     return Controller.extend(CAMINHO_ROTA_LISTAGEM, {
         formatter: Formatter,
@@ -30,22 +31,16 @@ sap.ui.define([
         _carregarLista() {
             try {
                 ReservaRepository.obterTodos()
-                    .then(response => {
-                        const statusOk = 200
-
-                        if (response.status == statusOk) {
-                            return response.json();
-                        }
-                        else {
-                            return Promise.reject(response);
-                        }
-                    })
-                    .then(response => this.getView().setModel(new JSONModel(response), MODELO_LISTA))
-                    .catch(async erro => {
-                        let mensagemErro = await erro.text();
-
-                        this._mostrarMensagemErro(mensagemErro);
-                    })
+                .then(response => {
+                    return response.status == STATUS_OK
+                        ? response.json()
+                        : Promise.reject(response);
+                })
+                .then(response => this.getView().setModel(new JSONModel(response), MODELO_LISTA))
+                .catch(async erro => {
+                    let mensagemErro = await erro.text();
+                    this._mostrarMensagemErro(mensagemErro);
+                })
             }
             catch (erro) {
                 this._mostrarMensagemErro(erro.message);
@@ -85,19 +80,13 @@ sap.ui.define([
 
                 ReservaRepository.obterTodos(stringFiltro)
                     .then(response => {
-                        const statusOk = 200
-
-                        if (response.status == statusOk) {
-                            return response.json();
-                        }
-                        else {
-                            return Promise.reject(response);
-                        }
+                        return response.status == STATUS_OK
+                            ? response.json()
+                            : Promise.reject(response);
                     })
                     .then(response => this.getView().setModel(new JSONModel(response), MODELO_LISTA))
                     .catch(async erro => {
                         let mensagemErro = await erro.text();
-
                         this._mostrarMensagemErro(mensagemErro);
                     })
             } catch (erro) {
@@ -115,16 +104,18 @@ sap.ui.define([
             }
         },
 
-        aoClicarAbrirDetalhes(linhaReserva) {
+        aoClicarAbrirDetalhes(evento) {
             try {
-                const reserva = linhaReserva.getSource();
-                const rotaDetalhes = "detalhes";
                 const propriedadeId = "id";
+                let idReserva = evento
+                    .getSource()
+                    .getBindingContext(MODELO_LISTA)
+                    .getProperty(propriedadeId);
                 
+                const rotaDetalhes = "detalhes";
                 let rota = this.getOwnerComponent().getRouter();
-                
                 rota.navTo(rotaDetalhes, {
-                    id: reserva.getBindingContext(MODELO_LISTA).getProperty(propriedadeId)
+                    id: idReserva
                 });
             } catch (erro) {
                 this._mostrarMensagemErro(erro.message);

@@ -11,6 +11,7 @@ sap.ui.define([
 ], (Controller, ReservaRepository, JSONModel, History, CoreLibrary, Dialog, Button, MobileLibrary, Text) => {
     "use strict";
 
+    const STATUS_OK = 200;
     const CAMINHO_ROTA_DETALHES = "reservas.hoteis.controller.Detalhes";
 
     return Controller.extend(CAMINHO_ROTA_DETALHES, {
@@ -28,14 +29,9 @@ sap.ui.define([
 
                 ReservaRepository.obterPorId(idReserva)
                     .then(response => {
-                        const statusOk = 200
-
-                        if (response.status == statusOk) {
-                            return response.json();
-                        }
-                        else {
-                            return Promise.reject(response);
-                        }
+                        return response.status == STATUS_OK
+                            ? response.json()
+                            : Promise.reject(response);
                     })
                     .then(response => this.getView().setModel(new JSONModel(response)))
                     .catch(async erro => {
