@@ -1,0 +1,102 @@
+<mvc:View
+    controllerName="reservas.hoteis.controller.Detalhes"
+    xmlns="sap.m"
+    xmlns:mvc="sap.ui.core.mvc">
+    <Page
+        title="{i18n>tituloDetalhes}"
+        showNavButton="true"
+        navButtonPress=".voltarPagina">
+        <Panel
+            style="Clear"
+            class="sapUiSmallMargin">
+            <HBox
+                class="sapUiSmallMargin">
+                <ObjectIdentifier title="{/nome}" />
+            </HBox>
+            <VBox
+                direction="Row">
+                <FlexBox
+                    direction="Row">
+                    <VBox
+                        class="sapUiSmallMargin">
+                        <HBox
+                            class="sapUiTinyMargin">
+                            <ObjectIdentifier title="{i18n>tituloColunaId}" />
+                        </HBox>
+                        <HBox
+                            class="sapUiTinyMargin">
+                            <ObjectIdentifier title="{i18n>tituloColunaCpf}" />
+                        </HBox>
+                        <HBox
+                            class="sapUiTinyMargin">
+                            <ObjectIdentifier title="{i18n>tituloColunaTelefone}" />
+                        </HBox>
+                        <HBox
+                            class="sapUiTinyMargin">
+                            <ObjectIdentifier title="{i18n>tituloColunaIdade}" />
+                        </HBox>
+                        <HBox
+                            class="sapUiTinyMargin">
+                            <ObjectIdentifier title="{i18n>tituloColunaSexo}" />
+                        </HBox>
+                        <HBox
+                            class="sapUiTinyMargin">
+                            <ObjectIdentifier title="{i18n>tituloColunaCheckIn}" />
+                        </HBox>
+                        <HBox
+                            class="sapUiTinyMargin">
+                            <ObjectIdentifier title="{i18n>tituloColunaCheckOut}" />
+                        </HBox>
+                        <HBox
+                            class="sapUiTinyMargin">
+                            <ObjectIdentifier title="{i18n>tituloColunaPrecoEstadia}" />
+                        </HBox>
+                        <HBox
+                            class="sapUiTinyMargin">
+                            <ObjectIdentifier title="{i18n>tituloColunaPagamentoEfetuado}" />
+                        </HBox>
+                    </VBox>
+                    <VBox
+                        class="sapUiSmallMargin">
+                        <HBox
+                            class="sapUiTinyMargin">
+                        <Text text="{/id}" />
+                        </HBox>
+                        <HBox
+                            class="sapUiTinyMargin">
+                        <Text text="{/cpf}" />
+                        </HBox>
+                        <HBox
+                            class="sapUiTinyMargin">
+                        <Text text="{/telefone}" />
+                        </HBox>
+                        <HBox
+                            class="sapUiTinyMargin">
+                        <Text text="{/idade}" />
+                        </HBox>
+                        <HBox
+                            class="sapUiTinyMargin">
+                        <Text text="{/sexo}" />
+                        </HBox>
+                        <HBox
+                            class="sapUiTinyMargin">
+                        <Text text="{/checkIn}" />
+                        </HBox>
+                        <HBox
+                            class="sapUiTinyMargin">
+                        <Text text="{/checkOut}" />
+                        </HBox>
+                        <HBox
+                            class="sapUiTinyMargin">
+                        <Text text="{/precoEstadia}" />
+                        </HBox>
+                        <HBox
+                            class="sapUiTinyMargin">
+                        <Text text="{/pagamentoEfetuado}" />
+                        </HBox>
+                    </VBox>
+                </FlexBox>
+            </VBox>
+        </Panel>
+    </Page>
+</mvc:View>

@@ -1,7 +1,7 @@
 {
-    "name": "ui5.walkthrough",
+    "name": "reservas.hoteis",
     "version": "1.0.0",
-    "description": "The UI5 walkthrough application",
+    "description": "Sistema de Reservas Para Hoteis",
     "scripts": {
         "start": "ui5 serve -o index.html"
     },

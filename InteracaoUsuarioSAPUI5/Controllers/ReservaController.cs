@@ -4,6 +4,8 @@ using Dominio.Extensoes;
 using FluentValidation;
 using Infraestrutura;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
+using System.Net;
 namespace InteracaoUsuarioSAPUI5.Controllers
 {
     [Route("api/[controller]")]
@@ -13,27 +15,40 @@ namespace InteracaoUsuarioSAPUI5.Controllers
         private readonly IRepositorio _repositorio;
         private readonly IValidator<Reserva> _validador;
 
-        public ReservaController(IRepositorio repositorio, IValidator<Reserva> validador)
+        public ReservaController(
+            IRepositorio repositorio,
+            IValidator<Reserva> validador
+            )
         {
             _repositorio = repositorio;
             _validador = validador;
         }
 
         [HttpGet]
-        public OkObjectResult ObterTodos()
+        public IActionResult ObterTodos([FromQuery] string? filtro)
         {
             try
             {
-                return Ok(_repositorio.ObterTodos());
+                var reservas = _repositorio.ObterTodos();
+
+                if (filtro.ContemValor())
+                {
+                    return Ok(reservas
+                        .Where(reserva =>
+                            reserva.Nome.Contains(filtro, StringComparison.OrdinalIgnoreCase) ||
+                            reserva.Cpf.Contains(filtro, StringComparison.OrdinalIgnoreCase)));
+                }
+
+                return Ok(reservas);
             }
             catch (Exception erro)
             {
-                throw new Exception(message: erro.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, erro.Message);
             }
         }
 
         [HttpGet("{id}")]
-        public OkObjectResult ObterPorId([FromRoute] int id)
+        public IActionResult ObterPorId([FromRoute] int id)
         {
             try
             {
@@ -41,63 +56,54 @@ namespace InteracaoUsuarioSAPUI5.Controllers
             }
             catch (Exception erro)
             {
-                throw new Exception(message: erro.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, erro.Message);
             }
         }
 
         [HttpPost]
-        public CreatedResult CriarReserva([FromBody] Reserva reserva)
+        public IActionResult CriarReserva([FromBody][Required] Reserva reservaPataCriacao)
         {
             try
             {
-                if (reserva == null)
-                {
-                    throw new Exception();
-                }
-                reserva.Id = ValoresPadrao.ID_NULO;
-                _validador.ValidateAndThrowArgumentException(reserva);
-                _repositorio.Criar(reserva);
+                reservaPataCriacao.Id = ValoresPadrao.ID_ZERO;
+                _validador.ValidateAndThrowArgumentException(reservaPataCriacao);
+                _repositorio.Criar(reservaPataCriacao);
 
-                return Created($"reserva/{reserva.Id}", reserva);
+                return Created($"reserva/{reservaPataCriacao.Id}", reservaPataCriacao);
             }
             catch (Exception erro)
             {
-                throw new Exception(message: erro.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, erro.Message);
             }
         }
 
         [HttpPut("{id}")]
-        public NoContentResult AtualizarReserva([FromRoute] int id, [FromBody] Reserva reserva)
+        public IActionResult AtualizarReserva([FromBody][Required] Reserva reservaParaAtualizar)
         {
             try
             {
-                if (reserva == null || reserva.Id != id)
-                {
-                    throw new Exception(message: MensagemExcessao.RESERVA_INVALIDA_OU_INEXISTENTE);
-                }
-                _validador.ValidateAndThrowArgumentException(reserva);
-                _repositorio.Atualizar(reserva);
+                _validador.ValidateAndThrowArgumentException(reservaParaAtualizar);
+                _repositorio.Atualizar(reservaParaAtualizar);
 
                 return NoContent();
             }
             catch (Exception erro)
             {
-                throw new Exception(message: erro.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, erro.Message);
             }
         }
 
         [HttpDelete("{id}")]
-        public NoContentResult RemoverReserva([FromRoute] int id)
+        public IActionResult RemoverReserva([FromRoute] int id)
         {
             try
             {
                 _repositorio.Remover(id);
-
                 return NoContent();
             }
             catch (Exception erro)
             {
-                throw new Exception(message: erro.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, erro.Message);
             }
         }
     }

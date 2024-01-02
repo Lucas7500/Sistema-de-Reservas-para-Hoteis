@@ -1,5 +1,6 @@
 ﻿using Dominio;
 using Dominio.Constantes;
+using System.Linq;
 
 namespace Infraestrutura
 {
@@ -9,68 +10,31 @@ namespace Infraestrutura
 
         public List<Reserva> ObterTodos()
         {
-            try
-            {
-                return _listaReservas;
-            }
-            catch
-            {
-                throw new Exception(message: MensagemExcessao.ERRO_OBTER_TODOS_BD);
-            }
+            return _listaReservas;
         }
 
         public Reserva ObterPorId(int id)
         {
-            Reserva reservaSelecionada = new();
+            var reserva = _listaReservas.FirstOrDefault(x => x.Id == id);
 
-            try
-            {
-                reservaSelecionada = _listaReservas.First(x => x.Id == id);
-            }
-            catch
-            {
-                throw new Exception(message: MensagemExcessao.ERRO_OBTER_POR_ID_BD);
-            }
-
-            return reservaSelecionada;
+            return reserva;
         }
 
-        public void Criar(Reserva reserva)
+        public void Criar(Reserva reservaParaCriacao)
         {
-            try
-            {
-                reserva.Id = ReservaSingleton.IncrementarId();
-                _listaReservas.Add(reserva);
-            }
-            catch
-            {
-                throw new Exception(message: MensagemExcessao.ERRO_CRIAR_BD);
-            }
+            reservaParaCriacao.Id = ReservaSingleton.IncrementarId();
+            _listaReservas.Add(reservaParaCriacao);
         }
-        public void Atualizar(Reserva copiaReserva)
+        public void Atualizar(Reserva reservaParaAtualizar)
         {
-            try
-            {
-                var reservaNaLista = _listaReservas.FindIndex(x => x.Id == copiaReserva.Id);
-                _listaReservas[reservaNaLista] = copiaReserva;
-            }
-            catch
-            {
-                throw new Exception(message: MensagemExcessao.ERRO_ATUALIZAR_BD);
-            }
+            var reservaNaLista = _listaReservas.FindIndex(x => x.Id == reservaParaAtualizar.Id);
+            _listaReservas[reservaNaLista] = reservaParaAtualizar;
         }
 
         public void Remover(int id)
         {
-            try
-            {
-                Reserva reserva = ObterPorId(id);
-                _listaReservas.Remove(reserva);
-            }
-            catch
-            {
-                throw new Exception(message: MensagemExcessao.ERRO_REMOVER_BD);
-            }
+            Reserva reserva = ObterPorId(id);
+            _listaReservas.Remove(reserva);
         }
     }
 }

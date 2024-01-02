@@ -1,14 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interação Usuário SAPUI5</title>
+	<meta charset="utf-8">
+	<title>Reservas para Hoteis</title>
+	<link rel="icon" href="favicon.ico" type="image/x-icon">
+	<script
+		id="sap-ui-bootstrap"
+		src="https://sdk.openui5.org/resources/sap-ui-core.js"
+		data-sap-ui-theme="sap_belize_plus"
+		data-sap-ui-libs="sap.m"
+		data-sap-ui-compatVersion="edge"
+		data-sap-ui-async="true"
+		data-sap-ui-onInit="module:sap/ui/core/ComponentSupport"
+		data-sap-ui-resourceroots='{
+			"reservas.hoteis": "./"
+		}'>
+	</script>
 </head>
 
-<body>
-    <h1>Hello, World!</h1>
+<body class="sapUiBody" id="content">
+	<div 
+		data-sap-ui-component data-name="reservas.hoteis" 
+		data-id="container"
+		data-settings='{"id" : "hoteis"}'>
+	</div>
 </body>
 
 </html>

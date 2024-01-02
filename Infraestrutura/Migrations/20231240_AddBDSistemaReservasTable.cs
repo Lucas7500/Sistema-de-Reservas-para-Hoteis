@@ -1,4 +1,5 @@
 ﻿using FluentMigrator;
+using FluentMigrator.SqlServer;
 
 namespace Infraestrutura.Migrations
 {
@@ -8,7 +9,7 @@ namespace Infraestrutura.Migrations
         public override void Up()
         {
             Create.Table("TabelaReservas")
-                .WithColumn("Id").AsInt32().PrimaryKey().Identity().NotNullable()
+                .WithColumn("Id").AsInt64().PrimaryKey().Identity(1,1).NotNullable()
                 .WithColumn("Nome").AsString().NotNullable()
                 .WithColumn("Cpf").AsString().NotNullable()
                 .WithColumn("Telefone").AsString().NotNullable()

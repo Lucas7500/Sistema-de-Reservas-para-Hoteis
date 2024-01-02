@@ -7,11 +7,6 @@ namespace Dominio
     [Table("TabelaReservas")]
     public class Reserva
     {
-        public object ShallowCopy()
-        {
-            return this.MemberwiseClone();
-        }
-
         [PrimaryKey, Identity]
         public int Id { get; set; }
         [Column("Nome"), NotNull]
@@ -32,5 +27,11 @@ namespace Dominio
         public decimal PrecoEstadia { get; set; }
         [Column("PagamentoEfetuado"), NotNull]
         public bool PagamentoEfetuado { get; set; }
+
+        public object ShallowCopy()
+        {
+            return this.MemberwiseClone();
+        }
+
     }
 }

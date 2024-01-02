@@ -35,126 +35,91 @@ namespace Infraestrutura
 
         public List<Reserva> ObterTodos()
         {
-            try
-            {
-                List<Reserva> listaReservas = new();
+            List<Reserva> listaReservas = new();
 
-                using (var connection = Connection())
+            using (var connection = Connection())
+            {
+                SqlCommand obterLinhasBD = new("SELECT * FROM TabelaReservas", connection);
+                var leitor = obterLinhasBD.ExecuteReader();
+
+                while (leitor.Read())
                 {
-                    SqlCommand obterLinhasBD = new("SELECT * FROM TabelaReservas", connection);
-                    var leitor = obterLinhasBD.ExecuteReader();
-
-                    while (leitor.Read())
-                    {
-                        listaReservas.Add(CriarReserva(leitor));
-                    }
+                    listaReservas.Add(CriarReserva(leitor));
                 }
-
-                return listaReservas;
-            }
-            catch
-            {
-                throw new Exception(message: MensagemExcessao.ERRO_OBTER_TODOS_BD);
             }
 
+            return listaReservas;
         }
 
         public Reserva ObterPorId(int id)
         {
+            using var connection = Connection();
+
             Reserva reservaSelecionada = new();
+            SqlCommand obterObjetoPorId = new($"SELECT * FROM TabelaReservas WHERE Id={id}", connection);
+            var leitor = obterObjetoPorId.ExecuteReader();
 
-            try
+
+            while (leitor.Read())
             {
-                using var connection = Connection();
-                SqlCommand obterObjetoPorId = new($"SELECT * FROM TabelaReservas WHERE Id={id}", connection);
-                var leitor = obterObjetoPorId.ExecuteReader();
-
-
-                while (leitor.Read())
-                {
-                    reservaSelecionada = CriarReserva(leitor);
-                }
-
-                return reservaSelecionada;
+                reservaSelecionada = CriarReserva(leitor);
             }
-            catch
-            {
-                throw new Exception(message: MensagemExcessao.ERRO_OBTER_POR_ID_BD);
-            }
+
+            return reservaSelecionada;
         }
 
-        public void Criar(Reserva reserva)
+        public void Criar(Reserva reservaParaCriacao)
         {
-            try
-            {
-                using var connection = Connection();
-                string comandoCriar = @"INSERT INTO TabelaReservas
+            using var connection = Connection();
+            string comandoCriar = @"INSERT INTO TabelaReservas
                 (Nome, Cpf, Telefone, Idade, Sexo, CheckIn, CheckOut, PrecoEstadia, PagamentoEfetuado)
+                OUTPUT INSERTED.ID
                 VALUES (@nome, @cpf, @telefone, @idade, @sexo, @checkin, @checkout, @precoestadia, @pagamentoefetuado)";
 
-                SqlCommand inserirReservaNaTabela = new(comandoCriar, connection);
+            SqlCommand inserirReservaNaTabela = new(comandoCriar, connection);
 
-                inserirReservaNaTabela.Parameters.AddWithValue("@nome", reserva.Nome);
-                inserirReservaNaTabela.Parameters.AddWithValue("@cpf", reserva.Cpf);
-                inserirReservaNaTabela.Parameters.AddWithValue("@telefone", reserva.Telefone);
-                inserirReservaNaTabela.Parameters.AddWithValue("@idade", reserva.Idade);
-                inserirReservaNaTabela.Parameters.AddWithValue("@sexo", reserva.Sexo);
-                inserirReservaNaTabela.Parameters.AddWithValue("@checkin", reserva.CheckIn.Date.ToString("dd-MM-yyyy"));
-                inserirReservaNaTabela.Parameters.AddWithValue("@checkout", reserva.CheckOut.Date.ToString("dd-MM-yyyy"));
-                inserirReservaNaTabela.Parameters.AddWithValue("@precoestadia", reserva.PrecoEstadia.ToString().Replace(',', '.'));
-                inserirReservaNaTabela.Parameters.AddWithValue("@pagamentoefetuado", reserva.PagamentoEfetuado);
+            inserirReservaNaTabela.Parameters.AddWithValue("@nome", reservaParaCriacao.Nome);
+            inserirReservaNaTabela.Parameters.AddWithValue("@cpf", reservaParaCriacao.Cpf);
+            inserirReservaNaTabela.Parameters.AddWithValue("@telefone", reservaParaCriacao.Telefone);
+            inserirReservaNaTabela.Parameters.AddWithValue("@idade", reservaParaCriacao.Idade);
+            inserirReservaNaTabela.Parameters.AddWithValue("@sexo", reservaParaCriacao.Sexo);
+            inserirReservaNaTabela.Parameters.AddWithValue("@checkin", reservaParaCriacao.CheckIn.Date.ToString("dd-MM-yyyy"));
+            inserirReservaNaTabela.Parameters.AddWithValue("@checkout", reservaParaCriacao.CheckOut.Date.ToString("dd-MM-yyyy"));
+            inserirReservaNaTabela.Parameters.AddWithValue("@precoestadia", reservaParaCriacao.PrecoEstadia.ToString().Replace(',', '.'));
+            inserirReservaNaTabela.Parameters.AddWithValue("@pagamentoefetuado", reservaParaCriacao.PagamentoEfetuado);
 
-                inserirReservaNaTabela.ExecuteNonQuery();
-            }
-            catch
-            {
-                throw new Exception(message: MensagemExcessao.ERRO_CRIAR_BD);
-            }
+            reservaParaCriacao.Id = Convert.ToInt32(inserirReservaNaTabela.ExecuteScalar());
         }
 
-        public void Atualizar(Reserva copiaReserva)
+        public void Atualizar(Reserva reservaParaAtualizar)
         {
-            try
-            {
-                using var connection = Connection();
-                string comandoEditar = @"UPDATE TabelaReservas
+            using var connection = Connection();
+            string comandoEditar = @"UPDATE TabelaReservas
                 SET Nome=@nome, Cpf=@cpf, Telefone=@telefone, Idade=@idade, Sexo=@sexo, CheckIn=@checkin,
                 CheckOut=@checkout, PrecoEstadia=@precoestadia, PagamentoEfetuado=@pagamentoefetuado
                 WHERE id=@id";
 
-                SqlCommand editarReservaNaTabela = new(comandoEditar, connection);
+            SqlCommand editarReservaNaTabela = new(comandoEditar, connection);
 
-                editarReservaNaTabela.Parameters.AddWithValue("@nome", copiaReserva.Nome);
-                editarReservaNaTabela.Parameters.AddWithValue("@cpf", copiaReserva.Cpf);
-                editarReservaNaTabela.Parameters.AddWithValue("@telefone", copiaReserva.Telefone);
-                editarReservaNaTabela.Parameters.AddWithValue("@idade", copiaReserva.Idade);
-                editarReservaNaTabela.Parameters.AddWithValue("@sexo", copiaReserva.Sexo);
-                editarReservaNaTabela.Parameters.AddWithValue("@checkin", copiaReserva.CheckIn.Date.ToString("dd-MM-yyyy"));
-                editarReservaNaTabela.Parameters.AddWithValue("@checkout", copiaReserva.CheckOut.Date.ToString("dd-MM-yyyy"));
-                editarReservaNaTabela.Parameters.AddWithValue("@precoestadia", copiaReserva.PrecoEstadia.ToString().Replace(',', '.'));
-                editarReservaNaTabela.Parameters.AddWithValue("@pagamentoefetuado", copiaReserva.PagamentoEfetuado);
-                editarReservaNaTabela.Parameters.AddWithValue("@id", copiaReserva.Id);
+            editarReservaNaTabela.Parameters.AddWithValue("@nome", reservaParaAtualizar.Nome);
+            editarReservaNaTabela.Parameters.AddWithValue("@cpf", reservaParaAtualizar.Cpf);
+            editarReservaNaTabela.Parameters.AddWithValue("@telefone", reservaParaAtualizar.Telefone);
+            editarReservaNaTabela.Parameters.AddWithValue("@idade", reservaParaAtualizar.Idade);
+            editarReservaNaTabela.Parameters.AddWithValue("@sexo", reservaParaAtualizar.Sexo);
+            editarReservaNaTabela.Parameters.AddWithValue("@checkin", reservaParaAtualizar.CheckIn.Date.ToString("dd-MM-yyyy"));
+            editarReservaNaTabela.Parameters.AddWithValue("@checkout", reservaParaAtualizar.CheckOut.Date.ToString("dd-MM-yyyy"));
+            editarReservaNaTabela.Parameters.AddWithValue("@precoestadia", reservaParaAtualizar.PrecoEstadia.ToString().Replace(',', '.'));
+            editarReservaNaTabela.Parameters.AddWithValue("@pagamentoefetuado", reservaParaAtualizar.PagamentoEfetuado);
+            editarReservaNaTabela.Parameters.AddWithValue("@id", reservaParaAtualizar.Id);
 
-                editarReservaNaTabela.ExecuteNonQuery();
-            }
-            catch
-            {
-                throw new Exception(message: MensagemExcessao.ERRO_ATUALIZAR_BD);
-            }
+            editarReservaNaTabela.ExecuteNonQuery();
         }
 
         public void Remover(int id)
         {
-            try
-            {
-                using var connection = Connection();
-                SqlCommand deletarReserva = new($"DELETE FROM TabelaReservas WHERE Id={id}", connection);
-                deletarReserva.ExecuteNonQuery();
-            }
-            catch
-            {
-                throw new Exception(message: MensagemExcessao.ERRO_REMOVER_BD);
-            }
+            using var connection = Connection();
+            SqlCommand deletarReserva = new($"DELETE FROM TabelaReservas WHERE Id={id}", connection);
+            deletarReserva.ExecuteNonQuery();
         }
     }
 }

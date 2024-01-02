@@ -17,7 +17,7 @@ namespace InteracaoUsuarioForms
             InitializeComponent();
             CaixaSexo.DataSource = Enum.GetValues(typeof(GeneroEnum));
             _validacaoReserva = validacaoReserva;
-            if (reservaParametro.Id > ValoresPadrao.ID_NULO)
+            if (reservaParametro.Id > ValoresPadrao.ID_ZERO)
             {
                 DataCheckIn.MinDate = reservaParametro.CheckIn;
                 DataCheckOut.MinDate = reservaParametro.CheckOut;
