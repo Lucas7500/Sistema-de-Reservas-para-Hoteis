@@ -2,23 +2,40 @@
     controllerName="reservas.hoteis.controller.Detalhes"
     xmlns="sap.m"
     xmlns:mvc="sap.ui.core.mvc">
-    <Page
-        title="{i18n>tituloDetalhes}"
-        showNavButton="true"
-        navButtonPress=".voltarPagina">
+    <Page>
+        <customHeader>
+            <Toolbar>
+                <Button
+                    icon="sap-icon://nav-back"
+                    title="{i18n>tituloDetalhes}"
+                    press=".voltarPagina"
+                    type="Transparent" />
+                <ToolbarSpacer />
+                <ObjectIdentifier title="{i18n>tituloDetalhes}" />
+                <ToolbarSpacer />
+                <Button
+                    icon="sap-icon://edit"
+                    text="{i18n>tituloBotaoEditar}"
+                    class="sapUiTinyMargin"
+                    type="Transparent" />
+                <Button
+                    icon="sap-icon://delete"
+                    text="{i18n>tituloBotaoRemover}"
+                    type="Transparent" />
+            </Toolbar>
+        </customHeader>
         <Panel
-            style="Clear"
-            class="sapUiSmallMargin">
-            <HBox
-                class="sapUiSmallMargin">
-                <ObjectIdentifier title="{/nome}" />
-            </HBox>
+            class="sapUiSmallMargin"
+            backgroundDesign="Transparent">
             <VBox
-                direction="Row">
+                direction="Column">
+                <HBox
+                    class="sapUiTinyMargin">
+                    <ObjectIdentifier title="{/nome}" />
+                </HBox>
                 <FlexBox
                     direction="Row">
-                    <VBox
-                        class="sapUiSmallMargin">
+                    <VBox>
                         <HBox
                             class="sapUiTinyMargin">
                             <ObjectIdentifier title="{i18n>tituloColunaId}" />
@@ -56,43 +73,76 @@
                             <ObjectIdentifier title="{i18n>tituloColunaPagamentoEfetuado}" />
                         </HBox>
                     </VBox>
-                    <VBox
-                        class="sapUiSmallMargin">
+                    <VBox>
                         <HBox
                             class="sapUiTinyMargin">
-                        <Text text="{/id}" />
+                            <Text text="{/id}" />
                         </HBox>
                         <HBox
                             class="sapUiTinyMargin">
-                        <Text text="{/cpf}" />
+                            <Text text="{/cpf}" />
                         </HBox>
                         <HBox
                             class="sapUiTinyMargin">
-                        <Text text="{/telefone}" />
+                            <Text text="{/telefone}" />
                         </HBox>
                         <HBox
                             class="sapUiTinyMargin">
-                        <Text text="{/idade}" />
+                            <Text text="{/idade}" />
                         </HBox>
                         <HBox
                             class="sapUiTinyMargin">
-                        <Text text="{/sexo}" />
+                            <Text
+                                text="{
+                                path: '/sexo',
+                                formatter: '.formatter.formataSexo'
+                            }" />
                         </HBox>
                         <HBox
                             class="sapUiTinyMargin">
-                        <Text text="{/checkIn}" />
+                            <Text
+                                text="{
+                                        path: '/checkIn',
+                                        type: 'sap.ui.model.type.Date',
+                                        formatOptions: {
+                                            style: 'short',
+                                            source: {
+                                            pattern: 'yyyy-MM-ddTHH:mm:ss'
+                                            }
+                                        }
+                                    }"
+                            />
                         </HBox>
                         <HBox
                             class="sapUiTinyMargin">
-                        <Text text="{/checkOut}" />
+                            <Text
+                                text="{
+                                        path: '/checkOut',
+                                        type: 'sap.ui.model.type.Date',
+                                        formatOptions: {
+                                            style: 'short',
+                                            source: {
+                                            pattern: 'yyyy-MM-ddTHH:mm:ss'
+                                            }
+                                        }
+                                    }"
+                            />
                         </HBox>
                         <HBox
                             class="sapUiTinyMargin">
-                        <Text text="{/precoEstadia}" />
+                            <Text
+                                text="{
+                                path: '/precoEstadia',
+                                formatter: '.formatter.formataPrecoEstadia'
+                            }" />
                         </HBox>
                         <HBox
                             class="sapUiTinyMargin">
-                        <Text text="{/pagamentoEfetuado}" />
+                            <Text
+                                text="{
+                                path: '/pagamentoEfetuado',
+                                formatter: '.formatter.formataPagamentoEfetuado'
+                            }" />
                         </HBox>
                     </VBox>
                 </FlexBox>
