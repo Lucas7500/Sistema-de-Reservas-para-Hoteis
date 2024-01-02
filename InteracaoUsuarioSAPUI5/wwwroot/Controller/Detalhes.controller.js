@@ -1,15 +1,14 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "../model/Formatter",
-    "../Repositorios/ReservaRepository",
     "sap/ui/model/json/JSONModel",
-    "sap/ui/core/routing/History",
+    "../Repositorios/ReservaRepository",
     "sap/ui/core/library",
     "sap/m/Dialog",
     "sap/m/Button",
     "sap/m/library",
     "sap/m/Text"
-], (Controller, Formatter, ReservaRepository, JSONModel, History, CoreLibrary, Dialog, Button, MobileLibrary, Text) => {
+], (Controller, Formatter, JSONModel, ReservaRepository, CoreLibrary, Dialog, Button, MobileLibrary, Text) => {
     "use strict";
 
     const STATUS_OK = 200;
