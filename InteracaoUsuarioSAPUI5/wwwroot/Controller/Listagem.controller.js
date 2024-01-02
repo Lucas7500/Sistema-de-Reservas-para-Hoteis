@@ -122,7 +122,6 @@ sap.ui.define([
 
         aoClicarAbrirDetalhes(linhaReserva) {
             try {
-                console.log(linhaReserva);
                 const reserva = linhaReserva.getSource();
                 
                 let indiceReserva = window
