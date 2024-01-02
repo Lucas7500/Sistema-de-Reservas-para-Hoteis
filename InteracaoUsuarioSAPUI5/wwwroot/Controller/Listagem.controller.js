@@ -1,6 +1,6 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
-    "../model/formatter",
+    "../model/Formatter",
     "sap/ui/model/json/JSONModel",
     "../Repositorios/ReservaRepository",
     "sap/ui/core/library",
@@ -8,14 +8,14 @@ sap.ui.define([
     "sap/m/Button",
     "sap/m/library",
     "sap/m/Text"
-], (Controller, formatter, JSONModel, ReservaRepository, coreLibrary, Dialog, Button, mobileLibrary, Text) => {
+], (Controller, Formatter, JSONModel, ReservaRepository, CoreLibrary, Dialog, Button, MobileLibrary, Text) => {
     "use strict";
 
     const CAMINHO_ROTA_LISTAGEM = "reservas.hoteis.controller.Listagem";
     const MODELO_LISTA = "TabelaReservas";
 
     return Controller.extend(CAMINHO_ROTA_LISTAGEM, {
-        formatter: formatter,
+        formatter: Formatter,
         onInit() {
             const rotaLista = 'listagem';
 
@@ -44,20 +44,18 @@ sap.ui.define([
                     .catch(async erro => {
                         let mensagemErro = await erro.text();
 
-                        console.error(erro);
                         this._mostrarMensagemErro(mensagemErro);
                     })
             }
             catch (erro) {
-                console.error(erro);
                 this._mostrarMensagemErro(erro.message);
             }
         },
 
         _mostrarMensagemErro(mensagemErro) {
-            var ButtonType = mobileLibrary.ButtonType;
-            var DialogType = mobileLibrary.DialogType;
-            var ValueState = coreLibrary.ValueState;
+            var ButtonType = MobileLibrary.ButtonType;
+            var DialogType = MobileLibrary.DialogType;
+            var ValueState = CoreLibrary.ValueState;
             const tituloDialog = "Erro";
 
             if (!this.oErrorMessageDialog) {
@@ -100,11 +98,9 @@ sap.ui.define([
                     .catch(async erro => {
                         let mensagemErro = await erro.text();
 
-                        console.error(erro);
                         this._mostrarMensagemErro(mensagemErro);
                     })
             } catch (erro) {
-                console.error(erro);
                 this._mostrarMensagemErro(erro.message);
             }
         },
@@ -115,7 +111,6 @@ sap.ui.define([
                 const rotaAdicionar = "adicionar";
                 rota.navTo(rotaAdicionar);
             } catch (erro) {
-                console.error(erro);
                 this._mostrarMensagemErro(erro.message);
             }
         },
@@ -123,19 +118,15 @@ sap.ui.define([
         aoClicarAbrirDetalhes(linhaReserva) {
             try {
                 const reserva = linhaReserva.getSource();
+                const rotaDetalhes = "detalhes";
+                const propriedadeId = "id";
                 
-                let indiceReserva = window
-                                    .encodeURIComponent(reserva.getBindingContext(MODELO_LISTA)
-                                    .getPath()
-                                    .substr(1));
                 let rota = this.getOwnerComponent().getRouter();
                 
-                const rotaDetalhes = "detalhes";
                 rota.navTo(rotaDetalhes, {
-                    id: reserva.getBindingContext(MODELO_LISTA).oModel.oData[indiceReserva].id
+                    id: reserva.getBindingContext(MODELO_LISTA).getProperty(propriedadeId)
                 });
             } catch (erro) {
-                console.error(erro);
                 this._mostrarMensagemErro(erro.message);
             }
         }

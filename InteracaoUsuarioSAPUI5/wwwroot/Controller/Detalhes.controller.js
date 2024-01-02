@@ -2,13 +2,18 @@ sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "../Repositorios/ReservaRepository",
     "sap/ui/model/json/JSONModel",
-    "sap/ui/core/routing/History"
-], (Controller, ReservaRepository, JSONModel, History) => {
+    "sap/ui/core/routing/History",
+    "sap/ui/core/library",
+    "sap/m/Dialog",
+    "sap/m/Button",
+    "sap/m/library",
+    "sap/m/Text"
+], (Controller, ReservaRepository, JSONModel, History, CoreLibrary, Dialog, Button, MobileLibrary, Text) => {
     "use strict";
 
-    const caminhoRotaDetalhes = "reservas.hoteis.controller.Detalhes";
+    const CAMINHO_ROTA_DETALHES = "reservas.hoteis.controller.Detalhes";
 
-    return Controller.extend(caminhoRotaDetalhes, {
+    return Controller.extend(CAMINHO_ROTA_DETALHES, {
         onInit() {
             const rotaDetalhes = 'detalhes';
 
@@ -16,13 +21,58 @@ sap.ui.define([
             rota.getRoute(rotaDetalhes).attachPatternMatched(this._aoCoincidirRota, this);
         },
 
-        _aoCoincidirRota(oEvent) {
-            const parametroArgumentos = "arguments";
-            let idReserva = oEvent.getParameter(parametroArgumentos).id;
-            
-            ReservaRepository.obterPorId(idReserva)
-            .then(response => response.json())
-            .then(response => this.getView().setModel(new JSONModel(response)));
+        _aoCoincidirRota(evento) {
+            try {
+                const parametroArgumentos = "arguments";
+                let idReserva = evento.getParameter(parametroArgumentos).id;
+
+                ReservaRepository.obterPorId(idReserva)
+                    .then(response => {
+                        const statusOk = 200
+
+                        if (response.status == statusOk) {
+                            return response.json();
+                        }
+                        else {
+                            return Promise.reject(response);
+                        }
+                    })
+                    .then(response => this.getView().setModel(new JSONModel(response)))
+                    .catch(async erro => {
+                        let mensagemErro = await erro.text();
+
+                        this._mostrarMensagemErro(mensagemErro);
+                    });
+            }
+            catch (erro) {
+                this._mostrarMensagemErro(erro.message);
+            }
+        },
+
+        _mostrarMensagemErro(mensagemErro) {
+            var ButtonType = MobileLibrary.ButtonType;
+            var DialogType = MobileLibrary.DialogType;
+            var ValueState = CoreLibrary.ValueState;
+            const tituloDialog = "Erro";
+
+            if (!this.oErrorMessageDialog) {
+                const textoBotao = "OK";
+                this.oErrorMessageDialog = new Dialog({
+                    type: DialogType.Message,
+                    title: tituloDialog,
+                    state: ValueState.Warning,
+                    content: new Text({ text: mensagemErro }),
+                    beginButton: new Button({
+                        type: ButtonType.Emphasized,
+                        text: textoBotao,
+                        press: function () {
+                            this.oErrorMessageDialog.close();
+                        }.bind(this)
+                    })
+                });
+            }
+
+            this.oErrorMessageDialog.open();
         },
 
         voltarPagina() {
@@ -33,7 +83,7 @@ sap.ui.define([
                 window.history.go(-1);
             } else {
                 const rotaLista = "listagem";
-                
+
                 const oRouter = this.getOwnerComponent().getRouter();
                 oRouter.navTo(rotaLista, {}, true);
             }
