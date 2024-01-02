@@ -93,41 +93,46 @@
                             <Text text="{TabelaReservas>idade}" />
                             <Text
                                 text="{
-                            path: 'TabelaReservas>sexo',
-                            formatter: '.formatter.formataSexo'
-                        }" />
+                                        path: 'TabelaReservas>sexo',
+                                        formatter: '.formatter.formataSexo'
+                                }"
+                            />
                             <Text
                                 text="{
                                 path: 'TabelaReservas>checkIn',
                                 type: 'sap.ui.model.type.Date',
-                            formatOptions: {
-                                style: 'short',
-                            source: {
-                                pattern: 'yyyy-MM-ddTHH:mm:ss'
+                                formatOptions: {
+                                    style: 'short',
+                                    source: {
+                                    pattern: 'yyyy-MM-ddTHH:mm:ss'
+                                    }
                                 }
-                            }
-                        }" />
+                            }"
+                            />
                             <Text
                                 text="{
                                 path: 'TabelaReservas>checkOut',
                                 type: 'sap.ui.model.type.Date',
-                            formatOptions: {
-                                style: 'short',
-                            source: {
-                                pattern: 'yyyy-MM-ddTHH:mm:ss'
+                                formatOptions: {
+                                    style: 'short',
+                                    source: {
+                                    pattern: 'yyyy-MM-ddTHH:mm:ss'
+                                    }
                                 }
-                            }
-                        }" />
+                            }"
+                            />
                             <Text
                                 text="{
-                            path: 'TabelaReservas>precoEstadia',
-                            formatter: '.formatter.formataPrecoEstadia'
-                        }" />
+                                    path: 'TabelaReservas>precoEstadia',
+                                    formatter: '.formatter.formataPrecoEstadia'
+                                }"
+                            />
                             <Text
                                 text="{
-                            path: 'TabelaReservas>pagamentoEfetuado',
-                            formatter: '.formatter.formataPagamentoEfetuado'
-                        }" />
+                                    path: 'TabelaReservas>pagamentoEfetuado',
+                                    formatter: '.formatter.formataPagamentoEfetuado'
+                            }"
+                            />
                         </cells>
                     </ColumnListItem>
                 </items>

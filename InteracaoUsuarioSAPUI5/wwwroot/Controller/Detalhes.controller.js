@@ -1,5 +1,6 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
+    "../model/Formatter",
     "../Repositorios/ReservaRepository",
     "sap/ui/model/json/JSONModel",
     "sap/ui/core/routing/History",
@@ -8,13 +9,14 @@ sap.ui.define([
     "sap/m/Button",
     "sap/m/library",
     "sap/m/Text"
-], (Controller, ReservaRepository, JSONModel, History, CoreLibrary, Dialog, Button, MobileLibrary, Text) => {
+], (Controller, Formatter, ReservaRepository, JSONModel, History, CoreLibrary, Dialog, Button, MobileLibrary, Text) => {
     "use strict";
 
     const STATUS_OK = 200;
     const CAMINHO_ROTA_DETALHES = "reservas.hoteis.controller.Detalhes";
 
     return Controller.extend(CAMINHO_ROTA_DETALHES, {
+        formatter: Formatter,
         onInit() {
             const rotaDetalhes = 'detalhes';
 
