@@ -8,8 +8,9 @@
                 <Button
                     icon="sap-icon://nav-back"
                     title="{i18n>tituloDetalhes}"
-                    press=".voltarPagina" 
+                    press=".voltarPagina"
                     type="Transparent" />
+                <ToolbarSpacer />
                 <ObjectIdentifier title="{i18n>tituloDetalhes}" />
                 <ToolbarSpacer />
                 <Button
