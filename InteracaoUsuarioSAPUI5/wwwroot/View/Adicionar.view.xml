@@ -1,10 +1,109 @@
 <mvc:View
     controllerName="reservas.hoteis.controller.Adicionar"
     xmlns="sap.m"
-    xmlns:mvc="sap.ui.core.mvc">
+    xmlns:mvc="sap.ui.core.mvc"
+    displayBlock="true">
     <Page
         title="{i18n>tituloAdicionar}"
         showNavButton="true"
         navButtonPress=".voltarPagina">
+        <Panel
+            backgroundDesign="Transparent">
+            <FlexBox
+                class="sapUiSmallMargin">
+                <VBox
+                    class="sapUiSmallMargin"
+                    width="50%">
+                    <Label
+                        text="Nome"
+                        labelFor="inputNome" />
+                    <Input
+                        id="inputNome"
+                        required="true"
+                        placeholder="Nome do cliente"
+                        showClearIcon="true" />
+                    <Label
+                        text="CPF"
+                        labelFor="inputCpf" />
+                    <MaskInput
+                        id="inputCpf"
+                        required="true"
+                        width="100%"
+                        mask="999.999.999-99"
+                        placeholderSymbol="_"
+                        placeholder="CPF do cliente"
+                        showClearIcon="true" />
+                    <Label
+                        text="Telefone"
+                        labelFor="inputTelefone" />
+                    <MaskInput
+                        id="inputTelefone"
+                        required="true"
+                        width="100%"
+                        mask="(99) 9 9999 9999"
+                        placeholderSymbol="_"
+                        placeholder="Telefone do cliente"
+                        showClearIcon="true" />
+                    <Label
+                        text="Idade"
+                        labelFor="inputIdade" />
+                    <Input
+                        id="inputIdade"
+                        required="true"
+                        type="Number"
+                        placeholder="Idade do cliente"
+                        showClearIcon="true" />
+                </VBox>
+                <VBox
+                    width="50%"
+                    class="sapUiSmallMargin">
+                    <Label
+                        text="Check-In"
+                        labelFor="inputCheckIn" />
+                    <Input
+                        id="inputCheckIn"
+                        required="true"
+                        type="Date"
+                    />
+                    <Label
+                        text="Check-Out"
+                        labelFor="inputCheckOut" />
+                    <Input
+                        id="inputCheckOut"
+                        required="true"
+                        type="Date"
+                    />
+                    <Label
+                        text="Preço da Estadia"
+                        labelFor="inputPrecoEstadia" />
+                    <Input
+                        id="inputPrecoEstadia"
+                        required="true"
+                        type="Number"
+                    />
+                    <Label
+                        text="Pagamento foi Efetuado?" />
+                    <HBox>
+                        <HBox
+                            alignItems="Center">
+                            <Label
+                                text="Sim"
+                                labelFor="radioButtonPagamentoEfetuado" />
+                        </HBox>
+                        <RadioButton
+                            id="radioButtonPagamentoEfetuado" />
+                        <HBox
+                            alignItems="Center">
+                            <Label
+                                text="Não"
+                                labelFor="radioButtonPagamentoNaoEfetuado" />
+                        </HBox>
+                        <RadioButton
+                            selected="true"
+                            id="radioButtonPagamentoNaoEfetuado" />
+                    </HBox>
+                </VBox>
+            </FlexBox>
+        </Panel>
     </Page>
 </mvc:View>

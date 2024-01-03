@@ -62,7 +62,7 @@
                     "target": "listagem"
                 },
                 {
-                    "pattern": "adicionar",
+                    "pattern": "cadastro",
                     "name": "adicionar",
                     "target": "adicionar"
                 },
