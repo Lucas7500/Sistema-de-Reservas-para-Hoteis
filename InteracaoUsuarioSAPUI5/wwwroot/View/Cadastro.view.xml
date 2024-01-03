@@ -22,7 +22,7 @@
                     press=".aoClicarSalvarReserva" />
                 <Button
                     icon="sap-icon://decline"
-                    press=".voltarPagina"
+                    press=".aoClicarCancelarCadastro"
                     text="{i18n>tituloBotaoCancelar}"
                     type="Transparent" />
             </Toolbar>
@@ -41,8 +41,7 @@
                         id="inputNome"
                         required="true"
                         placeholder="{i18n>placeholderNome}"
-                        showClearIcon="true" 
-                        value="{/nome}"/>
+                        showClearIcon="true" />
                     <Label
                         text="{i18n>labelCpf}"
                         labelFor="inputCpf" />
@@ -53,8 +52,7 @@
                         mask="{i18n>mascaraCpf}"
                         placeholderSymbol="{i18n>simboloPlaceholder}"
                         placeholder="{i18n>placeholderCpf}"
-                        showClearIcon="true" 
-                        value="{/cpf}"/>
+                        showClearIcon="true" />
                     <Label
                         text="{i18n>labelTelefone}"
                         labelFor="inputTelefone" />
@@ -65,8 +63,7 @@
                         mask="{i18n>mascaraTelefone}"
                         placeholderSymbol="{i18n>simboloPlaceholder}"
                         placeholder="{i18n>placeholderTelefone}"
-                        showClearIcon="true" 
-                        value="{/telefone}"/>
+                        showClearIcon="true" />
                     <Label
                         text="{i18n>labelIdade}"
                         labelFor="inputIdade" />
@@ -75,17 +72,16 @@
                         required="true"
                         type="Number"
                         placeholder="{i18n>placeholderIdade}"
-                        showClearIcon="true" 
-                        value="{/idade}"/>
+                        showClearIcon="true" />
                     <Label
-                        text="{i18n>labelPagamentoEfetuado}"
-                        labelFor="radioButtonPagamentoEfetuado" />
+                        text="{i18n>labelPagamentoEfetuado}" />
                     <RadioButtonGroup
                         columns="2">
                         <RadioButton
-                            text="{i18n>radioButtonSim}" 
-                            selected="{/pagamentoEfetuado}"/>
+                            id="radioButtonPagamentoEfetuado"
+                            text="{i18n>radioButtonSim}" />
                         <RadioButton
+                            id="radioButtonPagamentoNaoEfetuado"
                             text="{i18n>radioButtonNao}"
                             selected="true" />
                     </RadioButtonGroup>
@@ -100,8 +96,7 @@
                         id="comboBoxSexo"
                         placeholder="{i18n>placeholderSexo}"
                         required="true"
-                        width="100%"
-                        selectedKey="{/sexo}">
+                        width="100%">
                         <core:ListItem key="0" text="{i18n>sexoMasculino}" />
                         <core:ListItem key="1" text="{i18n>sexoFeminino}" />
                     </ComboBox>
@@ -112,7 +107,6 @@
                         id="inputCheckIn"
                         required="true"
                         type="Date"
-                        value="{/checkIn}"
                     />
                     <Label
                         text="{i18n>labelCheckOut}"
@@ -121,7 +115,6 @@
                         id="inputCheckOut"
                         required="true"
                         type="Date"
-                        value="{/checkOut}"
                     />
                     <Label
                         text="{i18n>labelPrecoEstadia}"

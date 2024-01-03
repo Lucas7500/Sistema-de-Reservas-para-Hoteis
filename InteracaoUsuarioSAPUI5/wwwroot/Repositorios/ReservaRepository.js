@@ -24,10 +24,7 @@ sap.ui.define([],() => {
                 headers: {"Content-type": "application/json; charset=UTF-8"}
             };
 
-            return fetch(ENDPOINT_RESERVA, metodoPost).then(res => {
-                res.json();
-                console.log(res);
-            })
+            return fetch(ENDPOINT_RESERVA, metodoPost);
         }
     }
 })

@@ -61,15 +61,15 @@ namespace InteracaoUsuarioSAPUI5.Controllers
         }
 
         [HttpPost]
-        public IActionResult CriarReserva([FromBody][Required] Reserva reservaPataCriacao)
+        public IActionResult CriarReserva([FromBody][Required] Reserva reservaParaCriacao)
         {
             try
             {
-                reservaPataCriacao.Id = ValoresPadrao.ID_ZERO;
-                _validador.ValidateAndThrowArgumentException(reservaPataCriacao);
-                _repositorio.Criar(reservaPataCriacao);
+                reservaParaCriacao.Id = ValoresPadrao.ID_ZERO;
+                _validador.ValidateAndThrowArgumentException(reservaParaCriacao);
+                _repositorio.Criar(reservaParaCriacao);
 
-                return Created($"reserva/{reservaPataCriacao.Id}", reservaPataCriacao);
+                return Created($"reserva/{reservaParaCriacao.Id}", reservaParaCriacao);
             }
             catch (Exception erro)
             {
