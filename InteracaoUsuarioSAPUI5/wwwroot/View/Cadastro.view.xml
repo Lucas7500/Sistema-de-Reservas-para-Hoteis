@@ -1,12 +1,30 @@
 <mvc:View
-    controllerName="reservas.hoteis.controller.Adicionar"
+    controllerName="reservas.hoteis.controller.Cadastro"
     xmlns="sap.m"
     xmlns:mvc="sap.ui.core.mvc"
     displayBlock="true">
-    <Page
-        title="{i18n>tituloAdicionar}"
-        showNavButton="true"
-        navButtonPress=".voltarPagina">
+    <Page>
+        <customHeader>
+            <Toolbar>
+                <Button
+                    icon="sap-icon://nav-back"
+                    press=".voltarPagina"
+                    type="Transparent" />
+                <ToolbarSpacer />
+                <ObjectIdentifier title="{i18n>tituloCadastro}" />
+                <ToolbarSpacer />
+                <Button
+                    icon="sap-icon://save"
+                    text="{i18n>tituloBotaoSalvar}"
+                    class="sapUiTinyMargin"
+                    type="Transparent" />
+                <Button
+                    icon="sap-icon://decline"
+                    press=".voltarPagina"
+                    text="{i18n>tituloBotaoCancelar}"
+                    type="Transparent" />
+            </Toolbar>
+        </customHeader>
         <Panel
             backgroundDesign="Transparent">
             <FlexBox
@@ -15,50 +33,50 @@
                     class="sapUiSmallMargin"
                     width="50%">
                     <Label
-                        text="Nome"
+                        text="{i18n>labelNome}"
                         labelFor="inputNome" />
                     <Input
                         id="inputNome"
                         required="true"
-                        placeholder="Nome do cliente"
+                        placeholder="{i18n>placeholderNome}"
                         showClearIcon="true" />
                     <Label
-                        text="CPF"
+                        text="{i18n>labelCpf}"
                         labelFor="inputCpf" />
                     <MaskInput
                         id="inputCpf"
                         required="true"
                         width="100%"
-                        mask="999.999.999-99"
-                        placeholderSymbol="_"
-                        placeholder="CPF do cliente"
+                        mask="{i18n>mascaraCpf}"
+                        placeholderSymbol="{i18n>simboloPlaceholder}"
+                        placeholder="{i18n>placeholderCpf}"
                         showClearIcon="true" />
                     <Label
-                        text="Telefone"
+                        text="{i18n>labelTelefone}"
                         labelFor="inputTelefone" />
                     <MaskInput
                         id="inputTelefone"
                         required="true"
                         width="100%"
-                        mask="(99) 9 9999 9999"
-                        placeholderSymbol="_"
-                        placeholder="Telefone do cliente"
+                        mask="{i18n>mascaraTelefone}"
+                        placeholderSymbol="{i18n>simboloPlaceholder}"
+                        placeholder="{i18n>placeholderTelefone}"
                         showClearIcon="true" />
                     <Label
-                        text="Idade"
+                        text="{i18n>labelIdade}"
                         labelFor="inputIdade" />
                     <Input
                         id="inputIdade"
                         required="true"
                         type="Number"
-                        placeholder="Idade do cliente"
+                        placeholder="{i18n>placeholderIdade}"
                         showClearIcon="true" />
                 </VBox>
                 <VBox
                     width="50%"
                     class="sapUiSmallMargin">
                     <Label
-                        text="Check-In"
+                        text="{i18n>labelCheckIn}"
                         labelFor="inputCheckIn" />
                     <Input
                         id="inputCheckIn"
@@ -66,7 +84,7 @@
                         type="Date"
                     />
                     <Label
-                        text="Check-Out"
+                        text="{i18n>labelCheckOut}"
                         labelFor="inputCheckOut" />
                     <Input
                         id="inputCheckOut"
@@ -74,34 +92,26 @@
                         type="Date"
                     />
                     <Label
-                        text="Preço da Estadia"
+                        text="{i18n>labelPrecoEstadia}"
                         labelFor="inputPrecoEstadia" />
                     <Input
                         id="inputPrecoEstadia"
+                        placeholder="{i18n>placeholderPrecoEstadia}"
                         required="true"
                         type="Number"
+                        showClearIcon="true"
                     />
                     <Label
-                        text="Pagamento foi Efetuado?" />
-                    <HBox>
-                        <HBox
-                            alignItems="Center">
-                            <Label
-                                text="Sim"
-                                labelFor="radioButtonPagamentoEfetuado" />
-                        </HBox>
+                        text="{i18n>labelPagamentoEfetuado}"
+                        labelFor="radioButtonPagamentoEfetuado" />
+                    <RadioButtonGroup
+                        columns="2">
                         <RadioButton
-                            id="radioButtonPagamentoEfetuado" />
-                        <HBox
-                            alignItems="Center">
-                            <Label
-                                text="Não"
-                                labelFor="radioButtonPagamentoNaoEfetuado" />
-                        </HBox>
+                            text="{i18n>radioButtonSim}" />
                         <RadioButton
-                            selected="true"
-                            id="radioButtonPagamentoNaoEfetuado" />
-                    </HBox>
+                            text="{i18n>radioButtonNao}"
+                            selected="true" />
+                    </RadioButtonGroup>
                 </VBox>
             </FlexBox>
         </Panel>

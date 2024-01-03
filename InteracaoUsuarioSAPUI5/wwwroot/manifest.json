@@ -63,8 +63,8 @@
                 },
                 {
                     "pattern": "cadastro",
-                    "name": "adicionar",
-                    "target": "adicionar"
+                    "name": "cadastro",
+                    "target": "cadastro"
                 },
                 {
                     "pattern": "detalhes/{id}",
@@ -77,9 +77,9 @@
                     "id": "listagem",
                     "name": "Listagem"
                 },
-                "adicionar": {
-                    "id": "adicionar",
-                    "name": "Adicionar"
+                "cadastro": {
+                    "id": "cadastro",
+                    "name": "Cadastro"
                 },
                 "detalhes": {
                     "id": "detalhes",

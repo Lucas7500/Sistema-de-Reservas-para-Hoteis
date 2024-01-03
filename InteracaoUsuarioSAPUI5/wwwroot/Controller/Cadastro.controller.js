@@ -4,7 +4,7 @@ sap.ui.define([
 ], (Controller, History) => {
     "use strict";
 
-    const CAMINHO_ROTA_ADICIONAR = "reservas.hoteis.controller.Adicionar";
+    const CAMINHO_ROTA_ADICIONAR = "reservas.hoteis.controller.Cadastro";
 
     return Controller.extend(CAMINHO_ROTA_ADICIONAR, {
         voltarPagina() {
