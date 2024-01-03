@@ -35,11 +35,6 @@
                 growingScrollToLoad="false">
                 <columns>
                     <Column
-                        hAlign="Center"
-                        width="5rem">
-                        <ObjectIdentifier title="{i18n>tituloColunaId}" />
-                    </Column>
-                    <Column
                         hAlign="Center">
                         <ObjectIdentifier title="{i18n>tituloColunaNome}" />
                     </Column>
@@ -84,9 +79,6 @@
                         type="Navigation"
                         press=".aoClicarAbrirDetalhes">
                         <cells>
-                            <ObjectIdentifier
-                                badgeNotes="true"
-                                title="{TabelaReservas>id}" />
                             <ObjectIdentifier title="{TabelaReservas>nome}" />
                             <ObjectIdentifier title="{TabelaReservas>cpf}" />
                             <Text text="{TabelaReservas>telefone}" />
