@@ -7,6 +7,10 @@ sap.ui.define([
     const CAMINHO_ROTA_ADICIONAR = "reservas.hoteis.controller.Cadastro";
 
     return Controller.extend(CAMINHO_ROTA_ADICIONAR, {
+        onInit() {
+
+        },
+        
         voltarPagina() {
             const oHistory = History.getInstance();
             const sPreviousHash = oHistory.getPreviousHash();
