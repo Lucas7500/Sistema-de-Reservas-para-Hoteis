@@ -94,11 +94,11 @@ sap.ui.define([
             }
         },
 
-        aoClicarAbrirAdicionar() {
+        aoClicarAbrirCadastro() {
             try {
                 let rota = this.getOwnerComponent().getRouter();
-                const rotaAdicionar = "adicionar";
-                rota.navTo(rotaAdicionar);
+                const rotaCadastro = "cadastro";
+                rota.navTo(rotaCadastro);
             } catch (erro) {
                 this._mostrarMensagemErro(erro.message);
             }
