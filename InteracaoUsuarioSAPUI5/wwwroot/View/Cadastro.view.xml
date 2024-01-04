@@ -83,8 +83,7 @@
                             text="{i18n>radioButtonSim}" />
                         <RadioButton
                             id="radioButtonPagamentoNaoEfetuado"
-                            text="{i18n>radioButtonNao}"
-                            selected="true" />
+                            text="{i18n>radioButtonNao}" />
                     </RadioButtonGroup>
                 </VBox>
                 <VBox
