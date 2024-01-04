@@ -23,7 +23,7 @@ sap.ui.define([
     return Controller.extend(CAMINHO_ROTA_CADASTRO, {
         onInit() {
             const rotaCadastro = 'cadastro';
-            
+
             let rota = this.getOwnerComponent().getRouter();
             rota.getRoute(rotaCadastro).attachPatternMatched(this._aoCoincidirRota, this);
         },
@@ -63,7 +63,7 @@ sap.ui.define([
                 pagamentoEfetuado: this.byId(ID_RADIOBUTTON_PAGAMENTO_EFETUADO).getProperty(propriedadeSelected)
             }
         },
-        
+
         _abrirDetalhesObjetoCriado(reservaCriada) {
             try {
                 const rotaDetalhes = "detalhes";
@@ -77,15 +77,20 @@ sap.ui.define([
         },
 
         voltarPagina() {
-            const oHistory = History.getInstance();
-            const sPreviousHash = oHistory.getPreviousHash();
+            try {
+                const oHistory = History.getInstance();
+                const sPreviousHash = oHistory.getPreviousHash();
 
-            if (sPreviousHash !== undefined) {
-                window.history.go(-1);
-            } else {
-                const rotaLista = "listagem";
-                const oRouter = this.getOwnerComponent().getRouter();
-                oRouter.navTo(rotaLista, {}, true);
+                if (sPreviousHash !== undefined) {
+                    window.history.go(-1);
+                } else {
+                    const rotaLista = "listagem";
+                    const oRouter = this.getOwnerComponent().getRouter();
+                    oRouter.navTo(rotaLista, {}, true);
+                }
+            }
+            catch (erro) {
+                MessageBox.warning(erro.message);
             }
         },
 
@@ -93,7 +98,7 @@ sap.ui.define([
             try {
                 let reserva = this._retornaReservaAserCriada();
                 let controller = this;
-                
+
                 const resourceBundle = this.getOwnerComponent().getModel(MODEL_I18N).getResourceBundle();
                 const textoMensagemSucessoSalvar = "mensagemSucessoSalvar";
                 const mensagemSucessoSalvar = resourceBundle.getText(textoMensagemSucessoSalvar);
@@ -126,26 +131,31 @@ sap.ui.define([
         },
 
         aoClicarCancelarCadastro() {
-            const resourceBundle = this.getOwnerComponent().getModel(MODEL_I18N).getResourceBundle();
+            try {
+                const resourceBundle = this.getOwnerComponent().getModel(MODEL_I18N).getResourceBundle();
 
-            const textoBotaoSim = "botaoSim";
-            const textoBotaoNao = "botaoNao";
-            const textoMensagemConfirmacaoCancelar = "mensagemConfirmacaoCancelar";
-            const botaoSim = resourceBundle.getText(textoBotaoSim);
-            const botaoNao = resourceBundle.getText(textoBotaoNao);
-            const mensagemConfirmacao = resourceBundle.getText(textoMensagemConfirmacaoCancelar);
+                const textoBotaoSim = "botaoSim";
+                const textoBotaoNao = "botaoNao";
+                const textoMensagemConfirmacaoCancelar = "mensagemConfirmacaoCancelar";
+                const botaoSim = resourceBundle.getText(textoBotaoSim);
+                const botaoNao = resourceBundle.getText(textoBotaoNao);
+                const mensagemConfirmacao = resourceBundle.getText(textoMensagemConfirmacaoCancelar);
 
-            let controller = this;
+                let controller = this;
 
-            MessageBox.confirm(mensagemConfirmacao, {
-                actions: [botaoSim, botaoNao],
-                emphasizedAction: botaoSim,
-                onClose: function (acao) {
-                    if (acao == botaoSim) {
-                        controller.voltarPagina();
+                MessageBox.confirm(mensagemConfirmacao, {
+                    actions: [botaoSim, botaoNao],
+                    emphasizedAction: botaoSim,
+                    onClose: function (acao) {
+                        if (acao == botaoSim) {
+                            controller.voltarPagina();
+                        }
                     }
-                }
-            });
+                });
+            }
+            catch (erro) {
+                MessageBox.warning(erro.message);
+            }
         }
     })
 })
