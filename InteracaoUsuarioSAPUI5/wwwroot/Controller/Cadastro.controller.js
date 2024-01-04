@@ -24,29 +24,44 @@ sap.ui.define([
     const ID_RADIOBUTTON_PAGAMENTO_NAO_EFETUADO = "radioButtonPagamentoNaoEfetuado";
 
     return Controller.extend(CAMINHO_ROTA_CADASTRO, {
+        onInit() {
+            let rota = this.getOwnerComponent().getRouter();
+            rota.getRoute('cadastro').attachPatternMatched(this._aoCoincidirRota, this);
+        },
+
+        _aoCoincidirRota() {
+            const valorVazio = "";
+            this.byId(ID_INPUT_NOME).setValue(valorVazio);
+            this.byId(ID_INPUT_CPF).setValue(valorVazio);
+            this.byId(ID_INPUT_TELEFONE).setValue(valorVazio);
+            this.byId(ID_INPUT_IDADE).setValue(valorVazio);
+            this.byId(ID_COMBOBOX_SEXO).setValue(valorVazio);
+            this.byId(ID_INPUT_CHECKIN).setValue(valorVazio);
+            this.byId(ID_INPUT_CHECKOUT).setValue(valorVazio);
+            this.byId(ID_INPUT_PRECO_ESTADIA).setValue(valorVazio);
+            this.byId(ID_RADIOBUTTON_PAGAMENTO_NAO_EFETUADO).setSelected(true);
+        },
+
         _mostrarMensagemErro(mensagemErro) {
-            debugger
             var ButtonType = MobileLibrary.ButtonType;
             var DialogType = MobileLibrary.DialogType;
             var ValueState = CoreLibrary.ValueState;
             const tituloDialog = "Erro";
 
-            if (!this.oErrorMessageDialog) {
-                const textoBotao = "OK";
-                this.oErrorMessageDialog = new Dialog({
-                    type: DialogType.Message,
-                    title: tituloDialog,
-                    state: ValueState.Warning,
-                    content: new Text({ text: mensagemErro }),
-                    beginButton: new Button({
-                        type: ButtonType.Emphasized,
-                        text: textoBotao,
-                        press: function () {
-                            this.oErrorMessageDialog.close();
-                        }.bind(this)
-                    })
-                });
-            }
+            const textoBotao = "OK";
+            this.oErrorMessageDialog = new Dialog({
+                type: DialogType.Message,
+                title: tituloDialog,
+                state: ValueState.Warning,
+                content: new Text({ text: mensagemErro }),
+                beginButton: new Button({
+                    type: ButtonType.Emphasized,
+                    text: textoBotao,
+                    press: function () {
+                        this.oErrorMessageDialog.close();
+                    }.bind(this)
+                })
+            });
 
             this.oErrorMessageDialog.open();
         },
@@ -58,26 +73,13 @@ sap.ui.define([
                 nome: this.byId(ID_INPUT_NOME).getValue(),
                 cpf: this.byId(ID_INPUT_CPF).getValue(),
                 telefone: this.byId(ID_INPUT_TELEFONE).getValue(),
-                idade: parseInt(this.byId(ID_INPUT_IDADE).getValue()),
-                sexo: parseInt(this.byId(ID_COMBOBOX_SEXO).getProperty(propriedadeSelectedKey)),
-                checkIn: this.byId(ID_INPUT_CHECKIN).getValue(),
-                checkOut: this.byId(ID_INPUT_CHECKOUT).getValue(),
-                precoEstadia: parseFloat(this.byId(ID_INPUT_PRECO_ESTADIA).getValue()),
+                idade: Number(this.byId(ID_INPUT_IDADE).getValue()),
+                sexo: Number(this.byId(ID_COMBOBOX_SEXO).getProperty(propriedadeSelectedKey)),
+                checkIn: null,
+                checkOut: null,
+                precoEstadia: Number(this.byId(ID_INPUT_PRECO_ESTADIA).getValue()),
                 pagamentoEfetuado: this.byId(ID_RADIOBUTTON_PAGAMENTO_EFETUADO).getProperty(propriedadeSelected)
             }
-        },
-
-        _limparCampos() {
-            const valorVazio = "";
-            this.byId(ID_INPUT_NOME).setValue(valorVazio);
-            this.byId(ID_INPUT_CPF).setValue(valorVazio);
-            this.byId(ID_INPUT_TELEFONE).setValue(valorVazio);
-            this.byId(ID_INPUT_IDADE).setValue(valorVazio);
-            this.byId(ID_RADIOBUTTON_PAGAMENTO_NAO_EFETUADO).setSelected(true);
-            this.byId(ID_COMBOBOX_SEXO).setValue(valorVazio);
-            this.byId(ID_INPUT_CHECKIN).setValue(valorVazio);
-            this.byId(ID_INPUT_CHECKOUT).setValue(valorVazio);
-            this.byId(ID_INPUT_PRECO_ESTADIA).setValue(valorVazio);
         },
 
         voltarPagina() {
@@ -95,20 +97,16 @@ sap.ui.define([
 
         aoClicarCancelarCadastro() {
             this.voltarPagina();
-            this._limparCampos();
         },
 
         aoClicarSalvarReserva() {
             try {
-                debugger
                 let reserva = this._retornaReservaAserCriada();
 
                 ReservaRepository.criarReserva(reserva)
                     .then(response => {
-                        debugger
                         if (response.status == STATUS_CREATED) {
                             this.voltarPagina();
-                            this._limparCampos();
 
                             return response.json();
                         }
@@ -117,7 +115,7 @@ sap.ui.define([
                         }
                     })
                     .catch(async erro => {
-                        debugger
+                        console.log(await erro.text());
                         let mensagemErro = await erro.text();
 
                         this._mostrarMensagemErro(mensagemErro);

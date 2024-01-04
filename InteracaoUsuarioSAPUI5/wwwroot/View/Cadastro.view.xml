@@ -74,7 +74,8 @@
                         placeholder="{i18n>placeholderIdade}"
                         showClearIcon="true" />
                     <Label
-                        text="{i18n>labelPagamentoEfetuado}" />
+                        text="{i18n>labelPagamentoEfetuado}"
+                        required="true" />
                     <RadioButtonGroup
                         columns="2">
                         <RadioButton
