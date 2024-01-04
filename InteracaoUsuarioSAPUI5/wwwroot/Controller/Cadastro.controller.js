@@ -29,8 +29,13 @@ sap.ui.define([
         },
 
         _aoCoincidirRota() {
+            this._limparCampos();
+        },
+
+        _limparCampos() {
             const valorVazio = "";
             const valorPadraoComboBoxSexo = 0;
+
             this.byId(ID_INPUT_NOME).setValue(valorVazio);
             this.byId(ID_INPUT_CPF).setValue(valorVazio);
             this.byId(ID_INPUT_TELEFONE).setValue(valorVazio);
@@ -58,6 +63,18 @@ sap.ui.define([
                 pagamentoEfetuado: this.byId(ID_RADIOBUTTON_PAGAMENTO_EFETUADO).getProperty(propriedadeSelected)
             }
         },
+        
+        _abrirDetalhesObjetoCriado(reservaCriada) {
+            try {
+                const rotaDetalhes = "detalhes";
+                let rota = this.getOwnerComponent().getRouter();
+                rota.navTo(rotaDetalhes, {
+                    id: reservaCriada.id
+                });
+            } catch (erro) {
+                MessageBox.warning(erro.message);
+            }
+        },
 
         voltarPagina() {
             const oHistory = History.getInstance();
@@ -72,47 +89,12 @@ sap.ui.define([
             }
         },
 
-        aoClicarCancelarCadastro() {
-            const resourceBundle = this.getOwnerComponent().getModel(MODEL_I18N).getResourceBundle();
-
-            const textoBotaoSim = "botaoSim";
-            const textoBotaoNao = "botaoNao";
-            const textoMensagemConfirmacaoCancelar = "mensagemConfirmacaoCancelar";
-            const botaoSim = resourceBundle.getText(textoBotaoSim);
-            const botaoNao = resourceBundle.getText(textoBotaoNao);
-            const mensagemConfirmacao = resourceBundle.getText(textoMensagemConfirmacaoCancelar);
-
-            let controller = this;
-
-            MessageBox.confirm(mensagemConfirmacao, {
-                actions: [botaoSim, botaoNao],
-                emphasizedAction: botaoSim,
-                onClose: function (acao) {
-                    if (acao == botaoSim) {
-                        controller.voltarPagina();
-                    }
-                }
-            });
-        },
-
-        _abrirDetalhesObjetoCriado(reservaCriada) {
-            try {
-                const rotaDetalhes = "detalhes";
-                let rota = this.getOwnerComponent().getRouter();
-                rota.navTo(rotaDetalhes, {
-                    id: reservaCriada.id
-                });
-            } catch (erro) {
-                MessageBox.warning(erro.message);
-            }
-        },
-
         aoClicarSalvarReserva() {
             try {
                 let reserva = this._retornaReservaAserCriada();
                 let controller = this;
+                
                 const resourceBundle = this.getOwnerComponent().getModel(MODEL_I18N).getResourceBundle();
-
                 const textoMensagemSucessoSalvar = "mensagemSucessoSalvar";
                 const mensagemSucessoSalvar = resourceBundle.getText(textoMensagemSucessoSalvar);
 
@@ -143,6 +125,29 @@ sap.ui.define([
             catch (erro) {
                 MessageBox.warning(erro.message);
             }
+        },
+
+        aoClicarCancelarCadastro() {
+            const resourceBundle = this.getOwnerComponent().getModel(MODEL_I18N).getResourceBundle();
+
+            const textoBotaoSim = "botaoSim";
+            const textoBotaoNao = "botaoNao";
+            const textoMensagemConfirmacaoCancelar = "mensagemConfirmacaoCancelar";
+            const botaoSim = resourceBundle.getText(textoBotaoSim);
+            const botaoNao = resourceBundle.getText(textoBotaoNao);
+            const mensagemConfirmacao = resourceBundle.getText(textoMensagemConfirmacaoCancelar);
+
+            let controller = this;
+
+            MessageBox.confirm(mensagemConfirmacao, {
+                actions: [botaoSim, botaoNao],
+                emphasizedAction: botaoSim,
+                onClose: function (acao) {
+                    if (acao == botaoSim) {
+                        controller.voltarPagina();
+                    }
+                }
+            });
         }
     })
 })
