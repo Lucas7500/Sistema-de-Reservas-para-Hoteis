@@ -103,8 +103,6 @@ sap.ui.define([
                         if (response.status == STATUS_CREATED) {
                             let reserva = await response.json();
                             MessageBox.success(mensagemSucessoSalvar, {
-                                actions: [MessageBox.Action.OK],
-                                emphasizedAction: MessageBox.Action.OK,
                                 onClose: () => {
                                     controller._abrirDetalhesObjetoCriado(reserva);
                                 }

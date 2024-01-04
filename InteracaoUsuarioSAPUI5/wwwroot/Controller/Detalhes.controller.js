@@ -3,9 +3,8 @@ sap.ui.define([
     "../model/Formatter",
     "sap/ui/model/json/JSONModel",
     "../Repositorios/ReservaRepository",
-    "sap/ui/core/routing/History",
     "sap/m/MessageBox"
-], (Controller, Formatter, JSONModel, ReservaRepository, History, MessageBox) => {
+], (Controller, Formatter, JSONModel, ReservaRepository, MessageBox) => {
     "use strict";
 
     const STATUS_OK = 200;
