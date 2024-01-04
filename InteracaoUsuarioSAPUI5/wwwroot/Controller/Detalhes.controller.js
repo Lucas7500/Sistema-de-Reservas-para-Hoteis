@@ -3,13 +3,9 @@ sap.ui.define([
     "../model/Formatter",
     "sap/ui/model/json/JSONModel",
     "../Repositorios/ReservaRepository",
-    "sap/ui/core/library",
-    "sap/m/Dialog",
-    "sap/m/Button",
-    "sap/m/library",
-    "sap/m/Text",
-    "sap/ui/core/routing/History"
-], (Controller, Formatter, JSONModel, ReservaRepository, CoreLibrary, Dialog, Button, MobileLibrary, Text, History) => {
+    "sap/ui/core/routing/History",
+    "sap/m/MessageBox"
+], (Controller, Formatter, JSONModel, ReservaRepository, History, MessageBox) => {
     "use strict";
 
     const STATUS_OK = 200;
@@ -39,51 +35,21 @@ sap.ui.define([
                     .catch(async erro => {
                         let mensagemErro = await erro.text();
 
-                        this._mostrarMensagemErro(mensagemErro);
+                        MessageBox.warning(mensagemErro);
                     });
             }
             catch (erro) {
-                this._mostrarMensagemErro(erro.message);
+                MessageBox.warning(erro.message);
             }
-        },
-
-        _mostrarMensagemErro(mensagemErro) {
-            var ButtonType = MobileLibrary.ButtonType;
-            var DialogType = MobileLibrary.DialogType;
-            var ValueState = CoreLibrary.ValueState;
-            const tituloDialog = "Erro";
-
-            if (!this.oErrorMessageDialog) {
-                const textoBotao = "OK";
-                this.oErrorMessageDialog = new Dialog({
-                    type: DialogType.Message,
-                    title: tituloDialog,
-                    state: ValueState.Warning,
-                    content: new Text({ text: mensagemErro }),
-                    beginButton: new Button({
-                        type: ButtonType.Emphasized,
-                        text: textoBotao,
-                        press: function () {
-                            this.oErrorMessageDialog.close();
-                        }.bind(this)
-                    })
-                });
-            }
-
-            this.oErrorMessageDialog.open();
         },
 
         voltarPagina() {
-            const oHistory = History.getInstance();
-            const sPreviousHash = oHistory.getPreviousHash();
-
-            if (sPreviousHash !== undefined) {
-                window.history.go(-1);
-            } else {
-                const rotaLista = "listagem";
-
-                const oRouter = this.getOwnerComponent().getRouter();
-                oRouter.navTo(rotaLista, {}, true);
+            try {
+                const rotaListagem = "listagem";
+                let rota = this.getOwnerComponent().getRouter();
+                rota.navTo(rotaListagem);
+            } catch (erro) {
+                MessageBox.warning(erro.message);
             }
         }
     })

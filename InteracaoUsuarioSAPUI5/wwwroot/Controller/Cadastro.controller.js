@@ -1,16 +1,13 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
-    "sap/ui/core/library",
-    "sap/m/Dialog",
-    "sap/m/Button",
-    "sap/m/library",
-    "sap/m/Text",
     "sap/ui/core/routing/History",
-    "../Repositorios/ReservaRepository"
-], (Controller, CoreLibrary, Dialog, Button, MobileLibrary, Text, History, ReservaRepository) => {
+    "../Repositorios/ReservaRepository",
+    "sap/m/MessageBox"
+], (Controller, History, ReservaRepository, MessageBox) => {
     "use strict";
 
     const CAMINHO_ROTA_CADASTRO = "reservas.hoteis.controller.Cadastro";
+    const MODEL_I18N = "i18n";
     const STATUS_CREATED = 201;
     const ID_INPUT_NOME = "inputNome";
     const ID_INPUT_CPF = "inputCpf";
@@ -25,46 +22,26 @@ sap.ui.define([
 
     return Controller.extend(CAMINHO_ROTA_CADASTRO, {
         onInit() {
+            const rotaCadastro = 'cadastro';
+            
             let rota = this.getOwnerComponent().getRouter();
-            rota.getRoute('cadastro').attachPatternMatched(this._aoCoincidirRota, this);
+            rota.getRoute(rotaCadastro).attachPatternMatched(this._aoCoincidirRota, this);
         },
 
         _aoCoincidirRota() {
             const valorVazio = "";
+            const valorPadraoComboBoxSexo = 0;
             this.byId(ID_INPUT_NOME).setValue(valorVazio);
             this.byId(ID_INPUT_CPF).setValue(valorVazio);
             this.byId(ID_INPUT_TELEFONE).setValue(valorVazio);
             this.byId(ID_INPUT_IDADE).setValue(valorVazio);
-            this.byId(ID_COMBOBOX_SEXO).setValue(valorVazio);
+            this.byId(ID_COMBOBOX_SEXO).setSelectedKey(valorPadraoComboBoxSexo);
             this.byId(ID_INPUT_CHECKIN).setValue(valorVazio);
             this.byId(ID_INPUT_CHECKOUT).setValue(valorVazio);
             this.byId(ID_INPUT_PRECO_ESTADIA).setValue(valorVazio);
             this.byId(ID_RADIOBUTTON_PAGAMENTO_NAO_EFETUADO).setSelected(true);
         },
 
-        _mostrarMensagemErro(mensagemErro) {
-            var ButtonType = MobileLibrary.ButtonType;
-            var DialogType = MobileLibrary.DialogType;
-            var ValueState = CoreLibrary.ValueState;
-            const tituloDialog = "Erro";
-
-            const textoBotao = "OK";
-            this.oErrorMessageDialog = new Dialog({
-                type: DialogType.Message,
-                title: tituloDialog,
-                state: ValueState.Warning,
-                content: new Text({ text: mensagemErro }),
-                beginButton: new Button({
-                    type: ButtonType.Emphasized,
-                    text: textoBotao,
-                    press: function () {
-                        this.oErrorMessageDialog.close();
-                    }.bind(this)
-                })
-            });
-
-            this.oErrorMessageDialog.open();
-        },
         _retornaReservaAserCriada() {
             const propriedadeSelectedKey = "selectedKey";
             const propriedadeSelected = "selected";
@@ -75,8 +52,8 @@ sap.ui.define([
                 telefone: this.byId(ID_INPUT_TELEFONE).getValue(),
                 idade: Number(this.byId(ID_INPUT_IDADE).getValue()),
                 sexo: Number(this.byId(ID_COMBOBOX_SEXO).getProperty(propriedadeSelectedKey)),
-                checkIn: null,
-                checkOut: null,
+                checkIn: this.byId(ID_INPUT_CHECKIN).getValue(),
+                checkOut: this.byId(ID_INPUT_CHECKOUT).getValue(),
                 precoEstadia: Number(this.byId(ID_INPUT_PRECO_ESTADIA).getValue()),
                 pagamentoEfetuado: this.byId(ID_RADIOBUTTON_PAGAMENTO_EFETUADO).getProperty(propriedadeSelected)
             }
@@ -96,17 +73,60 @@ sap.ui.define([
         },
 
         aoClicarCancelarCadastro() {
-            this.voltarPagina();
+            const resourceBundle = this.getOwnerComponent().getModel(MODEL_I18N).getResourceBundle();
+
+            const textoBotaoSim = "botaoSim";
+            const textoBotaoNao = "botaoNao";
+            const textoMensagemConfirmacaoCancelar = "mensagemConfirmacaoCancelar";
+            const botaoSim = resourceBundle.getText(textoBotaoSim);
+            const botaoNao = resourceBundle.getText(textoBotaoNao);
+            const mensagemConfirmacao = resourceBundle.getText(textoMensagemConfirmacaoCancelar);
+
+            let controller = this;
+
+            MessageBox.confirm(mensagemConfirmacao, {
+                actions: [botaoSim, botaoNao],
+                emphasizedAction: botaoSim,
+                onClose: function (acao) {
+                    if (acao == botaoSim) {
+                        controller.voltarPagina();
+                    }
+                }
+            });
+        },
+
+        _abrirDetalhesObjetoCriado(reservaCriada) {
+            try {
+                const rotaDetalhes = "detalhes";
+                let rota = this.getOwnerComponent().getRouter();
+                rota.navTo(rotaDetalhes, {
+                    id: reservaCriada.id
+                });
+            } catch (erro) {
+                MessageBox.warning(erro.message);
+            }
         },
 
         aoClicarSalvarReserva() {
             try {
                 let reserva = this._retornaReservaAserCriada();
+                let controller = this;
+                const resourceBundle = this.getOwnerComponent().getModel(MODEL_I18N).getResourceBundle();
+
+                const textoMensagemSucessoSalvar = "mensagemSucessoSalvar";
+                const mensagemSucessoSalvar = resourceBundle.getText(textoMensagemSucessoSalvar);
 
                 ReservaRepository.criarReserva(reserva)
-                    .then(response => {
+                    .then(async response => {
                         if (response.status == STATUS_CREATED) {
-                            this.voltarPagina();
+                            let reserva = await response.json();
+                            MessageBox.success(mensagemSucessoSalvar, {
+                                actions: [MessageBox.Action.OK],
+                                emphasizedAction: MessageBox.Action.OK,
+                                onClose: () => {
+                                    controller._abrirDetalhesObjetoCriado(reserva);
+                                }
+                            });
 
                             return response.json();
                         }
@@ -115,14 +135,13 @@ sap.ui.define([
                         }
                     })
                     .catch(async erro => {
-                        console.log(await erro.text());
                         let mensagemErro = await erro.text();
 
-                        this._mostrarMensagemErro(mensagemErro);
+                        MessageBox.warning(mensagemErro);
                     });
             }
             catch (erro) {
-                this._mostrarMensagemErro(erro.message);
+                MessageBox.warning(erro.message);
             }
         }
     })

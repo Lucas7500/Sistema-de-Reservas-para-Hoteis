@@ -93,14 +93,14 @@
                     <Label
                         text="{i18n>labelSexo}"
                         labelFor="comboBoxSexo" />
-                    <ComboBox
+                    <Select
                         id="comboBoxSexo"
                         placeholder="{i18n>placeholderSexo}"
                         required="true"
                         width="100%">
                         <core:ListItem key="0" text="{i18n>sexoMasculino}" />
                         <core:ListItem key="1" text="{i18n>sexoFeminino}" />
-                    </ComboBox>
+                    </Select>
                     <Label
                         text="{i18n>labelCheckIn}"
                         labelFor="inputCheckIn" />
@@ -125,7 +125,6 @@
                         placeholder="{i18n>placeholderPrecoEstadia}"
                         required="true"
                         type="Number"
-                        showClearIcon="true"
                         value="{/precoEstadia}"
                     />
                 </VBox>
