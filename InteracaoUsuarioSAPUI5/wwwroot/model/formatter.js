@@ -1,7 +1,9 @@
-sap.ui.define([], () => {
+sap.ui.define([
+    "sap/ui/core/format/DateFormat"
+], (DateFormat) => {
     "use strict";
 
-    const PARAMETRO_MODEL = "i18n";
+    const MODEL_I18N = "i18n";
 
     return {
         formataSexo(sexo) {
@@ -9,7 +11,7 @@ sap.ui.define([], () => {
             const textoSexoFeminino = "sexo1";
 
             const resourceBundle = this.getOwnerComponent()
-                .getModel(PARAMETRO_MODEL)
+                .getModel(MODEL_I18N)
                 .getResourceBundle();
 
             return resourceBundle.getText(sexo ? textoSexoFeminino : textoSexoMasculino)
@@ -30,10 +32,20 @@ sap.ui.define([], () => {
             const textoPagamentoNaoFoiEfetuado = "pagamentoEfetuadoFalse";
 
             const resourceBundle = this.getOwnerComponent()
-                .getModel(PARAMETRO_MODEL)
+                .getModel(MODEL_I18N)
                 .getResourceBundle();
 
             return resourceBundle.getText(pagamentoEfetuado ? textoPagamentoFoiEfetuado : textoPagamentoNaoFoiEfetuado);
+        },
+
+        formataData(data) {
+            const formatoData = "yyyy-MM-dd";
+
+            let formatador = DateFormat.getDateInstance({
+                pattern: formatoData
+            });
+            
+            return formatador.format(data);
         }
     }
 });

@@ -109,6 +109,12 @@ namespace Dominio
         private static bool CpfEhValido(string cpf)
         {
             string numerosCpf = new(cpf.Where(char.IsDigit).ToArray());
+
+            if (numerosCpf.Length != ValoresPadrao.TAMANHO_NUMEROS_CPF)
+            {
+                return false;
+            }
+
             int[] multiplicacoesPrimeiroDigito = new int[9] { 10, 9, 8, 7, 6, 5, 4, 3, 2 };
             int somaPrimeiroDigito = 0;
             int resto;

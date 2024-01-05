@@ -18,7 +18,7 @@
                         type="Emphasized"
                         icon="sap-icon://add"
                         text="{i18n>tituloBotaoAdicionar}"
-                        press=".aoClicarAbrirAdicionar" />
+                        press=".aoClicarAbrirCadastro" />
                     <ToolbarSpacer />
                     <SearchField
                         placeholder="{i18n>placeholderCampoPesquisaFiltro}"
@@ -34,11 +34,6 @@
                 growingThreshold="10"
                 growingScrollToLoad="false">
                 <columns>
-                    <Column
-                        hAlign="Center"
-                        width="5rem">
-                        <ObjectIdentifier title="{i18n>tituloColunaId}" />
-                    </Column>
                     <Column
                         hAlign="Center">
                         <ObjectIdentifier title="{i18n>tituloColunaNome}" />
@@ -84,9 +79,6 @@
                         type="Navigation"
                         press=".aoClicarAbrirDetalhes">
                         <cells>
-                            <ObjectIdentifier
-                                badgeNotes="true"
-                                title="{TabelaReservas>id}" />
                             <ObjectIdentifier title="{TabelaReservas>nome}" />
                             <ObjectIdentifier title="{TabelaReservas>cpf}" />
                             <Text text="{TabelaReservas>telefone}" />

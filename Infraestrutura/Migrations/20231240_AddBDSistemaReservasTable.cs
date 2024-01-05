@@ -3,8 +3,8 @@ using FluentMigrator.SqlServer;
 
 namespace Infraestrutura.Migrations
 {
-    [Migration(20231205124100)]
-    public class _20231205124100AddTabelaReservas : Migration
+    [Migration(20240103115300)]
+    public class _20240103115300AddTabelaReservas : Migration
     {
         public override void Up()
         {

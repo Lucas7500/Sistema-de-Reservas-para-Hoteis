@@ -15,6 +15,16 @@ sap.ui.define([],() => {
 
         obterPorId(id) {
             return fetch(`${ENDPOINT_RESERVA}/${id}`);
+        },
+
+        criarReserva(reservaParaCriar) {
+            let opcoes = {
+                method: "POST",
+                body: JSON.stringify(reservaParaCriar),
+                headers: {"Content-type": "application/json; charset=UTF-8"}
+            };
+
+            return fetch(ENDPOINT_RESERVA, opcoes);
         }
     }
 })
