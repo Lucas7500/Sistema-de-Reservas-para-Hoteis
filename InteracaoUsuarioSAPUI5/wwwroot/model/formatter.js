@@ -1,4 +1,6 @@
-sap.ui.define([], () => {
+sap.ui.define([
+    "sap/ui/core/format/DateFormat"
+], (DateFormat) => {
     "use strict";
 
     const MODEL_I18N = "i18n";
@@ -34,6 +36,16 @@ sap.ui.define([], () => {
                 .getResourceBundle();
 
             return resourceBundle.getText(pagamentoEfetuado ? textoPagamentoFoiEfetuado : textoPagamentoNaoFoiEfetuado);
+        },
+
+        formataData(data) {
+            const formatoData = "yyyy-MM-dd";
+
+            let formatador = DateFormat.getDateInstance({
+                pattern: formatoData
+            });
+            
+            return formatador.format(data);
         }
     }
 });

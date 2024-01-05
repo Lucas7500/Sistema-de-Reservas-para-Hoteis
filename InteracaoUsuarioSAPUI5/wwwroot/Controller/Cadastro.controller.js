@@ -1,24 +1,15 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
-    "sap/ui/core/routing/History",
+    "../model/Formatter",
+    "sap/ui/model/json/JSONModel",
     "../Repositorios/ReservaRepository",
     "sap/m/MessageBox"
-], (Controller, History, ReservaRepository, MessageBox) => {
+], (Controller, Formatter, JSONModel, ReservaRepository, MessageBox) => {
     "use strict";
 
     const CAMINHO_ROTA_CADASTRO = "reservas.hoteis.controller.Cadastro";
     const MODEL_I18N = "i18n";
     const STATUS_CREATED = 201;
-    const ID_INPUT_NOME = "inputNome";
-    const ID_INPUT_CPF = "inputCpf";
-    const ID_INPUT_TELEFONE = "inputTelefone";
-    const ID_INPUT_IDADE = "inputIdade";
-    const ID_COMBOBOX_SEXO = "comboBoxSexo";
-    const ID_INPUT_CHECKIN = "inputCheckIn";
-    const ID_INPUT_CHECKOUT = "inputCheckOut";
-    const ID_INPUT_PRECO_ESTADIA = "inputPrecoEstadia";
-    const ID_RADIOBUTTON_PAGAMENTO_EFETUADO = "radioButtonPagamentoEfetuado";
-    const ID_RADIOBUTTON_PAGAMENTO_NAO_EFETUADO = "radioButtonPagamentoNaoEfetuado";
 
     return Controller.extend(CAMINHO_ROTA_CADASTRO, {
         onInit() {
@@ -29,39 +20,46 @@ sap.ui.define([
         },
 
         _aoCoincidirRota() {
-            this._limparCampos();
+            this._modeloReserva();
         },
 
-        _limparCampos() {
-            const valorVazio = "";
-            const valorPadraoComboBoxSexo = 0;
+        _modeloReserva() {
+            const stringVazia = "";
+            let dataHoje = new Date();
+            let valorPadraoData = Formatter.formataData(dataHoje);
 
-            this.byId(ID_INPUT_NOME).setValue(valorVazio);
-            this.byId(ID_INPUT_CPF).setValue(valorVazio);
-            this.byId(ID_INPUT_TELEFONE).setValue(valorVazio);
-            this.byId(ID_INPUT_IDADE).setValue(valorVazio);
-            this.byId(ID_COMBOBOX_SEXO).setSelectedKey(valorPadraoComboBoxSexo);
-            this.byId(ID_INPUT_CHECKIN).setValue(valorVazio);
-            this.byId(ID_INPUT_CHECKOUT).setValue(valorVazio);
-            this.byId(ID_INPUT_PRECO_ESTADIA).setValue(valorVazio);
-            this.byId(ID_RADIOBUTTON_PAGAMENTO_NAO_EFETUADO).setSelected(true);
+            let reserva = {
+                nome: stringVazia,
+                cpf: stringVazia,
+                telefone: stringVazia,
+                idade: stringVazia,
+                sexo: stringVazia,
+                checkIn: valorPadraoData,
+                checkOut: valorPadraoData,
+                precoEstadia: stringVazia,
+                pagamentoEfetuado: false
+            };
+
+            const idRadioButtonPagamentoNaoEfetuado = "radioButtonPagamentoNaoEfetuado";
+            this.byId(idRadioButtonPagamentoNaoEfetuado).setSelected(true);
+
+            this.getView().setModel(new JSONModel(reserva));
         },
 
-        _retornaReservaAserCriada() {
-            const propriedadeSelectedKey = "selectedKey";
-            const propriedadeSelected = "selected";
+        _retornaReservaACriar() {
+            let reserva = this.getView().getModel().getData();
 
             return {
-                nome: this.byId(ID_INPUT_NOME).getValue(),
-                cpf: this.byId(ID_INPUT_CPF).getValue(),
-                telefone: this.byId(ID_INPUT_TELEFONE).getValue(),
-                idade: Number(this.byId(ID_INPUT_IDADE).getValue()),
-                sexo: Number(this.byId(ID_COMBOBOX_SEXO).getProperty(propriedadeSelectedKey)),
-                checkIn: this.byId(ID_INPUT_CHECKIN).getValue(),
-                checkOut: this.byId(ID_INPUT_CHECKOUT).getValue(),
-                precoEstadia: Number(this.byId(ID_INPUT_PRECO_ESTADIA).getValue()),
-                pagamentoEfetuado: this.byId(ID_RADIOBUTTON_PAGAMENTO_EFETUADO).getProperty(propriedadeSelected)
-            }
+                nome: reserva.nome,
+                cpf: reserva.cpf,
+                telefone: reserva.telefone,
+                idade: Number(reserva.idade),
+                sexo: Number(reserva.sexo),
+                checkIn: reserva.checkIn,
+                checkOut: reserva.checkOut,
+                precoEstadia: Number(reserva.precoEstadia),
+                pagamentoEfetuado: reserva.pagamentoEfetuado
+            };
         },
 
         _abrirDetalhesObjetoCriado(reservaCriada) {
@@ -78,16 +76,9 @@ sap.ui.define([
 
         voltarPagina() {
             try {
-                const oHistory = History.getInstance();
-                const sPreviousHash = oHistory.getPreviousHash();
-
-                if (sPreviousHash !== undefined) {
-                    window.history.go(-1);
-                } else {
-                    const rotaLista = "listagem";
-                    const oRouter = this.getOwnerComponent().getRouter();
-                    oRouter.navTo(rotaLista, {}, true);
-                }
+                const rotaLista = "listagem";
+                const oRouter = this.getOwnerComponent().getRouter();
+                oRouter.navTo(rotaLista);
             }
             catch (erro) {
                 MessageBox.warning(erro.message);
@@ -96,8 +87,8 @@ sap.ui.define([
 
         aoClicarSalvarReserva() {
             try {
-                let reserva = this._retornaReservaAserCriada();
                 let controller = this;
+                let reserva = this._retornaReservaACriar();
 
                 const resourceBundle = this.getOwnerComponent().getModel(MODEL_I18N).getResourceBundle();
                 const textoMensagemSucessoSalvar = "mensagemSucessoSalvar";
