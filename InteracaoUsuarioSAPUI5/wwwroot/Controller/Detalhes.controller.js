@@ -42,7 +42,7 @@ sap.ui.define([
             }
         },
 
-        voltarPagina() {
+        navegarParaTelaListagem() {
             try {
                 const rotaListagem = "listagem";
                 let rota = this.getOwnerComponent().getRouter();

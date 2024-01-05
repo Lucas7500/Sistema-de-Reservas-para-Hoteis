@@ -46,7 +46,7 @@ sap.ui.define([
             this.getView().setModel(new JSONModel(reserva));
         },
 
-        _retornaReservaACriar() {
+        _obterReservaPreenchida() {
             let reserva = this.getView().getModel().getData();
 
             return {
@@ -74,7 +74,7 @@ sap.ui.define([
             }
         },
 
-        voltarPagina() {
+        navegarParaTelaListagem() {
             try {
                 const rotaLista = "listagem";
                 const oRouter = this.getOwnerComponent().getRouter();
@@ -88,7 +88,7 @@ sap.ui.define([
         aoClicarSalvarReserva() {
             try {
                 let controller = this;
-                let reserva = this._retornaReservaACriar();
+                let reserva = this._obterReservaPreenchida();
 
                 const resourceBundle = this.getOwnerComponent().getModel(MODEL_I18N).getResourceBundle();
                 const textoMensagemSucessoSalvar = "mensagemSucessoSalvar";
@@ -139,7 +139,7 @@ sap.ui.define([
                     emphasizedAction: botaoSim,
                     onClose: function (acao) {
                         if (acao == botaoSim) {
-                            controller.voltarPagina();
+                            controller.navegarParaTelaListagem();
                         }
                     }
                 });

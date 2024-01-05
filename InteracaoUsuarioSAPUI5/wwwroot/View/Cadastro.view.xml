@@ -9,7 +9,7 @@
             <Toolbar>
                 <Button
                     icon="sap-icon://nav-back"
-                    press=".voltarPagina"
+                    press=".navegarParaTelaListagem"
                     type="Transparent" />
                 <ToolbarSpacer />
                 <ObjectIdentifier title="{i18n>tituloCadastro}" />
