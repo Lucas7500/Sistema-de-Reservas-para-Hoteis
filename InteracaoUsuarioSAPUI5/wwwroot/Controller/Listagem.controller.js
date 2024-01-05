@@ -7,16 +7,15 @@ sap.ui.define([
 ], (Controller, Formatter, JSONModel, ReservaRepository, MessageBox) => {
     "use strict";
 
+    const CAMINHO_ROTA_LISTAGEM = "reservas.hoteis.controller.Listagem";
     const STATUS_OK = 200;
     const MODELO_LISTA = "TabelaReservas";
-    const CAMINHO_ROTA_LISTAGEM = "reservas.hoteis.controller.Listagem";
 
     return Controller.extend(CAMINHO_ROTA_LISTAGEM, {
         formatter: Formatter,
         onInit() {
-            const rotaLista = 'listagem';
-
             let rota = this.getOwnerComponent().getRouter();
+            const rotaLista = 'listagem';
             rota.getRoute(rotaLista).attachPatternMatched(this._aoCoincidirRota, this);
         },
 
@@ -51,7 +50,6 @@ sap.ui.define([
             try {
                 const parametroQuery = "query";
                 let stringFiltro = filtro.getParameter(parametroQuery);
-                
                 this._obterReservas(stringFiltro);
             } catch (erro) {
                 MessageBox.warning(erro.message);
@@ -71,10 +69,7 @@ sap.ui.define([
         aoClicarAbrirDetalhes(evento) {
             try {
                 const propriedadeId = "id";
-                let idReserva = evento
-                    .getSource()
-                    .getBindingContext(MODELO_LISTA)
-                    .getProperty(propriedadeId);
+                let idReserva = evento.getSource().getBindingContext(MODELO_LISTA).getProperty(propriedadeId);
 
                 const rotaDetalhes = "detalhes";
                 let rota = this.getOwnerComponent().getRouter();

@@ -9,10 +9,7 @@ sap.ui.define([
         formataSexo(sexo) {
             const textoSexoMasculino = "sexo0";
             const textoSexoFeminino = "sexo1";
-
-            const resourceBundle = this.getOwnerComponent()
-                .getModel(MODEL_I18N)
-                .getResourceBundle();
+            const resourceBundle = this.getOwnerComponent().getModel(MODEL_I18N).getResourceBundle();
 
             return resourceBundle.getText(sexo ? textoSexoFeminino : textoSexoMasculino)
         },
@@ -30,17 +27,13 @@ sap.ui.define([
         formataPagamentoEfetuado(pagamentoEfetuado) {
             const textoPagamentoFoiEfetuado = "pagamentoEfetuadoTrue";
             const textoPagamentoNaoFoiEfetuado = "pagamentoEfetuadoFalse";
-
-            const resourceBundle = this.getOwnerComponent()
-                .getModel(MODEL_I18N)
-                .getResourceBundle();
+            const resourceBundle = this.getOwnerComponent().getModel(MODEL_I18N).getResourceBundle();
 
             return resourceBundle.getText(pagamentoEfetuado ? textoPagamentoFoiEfetuado : textoPagamentoNaoFoiEfetuado);
         },
 
         formataData(data) {
             const formatoData = "yyyy-MM-dd";
-
             let formatador = DateFormat.getDateInstance({
                 pattern: formatoData
             });

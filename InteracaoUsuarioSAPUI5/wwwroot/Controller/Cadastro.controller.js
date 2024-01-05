@@ -13,9 +13,8 @@ sap.ui.define([
 
     return Controller.extend(CAMINHO_ROTA_CADASTRO, {
         onInit() {
-            const rotaCadastro = 'cadastro';
-
             let rota = this.getOwnerComponent().getRouter();
+            const rotaCadastro = 'cadastro';
             rota.getRoute(rotaCadastro).attachPatternMatched(this._aoCoincidirRota, this);
         },
 
@@ -24,10 +23,10 @@ sap.ui.define([
         },
 
         _modeloReserva() {
-            const stringVazia = "";
             let dataHoje = new Date();
             let valorPadraoData = Formatter.formataData(dataHoje);
-
+            
+            const stringVazia = "";
             let reserva = {
                 nome: stringVazia,
                 cpf: stringVazia,
@@ -61,11 +60,41 @@ sap.ui.define([
                 pagamentoEfetuado: reserva.pagamentoEfetuado
             };
         },
+        
+        _criarReserva(reserva) {
+            const resourceBundle = this.getOwnerComponent().getModel(MODEL_I18N).getResourceBundle();
+            const textoMensagemSucessoSalvar = "mensagemSucessoSalvar";
+            const mensagemSucessoSalvar = resourceBundle.getText(textoMensagemSucessoSalvar);
 
-        _abrirDetalhesObjetoCriado(reservaCriada) {
+            let controller = this;
+
+            ReservaRepository.criarReserva(reserva)
+                .then(async response => {
+                    if (response.status == STATUS_CREATED) {
+                        let reserva = await response.json();
+                        MessageBox.success(mensagemSucessoSalvar, {
+                            onClose: () => {
+                                controller._abrirDetalhesReservaCriada(reserva);
+                            }
+                        });
+
+                        return response.json();
+                    }
+                    else {
+                        return Promise.reject(response);
+                    }
+                })
+                .catch(async erro => {
+                    let mensagemErro = await erro.text();
+
+                    MessageBox.warning(mensagemErro);
+                });
+        },
+
+        _abrirDetalhesReservaCriada(reservaCriada) {
             try {
-                const rotaDetalhes = "detalhes";
                 let rota = this.getOwnerComponent().getRouter();
+                const rotaDetalhes = "detalhes";
                 rota.navTo(rotaDetalhes, {
                     id: reservaCriada.id
                 });
@@ -76,9 +105,9 @@ sap.ui.define([
 
         _navegarParaTelaListagem() {
             try {
-                const rotaLista = "listagem";
-                const oRouter = this.getOwnerComponent().getRouter();
-                oRouter.navTo(rotaLista);
+                let rota = this.getOwnerComponent().getRouter();
+                const rotaListagem = "listagem";
+                rota.navTo(rotaListagem);
             }
             catch (erro) {
                 MessageBox.warning(erro.message);
@@ -88,37 +117,11 @@ sap.ui.define([
         aoClicarNavegarParaTelaListagem() {
             this._navegarParaTelaListagem();
         },
-        
+
         aoClicarSalvarReserva() {
             try {
-                let controller = this;
                 let reserva = this._obterReservaPreenchida();
-
-                const resourceBundle = this.getOwnerComponent().getModel(MODEL_I18N).getResourceBundle();
-                const textoMensagemSucessoSalvar = "mensagemSucessoSalvar";
-                const mensagemSucessoSalvar = resourceBundle.getText(textoMensagemSucessoSalvar);
-
-                ReservaRepository.criarReserva(reserva)
-                    .then(async response => {
-                        if (response.status == STATUS_CREATED) {
-                            let reserva = await response.json();
-                            MessageBox.success(mensagemSucessoSalvar, {
-                                onClose: () => {
-                                    controller._abrirDetalhesObjetoCriado(reserva);
-                                }
-                            });
-
-                            return response.json();
-                        }
-                        else {
-                            return Promise.reject(response);
-                        }
-                    })
-                    .catch(async erro => {
-                        let mensagemErro = await erro.text();
-
-                        MessageBox.warning(mensagemErro);
-                    });
+                this._criarReserva(reserva);
             }
             catch (erro) {
                 MessageBox.warning(erro.message);
