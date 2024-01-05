@@ -23,8 +23,15 @@ sap.ui.define([
             try {
                 const parametroArgumentos = "arguments";
                 let idReserva = evento.getParameter(parametroArgumentos).id;
-
-                ReservaRepository.obterPorId(idReserva)
+                
+                this._obterReserva(idReserva);
+            }
+            catch (erro) {
+                MessageBox.warning(erro.message);
+            }
+        },
+        _obterReserva(id) {
+            ReservaRepository.obterPorId(id)
                     .then(response => {
                         return response.status == STATUS_OK
                             ? response.json()
@@ -36,13 +43,9 @@ sap.ui.define([
 
                         MessageBox.warning(mensagemErro);
                     });
-            }
-            catch (erro) {
-                MessageBox.warning(erro.message);
-            }
         },
 
-        navegarParaTelaListagem() {
+        aoClicarNavegarParaTelaListagem() {
             try {
                 const rotaListagem = "listagem";
                 let rota = this.getOwnerComponent().getRouter();

@@ -74,7 +74,7 @@ sap.ui.define([
             }
         },
 
-        navegarParaTelaListagem() {
+        _navegarParaTelaListagem() {
             try {
                 const rotaLista = "listagem";
                 const oRouter = this.getOwnerComponent().getRouter();
@@ -85,6 +85,10 @@ sap.ui.define([
             }
         },
 
+        aoClicarNavegarParaTelaListagem() {
+            this._navegarParaTelaListagem();
+        },
+        
         aoClicarSalvarReserva() {
             try {
                 let controller = this;
@@ -139,7 +143,7 @@ sap.ui.define([
                     emphasizedAction: botaoSim,
                     onClose: function (acao) {
                         if (acao == botaoSim) {
-                            controller.navegarParaTelaListagem();
+                            controller._navegarParaTelaListagem();
                         }
                     }
                 });

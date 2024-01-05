@@ -26,7 +26,15 @@ sap.ui.define([
 
         _carregarLista() {
             try {
-                ReservaRepository.obterTodos()
+                this._obterReservas();
+            }
+            catch (erro) {
+                MessageBox.warning(erro.message);
+            }
+        },
+
+        _obterReservas(filtro) {
+            ReservaRepository.obterTodos(filtro)
                 .then(response => {
                     return response.status == STATUS_OK
                         ? response.json()
@@ -37,28 +45,14 @@ sap.ui.define([
                     let mensagemErro = await erro.text();
                     MessageBox.warning(mensagemErro);
                 })
-            }
-            catch (erro) {
-                MessageBox.warning(erro.message);
-            }
         },
 
         aoPesquisarFiltrarReservas(filtro) {
             try {
                 const parametroQuery = "query";
                 let stringFiltro = filtro.getParameter(parametroQuery);
-
-                ReservaRepository.obterTodos(stringFiltro)
-                    .then(response => {
-                        return response.status == STATUS_OK
-                            ? response.json()
-                            : Promise.reject(response);
-                    })
-                    .then(response => this.getView().setModel(new JSONModel(response), MODELO_LISTA))
-                    .catch(async erro => {
-                        let mensagemErro = await erro.text();
-                        MessageBox.warning(mensagemErro);
-                    })
+                
+                this._obterReservas(stringFiltro);
             } catch (erro) {
                 MessageBox.warning(erro.message);
             }
@@ -81,7 +75,7 @@ sap.ui.define([
                     .getSource()
                     .getBindingContext(MODELO_LISTA)
                     .getProperty(propriedadeId);
-                
+
                 const rotaDetalhes = "detalhes";
                 let rota = this.getOwnerComponent().getRouter();
                 rota.navTo(rotaDetalhes, {
