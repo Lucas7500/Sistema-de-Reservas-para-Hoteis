@@ -42,7 +42,8 @@
                         required="true"
                         placeholder="{i18n>placeholderNome}"
                         showClearIcon="true"
-                        value="{/nome}" />
+                        value="{/nome}"
+                        change=".teste" />
                     <Label
                         text="{i18n>labelCpf}"
                         labelFor="inputCpf" />

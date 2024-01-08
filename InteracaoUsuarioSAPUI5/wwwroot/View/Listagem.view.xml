@@ -35,15 +35,18 @@
                 growingScrollToLoad="false">
                 <columns>
                     <Column
-                        hAlign="Center">
+                        hAlign="Center"
+                        width="10rem">
                         <ObjectIdentifier title="{i18n>tituloColunaNome}" />
                     </Column>
                     <Column
-                        hAlign="Center">
+                        hAlign="Center"
+                        width="10rem">
                         <ObjectIdentifier title="{i18n>tituloColunaCpf}" />
                     </Column>
                     <Column
-                        hAlign="Center">
+                        hAlign="Center"
+                        width="10rem">
                         <ObjectIdentifier title="{i18n>tituloColunaTelefone}" />
                     </Column>
                     <Column
@@ -53,24 +56,26 @@
                     </Column>
                     <Column
                         hAlign="Center"
-                        width="5rem">
+                        width="6rem">
                         <ObjectIdentifier title="{i18n>tituloColunaSexo}" />
                     </Column>
                     <Column
-                        hAlign="Center">
+                        hAlign="Center"
+                        width="7rem">
                         <ObjectIdentifier title="{i18n>tituloColunaCheckIn}" />
                     </Column>
                     <Column
-                        hAlign="Center">
+                        hAlign="Center"
+                        width="7rem">
                         <ObjectIdentifier title="{i18n>tituloColunaCheckOut}" />
                     </Column>
                     <Column
-                        hAlign="Center">
+                        hAlign="Center"
+                        width="9rem">
                         <ObjectIdentifier title="{i18n>tituloColunaPrecoEstadia}" />
                     </Column>
                     <Column
-                        hAlign="Center"
-                        width="6rem">
+                        hAlign="Center">
                         <ObjectIdentifier title="{i18n>tituloColunaPagamentoEfetuado}" />
                     </Column>
                 </columns>
@@ -96,7 +101,7 @@
                                 formatOptions: {
                                     style: 'short',
                                     source: {
-                                    pattern: 'yyyy-MM-ddTHH:mm:ss'
+                                        pattern: 'yyyy-MM-ddTHH:mm:ss'
                                     }
                                 }
                             }"
@@ -108,7 +113,7 @@
                                 formatOptions: {
                                     style: 'short',
                                     source: {
-                                    pattern: 'yyyy-MM-ddTHH:mm:ss'
+                                        pattern: 'yyyy-MM-ddTHH:mm:ss'
                                     }
                                 }
                             }"

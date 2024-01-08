@@ -3,8 +3,10 @@ sap.ui.define([
     "../model/Formatter",
     "sap/ui/model/json/JSONModel",
     "../Repositorios/ReservaRepository",
-    "sap/m/MessageBox"
-], (Controller, Formatter, JSONModel, ReservaRepository, MessageBox) => {
+    "sap/m/MessageBox",
+    "../Services/Validacao",
+    "sap/ui/model/ValidateException"
+], (Controller, Formatter, JSONModel, ReservaRepository, MessageBox, Validacao, ValidateException) => {
     "use strict";
 
     const CAMINHO_ROTA_CADASTRO = "reservas.hoteis.controller.Cadastro";
@@ -25,7 +27,7 @@ sap.ui.define([
         _modeloReserva() {
             let dataHoje = new Date();
             let valorPadraoData = Formatter.formataData(dataHoje);
-            
+
             const stringVazia = "";
             let reserva = {
                 nome: stringVazia,
@@ -60,7 +62,7 @@ sap.ui.define([
                 pagamentoEfetuado: reserva.pagamentoEfetuado
             };
         },
-        
+
         _criarReserva(reserva) {
             const resourceBundle = this.getOwnerComponent().getModel(MODEL_I18N).getResourceBundle();
             const textoMensagemSucessoSalvar = "mensagemSucessoSalvar";
@@ -121,7 +123,7 @@ sap.ui.define([
         aoClicarSalvarReserva() {
             try {
                 let reserva = this._obterReservaPreenchida();
-                this._criarReserva(reserva);
+                this._criarReserva(reserva)
             }
             catch (erro) {
                 MessageBox.warning(erro.message);
@@ -131,12 +133,11 @@ sap.ui.define([
         aoClicarCancelarCadastro() {
             try {
                 const resourceBundle = this.getOwnerComponent().getModel(MODEL_I18N).getResourceBundle();
-
                 const textoBotaoSim = "botaoSim";
-                const textoBotaoNao = "botaoNao";
-                const textoMensagemConfirmacaoCancelar = "mensagemConfirmacaoCancelar";
                 const botaoSim = resourceBundle.getText(textoBotaoSim);
+                const textoBotaoNao = "botaoNao";
                 const botaoNao = resourceBundle.getText(textoBotaoNao);
+                const textoMensagemConfirmacaoCancelar = "mensagemConfirmacaoCancelar";
                 const mensagemConfirmacao = resourceBundle.getText(textoMensagemConfirmacaoCancelar);
 
                 let controller = this;
@@ -154,6 +155,12 @@ sap.ui.define([
             catch (erro) {
                 MessageBox.warning(erro.message);
             }
+        },
+
+        teste(evento) {
+            evento.getSource().setValueState("Error")
+            evento.getSource().setValueStateText("DEU BOM PORRAAAAAAAAAAAAAAAAAAAA")
+            window.eventoNome = evento;
         }
     })
 })

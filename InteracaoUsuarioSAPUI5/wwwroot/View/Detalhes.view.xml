@@ -106,7 +106,7 @@
                                         formatOptions: {
                                             style: 'short',
                                             source: {
-                                            pattern: 'yyyy-MM-ddTHH:mm:ss'
+                                                pattern: 'yyyy-MM-ddTHH:mm:ss'
                                             }
                                         }
                                     }"
@@ -121,7 +121,7 @@
                                         formatOptions: {
                                             style: 'short',
                                             source: {
-                                            pattern: 'yyyy-MM-ddTHH:mm:ss'
+                                                pattern: 'yyyy-MM-ddTHH:mm:ss'
                                             }
                                         }
                                     }"
