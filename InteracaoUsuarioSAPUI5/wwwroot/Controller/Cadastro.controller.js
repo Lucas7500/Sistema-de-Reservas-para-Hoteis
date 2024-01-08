@@ -159,7 +159,7 @@ sap.ui.define([
 
         teste(evento) {
             evento.getSource().setValueState("Error")
-            evento.getSource().setValueStateText("DEU BOM PORRAAAAAAAAAAAAAAAAAAAA")
+            evento.getSource().setValueStateText("DEU BOM")
             window.eventoNome = evento;
         }
     })
