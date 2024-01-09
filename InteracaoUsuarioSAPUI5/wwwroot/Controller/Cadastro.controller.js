@@ -4,14 +4,16 @@ sap.ui.define([
     "sap/ui/model/json/JSONModel",
     "../Repositorios/ReservaRepository",
     "sap/m/MessageBox",
-    "../Services/Validacao",
-    "sap/ui/model/ValidateException"
-], (Controller, Formatter, JSONModel, ReservaRepository, MessageBox, Validacao, ValidateException) => {
+    "../Services/Validacao"
+], (Controller, Formatter, JSONModel, ReservaRepository, MessageBox, Validacao) => {
     "use strict";
 
     const CAMINHO_ROTA_CADASTRO = "reservas.hoteis.controller.Cadastro";
     const MODEL_I18N = "i18n";
     const STATUS_CREATED = 201;
+    const VALUE_STATE_SUCESSO = "Success";
+    const VALUE_STATE_ERRO = "Error";
+    const PARAMETRO_VALUE = "value";
 
     return Controller.extend(CAMINHO_ROTA_CADASTRO, {
         onInit() {
@@ -61,6 +63,10 @@ sap.ui.define([
                 precoEstadia: Number(reserva.precoEstadia),
                 pagamentoEfetuado: reserva.pagamentoEfetuado
             };
+        },
+
+        _obterValorCheckIn() {
+            return this.byId("inputCheckIn").getValue();
         },
 
         _criarReserva(reserva) {
@@ -157,10 +163,83 @@ sap.ui.define([
             }
         },
 
-        teste(evento) {
-            evento.getSource().setValueState("Error")
-            evento.getSource().setValueStateText("DEU BOM")
-            window.eventoNome = evento;
+        aoMudarValidarNome(evento) {
+            try {
+                let nome = evento.getParameter(PARAMETRO_VALUE);
+
+                Validacao.validarNome(nome);
+                evento.getSource().setValueState(VALUE_STATE_SUCESSO);
+            }
+            catch (mensagemErroValidacao) {
+                evento.getSource().setValueState(VALUE_STATE_ERRO).setValueStateText(mensagemErroValidacao);
+            }
+        },
+
+        aoMudarValidarCpf(evento) {
+            try {
+                let cpf = evento.getParameter(PARAMETRO_VALUE);
+
+                Validacao.validarCpf(cpf);
+                evento.getSource().setValueState(VALUE_STATE_SUCESSO);
+            } catch (mensagemErroValidacao) {
+                evento.getSource().setValueState(VALUE_STATE_ERRO).setValueStateText(mensagemErroValidacao);
+            }
+        },
+
+        aoMudarValidarTelefone(evento) {
+            try {
+                let telefone = evento.getParameter(PARAMETRO_VALUE);
+
+                Validacao.validarTelefone(telefone);
+                evento.getSource().setValueState(VALUE_STATE_SUCESSO);
+            } catch (mensagemErroValidacao) {
+                evento.getSource().setValueState(VALUE_STATE_ERRO).setValueStateText(mensagemErroValidacao);
+            }
+        },
+
+        aoMudarValidarIdade(evento) {
+            try {
+                let idade = evento.getParameter(PARAMETRO_VALUE);
+
+                Validacao.validarIdade(idade);
+                evento.getSource().setValueState(VALUE_STATE_SUCESSO);
+            } catch (mensagemErroValidacao) {
+                evento.getSource().setValueState(VALUE_STATE_ERRO).setValueStateText(mensagemErroValidacao);
+            }
+        },
+
+        aoMudarValidarCheckIn(evento) {
+            try {
+                let checkIn = evento.getParameter(PARAMETRO_VALUE);
+
+                Validacao.validarCheckIn(checkIn);
+                evento.getSource().setValueState(VALUE_STATE_SUCESSO);
+            } catch (mensagemErroValidacao) {
+                evento.getSource().setValueState(VALUE_STATE_ERRO).setValueStateText(mensagemErroValidacao);
+            }
+        },
+
+        aoMudarValidarCheckOut(evento) {
+            try {
+                let checkOut = evento.getParameter(PARAMETRO_VALUE);
+                let checkIn = this._obterValorCheckIn();
+
+                Validacao.validarCheckOut(checkOut, checkIn);
+                evento.getSource().setValueState(VALUE_STATE_SUCESSO);
+            } catch (mensagemErroValidacao) {
+                evento.getSource().setValueState(VALUE_STATE_ERRO).setValueStateText(mensagemErroValidacao);
+            }
+        },
+
+        aoMudarValidarPrecoEstadia(evento) {
+            try {
+                let precoEstadia = evento.getParameter(PARAMETRO_VALUE);
+
+                Validacao.validarPrecoEstadia(precoEstadia);
+                evento.getSource().setValueState(VALUE_STATE_SUCESSO);
+            } catch (mensagemErroValidacao) {
+                evento.getSource().setValueState(VALUE_STATE_ERRO).setValueStateText(mensagemErroValidacao);
+            }
         }
     })
 })

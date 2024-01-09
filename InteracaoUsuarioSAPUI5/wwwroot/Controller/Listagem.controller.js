@@ -8,7 +8,6 @@ sap.ui.define([
     "use strict";
 
     const CAMINHO_ROTA_LISTAGEM = "reservas.hoteis.controller.Listagem";
-    const STATUS_OK = 200;
     const MODELO_LISTA = "TabelaReservas";
 
     return Controller.extend(CAMINHO_ROTA_LISTAGEM, {
@@ -35,7 +34,7 @@ sap.ui.define([
         _obterReservas(filtro) {
             ReservaRepository.obterTodos(filtro)
                 .then(response => {
-                    return response.status == STATUS_OK
+                    return response.status == response.ok
                         ? response.json()
                         : Promise.reject(response);
                 })

@@ -149,7 +149,7 @@ namespace Dominio
 
             if (resto < 2)
             {
-                if (segundoDigitoVerificador != '0') return false;
+                if (segundoDigitoVerificador != 0) return false;
             }
             else
             {
