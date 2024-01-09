@@ -10,7 +10,10 @@ sap.ui.define([], () => {
 
         validarNome(nome) {
             let nomeFormatado = nome.trim();
-            if (nomeFormatado == "") throw "Nome não preenchido"
+            if (nomeFormatado == "") {
+                LISTA_ERROS.push("Nome não preenchido");
+                return false;
+            }
 
             let regexNome = "^[a-zA-ZA-ZáàâãéèêíìîóòõôúùûçÁÀÃÂÉÈÊÍÌÎÓÒÔÕÚÙÛÇ ]*$";
 
@@ -18,18 +21,30 @@ sap.ui.define([], () => {
             const tamanhoMinimoNome = 3;
             const tamanhoMaximoNome = 50;
 
-            if (tamanhoNome < tamanhoMinimoNome) throw "Nome muito pequeno";
-            if (tamanhoNome > tamanhoMaximoNome) throw "Nome muito grande";
+            if (tamanhoNome < tamanhoMinimoNome) {
+                LISTA_ERROS.push("Nome muito pequeno");
+                return false;
+            }
+            else if (tamanhoNome > tamanhoMaximoNome) {
+                LISTA_ERROS.push("Nome muito grande");
+                return false;
+            };
 
             for (let char of nomeFormatado) {
                 if (!char.match(regexNome)) {
-                    throw "Formato incorreto para nome"
+                    LISTA_ERROS.push("Formato incorreto para nome");
+                    return false;
                 }
             }
+
+            return true;
         },
 
         validarCpf(cpf) {
-            if (cpf == "") throw "CPF não preenchido";
+            if (cpf == "") {
+                LISTA_ERROS.push("CPF não preenchido");
+                return false;
+            };
 
             let numerosCpf = "";
 
@@ -41,7 +56,10 @@ sap.ui.define([], () => {
 
             const tamanhoNumerosCpf = numerosCpf.length;
             const tamanhoCpfPreenchido = 11;
-            if (tamanhoNumerosCpf < tamanhoCpfPreenchido) throw "CPF deve estar totalmente preenchido";
+            if (tamanhoNumerosCpf < tamanhoCpfPreenchido) {
+                LISTA_ERROS.push("CPF deve estar totalmente preenchido");
+                return false;
+            }
 
             let stringNumerosCpf = String(numerosCpf);
             const multiplicacoesPrimeiroDigito = [10, 9, 8, 7, 6, 5, 4, 3, 2];
@@ -57,7 +75,8 @@ sap.ui.define([], () => {
 
             if ((resto < 2 && primeiroDigitoVerificador != 0) ||
                 (resto >= 2 && primeiroDigitoVerificador != (11 - resto))) {
-                throw "Cpf é inválido"
+                LISTA_ERROS.push("Cpf é inválido");
+                return false;
             }
 
             const multiplicacoesSegundoDigito = [11, 10, 9, 8, 7, 6, 5, 4, 3, 2];
@@ -72,12 +91,18 @@ sap.ui.define([], () => {
 
             if ((resto < 2 && segundoDigitoVerificador != 0) ||
                 (resto >= 2 && segundoDigitoVerificador != (11 - resto))) {
-                throw "CPF é inválido"
+                LISTA_ERROS.push("CPF é inválido");
+                return false;
             }
+
+            return true;
         },
 
         validarTelefone(telefone) {
-            if (telefone == "") throw "Telefone não preenchido";
+            if (telefone == "") {
+                LISTA_ERROS.push("Telefone não preenchido");
+                return false;
+            }
 
             let numerosTelefone = "";
 
@@ -90,59 +115,102 @@ sap.ui.define([], () => {
             const tamanhoNumerosTelefone = numerosTelefone.length;
             const tamanhoTelefonePreenchido = 11;
 
-            if (tamanhoNumerosTelefone < tamanhoTelefonePreenchido) throw "Telefone deve estar totalmente preenchido";
+            if (tamanhoNumerosTelefone < tamanhoTelefonePreenchido) {
+                LISTA_ERROS.push("Telefone deve estar totalmente preenchido");
+                return false;
+            }
         },
 
         validarIdade(idade) {
-            if (idade == "") throw "Idade não preenchida"
+            if (idade == "") {
+                LISTA_ERROS.push("Idade não preenchida");
+                return false;
+            }
 
             let numeroIdade = Number(idade);
-            if (numeroIdade < 18) throw "O cliente não pode ser menor de idade";
-            if (numeroIdade >= 200) throw "O cliente não pode ter mais de 200 anos"
+
+            if (numeroIdade < 18) {
+                LISTA_ERROS.push("O cliente não pode ser menor de idade");
+                return false;
+            }
+            else if (numeroIdade >= 200) {
+                LISTA_ERROS.push("O cliente não pode ter mais de 200 anos");
+                return false;
+            }
+
+            return true;
         },
 
         validarCheckIn(checkIn) {
-            if (checkIn == "") throw "Check-in não preenchido";
+            if (checkIn == "") {
+                LISTA_ERROS.push("Check-in não preenchido");
+                return false;
+            }
 
             let dataHoje = new Date();
             let [anoCheckIn, mesCheckIn, diaCheckIn] = checkIn.split("-");
 
             if (anoCheckIn < dataHoje.getFullYear()) {
-                throw "Data de check-in inválida"
+                LISTA_ERROS.push("Data de check-in inválida");
+                return false;
             }
             else if ((anoCheckIn == dataHoje.getFullYear()) &&
                 (mesCheckIn == (dataHoje.getMonth() + 1) && (diaCheckIn < dataHoje.getDate()))) {
-                throw "Data de check-in inválida";
+                LISTA_ERROS.push("Data de check-in inválida");
+                return false;
             }
+
+            return true;
         },
 
         validarCheckOut(checkOut, checkIn) {
-            if (checkIn == "") throw "Preencha primeiro o check-in"
-            if (checkOut == "") throw "Check-out não preenchido";
+            if (checkIn == "") {
+                LISTA_ERROS.push("Preencha primeiro o check-in");
+                return false;
+            }
+            if (checkOut == "") {
+                LISTA_ERROS.push("Check-out não preenchido");
+                return false;
+            }
 
             let dataHoje = new Date();
             let [anoCheckOut, mesCheckOut, diaCheckOut] = checkOut.split("-");
             let [anoCheckIn, mesCheckIn, diaCheckIn] = checkIn.split("-");
 
             if (anoCheckOut < dataHoje.getFullYear()) {
-                throw "Data de check-in inválida"
+                LISTA_ERROS.push("Data de check-in inválida");
             }
             else if ((anoCheckOut == dataHoje.getFullYear()) &&
                 (mesCheckOut == (dataHoje.getMonth() + 1) && (diaCheckOut < dataHoje.getDate()))) {
-                throw "Data de check-in inválida";
+                LISTA_ERROS.push("Data de check-in inválida");
+                return false;
             }
             else if ((anoCheckOut == anoCheckIn) &&
                 (mesCheckOut == mesCheckIn && (diaCheckOut < diaCheckIn))) {
-                throw "Data de check-out inválida";
+                LISTA_ERROS.push("Data de check-out inválida");
+                return false;
             }
+
+            return true;
         },
 
         validarPrecoEstadia(precoEstadia) {
-            if (precoEstadia == "") throw "Preço da estadia não preenchido";
+            if (precoEstadia == "") {
+                LISTA_ERROS.push("Preço da estadia não preenchido");
+                return false;
+            }
 
             let numeroPrecoEstadia = Number(precoEstadia);
-            if (numeroPrecoEstadia > 9999999999.99) throw "Preço da estadia acima do permitido";
-            if (numeroPrecoEstadia <= 0) throw "Preço da estadia não pode ser negativo ou zero";
+            if (numeroPrecoEstadia > 9999999999.99) {
+                LISTA_ERROS.push("Preço da estadia acima do permitido");
+                return false;
+            }
+            else if (numeroPrecoEstadia <= 0) {
+                LISTA_ERROS.push("Preço da estadia não pode ser negativo ou zero");
+                return false;
+            }
+
+            return true;
         }
     }
 })
