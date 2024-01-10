@@ -2,37 +2,73 @@ sap.ui.define([], () => {
     "use strict";
 
     const REGEX_NUMEROS = "[0-9]";
-    let LISTA_ERROS = []
+    
+    let LISTA_ERROS = [];
+    const INDICE_MENSAGEM_ERRO_NOME = 0;
+    const INDICE_MENSAGEM_ERRO_CPF = 1;
+    const INDICE_MENSAGEM_ERRO_TELEFONE = 2;
+    const INDICE_MENSAGEM_ERRO_IDADE = 3;
+    const INDICE_MENSAGEM_ERRO_CHECK_IN = 4;
+    const INDICE_MENSAGEM_ERRO_CHECK_OUT = 5;
+    const INDICE_MENSAGEM_ERRO_PRECO_ESTADIA = 6;
 
     return {
-        _obterListaErros() {
-            let separador = "\n";
-            let erros = LISTA_ERROS.join(separador);
+        obterListaErros() {
+            let erros = [];
+            
+            for (let mensagemErro of LISTA_ERROS) {
+                if (mensagemErro) {
+                    erros.push(mensagemErro);
+                }
+            }
+
             LISTA_ERROS = [];
 
             return erros;
         },
 
-        validarValorInicialCampos(reserva) {
+        obterMensagensErro() {
+            let separador = "\n";
+            
+            return this.obterListaErros().join(separador);
+        },
+
+        contemValor(propriedade) {
+            return Boolean(propriedade);
+        },
+
+        validarPropriedadesSemAlteracao(reserva) {
             let nomeFormatado = reserva.nome.trim();
 
-            if (nomeFormatado == "") LISTA_ERROS.push("Nome não preenchido");
-            if (reserva.cpf == "") LISTA_ERROS.push("CPF não preenchido");
-            if (reserva.telefone == "") LISTA_ERROS.push("Telefone não preenchido");
-            if (reserva.idade == "") LISTA_ERROS.push("Idade não preenchida");
-            if (reserva.checkIn == "") LISTA_ERROS.push("Check-in não preenchido");
-            if (reserva.checkOut == "") LISTA_ERROS.push("Check-out não preenchido");
-            if (reserva.precoEstadia == "") LISTA_ERROS.push("Preço da estadia não preenchido");
+            debugger
+            if (!this.contemValor(nomeFormatado))
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_NOME] = "Nome não preenchido";
 
-            return this._obterListaErros();
+            if (!this.contemValor(reserva.cpf))
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CPF] = "CPF não preenchido";
+
+            if (!this.contemValor(reserva.telefone))
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_TELEFONE] = "Telefone não preenchido";
+
+            if (!this.contemValor(reserva.idade))
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_IDADE] = "Idade não preenchida";
+
+            if (!this.contemValor(reserva.checkIn))
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_IN] = "Check-in não preenchido";
+
+            if (!this.contemValor(reserva.checkOut))
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_OUT] = "Check-out não preenchido";
+
+            if (!this.contemValor(reserva.precoEstadia))
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_NOME] = "Preço da estadia não preenchido";
         },
 
         validarNome(nome) {
             let nomeFormatado = nome.trim();
-            
-            if (nomeFormatado == "") {
-                LISTA_ERROS.push("Nome não preenchido");
-                return "Nome não preenchido";
+
+            if (!this.contemValor(nomeFormatado)) {
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_NOME] = "Nome não preenchido";
+                return LISTA_ERROS[INDICE_MENSAGEM_ERRO_NOME];
             }
 
             let regexNome = "^[a-zA-ZA-ZáàâãéèêíìîóòõôúùûçÁÀÃÂÉÈÊÍÌÎÓÒÔÕÚÙÛÇ ]*$";
@@ -42,26 +78,26 @@ sap.ui.define([], () => {
             const tamanhoMaximoNome = 50;
 
             if (tamanhoNome < tamanhoMinimoNome) {
-                LISTA_ERROS.push("Nome muito pequeno");
-                return "Nome muito pequeno";
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_NOME] = "Nome muito pequeno";
+                return LISTA_ERROS[INDICE_MENSAGEM_ERRO_NOME];
             }
             else if (tamanhoNome > tamanhoMaximoNome) {
-                LISTA_ERROS.push("Nome muito grande");
-                return "Nome muito grande";
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_NOME] = "Nome muito grande";
+                return LISTA_ERROS[INDICE_MENSAGEM_ERRO_NOME];
             };
 
             for (let char of nomeFormatado) {
                 if (!char.match(regexNome)) {
-                    LISTA_ERROS.push("Formato incorreto para nome");
-                    return "Formato incorreto para nome";
+                    LISTA_ERROS[INDICE_MENSAGEM_ERRO_NOME] = "Formato incorreto para nome";
+                    return LISTA_ERROS[INDICE_MENSAGEM_ERRO_NOME];
                 }
             }
         },
 
         validarCpf(cpf) {
-            if (cpf == "") {
-                LISTA_ERROS.push("CPF não preenchido");
-                return "CPF não preenchido";
+            if (!this.contemValor(cpf)) {
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CPF] = "CPF não preenchido";
+                return LISTA_ERROS[INDICE_MENSAGEM_ERRO_CPF];
             };
 
             let numerosCpf = "";
@@ -75,8 +111,8 @@ sap.ui.define([], () => {
             const tamanhoNumerosCpf = numerosCpf.length;
             const tamanhoCpfPreenchido = 11;
             if (tamanhoNumerosCpf < tamanhoCpfPreenchido) {
-                LISTA_ERROS.push("CPF deve estar totalmente preenchido");
-                return "CPF deve estar totalmente preenchido";
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CPF] = "CPF deve estar totalmente preenchido";
+                return LISTA_ERROS[INDICE_MENSAGEM_ERRO_CPF];
             }
 
             let stringNumerosCpf = String(numerosCpf);
@@ -93,8 +129,8 @@ sap.ui.define([], () => {
 
             if ((resto < 2 && primeiroDigitoVerificador != 0) ||
                 (resto >= 2 && primeiroDigitoVerificador != (11 - resto))) {
-                LISTA_ERROS.push("Cpf é inválido");
-                return "Cpf é inválido";
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CPF] = "Cpf é inválido";
+                return LISTA_ERROS[INDICE_MENSAGEM_ERRO_CPF];
             }
 
             const multiplicacoesSegundoDigito = [11, 10, 9, 8, 7, 6, 5, 4, 3, 2];
@@ -109,15 +145,15 @@ sap.ui.define([], () => {
 
             if ((resto < 2 && segundoDigitoVerificador != 0) ||
                 (resto >= 2 && segundoDigitoVerificador != (11 - resto))) {
-                LISTA_ERROS.push("CPF é inválido");
-                return "CPF é inválido";
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CPF] = "CPF é inválido";
+                return LISTA_ERROS[INDICE_MENSAGEM_ERRO_CPF];
             }
         },
 
         validarTelefone(telefone) {
-            if (telefone == "") {
-                LISTA_ERROS.push("Telefone não preenchido");
-                return "Telefone não preenchido";
+            if (!this.contemValor(telefone)) {
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_TELEFONE] = "Telefone não preenchido";
+                return LISTA_ERROS[INDICE_MENSAGEM_ERRO_TELEFONE];
             }
 
             let numerosTelefone = "";
@@ -132,93 +168,100 @@ sap.ui.define([], () => {
             const tamanhoTelefonePreenchido = 11;
 
             if (tamanhoNumerosTelefone < tamanhoTelefonePreenchido) {
-                LISTA_ERROS.push("Telefone deve estar totalmente preenchido");
-                return "Telefone deve estar totalmente preenchido";
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_TELEFONE] = "Telefone deve estar totalmente preenchido";
+                return LISTA_ERROS[INDICE_MENSAGEM_ERRO_TELEFONE];
             }
         },
 
         validarIdade(idade) {
-            if (idade == "") {
-                LISTA_ERROS.push("Idade não preenchida");
-                return "Idade não preenchida";
+            if (!this.contemValor(idade)) {
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_IDADE] = "Idade não preenchida";
+                return LISTA_ERROS[INDICE_MENSAGEM_ERRO_IDADE];
             }
 
             let numeroIdade = Number(idade);
+            const valorMinimoIdade = 18;
+            const valorMaximoIdade = 200;
 
-            if (numeroIdade < 18) {
-                LISTA_ERROS.push("O cliente não pode ser menor de idade");
-                return "O cliente não pode ser menor de idade";
+            if (numeroIdade < valorMinimoIdade) {
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_IDADE] = "O cliente não pode ser menor de idade";
+                return LISTA_ERROS[INDICE_MENSAGEM_ERRO_IDADE];
             }
-            else if (numeroIdade >= 200) {
-                LISTA_ERROS.push("O cliente não pode ter mais de 200 anos");
-                return "O cliente não pode ter mais de 200 anos";
+            else if (numeroIdade >= valorMaximoIdade) {
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_IDADE] = "O cliente não pode ter mais de 200 anos";
+                return LISTA_ERROS[INDICE_MENSAGEM_ERRO_IDADE];
             }
         },
 
         validarCheckIn(checkIn) {
-            if (checkIn == "") {
-                LISTA_ERROS.push("Check-in não preenchido");
-                return "Check-in não preenchido";
+            if (!this.contemValor(checkIn)) {
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_IN] = "Check-in não preenchido";
+                return LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_IN];
             }
 
-            let dataHoje = new Date();
+            let dataAtual = new Date();
+            let anoAtual = dataAtual.getFullYear();
+            let mesAtual = dataAtual.getMonth() + 1;
+            let diaAtual = dataAtual.getDate();
+
             let [anoCheckIn, mesCheckIn, diaCheckIn] = checkIn.split("-");
 
-            if (anoCheckIn < dataHoje.getFullYear()) {
-                LISTA_ERROS.push("Data de check-in inválida");
-                return "Data de check-in inválida";
+            if (anoCheckIn < anoAtual) {
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_IN] = "Data de check-in inválida";
+                return LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_IN];
             }
-            else if ((anoCheckIn == dataHoje.getFullYear()) &&
-                (mesCheckIn == (dataHoje.getMonth() + 1) && (diaCheckIn < dataHoje.getDate()))) {
-                LISTA_ERROS.push("Data de check-in inválida");
-                return "Data de check-in inválida";
+            else if ((anoCheckIn == anoAtual) && (mesCheckIn == mesAtual) && (diaCheckIn < diaAtual)) {
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_IN] = "Data de check-in inválida";
+                return LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_IN];
             }
         },
 
         validarCheckOut(checkOut, checkIn) {
-            if (checkIn == "") {
-                LISTA_ERROS.push("Preencha primeiro o check-in");
-                return "Preencha primeiro o check-in";
-            }
-            if (checkOut == "") {
-                LISTA_ERROS.push("Check-out não preenchido");
-                return "Check-out não preenchido";
+            if (!this.contemValor(checkOut)) {
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_OUT] = "Check-out não preenchido";
+                return LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_OUT];
             }
 
-            let dataHoje = new Date();
-            let [anoCheckOut, mesCheckOut, diaCheckOut] = checkOut.split("-");
-            let [anoCheckIn, mesCheckIn, diaCheckIn] = checkIn.split("-");
+            let dataAtual = new Date();
+            let anoAtual = dataAtual.getFullYear();
+            let mesAtual = dataAtual.getMonth() + 1;
+            let diaAtual = dataAtual.getDate();
 
-            if (anoCheckOut < dataHoje.getFullYear()) {
-                LISTA_ERROS.push("Data de check-out inválida");
-                return "Data de check-out inválida";
+            const separador = "-";
+            let [anoCheckOut, mesCheckOut, diaCheckOut] = checkOut.split(separador);
+            let [anoCheckIn, mesCheckIn, diaCheckIn] = checkIn.split(separador);
+
+            if (anoCheckOut < anoAtual) {
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_OUT] = "Data de check-out inválida";
+                return LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_OUT];
             }
-            else if ((anoCheckOut == dataHoje.getFullYear()) &&
-                (mesCheckOut == (dataHoje.getMonth() + 1) && (diaCheckOut < dataHoje.getDate()))) {
-                LISTA_ERROS.push("Data de check-out inválida");
-                return "Data de check-out inválida";
+            else if ((anoCheckOut == anoAtual) && (mesCheckOut == mesAtual) && (diaCheckOut < diaAtual)) {
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_OUT] = "Data de check-out inválida";
+                return LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_OUT];
             }
-            else if ((anoCheckOut == anoCheckIn) &&
-                (mesCheckOut == mesCheckIn && (diaCheckOut < diaCheckIn))) {
-                LISTA_ERROS.push("Data de check-out inválida");
-                return "Data de check-out inválida";
+            else if ((anoCheckOut == anoCheckIn) && (mesCheckOut == mesCheckIn) && (diaCheckOut < diaCheckIn)) {
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_OUT] = "Check-out não pode ser anterior ao Check-in";
+                return LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_OUT];
             }
         },
 
         validarPrecoEstadia(precoEstadia) {
-            if (precoEstadia == "") {
-                LISTA_ERROS.push("Preço da estadia não preenchido");
-                return "Preço da estadia não preenchido";
+            if (!this.contemValor(precoEstadia)) {
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_PRECO_ESTADIA] = "Preço da estadia não preenchido";
+                return LISTA_ERROS[INDICE_MENSAGEM_ERRO_PRECO_ESTADIA];
             }
 
             let numeroPrecoEstadia = Number(precoEstadia);
-            if (numeroPrecoEstadia > 9999999999.99) {
-                LISTA_ERROS.push("Preço da estadia acima do permitido");
-                return "Preço da estadia acima do permitido";
+            const valorMaximoPrecoEstadia = 9999999999.99;
+            const valorZero = 0;
+
+            if (numeroPrecoEstadia > valorMaximoPrecoEstadia) {
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_PRECO_ESTADIA] = "Preço da estadia acima do permitido";
+                return LISTA_ERROS[INDICE_MENSAGEM_ERRO_PRECO_ESTADIA];
             }
-            else if (numeroPrecoEstadia <= 0) {
-                LISTA_ERROS.push("Preço da estadia não pode ser negativo ou zero");
-                return "Preço da estadia não pode ser negativo ou zero";
+            else if (numeroPrecoEstadia <= valorZero) {
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_PRECO_ESTADIA] = "Preço da estadia não pode ser negativo ou zero";
+                return LISTA_ERROS[INDICE_MENSAGEM_ERRO_PRECO_ESTADIA];
             }
         }
     }

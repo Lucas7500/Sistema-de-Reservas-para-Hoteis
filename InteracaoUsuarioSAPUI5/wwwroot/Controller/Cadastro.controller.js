@@ -54,6 +54,37 @@ sap.ui.define([
                 : input.setValueState(VALUE_STATE_SUCESSO);
         },
 
+        _definirValueStateInputsSemAlteracao(listaErrosValidacao) {
+            const valorInicialValueState = "None";
+
+            const idInputNome = "inputNome";
+            const idInputCpf = "inputCpf";
+            const idInputTelefone = "inputTelefone";
+            const idInputIdade = "inputIdade";
+            const idInputCheckIn = "inputCheckIn";
+            const idInputCheckOut = "inputCheckOut";
+            const idInputPrecoEstadia = "inputPrecoEstadia";
+
+            const idInputs = [
+                idInputNome,
+                idInputCpf,
+                idInputTelefone,
+                idInputIdade,
+                idInputCheckIn,
+                idInputCheckOut,
+                idInputPrecoEstadia
+            ]
+
+            for (let i = 0; i < idInputs.length; i++) {
+                let input = this.byId(idInputs[i]);
+                let valueStateInput = input.getValueState();
+
+                if (valueStateInput == valorInicialValueState) {
+                    this._definirValueStateInput(input, listaErrosValidacao[i]);
+                }
+            }
+        },
+
         _obterVariavelI18n(nomeVariavel) {
             const modeloi18n = "i18n";
             const recursosi18n = this.getOwnerComponent().getModel(modeloi18n).getResourceBundle();
@@ -140,11 +171,18 @@ sap.ui.define([
         aoClicarSalvarReserva() {
             try {
                 let reserva = this._obterReservaPreenchida();
-                let mensagemErroValidacao = Validacao.validarValorInicialCampos(reserva);
+                Validacao.validarPropriedadesSemAlteracao(reserva);
+                let mensagensErroValidacao = Validacao.obterMensagensErro();
 
-                mensagemErroValidacao 
-                ? MessageBox.warning(mensagemErroValidacao)
-                : this._criarReserva(reserva);
+                if (mensagensErroValidacao) {
+                    let listaErrosValidacao = Validacao.obterListaErros();
+
+                    this._definirValueStateInputsSemAlteracao(listaErrosValidacao);
+                    MessageBox.warning(mensagensErroValidacao);
+                }
+                else {
+                    this._criarReserva(reserva);
+                }
             }
             catch (erro) {
                 MessageBox.warning(erro.message);
