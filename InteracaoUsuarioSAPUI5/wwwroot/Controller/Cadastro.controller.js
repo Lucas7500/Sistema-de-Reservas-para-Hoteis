@@ -9,7 +9,6 @@ sap.ui.define([
     "use strict";
 
     const CAMINHO_ROTA_CADASTRO = "reservas.hoteis.controller.Cadastro";
-    const MODEL_I18N = "i18n";
     const STATUS_CREATED = 201;
     const VALUE_STATE_SUCESSO = "Success";
     const VALUE_STATE_ERRO = "Error";
@@ -49,6 +48,19 @@ sap.ui.define([
             this.getView().setModel(new JSONModel(reserva));
         },
 
+        _definirValueStateInput(input, valueStateText) {
+            valueStateText
+                ? input.setValueState(VALUE_STATE_ERRO).setValueStateText(valueStateText)
+                : input.setValueState(VALUE_STATE_SUCESSO);
+        },
+
+        _obterVariavelI18n(nomeVariavel) {
+            const modeloi18n = "i18n";
+            const recursosi18n = this.getOwnerComponent().getModel(modeloi18n).getResourceBundle();
+
+            return recursosi18n.getText(nomeVariavel);
+        },
+
         _obterReservaPreenchida() {
             let reserva = this.getView().getModel().getData();
 
@@ -65,25 +77,18 @@ sap.ui.define([
             };
         },
 
-        _obterValorCheckIn() {
-            return this.byId("inputCheckIn").getValue();
-        },
-
         _criarReserva(reserva) {
-            const resourceBundle = this.getOwnerComponent().getModel(MODEL_I18N).getResourceBundle();
             const textoMensagemSucessoSalvar = "mensagemSucessoSalvar";
-            const mensagemSucessoSalvar = resourceBundle.getText(textoMensagemSucessoSalvar);
-
-            let controller = this;
+            const mensagemSucessoSalvar = this._obterVariavelI18n(textoMensagemSucessoSalvar);
+            let controllerCadastro = this;
 
             ReservaRepository.criarReserva(reserva)
                 .then(async response => {
-                    debugger
                     if (response.status == STATUS_CREATED) {
                         let reserva = await response.json();
                         MessageBox.success(mensagemSucessoSalvar, {
                             onClose: () => {
-                                controller._abrirDetalhesReservaCriada(reserva);
+                                controllerCadastro._abrirDetalhesReservaCriada(reserva);
                             }
                         });
 
@@ -124,13 +129,22 @@ sap.ui.define([
         },
 
         aoClicarNavegarParaTelaListagem() {
-            this._navegarParaTelaListagem();
+            try {
+                this._navegarParaTelaListagem();
+            }
+            catch (erro) {
+                MessageBox.warning(erro.message);
+            }
         },
 
         aoClicarSalvarReserva() {
             try {
                 let reserva = this._obterReservaPreenchida();
-                this._criarReserva(reserva)
+                let mensagemErroValidacao = Validacao.validarValorInicialCampos(reserva);
+
+                mensagemErroValidacao 
+                ? MessageBox.warning(mensagemErroValidacao)
+                : this._criarReserva(reserva);
             }
             catch (erro) {
                 MessageBox.warning(erro.message);
@@ -139,22 +153,22 @@ sap.ui.define([
 
         aoClicarCancelarCadastro() {
             try {
-                const resourceBundle = this.getOwnerComponent().getModel(MODEL_I18N).getResourceBundle();
                 const textoBotaoSim = "botaoSim";
-                const botaoSim = resourceBundle.getText(textoBotaoSim);
                 const textoBotaoNao = "botaoNao";
-                const botaoNao = resourceBundle.getText(textoBotaoNao);
                 const textoMensagemConfirmacaoCancelar = "mensagemConfirmacaoCancelar";
-                const mensagemConfirmacao = resourceBundle.getText(textoMensagemConfirmacaoCancelar);
 
-                let controller = this;
+                const botaoSim = this._obterVariavelI18n(textoBotaoSim);
+                const botaoNao = this._obterVariavelI18n(textoBotaoNao);
+                const mensagemConfirmacao = this._obterVariavelI18n(textoMensagemConfirmacaoCancelar);
+
+                let controllerCadastro = this;
 
                 MessageBox.confirm(mensagemConfirmacao, {
                     actions: [botaoSim, botaoNao],
                     emphasizedAction: botaoSim,
                     onClose: function (acao) {
                         if (acao == botaoSim) {
-                            controller._navegarParaTelaListagem();
+                            controllerCadastro._navegarParaTelaListagem();
                         }
                     }
                 });
@@ -166,80 +180,87 @@ sap.ui.define([
 
         aoMudarValidarNome(evento) {
             try {
-                let nome = evento.getParameter(PARAMETRO_VALUE);
+                let inputNome = evento.getSource();
+                let valorNome = evento.getParameter(PARAMETRO_VALUE);
+                let mensagemErroValidacao = Validacao.validarNome(valorNome);
 
-                Validacao.validarNome(nome);
-                evento.getSource().setValueState(VALUE_STATE_SUCESSO);
+                this._definirValueStateInput(inputNome, mensagemErroValidacao);
             }
-            catch (mensagemErroValidacao) {
-                evento.getSource().setValueState(VALUE_STATE_ERRO).setValueStateText(mensagemErroValidacao);
+            catch (erro) {
+                MessageBox.warning(erro.message);
             }
         },
 
         aoMudarValidarCpf(evento) {
             try {
-                let cpf = evento.getParameter(PARAMETRO_VALUE);
+                let inputCpf = evento.getSource();
+                let valorCpf = evento.getParameter(PARAMETRO_VALUE);
+                let mensagemErroValidacao = Validacao.validarCpf(valorCpf);
 
-                Validacao.validarCpf(cpf);
-                evento.getSource().setValueState(VALUE_STATE_SUCESSO);
-            } catch (mensagemErroValidacao) {
-                evento.getSource().setValueState(VALUE_STATE_ERRO).setValueStateText(mensagemErroValidacao);
+                this._definirValueStateInput(inputCpf, mensagemErroValidacao);
+            }
+            catch (erro) {
+                MessageBox.warning(erro.message);
             }
         },
 
         aoMudarValidarTelefone(evento) {
             try {
-                let telefone = evento.getParameter(PARAMETRO_VALUE);
+                let inputTelefone = evento.getSource();
+                let valorTelefone = evento.getParameter(PARAMETRO_VALUE);
+                let mensagemErroValidacao = Validacao.validarTelefone(valorTelefone);
 
-                Validacao.validarTelefone(telefone);
-                evento.getSource().setValueState(VALUE_STATE_SUCESSO);
-            } catch (mensagemErroValidacao) {
-                evento.getSource().setValueState(VALUE_STATE_ERRO).setValueStateText(mensagemErroValidacao);
+                this._definirValueStateInput(inputTelefone, mensagemErroValidacao);
+            }
+            catch (erro) {
+                MessageBox.warning(erro.message);
             }
         },
 
         aoMudarValidarIdade(evento) {
             try {
-                let idade = evento.getParameter(PARAMETRO_VALUE);
+                let inputIdade = evento.getSource();
+                let valorIdade = evento.getParameter(PARAMETRO_VALUE);
+                let mensagemErroValidacao = Validacao.validarIdade(valorIdade);
 
-                Validacao.validarIdade(idade);
-                evento.getSource().setValueState(VALUE_STATE_SUCESSO);
-            } catch (mensagemErroValidacao) {
-                evento.getSource().setValueState(VALUE_STATE_ERRO).setValueStateText(mensagemErroValidacao);
+                this._definirValueStateInput(inputIdade, mensagemErroValidacao);
+            }
+            catch (erro) {
+                MessageBox.warning(erro.message);
             }
         },
 
-        aoMudarValidarCheckIn(evento) {
+        aoMudarValidarCheckInECheckOut() {
             try {
-                let checkIn = evento.getParameter(PARAMETRO_VALUE);
+                const idInputCheckIn = "inputCheckIn";
+                const idInputCheckOut = "inputCheckOut";
 
-                Validacao.validarCheckIn(checkIn);
-                evento.getSource().setValueState(VALUE_STATE_SUCESSO);
-            } catch (mensagemErroValidacao) {
-                evento.getSource().setValueState(VALUE_STATE_ERRO).setValueStateText(mensagemErroValidacao);
+                let inputCheckIn = this.byId(idInputCheckIn);
+                let inputCheckOut = this.byId(idInputCheckOut);
+
+                let valorCheckIn = inputCheckIn.getValue();
+                let valorCheckOut = inputCheckOut.getValue();
+
+                let mensagemErroValidacaoCheckIn = Validacao.validarCheckIn(valorCheckIn);
+                let mensagemErroValidacaoCheckOut = Validacao.validarCheckOut(valorCheckOut, valorCheckIn);
+
+                this._definirValueStateInput(inputCheckIn, mensagemErroValidacaoCheckIn);
+                this._definirValueStateInput(inputCheckOut, mensagemErroValidacaoCheckOut);
             }
-        },
-
-        aoMudarValidarCheckOut(evento) {
-            try {
-                let checkOut = evento.getParameter(PARAMETRO_VALUE);
-                let checkIn = this._obterValorCheckIn();
-
-                Validacao.validarCheckOut(checkOut, checkIn);
-                evento.getSource().setValueState(VALUE_STATE_SUCESSO);
-            } catch (mensagemErroValidacao) {
-                evento.getSource().setValueState(VALUE_STATE_ERRO).setValueStateText(mensagemErroValidacao);
+            catch (erro) {
+                MessageBox.warning(erro.message);
             }
         },
 
         aoMudarValidarPrecoEstadia(evento) {
             try {
-                let precoEstadia = evento.getParameter(PARAMETRO_VALUE);
+                let inputPrecoEstadia = evento.getSource();
+                let valorPrecoEstadia = evento.getParameter(PARAMETRO_VALUE);
+                let mensagemErroValidacao = Validacao.validarPrecoEstadia(valorPrecoEstadia);
 
-                Validacao.validarPrecoEstadia(precoEstadia);
-                evento.getSource().setValueState(VALUE_STATE_SUCESSO);
-            } catch (mensagemErroValidacao) {
-                evento.getSource().setValueState(VALUE_STATE_ERRO).setValueStateText(mensagemErroValidacao);
+                this._definirValueStateInput(inputPrecoEstadia, mensagemErroValidacao);
+            } catch (erro) {
+                MessageBox.warning(erro.message);
             }
         }
     })

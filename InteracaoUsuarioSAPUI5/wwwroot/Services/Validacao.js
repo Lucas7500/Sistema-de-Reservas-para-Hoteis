@@ -5,14 +5,34 @@ sap.ui.define([], () => {
     let LISTA_ERROS = []
 
     return {
+        _obterListaErros() {
+            let separador = "\n";
+            let erros = LISTA_ERROS.join(separador);
+            LISTA_ERROS = [];
+
+            return erros;
+        },
+
         validarValorInicialCampos(reserva) {
+            let nomeFormatado = reserva.nome.trim();
+
+            if (nomeFormatado == "") LISTA_ERROS.push("Nome não preenchido");
+            if (reserva.cpf == "") LISTA_ERROS.push("CPF não preenchido");
+            if (reserva.telefone == "") LISTA_ERROS.push("Telefone não preenchido");
+            if (reserva.idade == "") LISTA_ERROS.push("Idade não preenchida");
+            if (reserva.checkIn == "") LISTA_ERROS.push("Check-in não preenchido");
+            if (reserva.checkOut == "") LISTA_ERROS.push("Check-out não preenchido");
+            if (reserva.precoEstadia == "") LISTA_ERROS.push("Preço da estadia não preenchido");
+
+            return this._obterListaErros();
         },
 
         validarNome(nome) {
             let nomeFormatado = nome.trim();
+            
             if (nomeFormatado == "") {
                 LISTA_ERROS.push("Nome não preenchido");
-                return false;
+                return "Nome não preenchido";
             }
 
             let regexNome = "^[a-zA-ZA-ZáàâãéèêíìîóòõôúùûçÁÀÃÂÉÈÊÍÌÎÓÒÔÕÚÙÛÇ ]*$";
@@ -23,27 +43,25 @@ sap.ui.define([], () => {
 
             if (tamanhoNome < tamanhoMinimoNome) {
                 LISTA_ERROS.push("Nome muito pequeno");
-                return false;
+                return "Nome muito pequeno";
             }
             else if (tamanhoNome > tamanhoMaximoNome) {
                 LISTA_ERROS.push("Nome muito grande");
-                return false;
+                return "Nome muito grande";
             };
 
             for (let char of nomeFormatado) {
                 if (!char.match(regexNome)) {
                     LISTA_ERROS.push("Formato incorreto para nome");
-                    return false;
+                    return "Formato incorreto para nome";
                 }
             }
-
-            return true;
         },
 
         validarCpf(cpf) {
             if (cpf == "") {
                 LISTA_ERROS.push("CPF não preenchido");
-                return false;
+                return "CPF não preenchido";
             };
 
             let numerosCpf = "";
@@ -58,7 +76,7 @@ sap.ui.define([], () => {
             const tamanhoCpfPreenchido = 11;
             if (tamanhoNumerosCpf < tamanhoCpfPreenchido) {
                 LISTA_ERROS.push("CPF deve estar totalmente preenchido");
-                return false;
+                return "CPF deve estar totalmente preenchido";
             }
 
             let stringNumerosCpf = String(numerosCpf);
@@ -76,7 +94,7 @@ sap.ui.define([], () => {
             if ((resto < 2 && primeiroDigitoVerificador != 0) ||
                 (resto >= 2 && primeiroDigitoVerificador != (11 - resto))) {
                 LISTA_ERROS.push("Cpf é inválido");
-                return false;
+                return "Cpf é inválido";
             }
 
             const multiplicacoesSegundoDigito = [11, 10, 9, 8, 7, 6, 5, 4, 3, 2];
@@ -92,16 +110,14 @@ sap.ui.define([], () => {
             if ((resto < 2 && segundoDigitoVerificador != 0) ||
                 (resto >= 2 && segundoDigitoVerificador != (11 - resto))) {
                 LISTA_ERROS.push("CPF é inválido");
-                return false;
+                return "CPF é inválido";
             }
-
-            return true;
         },
 
         validarTelefone(telefone) {
             if (telefone == "") {
                 LISTA_ERROS.push("Telefone não preenchido");
-                return false;
+                return "Telefone não preenchido";
             }
 
             let numerosTelefone = "";
@@ -117,34 +133,32 @@ sap.ui.define([], () => {
 
             if (tamanhoNumerosTelefone < tamanhoTelefonePreenchido) {
                 LISTA_ERROS.push("Telefone deve estar totalmente preenchido");
-                return false;
+                return "Telefone deve estar totalmente preenchido";
             }
         },
 
         validarIdade(idade) {
             if (idade == "") {
                 LISTA_ERROS.push("Idade não preenchida");
-                return false;
+                return "Idade não preenchida";
             }
 
             let numeroIdade = Number(idade);
 
             if (numeroIdade < 18) {
                 LISTA_ERROS.push("O cliente não pode ser menor de idade");
-                return false;
+                return "O cliente não pode ser menor de idade";
             }
             else if (numeroIdade >= 200) {
                 LISTA_ERROS.push("O cliente não pode ter mais de 200 anos");
-                return false;
+                return "O cliente não pode ter mais de 200 anos";
             }
-
-            return true;
         },
 
         validarCheckIn(checkIn) {
             if (checkIn == "") {
                 LISTA_ERROS.push("Check-in não preenchido");
-                return false;
+                return "Check-in não preenchido";
             }
 
             let dataHoje = new Date();
@@ -152,25 +166,23 @@ sap.ui.define([], () => {
 
             if (anoCheckIn < dataHoje.getFullYear()) {
                 LISTA_ERROS.push("Data de check-in inválida");
-                return false;
+                return "Data de check-in inválida";
             }
             else if ((anoCheckIn == dataHoje.getFullYear()) &&
                 (mesCheckIn == (dataHoje.getMonth() + 1) && (diaCheckIn < dataHoje.getDate()))) {
                 LISTA_ERROS.push("Data de check-in inválida");
-                return false;
+                return "Data de check-in inválida";
             }
-
-            return true;
         },
 
         validarCheckOut(checkOut, checkIn) {
             if (checkIn == "") {
                 LISTA_ERROS.push("Preencha primeiro o check-in");
-                return false;
+                return "Preencha primeiro o check-in";
             }
             if (checkOut == "") {
                 LISTA_ERROS.push("Check-out não preenchido");
-                return false;
+                return "Check-out não preenchido";
             }
 
             let dataHoje = new Date();
@@ -178,39 +190,36 @@ sap.ui.define([], () => {
             let [anoCheckIn, mesCheckIn, diaCheckIn] = checkIn.split("-");
 
             if (anoCheckOut < dataHoje.getFullYear()) {
-                LISTA_ERROS.push("Data de check-in inválida");
+                LISTA_ERROS.push("Data de check-out inválida");
+                return "Data de check-out inválida";
             }
             else if ((anoCheckOut == dataHoje.getFullYear()) &&
                 (mesCheckOut == (dataHoje.getMonth() + 1) && (diaCheckOut < dataHoje.getDate()))) {
-                LISTA_ERROS.push("Data de check-in inválida");
-                return false;
+                LISTA_ERROS.push("Data de check-out inválida");
+                return "Data de check-out inválida";
             }
             else if ((anoCheckOut == anoCheckIn) &&
                 (mesCheckOut == mesCheckIn && (diaCheckOut < diaCheckIn))) {
                 LISTA_ERROS.push("Data de check-out inválida");
-                return false;
+                return "Data de check-out inválida";
             }
-
-            return true;
         },
 
         validarPrecoEstadia(precoEstadia) {
             if (precoEstadia == "") {
                 LISTA_ERROS.push("Preço da estadia não preenchido");
-                return false;
+                return "Preço da estadia não preenchido";
             }
 
             let numeroPrecoEstadia = Number(precoEstadia);
             if (numeroPrecoEstadia > 9999999999.99) {
                 LISTA_ERROS.push("Preço da estadia acima do permitido");
-                return false;
+                return "Preço da estadia acima do permitido";
             }
             else if (numeroPrecoEstadia <= 0) {
                 LISTA_ERROS.push("Preço da estadia não pode ser negativo ou zero");
-                return false;
+                return "Preço da estadia não pode ser negativo ou zero";
             }
-
-            return true;
         }
     }
 })

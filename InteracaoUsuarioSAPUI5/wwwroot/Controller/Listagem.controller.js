@@ -14,7 +14,7 @@ sap.ui.define([
         formatter: Formatter,
         onInit() {
             let rota = this.getOwnerComponent().getRouter();
-            const rotaLista = 'listagem';
+            const rotaLista = "listagem";
             rota.getRoute(rotaLista).attachPatternMatched(this._aoCoincidirRota, this);
         },
 
@@ -38,7 +38,7 @@ sap.ui.define([
                         ? response.json()
                         : Promise.reject(response);
                 })
-                .then(response => this.getView().setModel(new JSONModel(response), MODELO_LISTA))
+                .then(reservas => this.getView().setModel(new JSONModel(reservas), MODELO_LISTA))
                 .catch(async erro => {
                     let mensagemErro = await erro.text();
                     MessageBox.warning(mensagemErro);

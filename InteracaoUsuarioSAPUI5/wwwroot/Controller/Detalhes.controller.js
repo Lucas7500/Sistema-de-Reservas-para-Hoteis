@@ -34,7 +34,7 @@ sap.ui.define([
                         ? response.json()
                         : Promise.reject(response);
                 })
-                .then(response => this.getView().setModel(new JSONModel(response)))
+                .then(reserva => this.getView().setModel(new JSONModel(reserva)))
                 .catch(async erro => {
                     let mensagemErro = await erro.text();
                     MessageBox.warning(mensagemErro);

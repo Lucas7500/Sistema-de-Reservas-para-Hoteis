@@ -118,7 +118,7 @@
                         required="true"
                         type="Date"
                         value="{/checkIn}" 
-                        change=".aoMudarValidarCheckIn"/>
+                        change=".aoMudarValidarCheckInECheckOut"/>
                     <Label
                         text="{i18n>labelCheckOut}"
                         labelFor="inputCheckOut" />
@@ -127,7 +127,7 @@
                         required="true"
                         type="Date"
                         value="{/checkOut}"
-                        change=".aoMudarValidarCheckOut" />
+                        change=".aoMudarValidarCheckInECheckOut" />
                     <Label
                         text="{i18n>labelPrecoEstadia}"
                         labelFor="inputPrecoEstadia" />
