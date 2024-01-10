@@ -8,7 +8,6 @@ sap.ui.define([
     "use strict";
 
     const CAMINHO_ROTA_DETALHES = "reservas.hoteis.controller.Detalhes";
-    const STATUS_OK = 200;
 
     return Controller.extend(CAMINHO_ROTA_DETALHES, {
         formatter: Formatter,
@@ -31,7 +30,7 @@ sap.ui.define([
         _obterReserva(id) {
             ReservaRepository.obterPorId(id)
                 .then(response => {
-                    return response.status == STATUS_OK
+                    return response.ok
                         ? response.json()
                         : Promise.reject(response);
                 })

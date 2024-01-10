@@ -78,6 +78,7 @@ sap.ui.define([
 
             ReservaRepository.criarReserva(reserva)
                 .then(async response => {
+                    debugger
                     if (response.status == STATUS_CREATED) {
                         let reserva = await response.json();
                         MessageBox.success(mensagemSucessoSalvar, {

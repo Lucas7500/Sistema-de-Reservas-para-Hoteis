@@ -34,7 +34,7 @@ sap.ui.define([
         _obterReservas(filtro) {
             ReservaRepository.obterTodos(filtro)
                 .then(response => {
-                    return response.status == response.ok
+                    return response.ok
                         ? response.json()
                         : Promise.reject(response);
                 })
