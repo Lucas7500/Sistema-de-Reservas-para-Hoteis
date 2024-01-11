@@ -13,6 +13,24 @@ sap.ui.define([
     const VALUE_STATE_SUCESSO = "Success";
     const VALUE_STATE_ERRO = "Error";
     const PARAMETRO_VALUE = "value";
+    const VALOR_INICIAL_VALUE_STATE_INPUT = "None";
+    const ID_INPUT_NOME = "inputNome";
+    const ID_INPUT_CPF = "inputCpf";
+    const ID_INPUT_TELEFONE = "inputTelefone";
+    const ID_INPUT_IDADE = "inputIdade";
+    const ID_INPUT_CHECK_IN = "inputCheckIn";
+    const ID_INPUT_CHECK_OUT = "inputCheckOut";
+    const ID_INPUT_PRECO_ESTADIA = "inputPrecoEstadia";
+
+    const ARRAY_ID_INPUTS = [
+        ID_INPUT_NOME,
+        ID_INPUT_CPF,
+        ID_INPUT_TELEFONE,
+        ID_INPUT_IDADE,
+        ID_INPUT_CHECK_IN,
+        ID_INPUT_CHECK_OUT,
+        ID_INPUT_PRECO_ESTADIA
+    ]
 
     return Controller.extend(CAMINHO_ROTA_CADASTRO, {
         onInit() {
@@ -44,6 +62,7 @@ sap.ui.define([
 
             const idRadioButtonPagamentoNaoEfetuado = "radioButtonPagamentoNaoEfetuado";
             this.byId(idRadioButtonPagamentoNaoEfetuado).setSelected(true);
+            this._limparValueStateInputs();
 
             this.getView().setModel(new JSONModel(reserva));
         },
@@ -55,33 +74,20 @@ sap.ui.define([
         },
 
         _definirValueStateInputsSemAlteracao(listaErrosValidacao) {
-            const valorInicialValueState = "None";
-
-            const idInputNome = "inputNome";
-            const idInputCpf = "inputCpf";
-            const idInputTelefone = "inputTelefone";
-            const idInputIdade = "inputIdade";
-            const idInputCheckIn = "inputCheckIn";
-            const idInputCheckOut = "inputCheckOut";
-            const idInputPrecoEstadia = "inputPrecoEstadia";
-
-            const idInputs = [
-                idInputNome,
-                idInputCpf,
-                idInputTelefone,
-                idInputIdade,
-                idInputCheckIn,
-                idInputCheckOut,
-                idInputPrecoEstadia
-            ]
-
-            for (let i = 0; i < idInputs.length; i++) {
-                let input = this.byId(idInputs[i]);
+            for (let i = 0; i < ARRAY_ID_INPUTS.length; i++) {
+                let input = this.byId(ARRAY_ID_INPUTS[i]);
                 let valueStateInput = input.getValueState();
 
-                if (valueStateInput == valorInicialValueState) {
+                if (valueStateInput == VALOR_INICIAL_VALUE_STATE_INPUT) {
                     this._definirValueStateInput(input, listaErrosValidacao[i]);
                 }
+            }
+        },
+
+        _limparValueStateInputs() {
+            for (let i = 0; i < ARRAY_ID_INPUTS.length; i++) {
+                let input = this.byId(ARRAY_ID_INPUTS[i]);
+               input.setValueState(VALOR_INICIAL_VALUE_STATE_INPUT);
             }
         },
 
@@ -172,12 +178,11 @@ sap.ui.define([
             try {
                 let reserva = this._obterReservaPreenchida();
                 Validacao.validarPropriedadesSemAlteracao(reserva);
-                let mensagensErroValidacao = Validacao.obterMensagensErro();
+                let listaErrosValidacao = Validacao.obterListaErros();
 
-                if (mensagensErroValidacao) {
-                    let listaErrosValidacao = Validacao.obterListaErros();
-
+                if (listaErrosValidacao.length) {
                     this._definirValueStateInputsSemAlteracao(listaErrosValidacao);
+                    let mensagensErroValidacao = Formatter.formataListaErros(listaErrosValidacao);
                     MessageBox.warning(mensagensErroValidacao);
                 }
                 else {
@@ -270,11 +275,8 @@ sap.ui.define([
 
         aoMudarValidarCheckInECheckOut() {
             try {
-                const idInputCheckIn = "inputCheckIn";
-                const idInputCheckOut = "inputCheckOut";
-
-                let inputCheckIn = this.byId(idInputCheckIn);
-                let inputCheckOut = this.byId(idInputCheckOut);
+                let inputCheckIn = this.byId(ID_INPUT_CHECK_IN);
+                let inputCheckOut = this.byId(ID_INPUT_CHECK_OUT);
 
                 let valorCheckIn = inputCheckIn.getValue();
                 let valorCheckOut = inputCheckOut.getValue();

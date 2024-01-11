@@ -2,7 +2,7 @@ sap.ui.define([], () => {
     "use strict";
 
     const REGEX_NUMEROS = "[0-9]";
-    
+
     let LISTA_ERROS = [];
     const INDICE_MENSAGEM_ERRO_NOME = 0;
     const INDICE_MENSAGEM_ERRO_CPF = 1;
@@ -14,23 +14,10 @@ sap.ui.define([], () => {
 
     return {
         obterListaErros() {
-            let erros = [];
-            
-            for (let mensagemErro of LISTA_ERROS) {
-                if (mensagemErro) {
-                    erros.push(mensagemErro);
-                }
-            }
-
+            let erros = LISTA_ERROS;
             LISTA_ERROS = [];
 
             return erros;
-        },
-
-        obterMensagensErro() {
-            let separador = "\n";
-            
-            return this.obterListaErros().join(separador);
         },
 
         contemValor(propriedade) {
@@ -40,7 +27,6 @@ sap.ui.define([], () => {
         validarPropriedadesSemAlteracao(reserva) {
             let nomeFormatado = reserva.nome.trim();
 
-            debugger
             if (!this.contemValor(nomeFormatado))
                 LISTA_ERROS[INDICE_MENSAGEM_ERRO_NOME] = "Nome não preenchido";
 
@@ -60,7 +46,7 @@ sap.ui.define([], () => {
                 LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_OUT] = "Check-out não preenchido";
 
             if (!this.contemValor(reserva.precoEstadia))
-                LISTA_ERROS[INDICE_MENSAGEM_ERRO_NOME] = "Preço da estadia não preenchido";
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_PRECO_ESTADIA] = "Preço da estadia não preenchido";
         },
 
         validarNome(nome) {
@@ -110,42 +96,42 @@ sap.ui.define([], () => {
 
             const tamanhoNumerosCpf = numerosCpf.length;
             const tamanhoCpfPreenchido = 11;
+
             if (tamanhoNumerosCpf < tamanhoCpfPreenchido) {
                 LISTA_ERROS[INDICE_MENSAGEM_ERRO_CPF] = "CPF deve estar totalmente preenchido";
                 return LISTA_ERROS[INDICE_MENSAGEM_ERRO_CPF];
             }
 
-            let stringNumerosCpf = String(numerosCpf);
-            const multiplicacoesPrimeiroDigito = [10, 9, 8, 7, 6, 5, 4, 3, 2];
+            const multiplicadoresPrimeiroDigito = [10, 9, 8, 7, 6, 5, 4, 3, 2];
+            const multiplicadoresSegundoDigito = [11, 10, 9, 8, 7, 6, 5, 4, 3, 2];
+
+            let arrayDigitosCpf = Array.from(String(numerosCpf), Number);
+            let primeiroDigitoVerificador = arrayDigitosCpf[9];
+            let segundoDigitoVerificador = arrayDigitosCpf[10]
             let somaPrimeiroDigito = 0;
-            let resto;
-
-            for (let i = 0; i < multiplicacoesPrimeiroDigito.length; i++) {
-                somaPrimeiroDigito += Number(stringNumerosCpf[i]) * multiplicacoesPrimeiroDigito[i];
-            }
-
-            let primeiroDigitoVerificador = Number(stringNumerosCpf[9]);
-            resto = somaPrimeiroDigito % 11;
-
-            if ((resto < 2 && primeiroDigitoVerificador != 0) ||
-                (resto >= 2 && primeiroDigitoVerificador != (11 - resto))) {
-                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CPF] = "Cpf é inválido";
-                return LISTA_ERROS[INDICE_MENSAGEM_ERRO_CPF];
-            }
-
-            const multiplicacoesSegundoDigito = [11, 10, 9, 8, 7, 6, 5, 4, 3, 2];
             let somaSegundoDigito = 0;
 
-            for (let i = 0; i < multiplicacoesSegundoDigito.length; i++) {
-                somaSegundoDigito += Number(stringNumerosCpf[i]) * multiplicacoesSegundoDigito[i];
+            for (let i = 0; i < arrayDigitosCpf.length; i++) {
+
+                if (i < multiplicadoresPrimeiroDigito.length) {
+                    somaPrimeiroDigito += arrayDigitosCpf[i] * multiplicadoresPrimeiroDigito[i];
+                }
+
+                if (i < multiplicadoresSegundoDigito.length) {
+                    somaSegundoDigito += arrayDigitosCpf[i] * multiplicadoresSegundoDigito[i];
+                }
             }
 
-            let segundoDigitoVerificador = Number(stringNumerosCpf[10]);
-            resto = somaSegundoDigito % 11;
+            let restoPrimeiroDigito = somaPrimeiroDigito % 11;
+            let restoSegundoDigito = somaSegundoDigito % 11;
 
-            if ((resto < 2 && segundoDigitoVerificador != 0) ||
-                (resto >= 2 && segundoDigitoVerificador != (11 - resto))) {
-                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CPF] = "CPF é inválido";
+            let primeiroCasoInvalido = restoPrimeiroDigito < 2 && primeiroDigitoVerificador != 0;
+            let segundoCasoInvalido = restoPrimeiroDigito >= 2 && primeiroDigitoVerificador != (11 - restoPrimeiroDigito);
+            let terceiroCasoInvalido = restoSegundoDigito < 2 && segundoDigitoVerificador != 0;
+            let quartoCasoInvalido = restoSegundoDigito >= 2 && segundoDigitoVerificador != (11 - restoSegundoDigito);
+
+            if (primeiroCasoInvalido || segundoCasoInvalido || terceiroCasoInvalido || quartoCasoInvalido) {
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CPF] = "Cpf é inválido";
                 return LISTA_ERROS[INDICE_MENSAGEM_ERRO_CPF];
             }
         },

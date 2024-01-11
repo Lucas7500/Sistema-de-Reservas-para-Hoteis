@@ -18,7 +18,7 @@ sap.ui.define([
             const duasCasasDecimais = 2;
             const charPonto = '.';
             const charVirgula = ',';
-            
+
             let stringPrecoEstadia = `R$ ${Number(precoEstadia).toFixed(duasCasasDecimais)}`
 
             return stringPrecoEstadia.replace(charPonto, charVirgula);
@@ -37,8 +37,17 @@ sap.ui.define([
             let formatador = DateFormat.getDateInstance({
                 pattern: formatoData
             });
-            
+
             return formatador.format(data);
+        },
+
+        formataListaErros(listaErros) {
+            let separador = "\n";
+            let mensagensErro = listaErros.
+                filter(mensagemErro => mensagemErro != undefined)
+                .join(separador);
+
+            return mensagensErro;
         }
     }
 });
