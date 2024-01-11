@@ -218,7 +218,7 @@ sap.ui.define([], () => {
                 return LISTA_ERROS[INDICE_MENSAGEM_ERRO_IDADE];
             }
             else if (numeroIdade >= valorMaximoIdade) {
-                const variavelIdadeAcimaValorMaximo = "IdadeAcimaValorMaximo";
+                const variavelIdadeAcimaValorMaximo = "idadeAcimaValorMaximo";
                 LISTA_ERROS[INDICE_MENSAGEM_ERRO_IDADE] = RECURSOS_I18N.getText(variavelIdadeAcimaValorMaximo);
 
                 return LISTA_ERROS[INDICE_MENSAGEM_ERRO_IDADE];
