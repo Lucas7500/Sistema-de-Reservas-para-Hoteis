@@ -40,7 +40,10 @@ sap.ui.define([
         },
 
         _aoCoincidirRota() {
+            const recursosi18n = this._obterRecursosI18n();
+
             this._modeloReserva();
+            Validacao.definirRecursosi18n(recursosi18n);
         },
 
         _modeloReserva() {
@@ -67,7 +70,7 @@ sap.ui.define([
             this.getView().setModel(new JSONModel(reserva));
         },
 
-        _definirValueStateInput(input, valueStateText) {
+        _definirValueStateInputValidado(input, valueStateText) {
             valueStateText
                 ? input.setValueState(VALUE_STATE_ERRO).setValueStateText(valueStateText)
                 : input.setValueState(VALUE_STATE_SUCESSO);
@@ -79,23 +82,35 @@ sap.ui.define([
                 let valueStateInput = input.getValueState();
 
                 if (valueStateInput == VALOR_INICIAL_VALUE_STATE_INPUT) {
-                    this._definirValueStateInput(input, listaErrosValidacao[i]);
+                    this._definirValueStateInputValidado(input, listaErrosValidacao[i]);
                 }
             }
         },
 
         _limparValueStateInputs() {
-            for (let i = 0; i < ARRAY_ID_INPUTS.length; i++) {
-                let input = this.byId(ARRAY_ID_INPUTS[i]);
-               input.setValueState(VALOR_INICIAL_VALUE_STATE_INPUT);
+            for (let idInput of ARRAY_ID_INPUTS) {
+                let input = this.byId(idInput);
+                input.setValueState(VALOR_INICIAL_VALUE_STATE_INPUT);
             }
         },
 
-        _obterVariavelI18n(nomeVariavel) {
-            const modeloi18n = "i18n";
-            const recursosi18n = this.getOwnerComponent().getModel(modeloi18n).getResourceBundle();
+        _obterInputsSemAlteracao() {
+            let inputsSemAlteracao = []
 
-            return recursosi18n.getText(nomeVariavel);
+            for (let idInput of ARRAY_ID_INPUTS) {
+                let valueStateInput = this.byId(idInput).getValueState();
+
+                if (valueStateInput == VALOR_INICIAL_VALUE_STATE_INPUT) {
+                    inputsSemAlteracao.push(idInput);
+                }
+            }
+
+            return inputsSemAlteracao;
+        },
+
+        _obterRecursosI18n() {
+            const modeloi18n = "i18n";
+            return this.getOwnerComponent().getModel(modeloi18n).getResourceBundle();
         },
 
         _obterReservaPreenchida() {
@@ -115,8 +130,9 @@ sap.ui.define([
         },
 
         _criarReserva(reserva) {
-            const textoMensagemSucessoSalvar = "mensagemSucessoSalvar";
-            const mensagemSucessoSalvar = this._obterVariavelI18n(textoMensagemSucessoSalvar);
+            const recursosi18n = this._obterRecursosI18n();
+            const variavelSucessoSalvar = "sucessoSalvar";
+            const mensagemSucessoSalvar = recursosi18n.getText(variavelSucessoSalvar);
             let controllerCadastro = this;
 
             ReservaRepository.criarReserva(reserva)
@@ -176,18 +192,21 @@ sap.ui.define([
 
         aoClicarSalvarReserva() {
             try {
-                let reserva = this._obterReservaPreenchida();
-                Validacao.validarPropriedadesSemAlteracao(reserva);
+                let reservaPreenchida = this._obterReservaPreenchida();
+                let inputsSemAlteracao = this._obterInputsSemAlteracao();
                 let listaErrosValidacao = Validacao.obterListaErros();
-
-                if (listaErrosValidacao.length) {
+                
+                if (inputsSemAlteracao.length) {
+                    Validacao.validarPropriedadesVazias(reservaPreenchida);
+                    listaErrosValidacao = Validacao.obterListaErros();
                     this._definirValueStateInputsSemAlteracao(listaErrosValidacao);
-                    let mensagensErroValidacao = Formatter.formataListaErros(listaErrosValidacao);
-                    MessageBox.warning(mensagensErroValidacao);
                 }
-                else {
-                    this._criarReserva(reserva);
-                }
+
+                let mensagensErroValidacao = Formatter.formataListaErros(listaErrosValidacao);
+
+                mensagensErroValidacao
+                    ? MessageBox.warning(mensagensErroValidacao)
+                    : this._criarReserva(reservaPreenchida);
             }
             catch (erro) {
                 MessageBox.warning(erro.message);
@@ -196,13 +215,15 @@ sap.ui.define([
 
         aoClicarCancelarCadastro() {
             try {
-                const textoBotaoSim = "botaoSim";
-                const textoBotaoNao = "botaoNao";
-                const textoMensagemConfirmacaoCancelar = "mensagemConfirmacaoCancelar";
+                const recursosi18n = this._obterRecursosI18n();
 
-                const botaoSim = this._obterVariavelI18n(textoBotaoSim);
-                const botaoNao = this._obterVariavelI18n(textoBotaoNao);
-                const mensagemConfirmacao = this._obterVariavelI18n(textoMensagemConfirmacaoCancelar);
+                const variavelBotaoSim = "botaoSim";
+                const variavelBotaoNao = "botaoNao";
+                const variavelConfirmacaoCancelar = "confirmacaoCancelar";
+
+                const botaoSim = recursosi18n.getText(variavelBotaoSim);
+                const botaoNao = recursosi18n.getText(variavelBotaoNao);
+                const mensagemConfirmacao = recursosi18n.getText(variavelConfirmacaoCancelar);
 
                 let controllerCadastro = this;
 
@@ -227,7 +248,7 @@ sap.ui.define([
                 let valorNome = evento.getParameter(PARAMETRO_VALUE);
                 let mensagemErroValidacao = Validacao.validarNome(valorNome);
 
-                this._definirValueStateInput(inputNome, mensagemErroValidacao);
+                this._definirValueStateInputValidado(inputNome, mensagemErroValidacao);
             }
             catch (erro) {
                 MessageBox.warning(erro.message);
@@ -240,7 +261,7 @@ sap.ui.define([
                 let valorCpf = evento.getParameter(PARAMETRO_VALUE);
                 let mensagemErroValidacao = Validacao.validarCpf(valorCpf);
 
-                this._definirValueStateInput(inputCpf, mensagemErroValidacao);
+                this._definirValueStateInputValidado(inputCpf, mensagemErroValidacao);
             }
             catch (erro) {
                 MessageBox.warning(erro.message);
@@ -253,7 +274,7 @@ sap.ui.define([
                 let valorTelefone = evento.getParameter(PARAMETRO_VALUE);
                 let mensagemErroValidacao = Validacao.validarTelefone(valorTelefone);
 
-                this._definirValueStateInput(inputTelefone, mensagemErroValidacao);
+                this._definirValueStateInputValidado(inputTelefone, mensagemErroValidacao);
             }
             catch (erro) {
                 MessageBox.warning(erro.message);
@@ -266,7 +287,7 @@ sap.ui.define([
                 let valorIdade = evento.getParameter(PARAMETRO_VALUE);
                 let mensagemErroValidacao = Validacao.validarIdade(valorIdade);
 
-                this._definirValueStateInput(inputIdade, mensagemErroValidacao);
+                this._definirValueStateInputValidado(inputIdade, mensagemErroValidacao);
             }
             catch (erro) {
                 MessageBox.warning(erro.message);
@@ -284,8 +305,8 @@ sap.ui.define([
                 let mensagemErroValidacaoCheckIn = Validacao.validarCheckIn(valorCheckIn);
                 let mensagemErroValidacaoCheckOut = Validacao.validarCheckOut(valorCheckOut, valorCheckIn);
 
-                this._definirValueStateInput(inputCheckIn, mensagemErroValidacaoCheckIn);
-                this._definirValueStateInput(inputCheckOut, mensagemErroValidacaoCheckOut);
+                this._definirValueStateInputValidado(inputCheckIn, mensagemErroValidacaoCheckIn);
+                this._definirValueStateInputValidado(inputCheckOut, mensagemErroValidacaoCheckOut);
             }
             catch (erro) {
                 MessageBox.warning(erro.message);
@@ -298,7 +319,7 @@ sap.ui.define([
                 let valorPrecoEstadia = evento.getParameter(PARAMETRO_VALUE);
                 let mensagemErroValidacao = Validacao.validarPrecoEstadia(valorPrecoEstadia);
 
-                this._definirValueStateInput(inputPrecoEstadia, mensagemErroValidacao);
+                this._definirValueStateInputValidado(inputPrecoEstadia, mensagemErroValidacao);
             } catch (erro) {
                 MessageBox.warning(erro.message);
             }
