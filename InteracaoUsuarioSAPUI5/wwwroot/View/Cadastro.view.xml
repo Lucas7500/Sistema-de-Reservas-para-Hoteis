@@ -74,9 +74,10 @@
                         text="{i18n>labelIdade}"
                         labelFor="inputIdade" />
                     <Input
+                        liveChange=".aoDigitarValidarIdade"
+                        maxLength="3"
                         id="inputIdade"
                         required="true"
-                        type="Number"
                         placeholder="{i18n>placeholderIdade}"
                         showClearIcon="true"
                         value="{/idade}"
@@ -132,10 +133,10 @@
                         text="{i18n>labelPrecoEstadia}"
                         labelFor="inputPrecoEstadia" />
                     <Input
+                        liveChange=".aoDigitarValidarPrecoEstadia"
                         id="inputPrecoEstadia"
                         placeholder="{i18n>placeholderPrecoEstadia}"
                         required="true"
-                        type="Number"
                         value="{/precoEstadia}"
                         change=".aoMudarValidarPrecoEstadia" />
                 </VBox>

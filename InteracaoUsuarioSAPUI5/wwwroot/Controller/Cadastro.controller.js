@@ -195,7 +195,7 @@ sap.ui.define([
                 let reservaPreenchida = this._obterReservaPreenchida();
                 let inputsSemAlteracao = this._obterInputsSemAlteracao();
                 let listaErrosValidacao = Validacao.obterListaErros();
-                
+
                 if (inputsSemAlteracao.length) {
                     Validacao.validarPropriedadesVazias(reservaPreenchida);
                     listaErrosValidacao = Validacao.obterListaErros();
@@ -240,6 +240,21 @@ sap.ui.define([
             catch (erro) {
                 MessageBox.warning(erro.message);
             }
+        },
+
+        aoDigitarValidarIdade(evento) {
+            const regexIdade = "[0-9]";
+            let valorInput = evento.getSource().getValue();
+
+            for (let char of valorInput) {
+                if (!char.match(regexIdade)) {
+                    let inputValido = valorInput.replace(char, "");
+                    evento.getSource().setValue(inputValido);
+                }
+            }
+        },
+
+        aoDigitarValidarPrecoEstadia(evento) {
         },
 
         aoMudarValidarNome(evento) {
@@ -317,6 +332,9 @@ sap.ui.define([
             try {
                 let inputPrecoEstadia = evento.getSource();
                 let valorPrecoEstadia = evento.getParameter(PARAMETRO_VALUE);
+                // let valorPrecoEstadiaFormatado = Formatter.formataPrecoEstadia(valorPrecoEstadia);
+                // inputPrecoEstadia.setValue(valorPrecoEstadiaFormatado);
+
                 let mensagemErroValidacao = Validacao.validarPrecoEstadia(valorPrecoEstadia);
 
                 this._definirValueStateInputValidado(inputPrecoEstadia, mensagemErroValidacao);
