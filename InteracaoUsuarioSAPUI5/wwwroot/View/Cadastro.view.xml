@@ -15,16 +15,16 @@
                 <ObjectIdentifier title="{i18n>tituloCadastro}" />
                 <ToolbarSpacer />
                 <Button
+                    class="sapUiTinyMarginEnd"
+                    icon="sap-icon://decline"
+                    text="{i18n>tituloBotaoCancelar}"
+                    type="Transparent"
+                    press=".aoClicarCancelarCadastro" />
+                <Button
                     icon="sap-icon://save"
                     text="{i18n>tituloBotaoSalvar}"
-                    class="sapUiTinyMargin"
-                    type="Transparent"
+                    type="Emphasized"
                     press=".aoClicarSalvarReserva" />
-                <Button
-                    icon="sap-icon://decline"
-                    press=".aoClicarCancelarCadastro"
-                    text="{i18n>tituloBotaoCancelar}"
-                    type="Transparent" />
             </Toolbar>
         </customHeader>
         <Panel
@@ -118,8 +118,8 @@
                         id="inputCheckIn"
                         required="true"
                         type="Date"
-                        value="{/checkIn}" 
-                        change=".aoMudarValidarCheckInECheckOut"/>
+                        value="{/checkIn}"
+                        change=".aoMudarValidarCheckInECheckOut" />
                     <Label
                         text="{i18n>labelCheckOut}"
                         labelFor="inputCheckOut" />

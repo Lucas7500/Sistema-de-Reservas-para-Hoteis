@@ -14,16 +14,15 @@
                 <Toolbar
                     style="Clear"
                     class="sapUiTinyMarginEnd">
-                    <Button
-                        type="Emphasized"
-                        icon="sap-icon://add"
-                        text="{i18n>tituloBotaoAdicionar}"
-                        press=".aoClicarAbrirCadastro" />
                     <ToolbarSpacer />
                     <SearchField
                         placeholder="{i18n>placeholderCampoPesquisaFiltro}"
                         width="30%"
                         search=".aoPesquisarFiltrarReservas" />
+                    <Button
+                        type="Emphasized"
+                        icon="sap-icon://add"
+                        press=".aoClicarAbrirCadastro" />
                 </Toolbar>
             </headerToolbar>
             <Table
@@ -56,17 +55,17 @@
                     </Column>
                     <Column
                         hAlign="Center"
-                        width="6rem">
+                        width="7rem">
                         <ObjectIdentifier title="{i18n>tituloColunaSexo}" />
                     </Column>
                     <Column
                         hAlign="Center"
-                        width="7rem">
+                        width="8rem">
                         <ObjectIdentifier title="{i18n>tituloColunaCheckIn}" />
                     </Column>
                     <Column
                         hAlign="Center"
-                        width="7rem">
+                        width="8rem">
                         <ObjectIdentifier title="{i18n>tituloColunaCheckOut}" />
                     </Column>
                     <Column

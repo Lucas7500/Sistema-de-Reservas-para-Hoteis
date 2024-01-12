@@ -332,8 +332,8 @@ sap.ui.define([
             try {
                 let inputPrecoEstadia = evento.getSource();
                 let valorPrecoEstadia = evento.getParameter(PARAMETRO_VALUE);
-                // let valorPrecoEstadiaFormatado = Formatter.formataPrecoEstadia(valorPrecoEstadia);
-                // inputPrecoEstadia.setValue(valorPrecoEstadiaFormatado);
+                let valorPrecoEstadiaFormatado = Formatter.formataPrecoEstadia(valorPrecoEstadia);
+                inputPrecoEstadia.setValue(valorPrecoEstadiaFormatado);
 
                 let mensagemErroValidacao = Validacao.validarPrecoEstadia(valorPrecoEstadia);
 
