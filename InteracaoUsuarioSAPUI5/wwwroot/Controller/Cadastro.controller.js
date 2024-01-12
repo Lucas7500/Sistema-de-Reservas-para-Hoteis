@@ -115,7 +115,7 @@ sap.ui.define([
 
         _obterReservaPreenchida() {
             let reserva = this.getView().getModel().getData();
-
+            
             return {
                 nome: reserva.nome,
                 cpf: reserva.cpf,
@@ -124,7 +124,7 @@ sap.ui.define([
                 sexo: Number(reserva.sexo),
                 checkIn: reserva.checkIn,
                 checkOut: reserva.checkOut,
-                precoEstadia: Number(reserva.precoEstadia),
+                precoEstadia: Number(reserva.precoEstadia.replace(/\./g, "").replace(",", ".")),
                 pagamentoEfetuado: reserva.pagamentoEfetuado
             };
         },
@@ -254,9 +254,6 @@ sap.ui.define([
             }
         },
 
-        aoDigitarValidarPrecoEstadia(evento) {
-        },
-
         aoMudarValidarNome(evento) {
             try {
                 let inputNome = evento.getSource();
@@ -331,13 +328,21 @@ sap.ui.define([
         aoMudarValidarPrecoEstadia(evento) {
             try {
                 let inputPrecoEstadia = evento.getSource();
-                let valorPrecoEstadia = evento.getParameter(PARAMETRO_VALUE);
-                let valorPrecoEstadiaFormatado = Formatter.formataPrecoEstadia(valorPrecoEstadia);
-                inputPrecoEstadia.setValue(valorPrecoEstadiaFormatado);
-
+                let valorPrecoEstadia = inputPrecoEstadia.getValue();
+                
                 let mensagemErroValidacao = Validacao.validarPrecoEstadia(valorPrecoEstadia);
 
                 this._definirValueStateInputValidado(inputPrecoEstadia, mensagemErroValidacao);
+                
+                for (let char of valorPrecoEstadia) {
+                    if (!char.match("[0-9\.,]")) {
+                        valorPrecoEstadia = valorPrecoEstadia.replace(char, "");
+                    }
+                }
+                valorPrecoEstadia = valorPrecoEstadia.replace(/\./g, "").replace(/,/g, ".");
+
+                let valorPrecoEstadiaFormatado = Formatter.formataPrecoEstadia(valorPrecoEstadia);
+                inputPrecoEstadia.setValue(valorPrecoEstadiaFormatado);
             } catch (erro) {
                 MessageBox.warning(erro.message);
             }

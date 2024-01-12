@@ -19,7 +19,6 @@ sap.ui.define([
             var formatador = NumberFormat.getCurrencyInstance({
                 currencyCode: false
             });
-            // const padraoBR = "BRL";
 
             return formatador.format(parseFloat(precoEstadia));
         },
