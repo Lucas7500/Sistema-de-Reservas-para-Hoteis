@@ -7,15 +7,10 @@ sap.ui.define([
     const CAMINHO_ROTA_BASE_CONTROLLER = "reservas.hoteis.controller.BaseController";
 
     return Controller.extend(CAMINHO_ROTA_BASE_CONTROLLER, {
-        modelo(nomeModelo, dados) {
-            if (dados) {
-                this.getView().setModel(new JSONModel(dados), nomeModelo);
-            }
-
-            let modeloEncontrado = this.getView().getModel(nomeModelo);
-            if (modeloEncontrado) {
-                return modeloEncontrado.getData();
-            }
+        modelo(nome, modelo) {
+            return modelo
+                ? this.getView().setModel(new JSONModel(modelo), nome)
+                : this.getView().getModel(nome).getData();
         },
 
         obterRecursosI18n() {
@@ -23,15 +18,20 @@ sap.ui.define([
             return this.getOwnerComponent().getModel(modeloi18n).getResourceBundle();
         },
 
-        navegar(rota, parametroId) {
+        vincularRota(nomeDaRota, aoCoincidirRota) {
+            let roteador = this.getOwnerComponent().getRouter();
+            roteador.getRoute(nomeDaRota).attachPatternMatched(aoCoincidirRota, this);
+        },
+
+        navegarPara(nomeDaRota, parametroId) {
             try {
                 let roteador = this.getOwnerComponent().getRouter();
 
-                parametroId 
-                ? roteador.navTo(rota, {
-                    id: parametroId
-                })
-                : roteador.navTo(rota);
+                parametroId
+                    ? roteador.navTo(nomeDaRota, {
+                        id: parametroId
+                    })
+                    : roteador.navTo(nomeDaRota);
             }
             catch (erro) {
                 MessageBox.warning(erro.message);

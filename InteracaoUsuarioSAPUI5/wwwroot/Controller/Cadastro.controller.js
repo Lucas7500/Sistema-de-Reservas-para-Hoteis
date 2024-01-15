@@ -1,14 +1,14 @@
 sap.ui.define([
     "./BaseController",
     "../model/Formatter",
-    "sap/ui/model/json/JSONModel",
     "../Repositorios/ReservaRepository",
     "sap/m/MessageBox",
     "../Services/Validacao"
-], (BaseController, Formatter, JSONModel, ReservaRepository, MessageBox, Validacao) => {
+], (BaseController, Formatter, ReservaRepository, MessageBox, Validacao) => {
     "use strict";
 
     const CAMINHO_ROTA_CADASTRO = "reservas.hoteis.controller.Cadastro";
+    const ROTA_LISTAGEM = "listagem";
     const STATUS_CREATED = 201;
     const VALUE_STATE_SUCESSO = "Success";
     const VALUE_STATE_ERRO = "Error";
@@ -21,6 +21,7 @@ sap.ui.define([
     const ID_INPUT_CHECK_IN = "inputCheckIn";
     const ID_INPUT_CHECK_OUT = "inputCheckOut";
     const ID_INPUT_PRECO_ESTADIA = "inputPrecoEstadia";
+    const MODELO_RESERVA = "reserva";
     const STRING_VAZIA = "";
     const CHAR_VIRGULA = ",";
     const CHAR_PONTO = ".";
@@ -39,13 +40,12 @@ sap.ui.define([
 
     return BaseController.extend(CAMINHO_ROTA_CADASTRO, {
         onInit() {
-            let rota = this.getOwnerComponent().getRouter();
-            const rotaCadastro = 'cadastro';
-            rota.getRoute(rotaCadastro).attachPatternMatched(this._aoCoincidirRota, this);
+            const rotaCadastro = "cadastro";
+            this.vincularRota(rotaCadastro, this._aoCoincidirRota);
         },
 
         _aoCoincidirRota() {
-            const recursosi18n = this._obterRecursosI18n();
+            const recursosi18n = this.obterRecursosI18n();
 
             this._modeloReserva();
             Validacao.definirRecursosi18n(recursosi18n);
@@ -71,7 +71,7 @@ sap.ui.define([
             this.byId(idRadioButtonPagamentoNaoEfetuado).setSelected(true);
             this._limparValueStateInputs();
 
-            this.getView().setModel(new JSONModel(reserva));
+            this.modelo(MODELO_RESERVA, reserva);
         },
 
         _definirValueStateInputValidado(input, valueStateText) {
@@ -112,13 +112,8 @@ sap.ui.define([
             return inputsSemAlteracao;
         },
 
-        _obterRecursosI18n() {
-            const modeloi18n = "i18n";
-            return this.getOwnerComponent().getModel(modeloi18n).getResourceBundle();
-        },
-
         _obterReservaPreenchida() {
-            let reserva = this.getView().getModel().getData();
+            let reserva = this.modelo(MODELO_RESERVA);
 
             return {
                 nome: reserva.nome,
@@ -136,7 +131,7 @@ sap.ui.define([
         },
 
         _criarReserva(reserva) {
-            const recursosi18n = this._obterRecursosI18n();
+            const recursosi18n = this.obterRecursosI18n();
             const variavelSucessoSalvar = "sucessoSalvar";
             const mensagemSucessoSalvar = recursosi18n.getText(variavelSucessoSalvar);
             let controllerCadastro = this;
@@ -147,7 +142,7 @@ sap.ui.define([
                         let reserva = await response.json();
                         MessageBox.success(mensagemSucessoSalvar, {
                             onClose: () => {
-                                controllerCadastro._abrirDetalhesReservaCriada(reserva);
+                                controllerCadastro._abrirDetalhesReservaCriada(reserva.id);
                             }
                         });
 
@@ -164,32 +159,18 @@ sap.ui.define([
                 });
         },
 
-        _abrirDetalhesReservaCriada(reservaCriada) {
+        _abrirDetalhesReservaCriada(idReservaCriada) {
             try {
-                let rota = this.getOwnerComponent().getRouter();
                 const rotaDetalhes = "detalhes";
-                rota.navTo(rotaDetalhes, {
-                    id: reservaCriada.id
-                });
+                this.navegarPara(rotaDetalhes, idReservaCriada);
             } catch (erro) {
-                MessageBox.warning(erro.message);
-            }
-        },
-
-        _navegarParaTelaListagem() {
-            try {
-                let rota = this.getOwnerComponent().getRouter();
-                const rotaListagem = "listagem";
-                rota.navTo(rotaListagem);
-            }
-            catch (erro) {
                 MessageBox.warning(erro.message);
             }
         },
 
         aoClicarNavegarParaTelaListagem() {
             try {
-                this._navegarParaTelaListagem();
+                this.navegarPara(ROTA_LISTAGEM);
             }
             catch (erro) {
                 MessageBox.warning(erro.message);
@@ -221,7 +202,7 @@ sap.ui.define([
 
         aoClicarCancelarCadastro() {
             try {
-                const recursosi18n = this._obterRecursosI18n();
+                const recursosi18n = this.obterRecursosI18n();
 
                 const variavelBotaoSim = "botaoSim";
                 const variavelBotaoNao = "botaoNao";
@@ -238,7 +219,7 @@ sap.ui.define([
                     emphasizedAction: botaoSim,
                     onClose: function (acao) {
                         if (acao == botaoSim) {
-                            controllerCadastro._navegarParaTelaListagem();
+                            controllerCadastro.navegarPara(ROTA_LISTAGEM);
                         }
                     }
                 });

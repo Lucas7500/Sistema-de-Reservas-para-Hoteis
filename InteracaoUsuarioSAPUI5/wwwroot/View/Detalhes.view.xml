@@ -28,7 +28,7 @@
             <VBox>
                 <HBox
                     class="sapUiTinyMarginBegin">
-                    <ObjectIdentifier title="{/nome}" />
+                    <ObjectIdentifier title="{reserva>/nome}" />
                 </HBox>
                 <HBox>
                     <HBox
@@ -38,7 +38,7 @@
                             title="{i18n>tituloColunaId}:" />
                         <Text
                             class="sapUiTinyMargin"
-                            text="{/id}" />
+                            text="{reserva>/id}" />
                     </HBox>
                 </HBox>
                 <HBox
@@ -57,10 +57,10 @@
                         <VBox>
                             <Text
                                 class="sapUiTinyMargin"
-                                text="{/cpf}" />
+                                text="{reserva>/cpf}" />
                             <Text
                                 class="sapUiTinyMargin"
-                                text="{/telefone}" />
+                                text="{reserva>/telefone}" />
                         </VBox>
                     </HBox>
 
@@ -81,11 +81,11 @@
                         <VBox>
                             <Text
                                 class="sapUiTinyMargin"
-                                text="{/idade}" />
+                                text="{reserva>/idade}" />
                             <Text
                                 class="sapUiTinyMargin"
                                 text=" {
-                                    path: '/sexo',
+                                    path: 'reserva>/sexo',
                                     formatter: '.formatter.formataSexo'}"
                             />
                         </VBox>
@@ -109,7 +109,7 @@
                             <Text
                                 class="sapUiTinyMargin"
                                 text="{
-                                        path: '/checkIn',
+                                        path: 'reserva>/checkIn',
                                         type: 'sap.ui.model.type.Date',
                                         formatOptions: {
                                             style: 'short',
@@ -122,7 +122,7 @@
                             <Text
                                 class="sapUiTinyMargin"
                                 text="{
-                                        path: '/checkOut',
+                                        path: 'reserva>/checkOut',
                                         type: 'sap.ui.model.type.Date',
                                         formatOptions: {
                                             style: 'short',
@@ -151,12 +151,12 @@
                             <Text
                                 class="sapUiTinyMargin"
                                 text="{
-                                        path: '/precoEstadia',
+                                        path: 'reserva>/precoEstadia',
                                         formatter: '.formatter.formataPrecoEstadia'}" />
                             <Text
                                 class="sapUiTinyMargin"
                                 text="{
-                                        path: '/pagamentoEfetuado',
+                                        path: 'reserva>/pagamentoEfetuado',
                                         formatter: '.formatter.formataPagamentoEfetuado'}" />
                         </VBox>
                     </HBox>

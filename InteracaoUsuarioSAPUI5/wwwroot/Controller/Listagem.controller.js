@@ -1,10 +1,9 @@
 sap.ui.define([
     "./BaseController",
     "../model/Formatter",
-    "sap/ui/model/json/JSONModel",
     "../Repositorios/ReservaRepository",
     "sap/m/MessageBox"
-], (BaseController, Formatter, JSONModel, ReservaRepository, MessageBox) => {
+], (BaseController, Formatter, ReservaRepository, MessageBox) => {
     "use strict";
 
     const CAMINHO_ROTA_LISTAGEM = "reservas.hoteis.controller.Listagem";
@@ -13,9 +12,8 @@ sap.ui.define([
     return BaseController.extend(CAMINHO_ROTA_LISTAGEM, {
         formatter: Formatter,
         onInit() {
-            let rota = this.getOwnerComponent().getRouter();
-            const rotaLista = "listagem";
-            rota.getRoute(rotaLista).attachPatternMatched(this._aoCoincidirRota, this);
+            const rotaListagem = "listagem";
+            this.vincularRota(rotaListagem, this._aoCoincidirRota);
         },
 
         _aoCoincidirRota() {
@@ -38,7 +36,7 @@ sap.ui.define([
                         ? response.json()
                         : Promise.reject(response);
                 })
-                .then(reservas => this.getView().setModel(new JSONModel(reservas), MODELO_LISTA))
+                .then(reservas => this.modelo(MODELO_LISTA, reservas))
                 .catch(async erro => {
                     let mensagemErro = await erro.text();
                     MessageBox.warning(mensagemErro);
@@ -57,9 +55,8 @@ sap.ui.define([
 
         aoClicarAbrirCadastro() {
             try {
-                let rota = this.getOwnerComponent().getRouter();
                 const rotaCadastro = "cadastro";
-                rota.navTo(rotaCadastro);
+                this.navegarPara(rotaCadastro);
             } catch (erro) {
                 MessageBox.warning(erro.message);
             }
@@ -71,10 +68,7 @@ sap.ui.define([
                 let idReserva = evento.getSource().getBindingContext(MODELO_LISTA).getProperty(propriedadeId);
 
                 const rotaDetalhes = "detalhes";
-                let rota = this.getOwnerComponent().getRouter();
-                rota.navTo(rotaDetalhes, {
-                    id: idReserva
-                });
+                this.navegarPara(rotaDetalhes, idReserva);
             } catch (erro) {
                 MessageBox.warning(erro.message);
             }

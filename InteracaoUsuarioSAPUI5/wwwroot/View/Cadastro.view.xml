@@ -42,7 +42,7 @@
                         required="true"
                         placeholder="{i18n>placeholderNome}"
                         showClearIcon="true"
-                        value="{/nome}"
+                        value="{reserva>/nome}"
                         change=".aoMudarValidarNome" />
                     <Label
                         text="{i18n>labelCpf}"
@@ -55,7 +55,7 @@
                         placeholderSymbol="{i18n>simboloPlaceholder}"
                         placeholder="{i18n>placeholderCpf}"
                         showClearIcon="true"
-                        value="{/cpf}"
+                        value="{reserva>/cpf}"
                         change=".aoMudarValidarCpf" />
                     <Label
                         text="{i18n>labelTelefone}"
@@ -68,7 +68,7 @@
                         placeholderSymbol="{i18n>simboloPlaceholder}"
                         placeholder="{i18n>placeholderTelefone}"
                         showClearIcon="true"
-                        value="{/telefone}"
+                        value="{reserva>/telefone}"
                         change=".aoMudarValidarTelefone" />
                     <Label
                         text="{i18n>labelIdade}"
@@ -80,7 +80,7 @@
                         required="true"
                         placeholder="{i18n>placeholderIdade}"
                         showClearIcon="true"
-                        value="{/idade}"
+                        value="{reserva>/idade}"
                         change=".aoMudarValidarIdade" />
                     <Label
                         text="{i18n>labelPagamentoEfetuado}"
@@ -90,7 +90,7 @@
                         <RadioButton
                             id="radioButtonPagamentoEfetuado"
                             text="{i18n>radioButtonSim}"
-                            selected="{/pagamentoEfetuado}" />
+                            selected="{reserva>/pagamentoEfetuado}" />
                         <RadioButton
                             id="radioButtonPagamentoNaoEfetuado"
                             text="{i18n>radioButtonNao}" />
@@ -106,7 +106,7 @@
                         id="comboBoxSexo"
                         required="true"
                         width="100%"
-                        selectedKey="{/sexo}"
+                        selectedKey="{reserva>/sexo}"
                         change=".aoMudarValidarSexo">
                         <core:ListItem key="0" text="{i18n>sexoMasculino}" />
                         <core:ListItem key="1" text="{i18n>sexoFeminino}" />
@@ -118,7 +118,7 @@
                         id="inputCheckIn"
                         required="true"
                         type="Date"
-                        value="{/checkIn}"
+                        value="{reserva>/checkIn}"
                         change=".aoMudarValidarCheckInECheckOut" />
                     <Label
                         text="{i18n>labelCheckOut}"
@@ -127,7 +127,7 @@
                         id="inputCheckOut"
                         required="true"
                         type="Date"
-                        value="{/checkOut}"
+                        value="{reserva>/checkOut}"
                         change=".aoMudarValidarCheckInECheckOut" />
                     <Label
                         text="{i18n>labelPrecoEstadia}"
@@ -136,7 +136,7 @@
                         id="inputPrecoEstadia"
                         placeholder="{i18n>placeholderPrecoEstadia}"
                         required="true"
-                        value="{/precoEstadia}"
+                        value="{reserva>/precoEstadia}"
                         change=".aoMudarValidarPrecoEstadia"
                         liveChange=".aoDigitarPermitirSomenteNumeros" />
                 </VBox>

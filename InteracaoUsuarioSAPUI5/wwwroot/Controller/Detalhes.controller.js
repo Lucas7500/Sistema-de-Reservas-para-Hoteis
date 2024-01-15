@@ -1,20 +1,19 @@
 sap.ui.define([
     "./BaseController",
     "../model/Formatter",
-    "sap/ui/model/json/JSONModel",
     "../Repositorios/ReservaRepository",
     "sap/m/MessageBox"
-], (BaseController, Formatter, JSONModel, ReservaRepository, MessageBox) => {
+], (BaseController, Formatter, ReservaRepository, MessageBox) => {
     "use strict";
 
     const CAMINHO_ROTA_DETALHES = "reservas.hoteis.controller.Detalhes";
+    const MODELO_RESERVA = "reserva";
 
     return BaseController.extend(CAMINHO_ROTA_DETALHES, {
         formatter: Formatter,
         onInit() {
-            let rota = this.getOwnerComponent().getRouter();
-            const rotaDetalhes = 'detalhes';
-            rota.getRoute(rotaDetalhes).attachPatternMatched(this._aoCoincidirRota, this);
+            const rotaDetalhes = "detalhes";
+            this.vincularRota(rotaDetalhes, this._aoCoincidirRota);
         },
 
         _aoCoincidirRota(evento) {
@@ -34,7 +33,7 @@ sap.ui.define([
                         ? response.json()
                         : Promise.reject(response);
                 })
-                .then(reserva => this.getView().setModel(new JSONModel(reserva)))
+                .then(reserva => this.modelo(MODELO_RESERVA, reserva))
                 .catch(async erro => {
                     let mensagemErro = await erro.text();
                     MessageBox.warning(mensagemErro);
@@ -43,9 +42,8 @@ sap.ui.define([
 
         aoClicarNavegarParaTelaListagem() {
             try {
-                let rota = this.getOwnerComponent().getRouter();
                 const rotaListagem = "listagem";
-                rota.navTo(rotaListagem);
+                this.navegarPara(rotaListagem);
             } catch (erro) {
                 MessageBox.warning(erro.message);
             }
