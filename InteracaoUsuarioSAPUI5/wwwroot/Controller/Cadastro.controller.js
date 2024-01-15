@@ -21,6 +21,11 @@ sap.ui.define([
     const ID_INPUT_CHECK_IN = "inputCheckIn";
     const ID_INPUT_CHECK_OUT = "inputCheckOut";
     const ID_INPUT_PRECO_ESTADIA = "inputPrecoEstadia";
+    const STRING_VAZIA = "";
+    const CHAR_VIRGULA = ",";
+    const CHAR_PONTO = ".";
+    const REGEX_PONTOS = /\./g;
+    const REGEX_VIRGULAS = /,/g;
 
     const ARRAY_ID_INPUTS = [
         ID_INPUT_NOME,
@@ -50,16 +55,15 @@ sap.ui.define([
             let dataHoje = new Date();
             let valorPadraoData = Formatter.formataData(dataHoje);
 
-            const stringVazia = "";
             let reserva = {
-                nome: stringVazia,
-                cpf: stringVazia,
-                telefone: stringVazia,
-                idade: stringVazia,
-                sexo: stringVazia,
+                nome: STRING_VAZIA,
+                cpf: STRING_VAZIA,
+                telefone: STRING_VAZIA,
+                idade: STRING_VAZIA,
+                sexo: STRING_VAZIA,
                 checkIn: valorPadraoData,
                 checkOut: valorPadraoData,
-                precoEstadia: stringVazia,
+                precoEstadia: STRING_VAZIA,
                 pagamentoEfetuado: false
             };
 
@@ -115,7 +119,7 @@ sap.ui.define([
 
         _obterReservaPreenchida() {
             let reserva = this.getView().getModel().getData();
-            
+
             return {
                 nome: reserva.nome,
                 cpf: reserva.cpf,
@@ -124,7 +128,9 @@ sap.ui.define([
                 sexo: Number(reserva.sexo),
                 checkIn: reserva.checkIn,
                 checkOut: reserva.checkOut,
-                precoEstadia: Number(reserva.precoEstadia.replace(/\./g, "").replace(",", ".")),
+                precoEstadia: Number(reserva.precoEstadia
+                    .replace(REGEX_PONTOS, STRING_VAZIA)
+                    .replace(CHAR_VIRGULA, CHAR_PONTO)),
                 pagamentoEfetuado: reserva.pagamentoEfetuado
             };
         },
@@ -243,12 +249,12 @@ sap.ui.define([
         },
 
         aoDigitarValidarIdade(evento) {
-            const regexIdade = "[0-9]";
+            const regexNumeros = "[0-9]";
             let valorInput = evento.getSource().getValue();
 
             for (let char of valorInput) {
-                if (!char.match(regexIdade)) {
-                    let inputValido = valorInput.replace(char, "");
+                if (!char.match(regexNumeros)) {
+                    let inputValido = valorInput.replace(char, STRING_VAZIA);
                     evento.getSource().setValue(inputValido);
                 }
             }
@@ -329,20 +335,21 @@ sap.ui.define([
             try {
                 let inputPrecoEstadia = evento.getSource();
                 let valorPrecoEstadia = inputPrecoEstadia.getValue();
-                
                 let mensagemErroValidacao = Validacao.validarPrecoEstadia(valorPrecoEstadia);
 
                 this._definirValueStateInputValidado(inputPrecoEstadia, mensagemErroValidacao);
-                
+
+                const regexNumerosPontoVirgula = "[0-9\.,]";
                 for (let char of valorPrecoEstadia) {
-                    if (!char.match("[0-9\.,]")) {
-                        valorPrecoEstadia = valorPrecoEstadia.replace(char, "");
+                    if (!char.match(regexNumerosPontoVirgula)) {
+                        valorPrecoEstadia = valorPrecoEstadia.replace(char, STRING_VAZIA);
                     }
                 }
-                valorPrecoEstadia = valorPrecoEstadia.replace(/\./g, "").replace(/,/g, ".");
 
-                let valorPrecoEstadiaFormatado = Formatter.formataPrecoEstadia(valorPrecoEstadia);
-                inputPrecoEstadia.setValue(valorPrecoEstadiaFormatado);
+                valorPrecoEstadia = valorPrecoEstadia
+                    .replace(REGEX_PONTOS, STRING_VAZIA)
+                    .replace(REGEX_VIRGULAS, CHAR_PONTO);
+                inputPrecoEstadia.setValue(Formatter.formataPrecoEstadia(valorPrecoEstadia));
             } catch (erro) {
                 MessageBox.warning(erro.message);
             }

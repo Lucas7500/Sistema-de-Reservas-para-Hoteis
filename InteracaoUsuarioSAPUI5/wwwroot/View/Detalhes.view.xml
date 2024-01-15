@@ -42,7 +42,7 @@
                     </HBox>
                 </HBox>
                 <HBox
-                    class="sapUiMediumMarginTop">
+                    class="sapUiSmallMarginTop">
                     <HBox
                         alignItems="Center">
                         <VBox>
