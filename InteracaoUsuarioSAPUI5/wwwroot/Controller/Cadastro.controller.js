@@ -1,11 +1,11 @@
 sap.ui.define([
-    "sap/ui/core/mvc/Controller",
+    "./BaseController",
     "../model/Formatter",
     "sap/ui/model/json/JSONModel",
     "../Repositorios/ReservaRepository",
     "sap/m/MessageBox",
     "../Services/Validacao"
-], (Controller, Formatter, JSONModel, ReservaRepository, MessageBox, Validacao) => {
+], (BaseController, Formatter, JSONModel, ReservaRepository, MessageBox, Validacao) => {
     "use strict";
 
     const CAMINHO_ROTA_CADASTRO = "reservas.hoteis.controller.Cadastro";
@@ -37,7 +37,7 @@ sap.ui.define([
         ID_INPUT_PRECO_ESTADIA
     ]
 
-    return Controller.extend(CAMINHO_ROTA_CADASTRO, {
+    return BaseController.extend(CAMINHO_ROTA_CADASTRO, {
         onInit() {
             let rota = this.getOwnerComponent().getRouter();
             const rotaCadastro = 'cadastro';

@@ -36,7 +36,7 @@ sap.ui.define([], () => {
 
             if (!this.contemValor(reservaPreenchida.cpf)) {
                 const variavelCpfNaoPreenchido = "cpfNaoPreenchido";
-                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CPF] =  RECURSOS_I18N.getText(variavelCpfNaoPreenchido);
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CPF] = RECURSOS_I18N.getText(variavelCpfNaoPreenchido);
             }
 
             if (!this.contemValor(reservaPreenchida.telefone)) {
@@ -94,13 +94,11 @@ sap.ui.define([], () => {
                 return LISTA_ERROS[INDICE_MENSAGEM_ERRO_NOME];
             };
 
-            for (let char of nomeFormatado) {
-                if (!char.match(regexNome)) {
-                    const variavelNomeFormatoIncorreto = "nomeFormatoIncorreto";
-                    LISTA_ERROS[INDICE_MENSAGEM_ERRO_NOME] = RECURSOS_I18N.getText(variavelNomeFormatoIncorreto);
+            if (!nomeFormatado.match(regexNome)) {
+                const variavelNomeFormatoIncorreto = "nomeFormatoIncorreto";
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_NOME] = RECURSOS_I18N.getText(variavelNomeFormatoIncorreto);
 
-                    return LISTA_ERROS[INDICE_MENSAGEM_ERRO_NOME];
-                }
+                return LISTA_ERROS[INDICE_MENSAGEM_ERRO_NOME];
             }
 
             LISTA_ERROS[INDICE_MENSAGEM_ERRO_NOME] = undefined;
@@ -109,8 +107,8 @@ sap.ui.define([], () => {
         validarCpf(cpf) {
             if (!this.contemValor(cpf)) {
                 const variavelCpfNaoPreenchido = "cpfNaoPreenchido";
-                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CPF] =  RECURSOS_I18N.getText(variavelCpfNaoPreenchido);
-                
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CPF] = RECURSOS_I18N.getText(variavelCpfNaoPreenchido);
+
                 return LISTA_ERROS[INDICE_MENSAGEM_ERRO_CPF];
             };
 
@@ -192,7 +190,7 @@ sap.ui.define([], () => {
             if (tamanhoNumerosTelefone < tamanhoTelefonePreenchido) {
                 const variavelTelefoneParcialmentePreenchido = "telefoneParcialmentePreenchido";
                 LISTA_ERROS[INDICE_MENSAGEM_ERRO_TELEFONE] = RECURSOS_I18N.getText(variavelTelefoneParcialmentePreenchido);
-                
+
                 return LISTA_ERROS[INDICE_MENSAGEM_ERRO_TELEFONE];
             }
 
@@ -306,7 +304,7 @@ sap.ui.define([], () => {
             const valorZero = 0;
 
             if (numeroPrecoEstadia > valorMaximoPrecoEstadia) {
-               const variavelPrecoEstadiaAcimaValorMaximo = "precoEstadiaAcimaValorMaximo"
+                const variavelPrecoEstadiaAcimaValorMaximo = "precoEstadiaAcimaValorMaximo"
                 LISTA_ERROS[INDICE_MENSAGEM_ERRO_PRECO_ESTADIA] = RECURSOS_I18N.getText(variavelPrecoEstadiaAcimaValorMaximo);
 
                 return LISTA_ERROS[INDICE_MENSAGEM_ERRO_PRECO_ESTADIA];

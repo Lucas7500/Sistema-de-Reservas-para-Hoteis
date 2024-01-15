@@ -1,16 +1,16 @@
 sap.ui.define([
-    "sap/ui/core/mvc/Controller",
+    "./BaseController",
     "../model/Formatter",
     "sap/ui/model/json/JSONModel",
     "../Repositorios/ReservaRepository",
     "sap/m/MessageBox"
-], (Controller, Formatter, JSONModel, ReservaRepository, MessageBox) => {
+], (BaseController, Formatter, JSONModel, ReservaRepository, MessageBox) => {
     "use strict";
 
     const CAMINHO_ROTA_LISTAGEM = "reservas.hoteis.controller.Listagem";
     const MODELO_LISTA = "TabelaReservas";
 
-    return Controller.extend(CAMINHO_ROTA_LISTAGEM, {
+    return BaseController.extend(CAMINHO_ROTA_LISTAGEM, {
         formatter: Formatter,
         onInit() {
             let rota = this.getOwnerComponent().getRouter();
