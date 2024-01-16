@@ -10,6 +10,7 @@ sap.ui.define([
     const CAMINHO_ROTA_CADASTRO = "reservas.hoteis.controller.Cadastro";
     const ROTA_LISTAGEM = "listagem";
     const STATUS_CREATED = 201;
+    const STATUS_NO_CONTENT = 204;
     const VALUE_STATE_SUCESSO = "Success";
     const VALUE_STATE_ERRO = "Error";
     const PARAMETRO_VALUE = "value";
@@ -40,36 +41,53 @@ sap.ui.define([
 
     return BaseController.extend(CAMINHO_ROTA_CADASTRO, {
         onInit() {
-            const rotaCadastro = "cadastro";
-            this.vincularRota(rotaCadastro, this._aoCoincidirRota);
-        },
-
-        _aoCoincidirRota() {
             const recursosi18n = this.obterRecursosI18n();
-
-            this._modeloReserva();
+            const rotaCadastro = "cadastro";
+            const rotaEdicao = "edicao";
             Validacao.definirRecursosi18n(recursosi18n);
+
+            this.vincularRota(rotaCadastro, this._aoCoincidirRotaCadastro);
+            this.vincularRota(rotaEdicao, this._aoCoincidirRotaEdicao);
         },
 
-        _modeloReserva() {
-            let dataHoje = new Date();
-            let valorPadraoData = Formatter.formataData(dataHoje);
+        _aoCoincidirRotaCadastro() {
+            this._modeloReserva();
+        },
 
-            let reserva = {
-                nome: STRING_VAZIA,
-                cpf: STRING_VAZIA,
-                telefone: STRING_VAZIA,
-                idade: STRING_VAZIA,
-                sexo: STRING_VAZIA,
-                checkIn: valorPadraoData,
-                checkOut: valorPadraoData,
-                precoEstadia: STRING_VAZIA,
-                pagamentoEfetuado: false
-            };
+        _aoCoincidirRotaEdicao(evento) {
+            const parametroArguments = "arguments";
+            const id = evento.getParameter(parametroArguments).id;
 
+            this._obterReservaPorId(id);
+        },
+
+        _modeloReserva(reserva) {
             const idRadioButtonPagamentoNaoEfetuado = "radioButtonPagamentoNaoEfetuado";
             this.byId(idRadioButtonPagamentoNaoEfetuado).setSelected(true);
+
             this._limparValueStateInputs();
+
+            if (reserva) {
+                reserva.checkIn = Formatter.formataData(new Date(reserva.checkIn));
+                reserva.checkOut = Formatter.formataData(new Date(reserva.checkOut));
+                reserva.precoEstadia = Formatter.formataPrecoEstadia(reserva.precoEstadia);
+            }
+            else {
+                let dataHoje = new Date();
+                let valorPadraoData = Formatter.formataData(dataHoje);
+
+                reserva = {
+                    nome: STRING_VAZIA,
+                    cpf: STRING_VAZIA,
+                    telefone: STRING_VAZIA,
+                    idade: STRING_VAZIA,
+                    sexo: STRING_VAZIA,
+                    checkIn: valorPadraoData,
+                    checkOut: valorPadraoData,
+                    precoEstadia: STRING_VAZIA,
+                    pagamentoEfetuado: false
+                };
+            }
 
             this.modelo(MODELO_RESERVA, reserva);
         },
@@ -115,38 +133,55 @@ sap.ui.define([
         _obterReservaPreenchida() {
             let reserva = this.modelo(MODELO_RESERVA);
 
-            return {
-                nome: reserva.nome,
-                cpf: reserva.cpf,
-                telefone: reserva.telefone,
-                idade: Number(reserva.idade),
-                sexo: Number(reserva.sexo),
-                checkIn: reserva.checkIn,
-                checkOut: reserva.checkOut,
-                precoEstadia: Number(reserva.precoEstadia
-                    .replace(REGEX_PONTOS, STRING_VAZIA)
-                    .replace(CHAR_VIRGULA, CHAR_PONTO)),
-                pagamentoEfetuado: reserva.pagamentoEfetuado
-            };
+            let reservaPreenchida = {};
+            if (reserva.id) {
+                reservaPreenchida.id = reserva.id;
+            }
+
+            reservaPreenchida.nome = reserva.nome;
+            reservaPreenchida.cpf = reserva.cpf;
+            reservaPreenchida.telefone = reserva.telefone;
+            reservaPreenchida.idade = Number(reserva.idade);
+            reservaPreenchida.sexo = Number(reserva.sexo);
+            reservaPreenchida.checkIn = reserva.checkIn;
+            reservaPreenchida.checkOut = reserva.checkOut;
+            reservaPreenchida.precoEstadia = Number(reserva.precoEstadia
+                .replace(REGEX_PONTOS, STRING_VAZIA)
+                .replace(CHAR_VIRGULA, CHAR_PONTO));
+            reservaPreenchida.pagamentoEfetuado = reserva.pagamentoEfetuado;
+
+            return reservaPreenchida;
         },
 
-        _criarReserva(reserva) {
+        _obterReservaPorId(id) {
+            ReservaRepository.obterPorId(id)
+                .then(response => {
+                    return response.ok
+                        ? response.json()
+                        : Promise.reject(response);
+                })
+                .then(reserva => this._modeloReserva(reserva))
+                .catch(async erro => {
+                    let mensagemErro = await erro.text();
+                    MessageBox.warning(mensagemErro);
+                });
+        },
+
+        _criarReserva(reservaParaCriar) {
             const recursosi18n = this.obterRecursosI18n();
             const variavelSucessoSalvar = "sucessoSalvar";
             const mensagemSucessoSalvar = recursosi18n.getText(variavelSucessoSalvar);
-            let controllerCadastro = this;
+            const controllerCadastro = this;
 
-            ReservaRepository.criarReserva(reserva)
+            ReservaRepository.criarReserva(reservaParaCriar)
                 .then(async response => {
                     if (response.status == STATUS_CREATED) {
-                        let reserva = await response.json();
+                        let reservaCriada = await response.json();
                         MessageBox.success(mensagemSucessoSalvar, {
                             onClose: () => {
-                                controllerCadastro._abrirDetalhesReservaCriada(reserva.id);
+                                controllerCadastro._abrirDetalhesReserva(reservaCriada.id);
                             }
                         });
-
-                        return response.json();
                     }
                     else {
                         return Promise.reject(response);
@@ -159,10 +194,36 @@ sap.ui.define([
                 });
         },
 
-        _abrirDetalhesReservaCriada(idReservaCriada) {
+        _atualizarReserva(reservaParaAtualizar) {
+            const recursosi18n = this.obterRecursosI18n();
+            const variavelSucessoEditar = "sucessoEditar";
+            const mensagemSucessoEditar = recursosi18n.getText(variavelSucessoEditar);
+            const controllerCadastro = this;
+
+            ReservaRepository.atualizarReserva(reservaParaAtualizar)
+                .then(response => {
+                    if (response.status == STATUS_NO_CONTENT) {
+                        MessageBox.success(mensagemSucessoEditar, {
+                            onClose: () => {
+                                controllerCadastro._abrirDetalhesReserva(reservaParaAtualizar.id);
+                            }
+                        })
+                    }
+                    else {
+                        return Promise.reject(response);
+                    }
+                })
+                .catch(async erro => {
+                    let mensagemErro = await erro.text();
+
+                    MessageBox.warning(mensagemErro);
+                });
+        },
+
+        _abrirDetalhesReserva(id) {
             try {
                 const rotaDetalhes = "detalhes";
-                this.navegarPara(rotaDetalhes, idReservaCriada);
+                this.navegarPara(rotaDetalhes, id);
             } catch (erro) {
                 MessageBox.warning(erro.message);
             }
@@ -182,18 +243,20 @@ sap.ui.define([
                 let reservaPreenchida = this._obterReservaPreenchida();
                 let inputsSemAlteracao = this._obterInputsSemAlteracao();
                 let listaErrosValidacao = Validacao.obterListaErros();
-
+                
                 if (inputsSemAlteracao.length) {
                     Validacao.validarPropriedadesVazias(reservaPreenchida);
                     listaErrosValidacao = Validacao.obterListaErros();
                     this._definirValueStateInputsSemAlteracao(listaErrosValidacao);
                 }
-
+                
                 let mensagensErroValidacao = Formatter.formataListaErros(listaErrosValidacao);
 
                 mensagensErroValidacao
                     ? MessageBox.warning(mensagensErroValidacao)
-                    : this._criarReserva(reservaPreenchida);
+                    : reservaPreenchida.id
+                        ? this._atualizarReserva(reservaPreenchida)
+                        : this._criarReserva(reservaPreenchida);
             }
             catch (erro) {
                 MessageBox.warning(erro.message);
@@ -316,9 +379,6 @@ sap.ui.define([
             try {
                 let inputPrecoEstadia = evento.getSource();
                 let valorPrecoEstadia = inputPrecoEstadia.getValue();
-                let mensagemErroValidacao = Validacao.validarPrecoEstadia(valorPrecoEstadia);
-
-                this._definirValueStateInputValidado(inputPrecoEstadia, mensagemErroValidacao);
 
                 const regexNumerosPontoVirgula = "[0-9\.,]";
                 for (let char of valorPrecoEstadia) {
@@ -330,6 +390,10 @@ sap.ui.define([
                 valorPrecoEstadia = valorPrecoEstadia
                     .replace(REGEX_PONTOS, STRING_VAZIA)
                     .replace(REGEX_VIRGULAS, CHAR_PONTO);
+
+                let mensagemErroValidacao = Validacao.validarPrecoEstadia(valorPrecoEstadia);
+
+                this._definirValueStateInputValidado(inputPrecoEstadia, mensagemErroValidacao);
                 inputPrecoEstadia.setValue(Formatter.formataPrecoEstadia(valorPrecoEstadia));
             } catch (erro) {
                 MessageBox.warning(erro.message);

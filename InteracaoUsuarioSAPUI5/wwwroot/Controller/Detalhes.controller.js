@@ -19,18 +19,18 @@ sap.ui.define([
 
         _aoCoincidirRota(evento) {
             try {
-                const parametroArgumentos = "arguments";
-                const idReserva = evento.getParameter(parametroArgumentos).id;
+                const parametroArguments = "arguments";
+                const idReserva = evento.getParameter(parametroArguments).id;
                 
                 this._definirIdReserva(idReserva);
-                this._obterReserva();
+                this._obterReservaPorId();
             }
             catch (erro) {
                 MessageBox.warning(erro.message);
             }
         },
 
-        _obterReserva() {
+        _obterReservaPorId() {
             ReservaRepository.obterPorId(ID_RESERVA)
                 .then(response => {
                     return response.ok

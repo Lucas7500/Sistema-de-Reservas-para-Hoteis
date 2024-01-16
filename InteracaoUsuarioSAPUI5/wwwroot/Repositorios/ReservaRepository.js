@@ -25,6 +25,16 @@ sap.ui.define([], () => {
             };
 
             return fetch(ENDPOINT_RESERVA, opcoes);
+        },
+
+        atualizarReserva(reservaParaAtualizar) {
+            let opcoes = {
+                method: "PUT",
+                body: JSON.stringify(reservaParaAtualizar),
+                headers: { "Content-type": "application/json; charset=UTF-8" }
+            };
+
+            return fetch(`${ENDPOINT_RESERVA}/${reservaParaAtualizar.id}`, opcoes);
         }
     }
 })
