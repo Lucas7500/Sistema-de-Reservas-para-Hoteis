@@ -27,11 +27,9 @@ sap.ui.define([
             try {
                 let roteador = this.getOwnerComponent().getRouter();
 
-                parametroId
-                    ? roteador.navTo(nomeDaRota, {
-                        id: parametroId
-                    })
-                    : roteador.navTo(nomeDaRota);
+                roteador.navTo(nomeDaRota, {
+                    id: parametroId
+                });
             }
             catch (erro) {
                 MessageBox.warning(erro.message);
