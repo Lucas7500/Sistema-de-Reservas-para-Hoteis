@@ -70,6 +70,11 @@
                     "pattern": "detalhes/{id}",
                     "name": "detalhes",
                     "target": "detalhes"
+                },
+                {
+                    "pattern": "cadastro/{id}",
+                    "name": "edicao",
+                    "target": "cadastro"
                 }
             ],
             "targets": {

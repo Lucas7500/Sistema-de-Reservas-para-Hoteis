@@ -3,7 +3,6 @@ sap.ui.define([], () => {
 
     const REGEX_NUMEROS = "[0-9]";
 
-    let LISTA_ERROS = [];
     const INDICE_MENSAGEM_ERRO_NOME = 0;
     const INDICE_MENSAGEM_ERRO_CPF = 1;
     const INDICE_MENSAGEM_ERRO_TELEFONE = 2;
@@ -11,6 +10,7 @@ sap.ui.define([], () => {
     const INDICE_MENSAGEM_ERRO_CHECK_IN = 4;
     const INDICE_MENSAGEM_ERRO_CHECK_OUT = 5;
     const INDICE_MENSAGEM_ERRO_PRECO_ESTADIA = 6;
+    let LISTA_ERROS = [];
     let RECURSOS_I18N;
 
     return {

@@ -15,7 +15,8 @@
                 <Button
                     icon="sap-icon://edit"
                     text="{i18n>tituloBotaoEditar}"
-                    type="Emphasized" />
+                    type="Emphasized" 
+                    press=".aoClicarNavegarParaTelaEdicao"/>
                 <Button
                     icon="sap-icon://delete"
                     text="{i18n>tituloBotaoRemover}"

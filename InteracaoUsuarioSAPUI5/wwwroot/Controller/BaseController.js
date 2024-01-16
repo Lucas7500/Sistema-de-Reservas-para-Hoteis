@@ -1,7 +1,8 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
-    "sap/ui/model/json/JSONModel"
-], (Controller, JSONModel) => {
+    "sap/ui/model/json/JSONModel",
+    "sap/m/MessageBox"
+], (Controller, JSONModel, MessageBox) => {
     "use strict";
 
     const CAMINHO_ROTA_BASE_CONTROLLER = "reservas.hoteis.controller.BaseController";

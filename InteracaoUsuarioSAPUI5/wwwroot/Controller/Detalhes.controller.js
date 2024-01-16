@@ -8,6 +8,7 @@ sap.ui.define([
 
     const CAMINHO_ROTA_DETALHES = "reservas.hoteis.controller.Detalhes";
     const MODELO_RESERVA = "reserva";
+    let ID_RESERVA;
 
     return BaseController.extend(CAMINHO_ROTA_DETALHES, {
         formatter: Formatter,
@@ -19,15 +20,18 @@ sap.ui.define([
         _aoCoincidirRota(evento) {
             try {
                 const parametroArgumentos = "arguments";
-                let idReserva = evento.getParameter(parametroArgumentos).id;
-                this._obterReserva(idReserva);
+                const idReserva = evento.getParameter(parametroArgumentos).id;
+                
+                this._definirIdReserva(idReserva);
+                this._obterReserva();
             }
             catch (erro) {
                 MessageBox.warning(erro.message);
             }
         },
-        _obterReserva(id) {
-            ReservaRepository.obterPorId(id)
+
+        _obterReserva() {
+            ReservaRepository.obterPorId(ID_RESERVA)
                 .then(response => {
                     return response.ok
                         ? response.json()
@@ -40,10 +44,23 @@ sap.ui.define([
                 });
         },
 
+        _definirIdReserva(idReserva) {
+            ID_RESERVA = idReserva;
+        },
+
         aoClicarNavegarParaTelaListagem() {
             try {
                 const rotaListagem = "listagem";
                 this.navegarPara(rotaListagem);
+            } catch (erro) {
+                MessageBox.warning(erro.message);
+            }
+        },
+
+        aoClicarNavegarParaTelaEdicao() {
+            try {
+                const rotaEdicao = "edicao";
+                this.navegarPara(rotaEdicao, ID_RESERVA);
             } catch (erro) {
                 MessageBox.warning(erro.message);
             }

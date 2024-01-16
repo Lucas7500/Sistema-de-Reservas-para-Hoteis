@@ -65,7 +65,7 @@ sap.ui.define([
         aoClicarAbrirDetalhes(evento) {
             try {
                 const propriedadeId = "id";
-                let idReserva = evento.getSource().getBindingContext(MODELO_LISTA).getProperty(propriedadeId);
+                const idReserva = evento.getSource().getBindingContext(MODELO_LISTA).getProperty(propriedadeId);
 
                 const rotaDetalhes = "detalhes";
                 this.navegarPara(rotaDetalhes, idReserva);
