@@ -1,6 +1,7 @@
 sap.ui.define([
-    "sap/ui/core/format/DateFormat"
-], (DateFormat) => {
+    "sap/ui/core/format/DateFormat",
+    "sap/ui/core/format/NumberFormat"
+], (DateFormat, NumberFormat) => {
     "use strict";
 
     const MODEL_I18N = "i18n";
@@ -9,43 +10,43 @@ sap.ui.define([
         formataSexo(sexo) {
             const textoSexoMasculino = "sexo0";
             const textoSexoFeminino = "sexo1";
-
-            const resourceBundle = this.getOwnerComponent()
-                .getModel(MODEL_I18N)
-                .getResourceBundle();
+            const resourceBundle = this.getOwnerComponent().getModel(MODEL_I18N).getResourceBundle();
 
             return resourceBundle.getText(sexo ? textoSexoFeminino : textoSexoMasculino)
         },
 
         formataPrecoEstadia(precoEstadia) {
-            const duasCasasDecimais = 2;
-            const charPonto = '.';
-            const charVirgula = ',';
-            
-            let stringPrecoEstadia = `R$ ${Number(precoEstadia).toFixed(duasCasasDecimais)}`
+            var formatador = NumberFormat.getCurrencyInstance({
+                currencyCode: false
+            });
 
-            return stringPrecoEstadia.replace(charPonto, charVirgula);
+            return formatador.format(parseFloat(precoEstadia));
         },
 
         formataPagamentoEfetuado(pagamentoEfetuado) {
             const textoPagamentoFoiEfetuado = "pagamentoEfetuadoTrue";
             const textoPagamentoNaoFoiEfetuado = "pagamentoEfetuadoFalse";
+            const recursosI18n = this.getOwnerComponent().getModel(MODEL_I18N).getResourceBundle();
 
-            const resourceBundle = this.getOwnerComponent()
-                .getModel(MODEL_I18N)
-                .getResourceBundle();
-
-            return resourceBundle.getText(pagamentoEfetuado ? textoPagamentoFoiEfetuado : textoPagamentoNaoFoiEfetuado);
+            return recursosI18n.getText(pagamentoEfetuado ? textoPagamentoFoiEfetuado : textoPagamentoNaoFoiEfetuado);
         },
 
         formataData(data) {
             const formatoData = "yyyy-MM-dd";
-
             let formatador = DateFormat.getDateInstance({
                 pattern: formatoData
             });
-            
+
             return formatador.format(data);
+        },
+
+        formataListaErros(listaErros) {
+            let separador = "\n";
+            let mensagensErro = listaErros.
+                filter(mensagemErro => mensagemErro != undefined)
+                .join(separador);
+
+            return mensagensErro;
         }
     }
 });

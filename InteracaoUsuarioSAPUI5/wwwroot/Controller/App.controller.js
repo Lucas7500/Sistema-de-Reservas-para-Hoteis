@@ -1,8 +1,8 @@
 sap.ui.define([
-    "sap/ui/core/mvc/Controller"
- ], (Controller) => {
-    "use strict";
- 
-    return Controller.extend("reservas.hoteis.controller.App", {
-    });
- });
+   "./BaseController"
+], (BaseController) => {
+   "use strict";
+
+   const CAMINHO_ROTA_APP = "reservas.hoteis.controller.App";
+   return BaseController.extend(CAMINHO_ROTA_APP, {});
+});

@@ -1,53 +1,119 @@
 sap.ui.define([
-    "sap/ui/core/mvc/Controller",
+    "./BaseController",
     "../model/Formatter",
-    "sap/ui/model/json/JSONModel",
     "../Repositorios/ReservaRepository",
-    "sap/m/MessageBox"
-], (Controller, Formatter, JSONModel, ReservaRepository, MessageBox) => {
+    "sap/m/MessageBox",
+    "../Services/Validacao"
+], (BaseController, Formatter, ReservaRepository, MessageBox, Validacao) => {
     "use strict";
 
     const CAMINHO_ROTA_CADASTRO = "reservas.hoteis.controller.Cadastro";
-    const MODEL_I18N = "i18n";
+    const ROTA_LISTAGEM = "listagem";
     const STATUS_CREATED = 201;
+    const VALUE_STATE_SUCESSO = "Success";
+    const VALUE_STATE_ERRO = "Error";
+    const PARAMETRO_VALUE = "value";
+    const VALOR_INICIAL_VALUE_STATE_INPUT = "None";
+    const ID_INPUT_NOME = "inputNome";
+    const ID_INPUT_CPF = "inputCpf";
+    const ID_INPUT_TELEFONE = "inputTelefone";
+    const ID_INPUT_IDADE = "inputIdade";
+    const ID_INPUT_CHECK_IN = "inputCheckIn";
+    const ID_INPUT_CHECK_OUT = "inputCheckOut";
+    const ID_INPUT_PRECO_ESTADIA = "inputPrecoEstadia";
+    const MODELO_RESERVA = "reserva";
+    const STRING_VAZIA = "";
+    const CHAR_VIRGULA = ",";
+    const CHAR_PONTO = ".";
+    const REGEX_PONTOS = /\./g;
+    const REGEX_VIRGULAS = /,/g;
 
-    return Controller.extend(CAMINHO_ROTA_CADASTRO, {
+    const ARRAY_ID_INPUTS = [
+        ID_INPUT_NOME,
+        ID_INPUT_CPF,
+        ID_INPUT_TELEFONE,
+        ID_INPUT_IDADE,
+        ID_INPUT_CHECK_IN,
+        ID_INPUT_CHECK_OUT,
+        ID_INPUT_PRECO_ESTADIA
+    ]
+
+    return BaseController.extend(CAMINHO_ROTA_CADASTRO, {
         onInit() {
-            const rotaCadastro = 'cadastro';
-
-            let rota = this.getOwnerComponent().getRouter();
-            rota.getRoute(rotaCadastro).attachPatternMatched(this._aoCoincidirRota, this);
+            const rotaCadastro = "cadastro";
+            this.vincularRota(rotaCadastro, this._aoCoincidirRota);
         },
 
         _aoCoincidirRota() {
+            const recursosi18n = this.obterRecursosI18n();
+
             this._modeloReserva();
+            Validacao.definirRecursosi18n(recursosi18n);
         },
 
         _modeloReserva() {
-            const stringVazia = "";
             let dataHoje = new Date();
             let valorPadraoData = Formatter.formataData(dataHoje);
 
             let reserva = {
-                nome: stringVazia,
-                cpf: stringVazia,
-                telefone: stringVazia,
-                idade: stringVazia,
-                sexo: stringVazia,
+                nome: STRING_VAZIA,
+                cpf: STRING_VAZIA,
+                telefone: STRING_VAZIA,
+                idade: STRING_VAZIA,
+                sexo: STRING_VAZIA,
                 checkIn: valorPadraoData,
                 checkOut: valorPadraoData,
-                precoEstadia: stringVazia,
+                precoEstadia: STRING_VAZIA,
                 pagamentoEfetuado: false
             };
 
             const idRadioButtonPagamentoNaoEfetuado = "radioButtonPagamentoNaoEfetuado";
             this.byId(idRadioButtonPagamentoNaoEfetuado).setSelected(true);
+            this._limparValueStateInputs();
 
-            this.getView().setModel(new JSONModel(reserva));
+            this.modelo(MODELO_RESERVA, reserva);
+        },
+
+        _definirValueStateInputValidado(input, valueStateText) {
+            valueStateText
+                ? input.setValueState(VALUE_STATE_ERRO).setValueStateText(valueStateText)
+                : input.setValueState(VALUE_STATE_SUCESSO);
+        },
+
+        _definirValueStateInputsSemAlteracao(listaErrosValidacao) {
+            for (let i = 0; i < ARRAY_ID_INPUTS.length; i++) {
+                let input = this.byId(ARRAY_ID_INPUTS[i]);
+                let valueStateInput = input.getValueState();
+
+                if (valueStateInput == VALOR_INICIAL_VALUE_STATE_INPUT) {
+                    this._definirValueStateInputValidado(input, listaErrosValidacao[i]);
+                }
+            }
+        },
+
+        _limparValueStateInputs() {
+            for (let idInput of ARRAY_ID_INPUTS) {
+                let input = this.byId(idInput);
+                input.setValueState(VALOR_INICIAL_VALUE_STATE_INPUT);
+            }
+        },
+
+        _obterInputsSemAlteracao() {
+            let inputsSemAlteracao = []
+
+            for (let idInput of ARRAY_ID_INPUTS) {
+                let valueStateInput = this.byId(idInput).getValueState();
+
+                if (valueStateInput == VALOR_INICIAL_VALUE_STATE_INPUT) {
+                    inputsSemAlteracao.push(idInput);
+                }
+            }
+
+            return inputsSemAlteracao;
         },
 
         _obterReservaPreenchida() {
-            let reserva = this.getView().getModel().getData();
+            let reserva = this.modelo(MODELO_RESERVA);
 
             return {
                 nome: reserva.nome,
@@ -57,28 +123,54 @@ sap.ui.define([
                 sexo: Number(reserva.sexo),
                 checkIn: reserva.checkIn,
                 checkOut: reserva.checkOut,
-                precoEstadia: Number(reserva.precoEstadia),
+                precoEstadia: Number(reserva.precoEstadia
+                    .replace(REGEX_PONTOS, STRING_VAZIA)
+                    .replace(CHAR_VIRGULA, CHAR_PONTO)),
                 pagamentoEfetuado: reserva.pagamentoEfetuado
             };
         },
 
-        _abrirDetalhesObjetoCriado(reservaCriada) {
+        _criarReserva(reserva) {
+            const recursosi18n = this.obterRecursosI18n();
+            const variavelSucessoSalvar = "sucessoSalvar";
+            const mensagemSucessoSalvar = recursosi18n.getText(variavelSucessoSalvar);
+            let controllerCadastro = this;
+
+            ReservaRepository.criarReserva(reserva)
+                .then(async response => {
+                    if (response.status == STATUS_CREATED) {
+                        let reserva = await response.json();
+                        MessageBox.success(mensagemSucessoSalvar, {
+                            onClose: () => {
+                                controllerCadastro._abrirDetalhesReservaCriada(reserva.id);
+                            }
+                        });
+
+                        return response.json();
+                    }
+                    else {
+                        return Promise.reject(response);
+                    }
+                })
+                .catch(async erro => {
+                    let mensagemErro = await erro.text();
+
+                    MessageBox.warning(mensagemErro);
+                });
+        },
+
+        _abrirDetalhesReservaCriada(idReservaCriada) {
             try {
                 const rotaDetalhes = "detalhes";
-                let rota = this.getOwnerComponent().getRouter();
-                rota.navTo(rotaDetalhes, {
-                    id: reservaCriada.id
-                });
+                this.navegarPara(rotaDetalhes, idReservaCriada);
             } catch (erro) {
                 MessageBox.warning(erro.message);
             }
         },
 
-        navegarParaTelaListagem() {
+        aoClicarNavegarParaTelaListagem() {
             try {
-                const rotaLista = "listagem";
-                const oRouter = this.getOwnerComponent().getRouter();
-                oRouter.navTo(rotaLista);
+                this.navegarPara(ROTA_LISTAGEM);
             }
             catch (erro) {
                 MessageBox.warning(erro.message);
@@ -87,34 +179,21 @@ sap.ui.define([
 
         aoClicarSalvarReserva() {
             try {
-                let controller = this;
-                let reserva = this._obterReservaPreenchida();
+                let reservaPreenchida = this._obterReservaPreenchida();
+                let inputsSemAlteracao = this._obterInputsSemAlteracao();
+                let listaErrosValidacao = Validacao.obterListaErros();
 
-                const resourceBundle = this.getOwnerComponent().getModel(MODEL_I18N).getResourceBundle();
-                const textoMensagemSucessoSalvar = "mensagemSucessoSalvar";
-                const mensagemSucessoSalvar = resourceBundle.getText(textoMensagemSucessoSalvar);
+                if (inputsSemAlteracao.length) {
+                    Validacao.validarPropriedadesVazias(reservaPreenchida);
+                    listaErrosValidacao = Validacao.obterListaErros();
+                    this._definirValueStateInputsSemAlteracao(listaErrosValidacao);
+                }
 
-                ReservaRepository.criarReserva(reserva)
-                    .then(async response => {
-                        if (response.status == STATUS_CREATED) {
-                            let reserva = await response.json();
-                            MessageBox.success(mensagemSucessoSalvar, {
-                                onClose: () => {
-                                    controller._abrirDetalhesObjetoCriado(reserva);
-                                }
-                            });
+                let mensagensErroValidacao = Formatter.formataListaErros(listaErrosValidacao);
 
-                            return response.json();
-                        }
-                        else {
-                            return Promise.reject(response);
-                        }
-                    })
-                    .catch(async erro => {
-                        let mensagemErro = await erro.text();
-
-                        MessageBox.warning(mensagemErro);
-                    });
+                mensagensErroValidacao
+                    ? MessageBox.warning(mensagensErroValidacao)
+                    : this._criarReserva(reservaPreenchida);
             }
             catch (erro) {
                 MessageBox.warning(erro.message);
@@ -123,28 +202,136 @@ sap.ui.define([
 
         aoClicarCancelarCadastro() {
             try {
-                const resourceBundle = this.getOwnerComponent().getModel(MODEL_I18N).getResourceBundle();
+                const recursosi18n = this.obterRecursosI18n();
 
-                const textoBotaoSim = "botaoSim";
-                const textoBotaoNao = "botaoNao";
-                const textoMensagemConfirmacaoCancelar = "mensagemConfirmacaoCancelar";
-                const botaoSim = resourceBundle.getText(textoBotaoSim);
-                const botaoNao = resourceBundle.getText(textoBotaoNao);
-                const mensagemConfirmacao = resourceBundle.getText(textoMensagemConfirmacaoCancelar);
+                const variavelBotaoSim = "botaoSim";
+                const variavelBotaoNao = "botaoNao";
+                const variavelConfirmacaoCancelar = "confirmacaoCancelar";
 
-                let controller = this;
+                const botaoSim = recursosi18n.getText(variavelBotaoSim);
+                const botaoNao = recursosi18n.getText(variavelBotaoNao);
+                const mensagemConfirmacao = recursosi18n.getText(variavelConfirmacaoCancelar);
+
+                let controllerCadastro = this;
 
                 MessageBox.confirm(mensagemConfirmacao, {
                     actions: [botaoSim, botaoNao],
                     emphasizedAction: botaoSim,
                     onClose: function (acao) {
                         if (acao == botaoSim) {
-                            controller.navegarParaTelaListagem();
+                            controllerCadastro.navegarPara(ROTA_LISTAGEM);
                         }
                     }
                 });
             }
             catch (erro) {
+                MessageBox.warning(erro.message);
+            }
+        },
+
+        aoDigitarValidarIdade(evento) {
+            const regexNumeros = "[0-9]";
+            let valorInput = evento.getSource().getValue();
+
+            for (let char of valorInput) {
+                if (!char.match(regexNumeros)) {
+                    let inputValido = valorInput.replace(char, STRING_VAZIA);
+                    evento.getSource().setValue(inputValido);
+                }
+            }
+        },
+
+        aoMudarValidarNome(evento) {
+            try {
+                let inputNome = evento.getSource();
+                let valorNome = evento.getParameter(PARAMETRO_VALUE);
+                let mensagemErroValidacao = Validacao.validarNome(valorNome);
+
+                this._definirValueStateInputValidado(inputNome, mensagemErroValidacao);
+            }
+            catch (erro) {
+                MessageBox.warning(erro.message);
+            }
+        },
+
+        aoMudarValidarCpf(evento) {
+            try {
+                let inputCpf = evento.getSource();
+                let valorCpf = evento.getParameter(PARAMETRO_VALUE);
+                let mensagemErroValidacao = Validacao.validarCpf(valorCpf);
+
+                this._definirValueStateInputValidado(inputCpf, mensagemErroValidacao);
+            }
+            catch (erro) {
+                MessageBox.warning(erro.message);
+            }
+        },
+
+        aoMudarValidarTelefone(evento) {
+            try {
+                let inputTelefone = evento.getSource();
+                let valorTelefone = evento.getParameter(PARAMETRO_VALUE);
+                let mensagemErroValidacao = Validacao.validarTelefone(valorTelefone);
+
+                this._definirValueStateInputValidado(inputTelefone, mensagemErroValidacao);
+            }
+            catch (erro) {
+                MessageBox.warning(erro.message);
+            }
+        },
+
+        aoMudarValidarIdade(evento) {
+            try {
+                let inputIdade = evento.getSource();
+                let valorIdade = evento.getParameter(PARAMETRO_VALUE);
+                let mensagemErroValidacao = Validacao.validarIdade(valorIdade);
+
+                this._definirValueStateInputValidado(inputIdade, mensagemErroValidacao);
+            }
+            catch (erro) {
+                MessageBox.warning(erro.message);
+            }
+        },
+
+        aoMudarValidarCheckInECheckOut() {
+            try {
+                let inputCheckIn = this.byId(ID_INPUT_CHECK_IN);
+                let inputCheckOut = this.byId(ID_INPUT_CHECK_OUT);
+
+                let valorCheckIn = inputCheckIn.getValue();
+                let valorCheckOut = inputCheckOut.getValue();
+
+                let mensagemErroValidacaoCheckIn = Validacao.validarCheckIn(valorCheckIn);
+                let mensagemErroValidacaoCheckOut = Validacao.validarCheckOut(valorCheckOut, valorCheckIn);
+
+                this._definirValueStateInputValidado(inputCheckIn, mensagemErroValidacaoCheckIn);
+                this._definirValueStateInputValidado(inputCheckOut, mensagemErroValidacaoCheckOut);
+            }
+            catch (erro) {
+                MessageBox.warning(erro.message);
+            }
+        },
+
+        aoMudarValidarPrecoEstadia(evento) {
+            try {
+                let inputPrecoEstadia = evento.getSource();
+                let valorPrecoEstadia = inputPrecoEstadia.getValue();
+                let mensagemErroValidacao = Validacao.validarPrecoEstadia(valorPrecoEstadia);
+
+                this._definirValueStateInputValidado(inputPrecoEstadia, mensagemErroValidacao);
+
+                const regexNumerosPontoVirgula = "[0-9\.,]";
+                for (let char of valorPrecoEstadia) {
+                    if (!char.match(regexNumerosPontoVirgula)) {
+                        valorPrecoEstadia = valorPrecoEstadia.replace(char, STRING_VAZIA);
+                    }
+                }
+
+                valorPrecoEstadia = valorPrecoEstadia
+                    .replace(REGEX_PONTOS, STRING_VAZIA)
+                    .replace(REGEX_VIRGULAS, CHAR_PONTO);
+                inputPrecoEstadia.setValue(Formatter.formataPrecoEstadia(valorPrecoEstadia));
+            } catch (erro) {
                 MessageBox.warning(erro.message);
             }
         }

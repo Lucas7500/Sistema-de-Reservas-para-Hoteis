@@ -115,48 +115,42 @@ namespace Dominio
                 return false;
             }
 
-            int[] multiplicacoesPrimeiroDigito = new int[9] { 10, 9, 8, 7, 6, 5, 4, 3, 2 };
-            int somaPrimeiroDigito = 0;
-            int resto;
-
-            for (int i = 0; i < multiplicacoesPrimeiroDigito.Length; i++)
-            {
-                somaPrimeiroDigito += int.Parse(numerosCpf[i].ToString()) * multiplicacoesPrimeiroDigito[i];
-            }
-
+            int[] multiplicadoresPrimeiroDigito = { 10, 9, 8, 7, 6, 5, 4, 3, 2 };
+            int[] multiplicadoresSegundoDigito = { 11, 10, 9, 8, 7, 6, 5, 4, 3, 2 };
             int primeiroDigitoVerificador = int.Parse(numerosCpf[9].ToString());
-            resto = somaPrimeiroDigito % 11;
-
-            if (resto < 2)
-            {
-                if (primeiroDigitoVerificador != 0) return false;
-            }
-            else
-            {
-                if (primeiroDigitoVerificador != (11 - resto)) return false;
-            }
-
-            int[] multiplicacoesSegundoDigito = new int[10] { 11, 10, 9, 8, 7, 6, 5, 4, 3, 2 };
+            int segundoDigitoVerificador = int.Parse(numerosCpf[10].ToString());
+            int somaPrimeiroDigito = 0;
             int somaSegundoDigito = 0;
 
-            for (int i = 0; i < multiplicacoesSegundoDigito.Length; i++)
+            for (int i = 0; i < numerosCpf.Length; i++)
             {
-                somaSegundoDigito += int.Parse(numerosCpf[i].ToString()) * multiplicacoesSegundoDigito[i];
+                if (i < multiplicadoresPrimeiroDigito.Length)
+                {
+                    somaPrimeiroDigito += int.Parse(numerosCpf[i].ToString()) * multiplicadoresPrimeiroDigito[i];
+                }
+
+                if (i < multiplicadoresSegundoDigito.Length)
+                {
+                    somaSegundoDigito += int.Parse(numerosCpf[i].ToString()) * multiplicadoresSegundoDigito[i];
+                }
             }
 
-            int segundoDigitoVerificador = int.Parse(numerosCpf[10].ToString()); ;
-            resto = somaSegundoDigito % 11;
+            int restoPrimeiroDigito = somaPrimeiroDigito % 11;
+            int restoSegundoDigito = somaSegundoDigito % 11;
 
-            if (resto < 2)
-            {
-                if (segundoDigitoVerificador != '0') return false;
-            }
-            else
-            {
-                if (segundoDigitoVerificador != (11 - resto)) return false;
-            }
+            bool primeiroCasoInvalido = restoPrimeiroDigito < ValoresPadrao.VALOR_REFERENCIA_RESTO_CPF 
+                && primeiroDigitoVerificador != ValoresPadrao.DIGITO_ZERO;
 
-            return true;
+            bool segundoCasoInvalido = restoPrimeiroDigito >= ValoresPadrao.VALOR_REFERENCIA_RESTO_CPF 
+                && primeiroDigitoVerificador != (11 - restoPrimeiroDigito);
+
+            bool terceiroCasoInvalido = restoSegundoDigito < ValoresPadrao.VALOR_REFERENCIA_RESTO_CPF 
+                && segundoDigitoVerificador != ValoresPadrao.DIGITO_ZERO;
+
+            bool quartoCasoInvalido = restoSegundoDigito >= ValoresPadrao.VALOR_REFERENCIA_RESTO_CPF 
+                && segundoDigitoVerificador != (11 - restoSegundoDigito);
+
+            return !(primeiroCasoInvalido || segundoCasoInvalido || terceiroCasoInvalido || quartoCasoInvalido);
         }
 
         private static bool SexoEhValido(GeneroEnum @enum)

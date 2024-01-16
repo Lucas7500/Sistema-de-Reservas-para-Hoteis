@@ -7,7 +7,7 @@
             <Toolbar>
                 <Button
                     icon="sap-icon://nav-back"
-                    press=".navegarParaTelaListagem"
+                    press=".aoClicarNavegarParaTelaListagem"
                     type="Transparent" />
                 <ToolbarSpacer />
                 <ObjectIdentifier title="{i18n>tituloDetalhes}" />
@@ -15,136 +15,152 @@
                 <Button
                     icon="sap-icon://edit"
                     text="{i18n>tituloBotaoEditar}"
-                    class="sapUiTinyMargin"
-                    type="Transparent" />
+                    type="Emphasized" />
                 <Button
                     icon="sap-icon://delete"
                     text="{i18n>tituloBotaoRemover}"
-                    type="Transparent" />
+                    type="Emphasized" />
             </Toolbar>
         </customHeader>
         <Panel
             class="sapUiSmallMargin"
             backgroundDesign="Transparent">
-            <VBox
-                direction="Column">
+            <VBox>
                 <HBox
-                    class="sapUiTinyMargin">
-                    <ObjectIdentifier title="{/nome}" />
+                    class="sapUiTinyMarginBegin">
+                    <ObjectIdentifier title="{reserva>/nome}" />
                 </HBox>
-                <FlexBox
-                    direction="Row">
-                    <VBox>
-                        <HBox
-                            class="sapUiTinyMargin">
-                            <ObjectIdentifier title="{i18n>tituloColunaId}" />
-                        </HBox>
-                        <HBox
-                            class="sapUiTinyMargin">
-                            <ObjectIdentifier title="{i18n>tituloColunaCpf}" />
-                        </HBox>
-                        <HBox
-                            class="sapUiTinyMargin">
-                            <ObjectIdentifier title="{i18n>tituloColunaTelefone}" />
-                        </HBox>
-                        <HBox
-                            class="sapUiTinyMargin">
-                            <ObjectIdentifier title="{i18n>tituloColunaIdade}" />
-                        </HBox>
-                        <HBox
-                            class="sapUiTinyMargin">
-                            <ObjectIdentifier title="{i18n>tituloColunaSexo}" />
-                        </HBox>
-                        <HBox
-                            class="sapUiTinyMargin">
-                            <ObjectIdentifier title="{i18n>tituloColunaCheckIn}" />
-                        </HBox>
-                        <HBox
-                            class="sapUiTinyMargin">
-                            <ObjectIdentifier title="{i18n>tituloColunaCheckOut}" />
-                        </HBox>
-                        <HBox
-                            class="sapUiTinyMargin">
-                            <ObjectIdentifier title="{i18n>tituloColunaPrecoEstadia}" />
-                        </HBox>
-                        <HBox
-                            class="sapUiTinyMargin">
-                            <ObjectIdentifier title="{i18n>tituloColunaPagamentoEfetuado}" />
-                        </HBox>
-                    </VBox>
-                    <VBox>
-                        <HBox
-                            class="sapUiTinyMargin">
-                            <Text text="{/id}" />
-                        </HBox>
-                        <HBox
-                            class="sapUiTinyMargin">
-                            <Text text="{/cpf}" />
-                        </HBox>
-                        <HBox
-                            class="sapUiTinyMargin">
-                            <Text text="{/telefone}" />
-                        </HBox>
-                        <HBox
-                            class="sapUiTinyMargin">
-                            <Text text="{/idade}" />
-                        </HBox>
-                        <HBox
-                            class="sapUiTinyMargin">
+                <HBox>
+                    <HBox
+                        alignItems="Center">
+                        <ObjectIdentifier
+                            class="sapUiTinyMargin"
+                            title="{i18n>tituloColunaId}:" />
+                        <Text
+                            class="sapUiTinyMargin"
+                            text="{reserva>/id}" />
+                    </HBox>
+                </HBox>
+                <HBox
+                    class="sapUiSmallMarginTop">
+                    <HBox
+                        alignItems="Center">
+                        <VBox>
+                            <ObjectIdentifier
+                                class="sapUiTinyMargin"
+                                title="{i18n>tituloColunaCpf}:" />
+                            <ObjectIdentifier
+                                class="sapUiTinyMargin"
+                                title="{i18n>tituloColunaTelefone}:" />
+                        </VBox>
+
+                        <VBox>
                             <Text
-                                text="{
-                                path: '/sexo',
-                                formatter: '.formatter.formataSexo'
-                            }" />
-                        </HBox>
-                        <HBox
-                            class="sapUiTinyMargin">
+                                class="sapUiTinyMargin"
+                                text="{reserva>/cpf}" />
                             <Text
+                                class="sapUiTinyMargin"
+                                text="{reserva>/telefone}" />
+                        </VBox>
+                    </HBox>
+
+                    <HBox
+                        class="sapUiMediumMarginBegin"
+                        alignItems="Center">
+                        <VBox>
+                            <ObjectIdentifier
+                                class="sapUiTinyMargin"
+                                title="{i18n>tituloColunaIdade}:"
+                            />
+                            <ObjectIdentifier
+                                class="sapUiTinyMargin"
+                                title="{i18n>tituloColunaSexo}:"
+                            />
+                        </VBox>
+
+                        <VBox>
+                            <Text
+                                class="sapUiTinyMargin"
+                                text="{reserva>/idade}" />
+                            <Text
+                                class="sapUiTinyMargin"
+                                text=" {
+                                    path: 'reserva>/sexo',
+                                    formatter: '.formatter.formataSexo'}"
+                            />
+                        </VBox>
+                    </HBox>
+
+                    <HBox
+                        class="sapUiMediumMarginBegin"
+                        alignItems="Center">
+                        <VBox>
+                            <ObjectIdentifier
+                                class="sapUiTinyMargin"
+                                title="{i18n>tituloColunaCheckIn}:"
+                            />
+                            <ObjectIdentifier
+                                class="sapUiTinyMargin"
+                                title="{i18n>tituloColunaCheckOut}:"
+                            />
+                        </VBox>
+
+                        <VBox>
+                            <Text
+                                class="sapUiTinyMargin"
                                 text="{
-                                        path: '/checkIn',
+                                        path: 'reserva>/checkIn',
                                         type: 'sap.ui.model.type.Date',
                                         formatOptions: {
                                             style: 'short',
                                             source: {
-                                            pattern: 'yyyy-MM-ddTHH:mm:ss'
+                                                pattern: 'yyyy-MM-ddTHH:mm:ss'
                                             }
                                         }
                                     }"
                             />
-                        </HBox>
-                        <HBox
-                            class="sapUiTinyMargin">
                             <Text
+                                class="sapUiTinyMargin"
                                 text="{
-                                        path: '/checkOut',
+                                        path: 'reserva>/checkOut',
                                         type: 'sap.ui.model.type.Date',
                                         formatOptions: {
                                             style: 'short',
                                             source: {
-                                            pattern: 'yyyy-MM-ddTHH:mm:ss'
+                                                pattern: 'yyyy-MM-ddTHH:mm:ss'
                                             }
                                         }
                                     }"
                             />
-                        </HBox>
-                        <HBox
-                            class="sapUiTinyMargin">
+                        </VBox>
+                    </HBox>
+
+                    <HBox
+                        class="sapUiMediumMarginBegin"
+                        alignItems="Center">
+                        <VBox>
+                            <ObjectIdentifier
+                                class="sapUiTinyMargin"
+                                title="{i18n>tituloColunaPrecoEstadia}:" />
+                            <ObjectIdentifier
+                                class="sapUiTinyMargin"
+                                title="{i18n>tituloColunaPagamentoEfetuado}" />
+                        </VBox>
+
+                        <VBox>
                             <Text
+                                class="sapUiTinyMargin"
                                 text="{
-                                path: '/precoEstadia',
-                                formatter: '.formatter.formataPrecoEstadia'
-                            }" />
-                        </HBox>
-                        <HBox
-                            class="sapUiTinyMargin">
+                                        path: 'reserva>/precoEstadia',
+                                        formatter: '.formatter.formataPrecoEstadia'}" />
                             <Text
+                                class="sapUiTinyMargin"
                                 text="{
-                                path: '/pagamentoEfetuado',
-                                formatter: '.formatter.formataPagamentoEfetuado'
-                            }" />
-                        </HBox>
-                    </VBox>
-                </FlexBox>
+                                        path: 'reserva>/pagamentoEfetuado',
+                                        formatter: '.formatter.formataPagamentoEfetuado'}" />
+                        </VBox>
+                    </HBox>
+                </HBox>
             </VBox>
         </Panel>
     </Page>

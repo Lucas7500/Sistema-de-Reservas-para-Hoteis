@@ -1,52 +1,49 @@
 sap.ui.define([
-    "sap/ui/core/mvc/Controller",
+    "./BaseController",
     "../model/Formatter",
-    "sap/ui/model/json/JSONModel",
     "../Repositorios/ReservaRepository",
     "sap/m/MessageBox"
-], (Controller, Formatter, JSONModel, ReservaRepository, MessageBox) => {
+], (BaseController, Formatter, ReservaRepository, MessageBox) => {
     "use strict";
 
-    const STATUS_OK = 200;
     const CAMINHO_ROTA_DETALHES = "reservas.hoteis.controller.Detalhes";
+    const MODELO_RESERVA = "reserva";
 
-    return Controller.extend(CAMINHO_ROTA_DETALHES, {
+    return BaseController.extend(CAMINHO_ROTA_DETALHES, {
         formatter: Formatter,
         onInit() {
-            const rotaDetalhes = 'detalhes';
-
-            let rota = this.getOwnerComponent().getRouter();
-            rota.getRoute(rotaDetalhes).attachPatternMatched(this._aoCoincidirRota, this);
+            const rotaDetalhes = "detalhes";
+            this.vincularRota(rotaDetalhes, this._aoCoincidirRota);
         },
 
         _aoCoincidirRota(evento) {
             try {
                 const parametroArgumentos = "arguments";
                 let idReserva = evento.getParameter(parametroArgumentos).id;
-
-                ReservaRepository.obterPorId(idReserva)
-                    .then(response => {
-                        return response.status == STATUS_OK
-                            ? response.json()
-                            : Promise.reject(response);
-                    })
-                    .then(response => this.getView().setModel(new JSONModel(response)))
-                    .catch(async erro => {
-                        let mensagemErro = await erro.text();
-
-                        MessageBox.warning(mensagemErro);
-                    });
+                this._obterReserva(idReserva);
             }
             catch (erro) {
                 MessageBox.warning(erro.message);
             }
         },
+        _obterReserva(id) {
+            ReservaRepository.obterPorId(id)
+                .then(response => {
+                    return response.ok
+                        ? response.json()
+                        : Promise.reject(response);
+                })
+                .then(reserva => this.modelo(MODELO_RESERVA, reserva))
+                .catch(async erro => {
+                    let mensagemErro = await erro.text();
+                    MessageBox.warning(mensagemErro);
+                });
+        },
 
-        navegarParaTelaListagem() {
+        aoClicarNavegarParaTelaListagem() {
             try {
                 const rotaListagem = "listagem";
-                let rota = this.getOwnerComponent().getRouter();
-                rota.navTo(rotaListagem);
+                this.navegarPara(rotaListagem);
             } catch (erro) {
                 MessageBox.warning(erro.message);
             }

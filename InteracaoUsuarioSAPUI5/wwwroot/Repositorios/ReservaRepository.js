@@ -1,12 +1,12 @@
-sap.ui.define([],() => {
+sap.ui.define([], () => {
     "use strict";
 
     const ENDPOINT_RESERVA = '/api/Reserva';
 
     return {
-         obterTodos(filtro) {
+        obterTodos(filtro) {
             let query = ENDPOINT_RESERVA;
-            if(filtro != (undefined || null)){
+            if (filtro != undefined || filtro != null) {
                 query += `?filtro=${filtro}`
             }
 
@@ -21,7 +21,7 @@ sap.ui.define([],() => {
             let opcoes = {
                 method: "POST",
                 body: JSON.stringify(reservaParaCriar),
-                headers: {"Content-type": "application/json; charset=UTF-8"}
+                headers: { "Content-type": "application/json; charset=UTF-8" }
             };
 
             return fetch(ENDPOINT_RESERVA, opcoes);

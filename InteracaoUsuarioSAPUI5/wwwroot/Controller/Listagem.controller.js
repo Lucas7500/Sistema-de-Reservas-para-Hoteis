@@ -1,23 +1,19 @@
 sap.ui.define([
-    "sap/ui/core/mvc/Controller",
+    "./BaseController",
     "../model/Formatter",
-    "sap/ui/model/json/JSONModel",
     "../Repositorios/ReservaRepository",
     "sap/m/MessageBox"
-], (Controller, Formatter, JSONModel, ReservaRepository, MessageBox) => {
+], (BaseController, Formatter, ReservaRepository, MessageBox) => {
     "use strict";
 
-    const STATUS_OK = 200;
-    const MODELO_LISTA = "TabelaReservas";
     const CAMINHO_ROTA_LISTAGEM = "reservas.hoteis.controller.Listagem";
+    const MODELO_LISTA = "TabelaReservas";
 
-    return Controller.extend(CAMINHO_ROTA_LISTAGEM, {
+    return BaseController.extend(CAMINHO_ROTA_LISTAGEM, {
         formatter: Formatter,
         onInit() {
-            const rotaLista = 'listagem';
-
-            let rota = this.getOwnerComponent().getRouter();
-            rota.getRoute(rotaLista).attachPatternMatched(this._aoCoincidirRota, this);
+            const rotaListagem = "listagem";
+            this.vincularRota(rotaListagem, this._aoCoincidirRota);
         },
 
         _aoCoincidirRota() {
@@ -26,39 +22,32 @@ sap.ui.define([
 
         _carregarLista() {
             try {
-                ReservaRepository.obterTodos()
-                .then(response => {
-                    return response.status == STATUS_OK
-                        ? response.json()
-                        : Promise.reject(response);
-                })
-                .then(response => this.getView().setModel(new JSONModel(response), MODELO_LISTA))
-                .catch(async erro => {
-                    let mensagemErro = await erro.text();
-                    MessageBox.warning(mensagemErro);
-                })
+                this._obterReservas();
             }
             catch (erro) {
                 MessageBox.warning(erro.message);
             }
         },
 
+        _obterReservas(filtro) {
+            ReservaRepository.obterTodos(filtro)
+                .then(response => {
+                    return response.ok
+                        ? response.json()
+                        : Promise.reject(response);
+                })
+                .then(reservas => this.modelo(MODELO_LISTA, reservas))
+                .catch(async erro => {
+                    let mensagemErro = await erro.text();
+                    MessageBox.warning(mensagemErro);
+                })
+        },
+
         aoPesquisarFiltrarReservas(filtro) {
             try {
                 const parametroQuery = "query";
                 let stringFiltro = filtro.getParameter(parametroQuery);
-
-                ReservaRepository.obterTodos(stringFiltro)
-                    .then(response => {
-                        return response.status == STATUS_OK
-                            ? response.json()
-                            : Promise.reject(response);
-                    })
-                    .then(response => this.getView().setModel(new JSONModel(response), MODELO_LISTA))
-                    .catch(async erro => {
-                        let mensagemErro = await erro.text();
-                        MessageBox.warning(mensagemErro);
-                    })
+                this._obterReservas(stringFiltro);
             } catch (erro) {
                 MessageBox.warning(erro.message);
             }
@@ -66,9 +55,8 @@ sap.ui.define([
 
         aoClicarAbrirCadastro() {
             try {
-                let rota = this.getOwnerComponent().getRouter();
                 const rotaCadastro = "cadastro";
-                rota.navTo(rotaCadastro);
+                this.navegarPara(rotaCadastro);
             } catch (erro) {
                 MessageBox.warning(erro.message);
             }
@@ -77,16 +65,10 @@ sap.ui.define([
         aoClicarAbrirDetalhes(evento) {
             try {
                 const propriedadeId = "id";
-                let idReserva = evento
-                    .getSource()
-                    .getBindingContext(MODELO_LISTA)
-                    .getProperty(propriedadeId);
-                
+                let idReserva = evento.getSource().getBindingContext(MODELO_LISTA).getProperty(propriedadeId);
+
                 const rotaDetalhes = "detalhes";
-                let rota = this.getOwnerComponent().getRouter();
-                rota.navTo(rotaDetalhes, {
-                    id: idReserva
-                });
+                this.navegarPara(rotaDetalhes, idReserva);
             } catch (erro) {
                 MessageBox.warning(erro.message);
             }
