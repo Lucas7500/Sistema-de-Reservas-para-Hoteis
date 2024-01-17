@@ -9,10 +9,7 @@ sap.ui.define([
 
     const CAMINHO_ROTA_CADASTRO = "reservas.hoteis.controller.Cadastro";
     const ROTA_LISTAGEM = "listagem";
-    const STATUS_CREATED = 201;
-    const STATUS_NO_CONTENT = 204;
-    const VALUE_STATE_SUCESSO = "Success";
-    const VALUE_STATE_ERRO = "Error";
+    const MODELO_RESERVA = "reserva";
     const PARAMETRO_VALUE = "value";
     const VALOR_INICIAL_VALUE_STATE_INPUT = "None";
     const ID_INPUT_NOME = "inputNome";
@@ -22,12 +19,7 @@ sap.ui.define([
     const ID_INPUT_CHECK_IN = "inputCheckIn";
     const ID_INPUT_CHECK_OUT = "inputCheckOut";
     const ID_INPUT_PRECO_ESTADIA = "inputPrecoEstadia";
-    const MODELO_RESERVA = "reserva";
     const STRING_VAZIA = "";
-    const CHAR_VIRGULA = ",";
-    const CHAR_PONTO = ".";
-    const REGEX_PONTOS = /\./g;
-    const REGEX_VIRGULAS = /,/g;
 
     const ARRAY_ID_INPUTS = [
         ID_INPUT_NOME,
@@ -53,44 +45,58 @@ sap.ui.define([
         },
 
         _aoCoincidirRotaCadastro() {
-            this._modeloReserva();
+            this._limparValueStateInputs();
+            this._definirValorPadraoRadioButton();
+            this._definirModeloReserva();
         },
 
         _aoCoincidirRotaEdicao(evento) {
-            const parametroArguments = "arguments";
-            const id = evento.getParameter(parametroArguments).id;
-
-            this._obterReservaPorId(id);
+            this._limparValueStateInputs();
+            this._definirValorPadraoRadioButton();
+            this._definirReservaPeloId(this._obterIdPeloParametro(evento));
         },
 
-        _modeloReserva(reserva) {
+        _definirModeloReserva(reserva) {
+            const nomeModelo = "reserva";
+
+            return reserva
+                ? this.modelo(nomeModelo, reserva)
+                : this._definirModeloPadrao(nomeModelo);
+        },
+
+        _definirModeloPadrao(nomeModelo) {
+            let reserva = {
+                nome: STRING_VAZIA,
+                cpf: STRING_VAZIA,
+                telefone: STRING_VAZIA,
+                idade: STRING_VAZIA,
+                sexo: STRING_VAZIA,
+                checkIn: Date(),
+                checkOut: Date(),
+                precoEstadia: STRING_VAZIA,
+                pagamentoEfetuado: false
+            };
+
+            this.modelo(nomeModelo, reserva);
+        },
+
+        _obterIdPeloParametro(evento) {
+            const parametroArguments = "arguments";
+            return evento.getParameter(parametroArguments).id;
+        },
+
+        _definirValorPadraoRadioButton() {
             const idRadioButtonPagamentoNaoEfetuado = "radioButtonPagamentoNaoEfetuado";
             this.byId(idRadioButtonPagamentoNaoEfetuado).setSelected(true);
-
-            this._limparValueStateInputs();
-
-            if (!reserva) {
-
-                reserva = {
-                    nome: STRING_VAZIA,
-                    cpf: STRING_VAZIA,
-                    telefone: STRING_VAZIA,
-                    idade: STRING_VAZIA,
-                    sexo: STRING_VAZIA,
-                    checkIn: Date(),
-                    checkOut: Date(),
-                    precoEstadia: STRING_VAZIA,
-                    pagamentoEfetuado: false
-                };
-            }
-
-            this.modelo(MODELO_RESERVA, reserva);
         },
 
         _definirValueStateInputValidado(input, valueStateText) {
+            const valueStateError = "Error";
+            const valueStateSuccess = "Success";
+
             valueStateText
-                ? input.setValueState(VALUE_STATE_ERRO).setValueStateText(valueStateText)
-                : input.setValueState(VALUE_STATE_SUCESSO);
+                ? input.setValueState(valueStateError).setValueStateText(valueStateText)
+                : input.setValueState(valueStateSuccess);
         },
 
         _definirValueStateInputsSemAlteracao(listaErrosValidacao) {
@@ -128,27 +134,13 @@ sap.ui.define([
         _obterReservaPreenchida() {
             let reserva = this.modelo(MODELO_RESERVA);
 
-            let reservaPreenchida = {};
-            if (reserva.id) {
-                reservaPreenchida.id = reserva.id;
-            }
+            reserva.idade = Number(reserva.idade);
+            reserva.sexo = Number(reserva.sexo);
 
-            reservaPreenchida.nome = reserva.nome;
-            reservaPreenchida.cpf = reserva.cpf;
-            reservaPreenchida.telefone = reserva.telefone;
-            reservaPreenchida.idade = Number(reserva.idade);
-            reservaPreenchida.sexo = Number(reserva.sexo);
-            reservaPreenchida.checkIn = reserva.checkIn;
-            reservaPreenchida.checkOut = reserva.checkOut;
-            reservaPreenchida.precoEstadia = Number(reserva.precoEstadia
-                .replace(REGEX_PONTOS, STRING_VAZIA)
-                .replace(CHAR_VIRGULA, CHAR_PONTO));
-            reservaPreenchida.pagamentoEfetuado = reserva.pagamentoEfetuado;
-
-            return reservaPreenchida;
+            return reserva;
         },
 
-        _obterReservaPorId(id) {
+        _definirReservaPeloId(id) {
             ReservaRepository.obterPorId(id)
                 .then(response => {
                     return response.ok
@@ -166,11 +158,11 @@ sap.ui.define([
             const recursosi18n = this.obterRecursosI18n();
             const variavelSucessoSalvar = "sucessoSalvar";
             const mensagemSucessoSalvar = recursosi18n.getText(variavelSucessoSalvar);
-            const controllerCadastro = this;
 
             ReservaRepository.criarReserva(reservaParaCriar)
                 .then(async response => {
-                    if (response.status == STATUS_CREATED) {
+                    const statusCreated = 201;
+                    if (response.status == statusCreated) {
                         let reservaCriada = await response.json();
                         MessageBox.success(mensagemSucessoSalvar, {
                             onClose: () => {
@@ -197,7 +189,8 @@ sap.ui.define([
 
             ReservaRepository.atualizarReserva(reservaParaAtualizar)
                 .then(response => {
-                    if (response.status == STATUS_NO_CONTENT) {
+                    const statusNoContent = 204;
+                    if (response.status == statusNoContent) {
                         MessageBox.success(mensagemSucessoEditar, {
                             onClose: () => {
                                 controllerCadastro._abrirDetalhesReserva(reservaParaAtualizar.id);
@@ -224,13 +217,15 @@ sap.ui.define([
             }
         },
 
-        aoClicarNavegarParaTelaAnterior() {
+        aoClicarNavegarParaTelaAnterior(evento) {
             try {
-                let reserva = this.modelo(MODELO_RESERVA);
+                //pegar o id por algum metodo do sap ui 5 
+                //senao pega pelo modelo
+                let reserva 
 
-                reserva.id
-                    ? this._abrirDetalhesReserva(reserva.id)
-                    : this.navegarPara(ROTA_LISTAGEM)
+                idReserva
+                    ? this._abrirDetalhesReserva(idReserva)
+                    : this.navegarPara(ROTA_LISTAGEM);
             }
             catch (erro) {
                 MessageBox.warning(erro.message);
@@ -240,6 +235,7 @@ sap.ui.define([
         aoClicarSalvarReserva() {
             try {
                 let reservaPreenchida = this._obterReservaPreenchida();
+
                 let inputsSemAlteracao = this._obterInputsSemAlteracao();
                 let listaErrosValidacao = Validacao.obterListaErros();
 
@@ -265,22 +261,16 @@ sap.ui.define([
         aoClicarCancelarCadastro() {
             try {
                 const recursosi18n = this.obterRecursosI18n();
-
-                const variavelBotaoSim = "botaoSim";
-                const variavelBotaoNao = "botaoNao";
                 const variavelConfirmacaoCancelar = "confirmacaoCancelar";
-
-                const botaoSim = recursosi18n.getText(variavelBotaoSim);
-                const botaoNao = recursosi18n.getText(variavelBotaoNao);
                 const mensagemConfirmacao = recursosi18n.getText(variavelConfirmacaoCancelar);
 
                 let controllerCadastro = this;
 
                 MessageBox.confirm(mensagemConfirmacao, {
-                    actions: [botaoSim, botaoNao],
-                    emphasizedAction: botaoSim,
+                    actions: [MessageBox.Action.YES, MessageBox.Action.NO],
+                    emphasizedAction: MessageBox.Action.YES,
                     onClose: function (acao) {
-                        if (acao == botaoSim) {
+                        if (acao == MessageBox.Action.YES) {
                             controllerCadastro.navegarPara(ROTA_LISTAGEM);
                         }
                     }
@@ -389,9 +379,12 @@ sap.ui.define([
                     }
                 }
 
+                const charPonto = ".";
+                const regexPontos = /\./g;
+                const regexVirgulas = /,/g;
                 valorPrecoEstadia = valorPrecoEstadia
-                    .replace(REGEX_PONTOS, STRING_VAZIA)
-                    .replace(REGEX_VIRGULAS, CHAR_PONTO);
+                    .replace(regexPontos, STRING_VAZIA)
+                    .replace(regexVirgulas, charPonto);
 
                 let mensagemErroValidacao = Validacao.validarPrecoEstadia(valorPrecoEstadia);
 

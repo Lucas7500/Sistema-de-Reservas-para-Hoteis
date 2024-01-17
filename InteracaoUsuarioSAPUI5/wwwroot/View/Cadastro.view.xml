@@ -137,7 +137,7 @@
                         change=".aoMudarValidarCheckInECheckOut" />
                     <Label
                         text="{i18n>labelPrecoEstadia}"
-                        labelFor="inputPrecoEstadia" />
+                        labelFor="inputPrecoEstadia" /> 
                     <Input
                         id="inputPrecoEstadia"
                         placeholder="{i18n>placeholderPrecoEstadia}"
