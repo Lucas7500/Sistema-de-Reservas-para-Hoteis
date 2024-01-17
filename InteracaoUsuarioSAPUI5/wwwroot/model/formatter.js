@@ -37,7 +37,7 @@ sap.ui.define([
                 pattern: formatoData
             });
 
-            return formatador.format(data);
+            return formatador.format(new Date(data));
         },
 
         formataListaErros(listaErros) {

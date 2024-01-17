@@ -11,6 +11,7 @@ sap.ui.define([
 
     return BaseController.extend(CAMINHO_ROTA_LISTAGEM, {
         formatter: Formatter,
+        
         onInit() {
             const rotaListagem = "listagem";
             this.vincularRota(rotaListagem, this._aoCoincidirRota);

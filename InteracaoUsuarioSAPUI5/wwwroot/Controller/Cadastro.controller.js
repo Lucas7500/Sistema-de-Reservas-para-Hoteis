@@ -40,6 +40,8 @@ sap.ui.define([
     ]
 
     return BaseController.extend(CAMINHO_ROTA_CADASTRO, {
+        formatter: Formatter,
+
         onInit() {
             const recursosi18n = this.obterRecursosI18n();
             const rotaCadastro = "cadastro";
@@ -67,14 +69,7 @@ sap.ui.define([
 
             this._limparValueStateInputs();
 
-            if (reserva) {
-                reserva.checkIn = Formatter.formataData(new Date(reserva.checkIn));
-                reserva.checkOut = Formatter.formataData(new Date(reserva.checkOut));
-                reserva.precoEstadia = Formatter.formataPrecoEstadia(reserva.precoEstadia);
-            }
-            else {
-                let dataHoje = new Date();
-                let valorPadraoData = Formatter.formataData(dataHoje);
+            if (!reserva) {
 
                 reserva = {
                     nome: STRING_VAZIA,
@@ -82,8 +77,8 @@ sap.ui.define([
                     telefone: STRING_VAZIA,
                     idade: STRING_VAZIA,
                     sexo: STRING_VAZIA,
-                    checkIn: valorPadraoData,
-                    checkOut: valorPadraoData,
+                    checkIn: Date(),
+                    checkOut: Date(),
                     precoEstadia: STRING_VAZIA,
                     pagamentoEfetuado: false
                 };
@@ -229,9 +224,13 @@ sap.ui.define([
             }
         },
 
-        aoClicarNavegarParaTelaListagem() {
+        aoClicarNavegarParaTelaAnterior() {
             try {
-                this.navegarPara(ROTA_LISTAGEM);
+                let reserva = this.modelo(MODELO_RESERVA);
+
+                reserva.id
+                    ? this._abrirDetalhesReserva(reserva.id)
+                    : this.navegarPara(ROTA_LISTAGEM)
             }
             catch (erro) {
                 MessageBox.warning(erro.message);
