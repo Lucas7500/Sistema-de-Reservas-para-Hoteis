@@ -243,13 +243,13 @@ sap.ui.define([
                 let reservaPreenchida = this._obterReservaPreenchida();
                 let inputsSemAlteracao = this._obterInputsSemAlteracao();
                 let listaErrosValidacao = Validacao.obterListaErros();
-                
+
                 if (inputsSemAlteracao.length) {
-                    Validacao.validarPropriedadesVazias(reservaPreenchida);
+                    Validacao.validarReserva(reservaPreenchida);
                     listaErrosValidacao = Validacao.obterListaErros();
                     this._definirValueStateInputsSemAlteracao(listaErrosValidacao);
                 }
-                
+
                 let mensagensErroValidacao = Formatter.formataListaErros(listaErrosValidacao);
 
                 mensagensErroValidacao
@@ -358,14 +358,17 @@ sap.ui.define([
 
         aoMudarValidarCheckInECheckOut() {
             try {
+                let reserva = this.modelo(MODELO_RESERVA);
+                let edicao = Boolean(reserva.id);
+
                 let inputCheckIn = this.byId(ID_INPUT_CHECK_IN);
                 let inputCheckOut = this.byId(ID_INPUT_CHECK_OUT);
 
                 let valorCheckIn = inputCheckIn.getValue();
                 let valorCheckOut = inputCheckOut.getValue();
 
-                let mensagemErroValidacaoCheckIn = Validacao.validarCheckIn(valorCheckIn);
-                let mensagemErroValidacaoCheckOut = Validacao.validarCheckOut(valorCheckOut, valorCheckIn);
+                let mensagemErroValidacaoCheckIn = Validacao.validarCheckIn(valorCheckIn, edicao);
+                let mensagemErroValidacaoCheckOut = Validacao.validarCheckOut(valorCheckOut, valorCheckIn, edicao);
 
                 this._definirValueStateInputValidado(inputCheckIn, mensagemErroValidacaoCheckIn);
                 this._definirValueStateInputValidado(inputCheckOut, mensagemErroValidacaoCheckOut);

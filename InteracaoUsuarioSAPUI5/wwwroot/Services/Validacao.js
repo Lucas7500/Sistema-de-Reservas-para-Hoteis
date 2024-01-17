@@ -26,43 +26,12 @@ sap.ui.define([], () => {
             return Boolean(propriedade);
         },
 
-        validarPropriedadesVazias(reservaPreenchida) {
-            let nomeFormatado = reservaPreenchida.nome.trim();
-
-            if (!this.contemValor(nomeFormatado)) {
-                const variavelNomeNaoPreenchido = "nomeNaoPreenchido";
-                LISTA_ERROS[INDICE_MENSAGEM_ERRO_NOME] = RECURSOS_I18N.getText(variavelNomeNaoPreenchido);
-            }
-
-            if (!this.contemValor(reservaPreenchida.cpf)) {
-                const variavelCpfNaoPreenchido = "cpfNaoPreenchido";
-                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CPF] = RECURSOS_I18N.getText(variavelCpfNaoPreenchido);
-            }
-
-            if (!this.contemValor(reservaPreenchida.telefone)) {
-                const variavelTelefoneNaoPreenchido = "telefoneNaoPreenchido";
-                LISTA_ERROS[INDICE_MENSAGEM_ERRO_TELEFONE] = RECURSOS_I18N.getText(variavelTelefoneNaoPreenchido);
-            }
-
-            if (!this.contemValor(reservaPreenchida.idade)) {
-                const variavelIdadeNaoPreenchida = "idadeNaoPreenchida";
-                LISTA_ERROS[INDICE_MENSAGEM_ERRO_IDADE] = RECURSOS_I18N.getText(variavelIdadeNaoPreenchida);
-            }
-
-            if (!this.contemValor(reservaPreenchida.checkIn)) {
-                const variavelCheckInNaoPreenchido = "checkInNaoPreenchido";
-                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_IN] = RECURSOS_I18N.getText(variavelCheckInNaoPreenchido);
-            }
-
-            if (!this.contemValor(reservaPreenchida.checkOut)) {
-                const variavelCheckOutNaoPreenchido = "checkOutNaoPreenchido";
-                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_OUT] = RECURSOS_I18N.getText(variavelCheckOutNaoPreenchido);
-            }
-
-            if (!this.contemValor(reservaPreenchida.precoEstadia)) {
-                const variavelPrecoEstadiaNaoPreenchido = "precoEstadiaNaoPreenchido"
-                LISTA_ERROS[INDICE_MENSAGEM_ERRO_PRECO_ESTADIA] = RECURSOS_I18N.getText(variavelPrecoEstadiaNaoPreenchido);
-            }
+        validarReserva(reserva) {
+            this.validarNome(reserva.nome);
+            this.validarCpf(reserva.cpf);
+            this.validarTelefone(reserva.telefone);
+            this.validarIdade(reserva.idade);
+            this.validarPrecoEstadia(reserva.precoEstadia);
         },
 
         validarNome(nome) {
@@ -225,12 +194,16 @@ sap.ui.define([], () => {
             LISTA_ERROS[INDICE_MENSAGEM_ERRO_IDADE] = undefined;
         },
 
-        validarCheckIn(checkIn) {
+        validarCheckIn(checkIn, edicao) {
             if (!this.contemValor(checkIn)) {
                 const variavelCheckInNaoPreenchido = "checkInNaoPreenchido";
                 LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_IN] = RECURSOS_I18N.getText(variavelCheckInNaoPreenchido);
 
                 return LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_IN];
+            }
+
+            if (edicao) {
+                return;
             }
 
             let dataAtual = new Date();
@@ -242,9 +215,10 @@ sap.ui.define([], () => {
             let [anoCheckIn, mesCheckIn, diaCheckIn] = checkIn.split(separador);
 
             let primeiroCasoInvalido = anoCheckIn < anoAtual;
-            let segundoCasoInvalido = (anoCheckIn == anoAtual) && (mesCheckIn == mesAtual) && (diaCheckIn < diaAtual);
+            let segundoCasoInvalido = (anoCheckIn == anoAtual) && (mesCheckIn < mesAtual);
+            let terceiroCasoInvalido = (anoCheckIn == anoAtual) && (mesCheckIn == mesAtual) && (diaCheckIn < diaAtual);
 
-            if (primeiroCasoInvalido || segundoCasoInvalido) {
+            if (primeiroCasoInvalido || segundoCasoInvalido || terceiroCasoInvalido) {
                 const variavelCheckInDatasPassadas = "checkInDatasPassadas";
                 LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_IN] = RECURSOS_I18N.getText(variavelCheckInDatasPassadas);
 
@@ -254,7 +228,7 @@ sap.ui.define([], () => {
             LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_IN] = undefined;
         },
 
-        validarCheckOut(checkOut, checkIn) {
+        validarCheckOut(checkOut, checkIn, edicao) {
             if (!this.contemValor(checkOut)) {
                 const variavelCheckOutNaoPreenchido = "checkOutNaoPreenchido";
                 LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_OUT] = RECURSOS_I18N.getText(variavelCheckOutNaoPreenchido);
@@ -262,26 +236,33 @@ sap.ui.define([], () => {
                 return LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_OUT];
             }
 
-            let dataAtual = new Date();
-            let anoAtual = dataAtual.getFullYear();
-            let mesAtual = dataAtual.getMonth() + 1;
-            let diaAtual = dataAtual.getDate();
-
             const separador = "-";
             let [anoCheckOut, mesCheckOut, diaCheckOut] = checkOut.split(separador);
             let [anoCheckIn, mesCheckIn, diaCheckIn] = checkIn.split(separador);
 
-            let primeiroCasoInvalido = anoCheckOut < anoAtual;
-            let segundoCasoInvalido = (anoCheckOut == anoAtual) && (mesCheckOut == mesAtual) && (diaCheckOut < diaAtual);
-            let terceiroCasoInvalido = (anoCheckOut == anoCheckIn) && (mesCheckOut == mesCheckIn) && (diaCheckOut < diaCheckIn);
+            let primeiroCasoInvalido, segundoCasoInvalido, terceiroCasoInvalido;
+            if (!edicao) {
+                let dataAtual = new Date();
+                let anoAtual = dataAtual.getFullYear();
+                let mesAtual = dataAtual.getMonth() + 1;
+                let diaAtual = dataAtual.getDate();
 
-            if (primeiroCasoInvalido || segundoCasoInvalido) {
+                primeiroCasoInvalido = anoCheckOut < anoAtual;
+                segundoCasoInvalido = (anoCheckOut == anoAtual) && (mesCheckOut < mesAtual);
+                terceiroCasoInvalido = (anoCheckOut == anoAtual) && (mesCheckOut == mesAtual) && (diaCheckOut < diaAtual);
+            }
+
+            let quartoCasoInvalido = (anoCheckOut < anoCheckIn);
+            let quintoCasoInvalido = (anoCheckOut == anoCheckIn) && (mesCheckOut < mesCheckIn);
+            let sextoCasoInvalido = (anoCheckOut == anoCheckIn) && (mesCheckOut == mesCheckIn) && (diaCheckOut < diaCheckIn);
+
+            if (primeiroCasoInvalido || segundoCasoInvalido || sextoCasoInvalido) {
                 const variavelCheckOutDatasPassadas = "checkOutDatasPassadas";
                 LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_OUT] = RECURSOS_I18N.getText(variavelCheckOutDatasPassadas);
 
                 return LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_OUT];
             }
-            else if (terceiroCasoInvalido) {
+            else if (quartoCasoInvalido || quintoCasoInvalido || terceiroCasoInvalido) {
                 const variavelCheckOutAnteriorCheckIn = "checkOutAnteriorCheckIn";
                 LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_OUT] = RECURSOS_I18N.getText(variavelCheckOutAnteriorCheckIn);
 
