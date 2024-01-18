@@ -6,8 +6,13 @@ sap.ui.define([
     "use strict";
 
     const CAMINHO_ROTA_BASE_CONTROLLER = "reservas.hoteis.controller.BaseController";
+    let roteador;
 
     return Controller.extend(CAMINHO_ROTA_BASE_CONTROLLER, {
+        onInit() {
+            roteador = this.getOwnerComponent().getRouter();
+        },
+
         modelo(nome, modelo) {
             return modelo
                 ? this.getView().setModel(new JSONModel(modelo), nome)
@@ -20,14 +25,11 @@ sap.ui.define([
         },
 
         vincularRota(nomeDaRota, aoCoincidirRota) {
-            let roteador = this.getOwnerComponent().getRouter();
             roteador.getRoute(nomeDaRota).attachPatternMatched(aoCoincidirRota, this);
         },
 
         navegarPara(nomeDaRota, parametroId) {
             try {
-                let roteador = this.getOwnerComponent().getRouter();
-
                 roteador.navTo(nomeDaRota, {
                     id: parametroId
                 });

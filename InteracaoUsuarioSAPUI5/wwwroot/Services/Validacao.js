@@ -174,6 +174,14 @@ sap.ui.define([], () => {
                 return LISTA_ERROS[INDICE_MENSAGEM_ERRO_IDADE];
             }
 
+            const regexNumeros = "^[0-9]*$";
+            if(!String(idade).match(regexNumeros)) {
+                const variavelFormatoInvalidoIdade = "formatoInvalidoidade";
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_IDADE] = RECURSOS_I18N.getText(variavelFormatoInvalidoIdade);
+
+                return LISTA_ERROS[INDICE_MENSAGEM_ERRO_IDADE];
+            }
+
             let numeroIdade = Number(idade);
             const valorMinimoIdade = 18;
             const valorMaximoIdade = 200;
@@ -194,16 +202,12 @@ sap.ui.define([], () => {
             LISTA_ERROS[INDICE_MENSAGEM_ERRO_IDADE] = undefined;
         },
 
-        validarCheckIn(checkIn, edicao) {
+        validarCheckIn(checkIn) {
             if (!this.contemValor(checkIn)) {
                 const variavelCheckInNaoPreenchido = "checkInNaoPreenchido";
                 LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_IN] = RECURSOS_I18N.getText(variavelCheckInNaoPreenchido);
 
                 return LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_IN];
-            }
-
-            if (edicao) {
-                return;
             }
 
             let dataAtual = new Date();
@@ -228,7 +232,7 @@ sap.ui.define([], () => {
             LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_IN] = undefined;
         },
 
-        validarCheckOut(checkOut, checkIn, edicao) {
+        validarCheckOut(checkOut, checkIn) {
             if (!this.contemValor(checkOut)) {
                 const variavelCheckOutNaoPreenchido = "checkOutNaoPreenchido";
                 LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_OUT] = RECURSOS_I18N.getText(variavelCheckOutNaoPreenchido);
@@ -241,16 +245,17 @@ sap.ui.define([], () => {
             let [anoCheckIn, mesCheckIn, diaCheckIn] = checkIn.split(separador);
 
             let primeiroCasoInvalido, segundoCasoInvalido, terceiroCasoInvalido;
-            if (!edicao) {
-                let dataAtual = new Date();
-                let anoAtual = dataAtual.getFullYear();
-                let mesAtual = dataAtual.getMonth() + 1;
-                let diaAtual = dataAtual.getDate();
+     
+            //#region 
+            let dataAtual = new Date();
+            let anoAtual = dataAtual.getFullYear();
+            let mesAtual = dataAtual.getMonth() + 1;
+            let diaAtual = dataAtual.getDate();
 
-                primeiroCasoInvalido = anoCheckOut < anoAtual;
-                segundoCasoInvalido = (anoCheckOut == anoAtual) && (mesCheckOut < mesAtual);
-                terceiroCasoInvalido = (anoCheckOut == anoAtual) && (mesCheckOut == mesAtual) && (diaCheckOut < diaAtual);
-            }
+            primeiroCasoInvalido = anoCheckOut < anoAtual;
+            segundoCasoInvalido = (anoCheckOut == anoAtual) && (mesCheckOut < mesAtual);
+            terceiroCasoInvalido = (anoCheckOut == anoAtual) && (mesCheckOut == mesAtual) && (diaCheckOut < diaAtual);
+            //#endregion
 
             let quartoCasoInvalido = (anoCheckOut < anoCheckIn);
             let quintoCasoInvalido = (anoCheckOut == anoCheckIn) && (mesCheckOut < mesCheckIn);

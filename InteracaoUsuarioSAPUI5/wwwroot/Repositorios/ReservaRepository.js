@@ -18,23 +18,23 @@ sap.ui.define([], () => {
         },
 
         criarReserva(reservaParaCriar) {
-            let opcoes = {
+            let configuracoesRequisicao = {
                 method: "POST",
                 body: JSON.stringify(reservaParaCriar),
                 headers: { "Content-type": "application/json; charset=UTF-8" }
             };
 
-            return fetch(ENDPOINT_RESERVA, opcoes);
+            return fetch(ENDPOINT_RESERVA, configuracoesRequisicao);
         },
 
         atualizarReserva(reservaParaAtualizar) {
-            let opcoes = {
+            let configuracoesRequisicao = {
                 method: "PUT",
                 body: JSON.stringify(reservaParaAtualizar),
                 headers: { "Content-type": "application/json; charset=UTF-8" }
             };
 
-            return fetch(`${ENDPOINT_RESERVA}/${reservaParaAtualizar.id}`, opcoes);
+            return fetch(`${ENDPOINT_RESERVA}/${reservaParaAtualizar.id}`, configuracoesRequisicao);
         }
     }
 })

@@ -8,7 +8,6 @@ sap.ui.define([
 
     const CAMINHO_ROTA_DETALHES = "reservas.hoteis.controller.Detalhes";
     const MODELO_RESERVA = "reserva";
-    let ID_RESERVA;
 
     return BaseController.extend(CAMINHO_ROTA_DETALHES, {
         formatter: Formatter,
@@ -21,17 +20,16 @@ sap.ui.define([
             try {
                 const parametroArguments = "arguments";
                 const idReserva = evento.getParameter(parametroArguments).id;
-                
-                this._definirIdReserva(idReserva);
-                this._obterReservaPorId();
+
+                this._definirReservaPeloId(idReserva);
             }
             catch (erro) {
                 MessageBox.warning(erro.message);
             }
         },
 
-        _obterReservaPorId() {
-            ReservaRepository.obterPorId(ID_RESERVA)
+        _definirReservaPeloId(id) {
+            ReservaRepository.obterPorId(id)
                 .then(response => {
                     return response.ok
                         ? response.json()
@@ -42,10 +40,6 @@ sap.ui.define([
                     let mensagemErro = await erro.text();
                     MessageBox.warning(mensagemErro);
                 });
-        },
-
-        _definirIdReserva(idReserva) {
-            ID_RESERVA = idReserva;
         },
 
         aoClicarNavegarParaTelaListagem() {
@@ -60,7 +54,9 @@ sap.ui.define([
         aoClicarNavegarParaTelaEdicao() {
             try {
                 const rotaEdicao = "edicao";
-                this.navegarPara(rotaEdicao, ID_RESERVA);
+                const idReserva = this.modelo(MODELO_RESERVA).id;
+
+                this.navegarPara(rotaEdicao, idReserva);
             } catch (erro) {
                 MessageBox.warning(erro.message);
             }

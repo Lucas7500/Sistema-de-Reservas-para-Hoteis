@@ -142,10 +142,7 @@
                         id="inputPrecoEstadia"
                         placeholder="{i18n>placeholderPrecoEstadia}"
                         required="true"
-                        value="{
-                            path: 'reserva>/precoEstadia',
-                            formatter: '.formatter.formataPrecoEstadia'
-                        }"
+                        value="{reserva>/precoEstadia}"
                         change=".aoMudarValidarPrecoEstadia"
                         liveChange=".aoDigitarPermitirSomenteNumeros" />
                 </VBox>

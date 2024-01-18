@@ -23,6 +23,17 @@ sap.ui.define([
             return formatador.format(parseFloat(precoEstadia));
         },
 
+        desformataPrecoEstadia(precoEstadia) {
+            const regexPontos = /\./g;
+            const regexVirgulas = /,/;
+            const charPonto = ".";
+            const stringVazia = "";
+
+            return String(precoEstadia)
+                .replace(regexPontos, stringVazia)
+                .replace(regexVirgulas, charPonto);
+        },
+
         formataPagamentoEfetuado(pagamentoEfetuado) {
             const textoPagamentoFoiEfetuado = "pagamentoEfetuadoTrue";
             const textoPagamentoNaoFoiEfetuado = "pagamentoEfetuadoFalse";
