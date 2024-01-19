@@ -26,15 +26,12 @@
         <Panel
             class="sapUiSmallMargin"
             backgroundDesign="Transparent">
-            <VBox>
                 <HBox>
                     <ObjectIdentifier title="{reserva>/nome} - {i18n>tituloColunaId}:" />
                     <Text class="sapUiTinyMarginBegin" text="{reserva>/id}" />
                 </HBox>
-                <HBox
-                    class="sapUiTinyMarginTop">
-                    <HBox
-                        alignItems="Center">
+                <HBox class="sapUiSmallMarginTop">
+                    <HBox alignItems="Center">
                         <VBox>
                             <ObjectIdentifier
                                 class="sapUiTinyMarginBottom"
@@ -126,7 +123,6 @@
                         </VBox>
                     </HBox>
                 </HBox>
-            </VBox>
         </Panel>
     </Page>
 </mvc:View>

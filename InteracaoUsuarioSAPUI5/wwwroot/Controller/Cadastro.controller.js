@@ -73,8 +73,8 @@ sap.ui.define([
                 telefone: String(),
                 idade: String(),
                 sexo: String(),
-                checkIn: Date(),
-                checkOut: Date(),
+                checkIn: new Date().toISOString(),
+                checkOut: new Date().toISOString(),
                 precoEstadia: String(),
                 pagamentoEfetuado: false
             };
