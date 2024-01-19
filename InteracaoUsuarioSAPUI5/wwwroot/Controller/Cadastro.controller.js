@@ -122,7 +122,7 @@ sap.ui.define([
         },
 
         _obterReservaPreenchida() {
-            let reserva = this.modelo(MODELO_RESERVA);
+            let reserva = structuredClone(this.modelo(MODELO_RESERVA));
 
             reserva.idade = Number(reserva.idade);
             reserva.sexo = Number(reserva.sexo);
@@ -223,12 +223,11 @@ sap.ui.define([
 
         aoClicarSalvarReserva() {
             try {
-                let reservaPreenchida = this._obterReservaPreenchida();
+                const reservaPreenchida = this._obterReservaPreenchida();
                 Validacao.validarReserva(reservaPreenchida);
 
-                let listaErrosValidacao = Validacao.obterListaErros();
-                let mensagensErroValidacao = Formatter.formataListaErros(listaErrosValidacao);
-
+                const listaErrosValidacao = Validacao.obterListaErros();
+                const mensagensErroValidacao = Formatter.formataListaErros(listaErrosValidacao);
                 this._definirValueStateInputsSemAlteracao(listaErrosValidacao);
 
                 mensagensErroValidacao
@@ -257,9 +256,9 @@ sap.ui.define([
 
         aoMudarValidarNome(evento) {
             try {
-                let inputNome = evento.getSource();
-                let valorNome = evento.getParameter(PARAMETRO_VALUE);
-                let mensagemErroValidacao = Validacao.validarNome(valorNome);
+                const inputNome = evento.getSource();
+                const valorNome = evento.getParameter(PARAMETRO_VALUE);
+                const mensagemErroValidacao = Validacao.validarNome(valorNome);
 
                 this._definirValueStateInputValidado(inputNome, mensagemErroValidacao);
             }
@@ -270,9 +269,9 @@ sap.ui.define([
 
         aoMudarValidarCpf(evento) {
             try {
-                let inputCpf = evento.getSource();
-                let valorCpf = evento.getParameter(PARAMETRO_VALUE);
-                let mensagemErroValidacao = Validacao.validarCpf(valorCpf);
+                const inputCpf = evento.getSource();
+                const valorCpf = evento.getParameter(PARAMETRO_VALUE);
+                const mensagemErroValidacao = Validacao.validarCpf(valorCpf);
 
                 this._definirValueStateInputValidado(inputCpf, mensagemErroValidacao);
             }
@@ -283,9 +282,9 @@ sap.ui.define([
 
         aoMudarValidarTelefone(evento) {
             try {
-                let inputTelefone = evento.getSource();
-                let valorTelefone = evento.getParameter(PARAMETRO_VALUE);
-                let mensagemErroValidacao = Validacao.validarTelefone(valorTelefone);
+                const inputTelefone = evento.getSource();
+                const valorTelefone = evento.getParameter(PARAMETRO_VALUE);
+                const mensagemErroValidacao = Validacao.validarTelefone(valorTelefone);
 
                 this._definirValueStateInputValidado(inputTelefone, mensagemErroValidacao);
             }
@@ -296,9 +295,9 @@ sap.ui.define([
 
         aoMudarValidarIdade(evento) {
             try {
-                let inputIdade = evento.getSource();
-                let valorIdade = evento.getParameter(PARAMETRO_VALUE);
-                let mensagemErroValidacao = Validacao.validarIdade(valorIdade);
+                const inputIdade = evento.getSource();
+                const valorIdade = evento.getParameter(PARAMETRO_VALUE);
+                const mensagemErroValidacao = Validacao.validarIdade(valorIdade);
 
                 this._definirValueStateInputValidado(inputIdade, mensagemErroValidacao);
             }
@@ -309,14 +308,22 @@ sap.ui.define([
 
         aoMudarValidarCheckInECheckOut() {
             try {
-                let inputCheckIn = this.byId(ID_INPUT_CHECK_IN);
-                let inputCheckOut = this.byId(ID_INPUT_CHECK_OUT);
-
-                let valorCheckIn = inputCheckIn.getValue();
-                let valorCheckOut = inputCheckOut.getValue();
-
-                let mensagemErroValidacaoCheckIn = Validacao.validarCheckIn(valorCheckIn);
-                let mensagemErroValidacaoCheckOut = Validacao.validarCheckOut(valorCheckOut, valorCheckIn);
+                const idReserva = this.modelo(MODELO_RESERVA).id;
+                const inputCheckIn = this.byId(ID_INPUT_CHECK_IN);
+                const inputCheckOut = this.byId(ID_INPUT_CHECK_OUT);
+                const valorCheckIn = inputCheckIn.getValue();
+                const valorCheckOut = inputCheckOut.getValue();
+                
+                let mensagemErroValidacaoCheckIn, mensagemErroValidacaoCheckOut;
+                
+                if (idReserva) {
+                    mensagemErroValidacaoCheckIn = Validacao.validarCheckIn(valorCheckIn);
+                    mensagemErroValidacaoCheckOut = Validacao.validarCheckOut(valorCheckOut, valorCheckIn);
+                }
+                else {
+                    mensagemErroValidacaoCheckIn = Validacao.validarCheckInCadastro(valorCheckIn);
+                    mensagemErroValidacaoCheckOut = Validacao.validarCheckOutCadastro(valorCheckOut, valorCheckIn);
+                }
 
                 this._definirValueStateInputValidado(inputCheckIn, mensagemErroValidacaoCheckIn);
                 this._definirValueStateInputValidado(inputCheckOut, mensagemErroValidacaoCheckOut);
@@ -328,9 +335,9 @@ sap.ui.define([
 
         aoMudarValidarPrecoEstadia(evento) {
             try {
-                let inputPrecoEstadia = evento.getSource();
-                let valorPrecoEstadia = evento.getParameter(PARAMETRO_VALUE);
-                let mensagemErroValidacao = Validacao.validarPrecoEstadia(valorPrecoEstadia);
+                const inputPrecoEstadia = evento.getSource();
+                const valorPrecoEstadia = evento.getParameter(PARAMETRO_VALUE);
+                const mensagemErroValidacao = Validacao.validarPrecoEstadia(valorPrecoEstadia);
 
                 this._definirValueStateInputValidado(inputPrecoEstadia, mensagemErroValidacao);
 

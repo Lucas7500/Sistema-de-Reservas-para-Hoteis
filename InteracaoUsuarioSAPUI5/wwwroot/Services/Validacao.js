@@ -3,8 +3,6 @@ sap.ui.define([
 ], (Formatter) => {
     "use strict";
 
-    const REGEX_NUMEROS = "[0-9]";
-
     const INDICE_MENSAGEM_ERRO_NOME = 0;
     const INDICE_MENSAGEM_ERRO_CPF = 1;
     const INDICE_MENSAGEM_ERRO_TELEFONE = 2;
@@ -38,7 +36,11 @@ sap.ui.define([
         },
 
         validarNome(nome) {
-            let nomeFormatado = nome.trim();
+            const nomeFormatado = nome.trim();
+            const tamanhoNome = nomeFormatado.length;
+            const tamanhoMinimoNome = 3;
+            const tamanhoMaximoNome = 50;
+            const regexNome = "^[a-zA-ZáàâãäéèêëíìïóòôõöüúùçñÁÀÂÃÄÉÈÊËÍÌÏÓÒÔÕÖÜÚÙÇÑ ]*$";
 
             if (!this.contemValor(nomeFormatado)) {
                 const variavelNomeNaoPreenchido = "nomeNaoPreenchido";
@@ -46,68 +48,34 @@ sap.ui.define([
 
                 return LISTA_ERROS[INDICE_MENSAGEM_ERRO_NOME];
             }
-
-            let regexNome = "^[a-zA-ZáàâãäéèêëíìïóòôõöüúùçñÁÀÂÃÄÉÈÊËÍÌÏÓÒÔÕÖÜÚÙÇÑ ]*$";
-
-            const tamanhoNome = nomeFormatado.length;
-            const tamanhoMinimoNome = 3;
-            const tamanhoMaximoNome = 50;
-
-            if (tamanhoNome < tamanhoMinimoNome) {
+            else if (tamanhoNome < tamanhoMinimoNome) {
                 const variavelNomeCurto = "nomeCurto";
                 LISTA_ERROS[INDICE_MENSAGEM_ERRO_NOME] = RECURSOS_I18N.getText(variavelNomeCurto);
-
-                return LISTA_ERROS[INDICE_MENSAGEM_ERRO_NOME];
             }
             else if (tamanhoNome > tamanhoMaximoNome) {
                 const variavelNomeLongo = "nomeLongo";
                 LISTA_ERROS[INDICE_MENSAGEM_ERRO_NOME] = RECURSOS_I18N.getText(variavelNomeLongo);
-
-                return LISTA_ERROS[INDICE_MENSAGEM_ERRO_NOME];
-            };
-
-            if (!nomeFormatado.match(regexNome)) {
+            }
+            else if (!nomeFormatado.match(regexNome)) {
                 const variavelNomeFormatoIncorreto = "nomeFormatoIncorreto";
                 LISTA_ERROS[INDICE_MENSAGEM_ERRO_NOME] = RECURSOS_I18N.getText(variavelNomeFormatoIncorreto);
-
-                return LISTA_ERROS[INDICE_MENSAGEM_ERRO_NOME];
+            }
+            else {
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_NOME] = undefined;
             }
 
-            LISTA_ERROS[INDICE_MENSAGEM_ERRO_NOME] = undefined;
+            return LISTA_ERROS[INDICE_MENSAGEM_ERRO_NOME];
         },
 
         validarCpf(cpf) {
-            if (!this.contemValor(cpf)) {
-                const variavelCpfNaoPreenchido = "cpfNaoPreenchido";
-                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CPF] = RECURSOS_I18N.getText(variavelCpfNaoPreenchido);
-
-                return LISTA_ERROS[INDICE_MENSAGEM_ERRO_CPF];
-            };
-
-            let numerosCpf = "";
-
-            for (let char of cpf) {
-                if (char.match(REGEX_NUMEROS)) {
-                    numerosCpf += char;
-                }
-            }
-
-            const tamanhoNumerosCpf = numerosCpf.length;
-            const tamanhoCpfPreenchido = 11;
-
-            if (tamanhoNumerosCpf < tamanhoCpfPreenchido) {
-                const variavelCpfParcialmentePreenchido = "cpfParcialmentePreenchido";
-                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CPF] = RECURSOS_I18N.getText(variavelCpfParcialmentePreenchido);
-
-                return LISTA_ERROS[INDICE_MENSAGEM_ERRO_CPF];
-            }
-
+            const arrayDigitosCpf = Array.from(cpf, Number).filter(numero => !isNaN(numero));
+            const tamanhoNumerosCpf = arrayDigitosCpf.length;
+            const primeiroDigitoVerificador = arrayDigitosCpf[9];
+            const segundoDigitoVerificador = arrayDigitosCpf[10]
             const multiplicadoresPrimeiroDigito = [10, 9, 8, 7, 6, 5, 4, 3, 2];
             const multiplicadoresSegundoDigito = [11, 10, 9, 8, 7, 6, 5, 4, 3, 2];
+            const tamanhoCpfPreenchido = 11;
 
-            let arrayDigitosCpf = Array.from(String(numerosCpf), Number);
-            let primeiroDigitoVerificador = arrayDigitosCpf[9];
-            let segundoDigitoVerificador = arrayDigitosCpf[10]
             let somaPrimeiroDigito = 0;
             let somaSegundoDigito = 0;
 
@@ -122,199 +90,187 @@ sap.ui.define([
                 }
             }
 
-            let restoPrimeiroDigito = somaPrimeiroDigito % 11;
-            let restoSegundoDigito = somaSegundoDigito % 11;
+            const restoPrimeiroDigito = somaPrimeiroDigito % 11;
+            const restoSegundoDigito = somaSegundoDigito % 11;
+            const primeiroCasoInvalido = restoPrimeiroDigito < 2 && primeiroDigitoVerificador != 0;
+            const segundoCasoInvalido = restoPrimeiroDigito >= 2 && primeiroDigitoVerificador != (11 - restoPrimeiroDigito);
+            const terceiroCasoInvalido = restoSegundoDigito < 2 && segundoDigitoVerificador != 0;
+            const quartoCasoInvalido = restoSegundoDigito >= 2 && segundoDigitoVerificador != (11 - restoSegundoDigito);
 
-            let primeiroCasoInvalido = restoPrimeiroDigito < 2 && primeiroDigitoVerificador != 0;
-            let segundoCasoInvalido = restoPrimeiroDigito >= 2 && primeiroDigitoVerificador != (11 - restoPrimeiroDigito);
-            let terceiroCasoInvalido = restoSegundoDigito < 2 && segundoDigitoVerificador != 0;
-            let quartoCasoInvalido = restoSegundoDigito >= 2 && segundoDigitoVerificador != (11 - restoSegundoDigito);
-
-            if (primeiroCasoInvalido || segundoCasoInvalido || terceiroCasoInvalido || quartoCasoInvalido) {
+            if (!this.contemValor(cpf)) {
+                const variavelCpfNaoPreenchido = "cpfNaoPreenchido";
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CPF] = RECURSOS_I18N.getText(variavelCpfNaoPreenchido);
+            }
+            else if (tamanhoNumerosCpf < tamanhoCpfPreenchido) {
+                const variavelCpfParcialmentePreenchido = "cpfParcialmentePreenchido";
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CPF] = RECURSOS_I18N.getText(variavelCpfParcialmentePreenchido);
+            }
+            else if (primeiroCasoInvalido || segundoCasoInvalido || terceiroCasoInvalido || quartoCasoInvalido) {
                 const variavelCpfInvalido = "cpfInvalido";
                 LISTA_ERROS[INDICE_MENSAGEM_ERRO_CPF] = RECURSOS_I18N.getText(variavelCpfInvalido);
-
-                return LISTA_ERROS[INDICE_MENSAGEM_ERRO_CPF];
+            }
+            else {
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CPF] = undefined;
             }
 
-            LISTA_ERROS[INDICE_MENSAGEM_ERRO_CPF] = undefined;
+            return LISTA_ERROS[INDICE_MENSAGEM_ERRO_CPF];
         },
 
         validarTelefone(telefone) {
-            if (!this.contemValor(telefone)) {
-                const variavelTelefoneNaoPreenchido = "telefoneNaoPreenchido";
-                LISTA_ERROS[INDICE_MENSAGEM_ERRO_TELEFONE] = RECURSOS_I18N.getText(variavelTelefoneNaoPreenchido);
-
-                return LISTA_ERROS[INDICE_MENSAGEM_ERRO_TELEFONE];
-            }
-
+            const regexNumeros = "[0-9]";
             let numerosTelefone = "";
 
             for (let char of telefone) {
-                if (char.match(REGEX_NUMEROS)) {
-                    numerosTelefone += char;
-                }
+                if (char.match(regexNumeros)) numerosTelefone += char;
             }
 
             const tamanhoNumerosTelefone = numerosTelefone.length;
             const tamanhoTelefonePreenchido = 11;
 
-            if (tamanhoNumerosTelefone < tamanhoTelefonePreenchido) {
+            if (!this.contemValor(telefone)) {
+                const variavelTelefoneNaoPreenchido = "telefoneNaoPreenchido";
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_TELEFONE] = RECURSOS_I18N.getText(variavelTelefoneNaoPreenchido);
+            }
+            else if (tamanhoNumerosTelefone < tamanhoTelefonePreenchido) {
                 const variavelTelefoneParcialmentePreenchido = "telefoneParcialmentePreenchido";
                 LISTA_ERROS[INDICE_MENSAGEM_ERRO_TELEFONE] = RECURSOS_I18N.getText(variavelTelefoneParcialmentePreenchido);
-
-                return LISTA_ERROS[INDICE_MENSAGEM_ERRO_TELEFONE];
+            }
+            else {
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_TELEFONE] = undefined;
             }
 
-            LISTA_ERROS[INDICE_MENSAGEM_ERRO_TELEFONE] = undefined;
+            return LISTA_ERROS[INDICE_MENSAGEM_ERRO_TELEFONE];
         },
 
         validarIdade(idade) {
-            if (!this.contemValor(idade)) {
-                const variavelIdadeNaoPreenchida = "idadeNaoPreenchida";
-                LISTA_ERROS[INDICE_MENSAGEM_ERRO_IDADE] = RECURSOS_I18N.getText(variavelIdadeNaoPreenchida);
-
-                return LISTA_ERROS[INDICE_MENSAGEM_ERRO_IDADE];
-            }
-
             const regexNumeros = "^[0-9]*$";
-            if (!String(idade).match(regexNumeros)) {
-                const variavelIdadeFormatoInvalido = "idadeFormatoInvalido";
-                LISTA_ERROS[INDICE_MENSAGEM_ERRO_IDADE] = RECURSOS_I18N.getText(variavelIdadeFormatoInvalido);
-
-                return LISTA_ERROS[INDICE_MENSAGEM_ERRO_IDADE];
-            }
-
-            let numeroIdade = Number(idade);
+            const numeroIdade = Number(idade);
             const valorMinimoIdade = 18;
             const valorMaximoIdade = 200;
 
-            if (numeroIdade < valorMinimoIdade) {
+            if (!this.contemValor(idade)) {
+                const variavelIdadeNaoPreenchida = "idadeNaoPreenchida";
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_IDADE] = RECURSOS_I18N.getText(variavelIdadeNaoPreenchida);
+            }
+            else if (!String(idade).match(regexNumeros)) {
+                const variavelIdadeFormatoInvalido = "idadeFormatoInvalido";
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_IDADE] = RECURSOS_I18N.getText(variavelIdadeFormatoInvalido);
+            }
+            else if (numeroIdade < valorMinimoIdade) {
                 const variavelMenorDeIdade = "menorDeIdade";
                 LISTA_ERROS[INDICE_MENSAGEM_ERRO_IDADE] = RECURSOS_I18N.getText(variavelMenorDeIdade);
-
-                return LISTA_ERROS[INDICE_MENSAGEM_ERRO_IDADE];
             }
             else if (numeroIdade >= valorMaximoIdade) {
                 const variavelIdadeAcimaValorMaximo = "idadeAcimaValorMaximo";
                 LISTA_ERROS[INDICE_MENSAGEM_ERRO_IDADE] = RECURSOS_I18N.getText(variavelIdadeAcimaValorMaximo);
-
-                return LISTA_ERROS[INDICE_MENSAGEM_ERRO_IDADE];
+            }
+            else {
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_IDADE] = undefined;
             }
 
-            LISTA_ERROS[INDICE_MENSAGEM_ERRO_IDADE] = undefined;
+            return LISTA_ERROS[INDICE_MENSAGEM_ERRO_IDADE];
+        },
+
+        validarDataCadastro(data) {
+            const anoAtual = new Date().getFullYear();
+            const mesAtual = new Date().getMonth() + 1;
+            const diaAtual = new Date().getDate();
+            
+            const separador = "-";
+            const [ano, mes, dia] = data.split(separador);
+
+            const primeiroCasoInvalido = ano < anoAtual;
+            const segundoCasoInvalido = (ano == anoAtual) && (mes < mesAtual);
+            const terceiroCasoInvalido = (ano == anoAtual) && (mes == mesAtual) && (dia < diaAtual);
+
+            return !(primeiroCasoInvalido || segundoCasoInvalido || terceiroCasoInvalido);
+
         },
 
         validarCheckIn(checkIn) {
             if (!this.contemValor(checkIn)) {
                 const variavelCheckInNaoPreenchido = "checkInNaoPreenchido";
                 LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_IN] = RECURSOS_I18N.getText(variavelCheckInNaoPreenchido);
-
-                return LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_IN];
+            }
+            else {
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_IN] = undefined;
             }
 
-            let dataAtual = new Date();
-            let anoAtual = dataAtual.getFullYear();
-            let mesAtual = dataAtual.getMonth() + 1;
-            let diaAtual = dataAtual.getDate();
-
-            const separador = "-";
-            let [anoCheckIn, mesCheckIn, diaCheckIn] = checkIn.split(separador);
-
-            let primeiroCasoInvalido = anoCheckIn < anoAtual;
-            let segundoCasoInvalido = (anoCheckIn == anoAtual) && (mesCheckIn < mesAtual);
-            let terceiroCasoInvalido = (anoCheckIn == anoAtual) && (mesCheckIn == mesAtual) && (diaCheckIn < diaAtual);
-
-            if (primeiroCasoInvalido || segundoCasoInvalido || terceiroCasoInvalido) {
-                const variavelCheckInDatasPassadas = "checkInDatasPassadas";
-                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_IN] = RECURSOS_I18N.getText(variavelCheckInDatasPassadas);
-
-                return LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_IN];
-            }
-
-            LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_IN] = undefined;
+            return LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_IN];
         },
 
         validarCheckOut(checkOut, checkIn) {
+            const separador = "-";
+            const [anoCheckOut, mesCheckOut, diaCheckOut] = checkOut.split(separador);
+            const [anoCheckIn, mesCheckIn, diaCheckIn] = checkIn.split(separador);
+            const primeiroCasoInvalido = (anoCheckOut < anoCheckIn);
+            const segundoCasoInvalido = (anoCheckOut == anoCheckIn) && (mesCheckOut < mesCheckIn);
+            const terceiroCasoInvalido = (anoCheckOut == anoCheckIn) && (mesCheckOut == mesCheckIn) && (diaCheckOut < diaCheckIn);
+
             if (!this.contemValor(checkOut)) {
                 const variavelCheckOutNaoPreenchido = "checkOutNaoPreenchido";
                 LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_OUT] = RECURSOS_I18N.getText(variavelCheckOutNaoPreenchido);
-
-                return LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_OUT];
             }
-
-            const separador = "-";
-            let [anoCheckOut, mesCheckOut, diaCheckOut] = checkOut.split(separador);
-            let [anoCheckIn, mesCheckIn, diaCheckIn] = checkIn.split(separador);
-
-            let primeiroCasoInvalido, segundoCasoInvalido, terceiroCasoInvalido;
-
-            //#region 
-            let dataAtual = new Date();
-            let anoAtual = dataAtual.getFullYear();
-            let mesAtual = dataAtual.getMonth() + 1;
-            let diaAtual = dataAtual.getDate();
-
-            primeiroCasoInvalido = anoCheckOut < anoAtual;
-            segundoCasoInvalido = (anoCheckOut == anoAtual) && (mesCheckOut < mesAtual);
-            terceiroCasoInvalido = (anoCheckOut == anoAtual) && (mesCheckOut == mesAtual) && (diaCheckOut < diaAtual);
-            //#endregion
-
-            let quartoCasoInvalido = (anoCheckOut < anoCheckIn);
-            let quintoCasoInvalido = (anoCheckOut == anoCheckIn) && (mesCheckOut < mesCheckIn);
-            let sextoCasoInvalido = (anoCheckOut == anoCheckIn) && (mesCheckOut == mesCheckIn) && (diaCheckOut < diaCheckIn);
-
-            if (primeiroCasoInvalido || segundoCasoInvalido || sextoCasoInvalido) {
-                const variavelCheckOutDatasPassadas = "checkOutDatasPassadas";
-                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_OUT] = RECURSOS_I18N.getText(variavelCheckOutDatasPassadas);
-
-                return LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_OUT];
-            }
-            else if (quartoCasoInvalido || quintoCasoInvalido || terceiroCasoInvalido) {
+            else if (primeiroCasoInvalido || segundoCasoInvalido || terceiroCasoInvalido) {
                 const variavelCheckOutAnteriorCheckIn = "checkOutAnteriorCheckIn";
                 LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_OUT] = RECURSOS_I18N.getText(variavelCheckOutAnteriorCheckIn);
-
-                return LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_OUT];
+            }
+            else {
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_OUT] = undefined;
             }
 
-            LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_OUT] = undefined;
+            return LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_OUT];
+        },
+
+        validarCheckInCadastro(checkIn) {
+            LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_IN] = this.validarCheckIn(checkIn);
+
+            if (!this.validarDataCadastro(checkIn)) {
+                const variavelCheckInDatasPassadas = "checkInDatasPassadas";
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_IN] = RECURSOS_I18N.getText(variavelCheckInDatasPassadas);
+            }
+
+            return LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_IN];
+        },
+
+        validarCheckOutCadastro(checkOut, checkIn) {
+            LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_OUT] = this.validarCheckOut(checkOut, checkIn);
+
+            if (!this.validarDataCadastro(checkOut)) {
+                const variavelCheckOutDatasPassadas = "checkOutDatasPassadas";
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_OUT] = RECURSOS_I18N.getText(variavelCheckOutDatasPassadas);
+            }
+
+            return LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_OUT];
         },
 
         validarPrecoEstadia(precoEstadia) {
+            const regexValoresNaoPermitidos = /[^0-9\.,]+/g;
+            const valorMaximoPrecoEstadia = 9999999999.99;
+            const valorZero = 0;
+            const numeroPrecoEstadia = Number(Formatter.desformataPrecoEstadia(precoEstadia));
+
             if (!this.contemValor(precoEstadia)) {
                 const variavelPrecoEstadiaNaoPreenchido = "precoEstadiaNaoPreenchido"
                 LISTA_ERROS[INDICE_MENSAGEM_ERRO_PRECO_ESTADIA] = RECURSOS_I18N.getText(variavelPrecoEstadiaNaoPreenchido);
-
-                return LISTA_ERROS[INDICE_MENSAGEM_ERRO_PRECO_ESTADIA];
             }
-
-            const regexValoresNaoPermitidos = /[^0-9\.,]+/g;
-
-            if (String(precoEstadia).match(regexValoresNaoPermitidos)) {
+            else if (String(precoEstadia).match(regexValoresNaoPermitidos)) {
                 const variavelPrecoEstadiaFormatoInvalido = "precoEstadiaFormatoInvalido"
                 LISTA_ERROS[INDICE_MENSAGEM_ERRO_PRECO_ESTADIA] = RECURSOS_I18N.getText(variavelPrecoEstadiaFormatoInvalido);
-
-                return LISTA_ERROS[INDICE_MENSAGEM_ERRO_PRECO_ESTADIA];
             }
-
-            let numeroPrecoEstadia = Number(Formatter.desformataPrecoEstadia(precoEstadia));
-            const valorMaximoPrecoEstadia = 9999999999.99;
-            const valorZero = 0;
-
-            if (numeroPrecoEstadia > valorMaximoPrecoEstadia) {
+            else if (numeroPrecoEstadia > valorMaximoPrecoEstadia) {
                 const variavelPrecoEstadiaAcimaValorMaximo = "precoEstadiaAcimaValorMaximo"
                 LISTA_ERROS[INDICE_MENSAGEM_ERRO_PRECO_ESTADIA] = RECURSOS_I18N.getText(variavelPrecoEstadiaAcimaValorMaximo);
-
-                return LISTA_ERROS[INDICE_MENSAGEM_ERRO_PRECO_ESTADIA];
             }
             else if (numeroPrecoEstadia <= valorZero) {
                 const variavelPrecoEstadiaNegativoOuZero = "precoEstadiaNegativoOuZero"
                 LISTA_ERROS[INDICE_MENSAGEM_ERRO_PRECO_ESTADIA] = RECURSOS_I18N.getText(variavelPrecoEstadiaNegativoOuZero);
-
-                return LISTA_ERROS[INDICE_MENSAGEM_ERRO_PRECO_ESTADIA];
+            }
+            else {
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_PRECO_ESTADIA] = undefined;
             }
 
-            LISTA_ERROS[INDICE_MENSAGEM_ERRO_PRECO_ESTADIA] = undefined;
+            return LISTA_ERROS[INDICE_MENSAGEM_ERRO_PRECO_ESTADIA];
         }
     }
 })

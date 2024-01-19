@@ -16,7 +16,12 @@ sap.ui.define([
         },
 
         formataPrecoEstadia(precoEstadia) {
-            return NumberFormat.getCurrencyInstance({ currencyCode: false }).format(parseFloat(precoEstadia));
+            const charVirgula = ",";
+            const charPonto = ".";
+
+            return NumberFormat
+                .getCurrencyInstance({ currencyCode: false })
+                .format(parseFloat(String(precoEstadia).replace(charVirgula, charPonto)));
         },
 
         desformataPrecoEstadia(precoEstadia) {
