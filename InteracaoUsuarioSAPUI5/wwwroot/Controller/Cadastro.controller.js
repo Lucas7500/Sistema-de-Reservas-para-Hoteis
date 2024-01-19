@@ -131,13 +131,17 @@ sap.ui.define([
             return reserva;
         },
 
-        _messageBoxConfirmacaoCancelamento(mensagemConfirmacao, navegarParaTelaAnterior) {
+        _messageBoxConfirmacaoCancelamento(mensagemConfirmacao, navegarPara) {
+            const idReserva = this.modelo(MODELO_RESERVA).id;
+
             MessageBox.confirm(mensagemConfirmacao, {
                 actions: [MessageBox.Action.YES, MessageBox.Action.NO],
                 emphasizedAction: MessageBox.Action.YES,
                 onClose: (acao) => {
                     if (acao == MessageBox.Action.YES) {
-                        navegarParaTelaAnterior();
+                        idReserva
+                            ? navegarPara(ROTA_DETALHES, idReserva)
+                            : navegarPara(ROTA_LISTAGEM);
                     }
                 }
             });
@@ -204,17 +208,13 @@ sap.ui.define([
                 });
         },
 
-        _navegarParaTelaAnterior() {
-            const idReserva = this.modelo(MODELO_RESERVA).id;
-
-            idReserva
-                ? this.navegarPara(ROTA_DETALHES, idReserva)
-                : this.navegarPara(ROTA_LISTAGEM);
-        },
-
         aoClicarNavegarParaTelaAnterior() {
             try {
-                this._navegarParaTelaAnterior();
+                const idReserva = this.modelo(MODELO_RESERVA).id;
+
+                idReserva
+                    ? this.navegarPara(ROTA_DETALHES, idReserva)
+                    : this.navegarPara(ROTA_LISTAGEM);
             }
             catch (erro) {
                 MessageBox.warning(erro.message);
@@ -225,10 +225,10 @@ sap.ui.define([
             try {
                 let reservaPreenchida = this._obterReservaPreenchida();
                 Validacao.validarReserva(reservaPreenchida);
-                
+
                 let listaErrosValidacao = Validacao.obterListaErros();
                 let mensagensErroValidacao = Formatter.formataListaErros(listaErrosValidacao);
-                
+
                 this._definirValueStateInputsSemAlteracao(listaErrosValidacao);
 
                 mensagensErroValidacao
@@ -248,7 +248,7 @@ sap.ui.define([
                 const variavelConfirmacaoCancelar = "confirmacaoCancelar";
                 const mensagemConfirmacao = recursosi18n.getText(variavelConfirmacaoCancelar);
 
-                this._messageBoxConfirmacaoCancelamento(mensagemConfirmacao, this._navegarParaTelaAnterior);
+                this._messageBoxConfirmacaoCancelamento(mensagemConfirmacao, this.navegarPara);
             }
             catch (erro) {
                 MessageBox.warning(erro.message);
