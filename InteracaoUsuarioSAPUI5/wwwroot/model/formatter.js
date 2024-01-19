@@ -16,21 +16,16 @@ sap.ui.define([
         },
 
         formataPrecoEstadia(precoEstadia) {
-            var formatador = NumberFormat.getCurrencyInstance({
-                currencyCode: false
-            });
-
-            return formatador.format(parseFloat(precoEstadia));
+            return NumberFormat.getCurrencyInstance({ currencyCode: false }).format(parseFloat(precoEstadia));
         },
 
         desformataPrecoEstadia(precoEstadia) {
             const regexPontos = /\./g;
             const regexVirgulas = /,/;
             const charPonto = ".";
-            const stringVazia = "";
 
             return String(precoEstadia)
-                .replace(regexPontos, stringVazia)
+                .replace(regexPontos, String())
                 .replace(regexVirgulas, charPonto);
         },
 
@@ -44,20 +39,12 @@ sap.ui.define([
 
         formataData(data) {
             const formatoData = "yyyy-MM-dd";
-            let formatador = DateFormat.getDateInstance({
-                pattern: formatoData
-            });
-
-            return formatador.format(new Date(data));
+            return DateFormat.getDateInstance({ pattern: formatoData }).format(new Date(data));
         },
 
         formataListaErros(listaErros) {
-            let separador = "\n";
-            let mensagensErro = listaErros.
-                filter(mensagemErro => mensagemErro != undefined)
-                .join(separador);
-
-            return mensagensErro;
+            const separador = "\n";
+            return listaErros.filter(mensagemErro => mensagemErro != undefined).join(separador);
         }
     }
 });

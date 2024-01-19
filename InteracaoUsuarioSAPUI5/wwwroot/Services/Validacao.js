@@ -1,4 +1,6 @@
-sap.ui.define([], () => {
+sap.ui.define([
+    "../model/Formatter"
+], (Formatter) => {
     "use strict";
 
     const REGEX_NUMEROS = "[0-9]";
@@ -10,6 +12,7 @@ sap.ui.define([], () => {
     const INDICE_MENSAGEM_ERRO_CHECK_IN = 4;
     const INDICE_MENSAGEM_ERRO_CHECK_OUT = 5;
     const INDICE_MENSAGEM_ERRO_PRECO_ESTADIA = 6;
+
     let LISTA_ERROS = [];
     let RECURSOS_I18N;
 
@@ -175,9 +178,9 @@ sap.ui.define([], () => {
             }
 
             const regexNumeros = "^[0-9]*$";
-            if(!String(idade).match(regexNumeros)) {
-                const variavelFormatoInvalidoIdade = "formatoInvalidoidade";
-                LISTA_ERROS[INDICE_MENSAGEM_ERRO_IDADE] = RECURSOS_I18N.getText(variavelFormatoInvalidoIdade);
+            if (!String(idade).match(regexNumeros)) {
+                const variavelIdadeFormatoInvalido = "idadeFormatoInvalido";
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_IDADE] = RECURSOS_I18N.getText(variavelIdadeFormatoInvalido);
 
                 return LISTA_ERROS[INDICE_MENSAGEM_ERRO_IDADE];
             }
@@ -245,7 +248,7 @@ sap.ui.define([], () => {
             let [anoCheckIn, mesCheckIn, diaCheckIn] = checkIn.split(separador);
 
             let primeiroCasoInvalido, segundoCasoInvalido, terceiroCasoInvalido;
-     
+
             //#region 
             let dataAtual = new Date();
             let anoAtual = dataAtual.getFullYear();
@@ -285,7 +288,16 @@ sap.ui.define([], () => {
                 return LISTA_ERROS[INDICE_MENSAGEM_ERRO_PRECO_ESTADIA];
             }
 
-            let numeroPrecoEstadia = Number(precoEstadia);
+            const regexValoresNaoPermitidos = /[^0-9\.,]+/g;
+
+            if (String(precoEstadia).match(regexValoresNaoPermitidos)) {
+                const variavelPrecoEstadiaFormatoInvalido = "precoEstadiaFormatoInvalido"
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_PRECO_ESTADIA] = RECURSOS_I18N.getText(variavelPrecoEstadiaFormatoInvalido);
+
+                return LISTA_ERROS[INDICE_MENSAGEM_ERRO_PRECO_ESTADIA];
+            }
+
+            let numeroPrecoEstadia = Number(Formatter.desformataPrecoEstadia(precoEstadia));
             const valorMaximoPrecoEstadia = 9999999999.99;
             const valorZero = 0;
 

@@ -11,6 +11,7 @@ sap.ui.define([
 
     return BaseController.extend(CAMINHO_ROTA_DETALHES, {
         formatter: Formatter,
+        
         onInit() {
             const rotaDetalhes = "detalhes";
             this.vincularRota(rotaDetalhes, this._aoCoincidirRota);
@@ -18,14 +19,16 @@ sap.ui.define([
 
         _aoCoincidirRota(evento) {
             try {
-                const parametroArguments = "arguments";
-                const idReserva = evento.getParameter(parametroArguments).id;
-
-                this._definirReservaPeloId(idReserva);
+                this._definirReservaPeloId(this._obterIdPeloParametro(evento));
             }
             catch (erro) {
                 MessageBox.warning(erro.message);
             }
+        },
+
+        _obterIdPeloParametro(evento) {
+            const parametroArguments = "arguments";
+            return evento.getParameter(parametroArguments).id;
         },
 
         _definirReservaPeloId(id) {
