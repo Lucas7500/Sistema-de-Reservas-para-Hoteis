@@ -44,7 +44,7 @@ sap.ui.define([
                 const parametroQuery = "query";
                 const stringFiltro = filtro.getParameter(parametroQuery);
 
-                this._obterReservas(stringFiltro);
+                this._modeloListaReservas(stringFiltro);
             } catch (erro) {
                 MessageBox.warning(erro.message);
             }

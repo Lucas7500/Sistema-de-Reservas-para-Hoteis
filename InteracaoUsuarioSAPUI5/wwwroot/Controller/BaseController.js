@@ -6,13 +6,8 @@ sap.ui.define([
     "use strict";
 
     const CAMINHO_ROTA_BASE_CONTROLLER = "reservas.hoteis.controller.BaseController";
-    let roteador;
 
     return Controller.extend(CAMINHO_ROTA_BASE_CONTROLLER, {
-        onInit() {
-            roteador = this.getOwnerComponent().getRouter();
-        },
-
         modelo(nome, modelo) {
             return modelo
                 ? this.getView().setModel(new JSONModel(modelo), nome)
@@ -21,16 +16,28 @@ sap.ui.define([
 
         obterRecursosI18n() {
             const modeloi18n = "i18n";
-            return this.getOwnerComponent().getModel(modeloi18n).getResourceBundle();
+
+            return this
+                .getOwnerComponent()
+                .getModel(modeloi18n)
+                .getResourceBundle();
         },
 
         vincularRota(nomeDaRota, aoCoincidirRota) {
-            roteador.getRoute(nomeDaRota).attachPatternMatched(aoCoincidirRota, this);
+            try {
+                return this
+                    .getOwnerComponent()
+                    .getRouter()
+                    .getRoute(nomeDaRota)
+                    .attachPatternMatched(aoCoincidirRota, this);
+            } catch (erro) {
+                MessageBox.warning(erro.message);
+            }
         },
 
         navegarPara(nomeDaRota, parametroId) {
             try {
-                roteador.navTo(nomeDaRota, {
+                return this.getOwnerComponent().getRouter().navTo(nomeDaRota, {
                     id: parametroId
                 });
             }

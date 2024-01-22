@@ -161,7 +161,7 @@ sap.ui.define([
                 });
         },
 
-        _criarReserva(reservaParaCriar, navegarParaTelaReservaCriada) {
+        _criarReserva(reservaParaCriar) {
             const recursosi18n = this.obterRecursosI18n();
             const variavelSucessoSalvar = "sucessoSalvar";
             const mensagemSucessoSalvar = recursosi18n.getText(variavelSucessoSalvar);
@@ -174,11 +174,13 @@ sap.ui.define([
                         : Promise.reject(response)
                 })
                 .then(reservaCriada => {
-                    MessageBox.success(mensagemSucessoSalvar, {
+                    const onCloseMessageBox = {
                         onClose: () => {
-                            navegarParaTelaReservaCriada(ROTA_DETALHES, reservaCriada.id)
+                            this.navegarPara(ROTA_DETALHES, reservaCriada.id)
                         }
-                    })
+                    };
+
+                    MessageBox.success(mensagemSucessoSalvar, onCloseMessageBox);
                 })
                 .catch(async erro => {
                     let mensagemErro = await erro.text();
@@ -186,7 +188,7 @@ sap.ui.define([
                 });
         },
 
-        _atualizarReserva(reservaParaAtualizar, navegarTelaReservaEditada) {
+        _atualizarReserva(reservaParaAtualizar) {
             const recursosi18n = this.obterRecursosI18n();
             const variavelSucessoEditar = "sucessoEditar";
             const mensagemSucessoEditar = recursosi18n.getText(variavelSucessoEditar);
@@ -194,12 +196,13 @@ sap.ui.define([
             ReservaRepository.atualizarReserva(reservaParaAtualizar)
                 .then(response => {
                     const statusNoContent = 204;
+                    const onCloseMessageBox = {
+                        onClose: () => {
+                            this.navegarPara(ROTA_DETALHES, reservaParaAtualizar.id)
+                        }
+                    }
                     return response.status == statusNoContent
-                        ? MessageBox.success(mensagemSucessoEditar, {
-                            onClose: () => {
-                                navegarTelaReservaEditada(ROTA_DETALHES, reservaParaAtualizar.id)
-                            }
-                        })
+                        ? MessageBox.success(mensagemSucessoEditar, onCloseMessageBox)
                         : Promise.reject(response)
                 })
                 .catch(async erro => {
@@ -233,8 +236,8 @@ sap.ui.define([
                 mensagensErroValidacao
                     ? MessageBox.warning(mensagensErroValidacao)
                     : reservaPreenchida.id
-                        ? this._atualizarReserva(reservaPreenchida, this.navegarPara)
-                        : this._criarReserva(reservaPreenchida, this.navegarPara);
+                        ? this._atualizarReserva(reservaPreenchida)
+                        : this._criarReserva(reservaPreenchida);
             }
             catch (erro) {
                 MessageBox.warning(erro.message);
@@ -313,9 +316,9 @@ sap.ui.define([
                 const inputCheckOut = this.byId(ID_INPUT_CHECK_OUT);
                 const valorCheckIn = inputCheckIn.getValue();
                 const valorCheckOut = inputCheckOut.getValue();
-                
+
                 let mensagemErroValidacaoCheckIn, mensagemErroValidacaoCheckOut;
-                
+
                 if (idReserva) {
                     mensagemErroValidacaoCheckIn = Validacao.validarCheckIn(valorCheckIn);
                     mensagemErroValidacaoCheckOut = Validacao.validarCheckOut(valorCheckOut, valorCheckIn);
