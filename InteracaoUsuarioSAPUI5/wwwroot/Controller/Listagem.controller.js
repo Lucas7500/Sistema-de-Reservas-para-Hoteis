@@ -18,25 +18,26 @@ sap.ui.define([
         },
 
         _aoCoincidirRota() {
-            try {
-                this._modeloListaReservas();
-            } catch (erro) {
-                MessageBox.warning(erro.message);
-            }
+            this._modeloListaReservas();
         },
 
         _modeloListaReservas(filtro) {
-            ReservaRepository.obterTodos(filtro)
-                .then(response => {
-                    return response.ok
-                        ? response.json()
-                        : Promise.reject(response);
-                })
-                .then(reservas => this.modelo(MODELO_LISTA, reservas))
-                .catch(async erro => {
-                    let mensagemErro = await erro.text();
-                    MessageBox.warning(mensagemErro);
-                })
+            try {
+                ReservaRepository.obterTodos(filtro)
+                    .then(response => {
+                        return response.ok
+                            ? response.json()
+                            : Promise.reject(response);
+                    })
+                    .then(reservas => this.modelo(MODELO_LISTA, reservas))
+                    .catch(async erro => {
+                        let mensagemErro = await erro.text();
+                        MessageBox.warning(mensagemErro);
+                    })
+            }
+            catch (erro) {
+                MessageBox.warning(erro.message);
+            }
         },
 
         aoPesquisarFiltrarReservas(filtro) {

@@ -1,8 +1,7 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
-    "sap/ui/model/json/JSONModel",
-    "sap/m/MessageBox"
-], (Controller, JSONModel, MessageBox) => {
+    "sap/ui/model/json/JSONModel"
+], (Controller, JSONModel) => {
     "use strict";
 
     const CAMINHO_ROTA_BASE_CONTROLLER = "reservas.hoteis.controller.BaseController";
@@ -24,26 +23,17 @@ sap.ui.define([
         },
 
         vincularRota(nomeDaRota, aoCoincidirRota) {
-            try {
-                return this
-                    .getOwnerComponent()
-                    .getRouter()
-                    .getRoute(nomeDaRota)
-                    .attachPatternMatched(aoCoincidirRota, this);
-            } catch (erro) {
-                MessageBox.warning(erro.message);
-            }
+            return this
+                .getOwnerComponent()
+                .getRouter()
+                .getRoute(nomeDaRota)
+                .attachPatternMatched(aoCoincidirRota, this);
         },
 
         navegarPara(nomeDaRota, parametroId) {
-            try {
-                return this.getOwnerComponent().getRouter().navTo(nomeDaRota, {
-                    id: parametroId
-                });
-            }
-            catch (erro) {
-                MessageBox.warning(erro.message);
-            }
+            return this.getOwnerComponent().getRouter().navTo(nomeDaRota, {
+                id: parametroId
+            });
         }
     });
 });

@@ -11,19 +11,14 @@ sap.ui.define([
 
     return BaseController.extend(CAMINHO_ROTA_DETALHES, {
         formatter: Formatter,
-        
+
         onInit() {
             const rotaDetalhes = "detalhes";
             this.vincularRota(rotaDetalhes, this._aoCoincidirRota);
         },
 
         _aoCoincidirRota(evento) {
-            try {
-                this._definirReservaPeloId(this._obterIdPeloParametro(evento));
-            }
-            catch (erro) {
-                MessageBox.warning(erro.message);
-            }
+            this._definirReservaPeloId(this._obterIdPeloParametro(evento));
         },
 
         _obterIdPeloParametro(evento) {
@@ -32,17 +27,22 @@ sap.ui.define([
         },
 
         _definirReservaPeloId(id) {
-            ReservaRepository.obterPorId(id)
-                .then(response => {
-                    return response.ok
-                        ? response.json()
-                        : Promise.reject(response);
-                })
-                .then(reserva => this.modelo(MODELO_RESERVA, reserva))
-                .catch(async erro => {
-                    let mensagemErro = await erro.text();
-                    MessageBox.warning(mensagemErro);
-                });
+            try {
+                ReservaRepository.obterPorId(id)
+                    .then(response => {
+                        return response.ok
+                            ? response.json()
+                            : Promise.reject(response);
+                    })
+                    .then(reserva => this.modelo(MODELO_RESERVA, reserva))
+                    .catch(async erro => {
+                        let mensagemErro = await erro.text();
+                        MessageBox.warning(mensagemErro);
+                    });
+            }
+            catch (erro) {
+                MessageBox.warning(erro.message);
+            }
         },
 
         aoClicarNavegarParaTelaListagem() {
@@ -58,7 +58,7 @@ sap.ui.define([
             try {
                 const rotaEdicao = "edicao";
                 const idReserva = this.modelo(MODELO_RESERVA).id;
-
+                
                 this.navegarPara(rotaEdicao, idReserva);
             } catch (erro) {
                 MessageBox.warning(erro.message);

@@ -51,13 +51,9 @@ sap.ui.define([
         },
 
         _aoCoincidirRotaEdicao(evento) {
-            try {
-                this._limparValueStateInputs();
-                this._definirValorPadraoRadioButton();
-                this._definirReservaPeloId(this._obterIdPeloParametro(evento));
-            } catch (erro) {
-                MessageBox.warning(erro.message);
-            }
+            this._limparValueStateInputs();
+            this._definirValorPadraoRadioButton();
+            this._definirReservaPeloId(this._obterIdPeloParametro(evento));
         },
 
         _modeloReserva(reserva) {
@@ -148,67 +144,82 @@ sap.ui.define([
         },
 
         _definirReservaPeloId(id) {
-            ReservaRepository.obterPorId(id)
-                .then(response => {
-                    return response.ok
-                        ? response.json()
-                        : Promise.reject(response);
-                })
-                .then(reserva => this._modeloReserva(reserva))
-                .catch(async erro => {
-                    let mensagemErro = await erro.text();
-                    MessageBox.warning(mensagemErro);
-                });
+            try {
+                ReservaRepository.obterPorId(id)
+                    .then(response => {
+                        return response.ok
+                            ? response.json()
+                            : Promise.reject(response);
+                    })
+                    .then(reserva => this._modeloReserva(reserva))
+                    .catch(async erro => {
+                        let mensagemErro = await erro.text();
+                        MessageBox.warning(mensagemErro);
+                    });
+            }
+            catch (erro) {
+                MessageBox.warning(erro.message);
+            }
         },
 
         _criarReserva(reservaParaCriar) {
-            const recursosi18n = this.obterRecursosI18n();
-            const variavelSucessoSalvar = "sucessoSalvar";
-            const mensagemSucessoSalvar = recursosi18n.getText(variavelSucessoSalvar);
+            try {
+                const recursosi18n = this.obterRecursosI18n();
+                const variavelSucessoSalvar = "sucessoSalvar";
+                const mensagemSucessoSalvar = recursosi18n.getText(variavelSucessoSalvar);
 
-            ReservaRepository.criarReserva(reservaParaCriar)
-                .then(response => {
-                    const statusCreated = 201;
-                    return response.status == statusCreated
-                        ? response.json()
-                        : Promise.reject(response)
-                })
-                .then(reservaCriada => {
-                    const onCloseMessageBox = {
-                        onClose: () => {
-                            this.navegarPara(ROTA_DETALHES, reservaCriada.id)
-                        }
-                    };
+                ReservaRepository.criarReserva(reservaParaCriar)
+                    .then(response => {
+                        const statusCreated = 201;
+                        return response.status == statusCreated
+                            ? response.json()
+                            : Promise.reject(response)
+                    })
+                    .then(reservaCriada => {
+                        const onCloseMessageBox = {
+                            onClose: () => {
+                                this.navegarPara(ROTA_DETALHES, reservaCriada.id)
+                            }
+                        };
 
-                    MessageBox.success(mensagemSucessoSalvar, onCloseMessageBox);
-                })
-                .catch(async erro => {
-                    let mensagemErro = await erro.text();
-                    MessageBox.warning(mensagemErro);
-                });
+                        MessageBox.success(mensagemSucessoSalvar, onCloseMessageBox);
+                    })
+                    .catch(async erro => {
+                        let mensagemErro = await erro.text();
+                        MessageBox.warning(mensagemErro);
+                    });
+            } 
+            catch (erro) {
+                MessageBox.warning(erro.message);
+            }
         },
 
         _atualizarReserva(reservaParaAtualizar) {
-            const recursosi18n = this.obterRecursosI18n();
-            const variavelSucessoEditar = "sucessoEditar";
-            const mensagemSucessoEditar = recursosi18n.getText(variavelSucessoEditar);
+            try {
+                const recursosi18n = this.obterRecursosI18n();
+                const variavelSucessoEditar = "sucessoEditar";
+                const mensagemSucessoEditar = recursosi18n.getText(variavelSucessoEditar);
 
-            ReservaRepository.atualizarReserva(reservaParaAtualizar)
-                .then(response => {
-                    const statusNoContent = 204;
-                    const onCloseMessageBox = {
-                        onClose: () => {
-                            this.navegarPara(ROTA_DETALHES, reservaParaAtualizar.id)
+                ReservaRepository.atualizarReserva(reservaParaAtualizar)
+                    .then(response => {
+                        const statusNoContent = 204;
+                        const onCloseMessageBox = {
+                            onClose: () => {
+                                this.navegarPara(ROTA_DETALHES, reservaParaAtualizar.id)
+                            }
                         }
-                    }
-                    return response.status == statusNoContent
-                        ? MessageBox.success(mensagemSucessoEditar, onCloseMessageBox)
-                        : Promise.reject(response)
-                })
-                .catch(async erro => {
-                    let mensagemErro = await erro.text();
-                    MessageBox.warning(mensagemErro);
-                });
+                        return response.status == statusNoContent
+                            ? MessageBox.success(mensagemSucessoEditar, onCloseMessageBox)
+                            : Promise.reject(response)
+                    })
+                    .catch(async erro => {
+                        let mensagemErro = await erro.text();
+                        MessageBox.warning(mensagemErro);
+                    });
+            } 
+            catch (erro) {
+                MessageBox.warning(erro.message);
+            }
         },
 
         aoClicarNavegarParaTelaAnterior() {
