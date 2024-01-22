@@ -46,53 +46,53 @@ sap.ui.define([
         _removerReserva() {
             try {
                 const idReserva = this.modelo(MODELO_RESERVA).id;
-
+                const variavelSucessoRemover = "sucessoRemover";
+                const mensagemSucesso = this.obterRecursosI18n().getText(variavelSucessoRemover);
+                
                 return ReservaRepository.removerReserva(idReserva)
+                    .then(() => MessageBox.success(mensagemSucesso, {
+                        onClose: () => {
+                            this.navegarPara(ROTA_LISTAGEM);
+                        }
+                    }))
                     .catch(async erro => MessageBox.warning(await erro.text()));
-            } catch (erro) {
-                MessageBox.warning(erro.message);
+    } catch (erro) {
+        MessageBox.warning(erro.message);
+    }
+},
+
+    aoClicarNavegarParaTelaListagem() {
+    try {
+        this.navegarPara(ROTA_LISTAGEM);
+    } catch(erro) {
+        MessageBox.warning(erro.message);
+    }
+},
+
+    aoClicarNavegarParaTelaEdicao() {
+    try {
+        const rotaEdicao = "edicao";
+        const idReserva = this.modelo(MODELO_RESERVA).id;
+
+        this.navegarPara(rotaEdicao, idReserva);
+    } catch(erro) {
+        MessageBox.warning(erro.message);
+    }
+},
+
+    aoClicarRemoverReserva() {
+    const variavelConfirmacaoRemocao = "confirmacaoRemocao";
+    const mensagemConfirmacao = this.obterRecursosI18n().getText(variavelConfirmacaoRemocao);
+
+    MessageBox.confirm(mensagemConfirmacao, {
+        actions: [MessageBox.Action.YES, MessageBox.Action.NO],
+        emphasizedAction: MessageBox.Action.YES,
+        onClose: (acao) => {
+            if (acao == MessageBox.Action.YES) {
+                this._removerReserva();
             }
-        },
-
-        aoClicarNavegarParaTelaListagem() {
-            try {
-                this.navegarPara(ROTA_LISTAGEM);
-            } catch (erro) {
-                MessageBox.warning(erro.message);
-            }
-        },
-
-        aoClicarNavegarParaTelaEdicao() {
-            try {
-                const rotaEdicao = "edicao";
-                const idReserva = this.modelo(MODELO_RESERVA).id;
-
-                this.navegarPara(rotaEdicao, idReserva);
-            } catch (erro) {
-                MessageBox.warning(erro.message);
-            }
-        },
-
-        aoClicarRemoverReserva() {
-            const variavelConfirmacaoRemocao = "confirmacaoRemocao";
-            const variavelSucessoRemover = "sucessoRemover";
-            const mensagemConfirmacao = this.obterRecursosI18n().getText(variavelConfirmacaoRemocao);
-            const mensagemSucesso = this.obterRecursosI18n().getText(variavelSucessoRemover);
-
-            MessageBox.confirm(mensagemConfirmacao, {
-                actions: [MessageBox.Action.YES, MessageBox.Action.NO],
-                emphasizedAction: MessageBox.Action.YES,
-                onClose: (acao) => {
-                    if (acao == MessageBox.Action.YES) {
-                        this._removerReserva()
-                            .then(() => MessageBox.success(mensagemSucesso, {
-                                onClose: () => {
-                                    this.navegarPara(ROTA_LISTAGEM)
-                                }
-                            }));
-                    }
-                }
-            })
         }
+    })
+}
     })
 })
