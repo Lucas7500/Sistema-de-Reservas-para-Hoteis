@@ -323,8 +323,10 @@ sap.ui.define([
         aoMudarValidarCheckInECheckOut() {
             try {
                 const idReserva = this.modelo(MODELO_RESERVA).id;
+
                 const inputCheckIn = this.byId(ID_INPUT_CHECK_IN);
                 const inputCheckOut = this.byId(ID_INPUT_CHECK_OUT);
+                
                 const valorCheckIn = inputCheckIn.getValue();
                 const valorCheckOut = inputCheckOut.getValue();
 
