@@ -127,7 +127,7 @@ sap.ui.define([
             return reserva;
         },
 
-        _messageBoxConfirmacaoCancelamento(mensagemConfirmacao, navegarPara) {
+        _messageBoxConfirmacaoCancelamento(mensagemConfirmacao) {
             const idReserva = this.modelo(MODELO_RESERVA).id;
 
             MessageBox.confirm(mensagemConfirmacao, {
@@ -136,8 +136,8 @@ sap.ui.define([
                 onClose: (acao) => {
                     if (acao == MessageBox.Action.YES) {
                         idReserva
-                            ? navegarPara(ROTA_DETALHES, idReserva)
-                            : navegarPara(ROTA_LISTAGEM);
+                            ? this.navegarPara(ROTA_DETALHES, idReserva)
+                            : this.navegarPara(ROTA_LISTAGEM);
                     }
                 }
             });
@@ -176,19 +176,17 @@ sap.ui.define([
                             : Promise.reject(response)
                     })
                     .then(reservaCriada => {
-                        const onCloseMessageBox = {
+                        MessageBox.success(mensagemSucessoSalvar, {
                             onClose: () => {
                                 this.navegarPara(ROTA_DETALHES, reservaCriada.id)
                             }
-                        };
-
-                        MessageBox.success(mensagemSucessoSalvar, onCloseMessageBox);
+                        });
                     })
                     .catch(async erro => {
                         let mensagemErro = await erro.text();
                         MessageBox.warning(mensagemErro);
                     });
-            } 
+            }
             catch (erro) {
                 MessageBox.warning(erro.message);
             }
@@ -203,20 +201,19 @@ sap.ui.define([
                 ReservaRepository.atualizarReserva(reservaParaAtualizar)
                     .then(response => {
                         const statusNoContent = 204;
-                        const onCloseMessageBox = {
-                            onClose: () => {
-                                this.navegarPara(ROTA_DETALHES, reservaParaAtualizar.id)
-                            }
-                        }
                         return response.status == statusNoContent
-                            ? MessageBox.success(mensagemSucessoEditar, onCloseMessageBox)
+                            ? MessageBox.success(mensagemSucessoEditar, {
+                                onClose: () => {
+                                    this.navegarPara(ROTA_DETALHES, reservaParaAtualizar.id)
+                                }
+                            })
                             : Promise.reject(response)
                     })
                     .catch(async erro => {
                         let mensagemErro = await erro.text();
                         MessageBox.warning(mensagemErro);
                     });
-            } 
+            }
             catch (erro) {
                 MessageBox.warning(erro.message);
             }
@@ -261,7 +258,7 @@ sap.ui.define([
                 const variavelConfirmacaoCancelar = "confirmacaoCancelar";
                 const mensagemConfirmacao = recursosi18n.getText(variavelConfirmacaoCancelar);
 
-                this._messageBoxConfirmacaoCancelamento(mensagemConfirmacao, this.navegarPara);
+                this._messageBoxConfirmacaoCancelamento(mensagemConfirmacao);
             }
             catch (erro) {
                 MessageBox.warning(erro.message);
@@ -326,7 +323,7 @@ sap.ui.define([
 
                 const inputCheckIn = this.byId(ID_INPUT_CHECK_IN);
                 const inputCheckOut = this.byId(ID_INPUT_CHECK_OUT);
-                
+
                 const valorCheckIn = inputCheckIn.getValue();
                 const valorCheckOut = inputCheckOut.getValue();
 
