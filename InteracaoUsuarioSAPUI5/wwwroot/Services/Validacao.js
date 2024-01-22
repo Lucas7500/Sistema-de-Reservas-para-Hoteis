@@ -45,8 +45,6 @@ sap.ui.define([
             if (!this.contemValor(nomeFormatado)) {
                 const variavelNomeNaoPreenchido = "nomeNaoPreenchido";
                 LISTA_ERROS[INDICE_MENSAGEM_ERRO_NOME] = RECURSOS_I18N.getText(variavelNomeNaoPreenchido);
-
-                return LISTA_ERROS[INDICE_MENSAGEM_ERRO_NOME];
             }
             else if (tamanhoNome < tamanhoMinimoNome) {
                 const variavelNomeCurto = "nomeCurto";
