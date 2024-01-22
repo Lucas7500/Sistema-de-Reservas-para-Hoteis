@@ -11,43 +11,41 @@ sap.ui.define([
 
     return BaseController.extend(CAMINHO_ROTA_LISTAGEM, {
         formatter: Formatter,
+
         onInit() {
             const rotaListagem = "listagem";
             this.vincularRota(rotaListagem, this._aoCoincidirRota);
         },
 
         _aoCoincidirRota() {
-            this._carregarLista();
+            this._modeloListaReservas();
         },
 
-        _carregarLista() {
+        _modeloListaReservas(filtro) {
             try {
-                this._obterReservas();
+                ReservaRepository.obterTodos(filtro)
+                    .then(response => {
+                        return response.ok
+                            ? response.json()
+                            : Promise.reject(response);
+                    })
+                    .then(reservas => this.modelo(MODELO_LISTA, reservas))
+                    .catch(async erro => {
+                        let mensagemErro = await erro.text();
+                        MessageBox.warning(mensagemErro);
+                    })
             }
             catch (erro) {
                 MessageBox.warning(erro.message);
             }
         },
 
-        _obterReservas(filtro) {
-            ReservaRepository.obterTodos(filtro)
-                .then(response => {
-                    return response.ok
-                        ? response.json()
-                        : Promise.reject(response);
-                })
-                .then(reservas => this.modelo(MODELO_LISTA, reservas))
-                .catch(async erro => {
-                    let mensagemErro = await erro.text();
-                    MessageBox.warning(mensagemErro);
-                })
-        },
-
         aoPesquisarFiltrarReservas(filtro) {
             try {
                 const parametroQuery = "query";
-                let stringFiltro = filtro.getParameter(parametroQuery);
-                this._obterReservas(stringFiltro);
+                const stringFiltro = filtro.getParameter(parametroQuery);
+
+                this._modeloListaReservas(stringFiltro);
             } catch (erro) {
                 MessageBox.warning(erro.message);
             }
@@ -65,7 +63,10 @@ sap.ui.define([
         aoClicarAbrirDetalhes(evento) {
             try {
                 const propriedadeId = "id";
-                let idReserva = evento.getSource().getBindingContext(MODELO_LISTA).getProperty(propriedadeId);
+                const idReserva = evento
+                    .getSource()
+                    .getBindingContext(MODELO_LISTA)
+                    .getProperty(propriedadeId);
 
                 const rotaDetalhes = "detalhes";
                 this.navegarPara(rotaDetalhes, idReserva);

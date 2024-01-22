@@ -9,7 +9,7 @@
             <Toolbar>
                 <Button
                     icon="sap-icon://nav-back"
-                    press=".aoClicarNavegarParaTelaListagem"
+                    press=".aoClicarNavegarParaTelaAnterior"
                     type="Transparent" />
                 <ToolbarSpacer />
                 <ObjectIdentifier title="{i18n>tituloCadastro}" />
@@ -118,7 +118,10 @@
                         id="inputCheckIn"
                         required="true"
                         type="Date"
-                        value="{reserva>/checkIn}"
+                        value="{
+                            path: 'reserva>/checkIn',
+                            formatter: '.formatter.formataData'
+                        }"
                         change=".aoMudarValidarCheckInECheckOut" />
                     <Label
                         text="{i18n>labelCheckOut}"
@@ -127,11 +130,14 @@
                         id="inputCheckOut"
                         required="true"
                         type="Date"
-                        value="{reserva>/checkOut}"
+                        value="{
+                            path: 'reserva>/checkOut',
+                            formatter: '.formatter.formataData'
+                        }"
                         change=".aoMudarValidarCheckInECheckOut" />
                     <Label
                         text="{i18n>labelPrecoEstadia}"
-                        labelFor="inputPrecoEstadia" />
+                        labelFor="inputPrecoEstadia" /> 
                     <Input
                         id="inputPrecoEstadia"
                         placeholder="{i18n>placeholderPrecoEstadia}"

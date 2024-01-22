@@ -15,25 +15,25 @@ sap.ui.define([
 
         obterRecursosI18n() {
             const modeloi18n = "i18n";
-            return this.getOwnerComponent().getModel(modeloi18n).getResourceBundle();
+
+            return this
+                .getOwnerComponent()
+                .getModel(modeloi18n)
+                .getResourceBundle();
         },
 
         vincularRota(nomeDaRota, aoCoincidirRota) {
-            let roteador = this.getOwnerComponent().getRouter();
-            roteador.getRoute(nomeDaRota).attachPatternMatched(aoCoincidirRota, this);
+            return this
+                .getOwnerComponent()
+                .getRouter()
+                .getRoute(nomeDaRota)
+                .attachPatternMatched(aoCoincidirRota, this);
         },
 
         navegarPara(nomeDaRota, parametroId) {
-            try {
-                let roteador = this.getOwnerComponent().getRouter();
-
-                roteador.navTo(nomeDaRota, {
-                    id: parametroId
-                });
-            }
-            catch (erro) {
-                MessageBox.warning(erro.message);
-            }
+            return this.getOwnerComponent().getRouter().navTo(nomeDaRota, {
+                id: parametroId
+            });
         }
     });
 });

@@ -31,7 +31,7 @@
                 items="{TabelaReservas>/}"
                 growing="true"
                 growingThreshold="10"
-                growingScrollToLoad="false">
+                growingScrollToLoad="true">
                 <columns>
                     <Column
                         hAlign="Center"

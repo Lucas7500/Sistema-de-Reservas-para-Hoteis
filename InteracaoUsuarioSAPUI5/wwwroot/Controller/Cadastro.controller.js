@@ -3,17 +3,16 @@ sap.ui.define([
     "../model/Formatter",
     "../Repositorios/ReservaRepository",
     "sap/m/MessageBox",
-    "../Services/Validacao"
-], (BaseController, Formatter, ReservaRepository, MessageBox, Validacao) => {
+    "../Services/Validacao",
+    "sap/ui/core/ValueState"
+], (BaseController, Formatter, ReservaRepository, MessageBox, Validacao, ValueState) => {
     "use strict";
 
     const CAMINHO_ROTA_CADASTRO = "reservas.hoteis.controller.Cadastro";
     const ROTA_LISTAGEM = "listagem";
-    const STATUS_CREATED = 201;
-    const VALUE_STATE_SUCESSO = "Success";
-    const VALUE_STATE_ERRO = "Error";
+    const ROTA_DETALHES = "detalhes";
+    const MODELO_RESERVA = "reserva";
     const PARAMETRO_VALUE = "value";
-    const VALOR_INICIAL_VALUE_STATE_INPUT = "None";
     const ID_INPUT_NOME = "inputNome";
     const ID_INPUT_CPF = "inputCpf";
     const ID_INPUT_TELEFONE = "inputTelefone";
@@ -21,12 +20,6 @@ sap.ui.define([
     const ID_INPUT_CHECK_IN = "inputCheckIn";
     const ID_INPUT_CHECK_OUT = "inputCheckOut";
     const ID_INPUT_PRECO_ESTADIA = "inputPrecoEstadia";
-    const MODELO_RESERVA = "reserva";
-    const STRING_VAZIA = "";
-    const CHAR_VIRGULA = ",";
-    const CHAR_PONTO = ".";
-    const REGEX_PONTOS = /\./g;
-    const REGEX_VIRGULAS = /,/g;
 
     const ARRAY_ID_INPUTS = [
         ID_INPUT_NOME,
@@ -39,45 +32,66 @@ sap.ui.define([
     ]
 
     return BaseController.extend(CAMINHO_ROTA_CADASTRO, {
+        formatter: Formatter,
+
         onInit() {
             const rotaCadastro = "cadastro";
-            this.vincularRota(rotaCadastro, this._aoCoincidirRota);
-        },
-
-        _aoCoincidirRota() {
+            const rotaEdicao = "edicao";
             const recursosi18n = this.obterRecursosI18n();
 
-            this._modeloReserva();
             Validacao.definirRecursosi18n(recursosi18n);
+            this.vincularRota(rotaCadastro, this._aoCoincidirRotaCadastro);
+            this.vincularRota(rotaEdicao, this._aoCoincidirRotaEdicao);
         },
 
-        _modeloReserva() {
-            let dataHoje = new Date();
-            let valorPadraoData = Formatter.formataData(dataHoje);
+        _aoCoincidirRotaCadastro() {
+            this._limparValueStateInputs();
+            this._definirValorPadraoRadioButton();
+            this._modeloReserva();
+        },
 
+        _aoCoincidirRotaEdicao(evento) {
+            this._limparValueStateInputs();
+            this._definirValorPadraoRadioButton();
+            this._definirReservaPeloId(this._obterIdPeloParametro(evento));
+        },
+
+        _modeloReserva(reserva) {
+            return reserva
+                ? this._definirModeloPadraoEdicao(reserva)
+                : this._definirModeloPadraoCadastro();
+        },
+
+        _definirModeloPadraoCadastro() {
             let reserva = {
-                nome: STRING_VAZIA,
-                cpf: STRING_VAZIA,
-                telefone: STRING_VAZIA,
-                idade: STRING_VAZIA,
-                sexo: STRING_VAZIA,
-                checkIn: valorPadraoData,
-                checkOut: valorPadraoData,
-                precoEstadia: STRING_VAZIA,
+                nome: String(),
+                cpf: String(),
+                telefone: String(),
+                idade: String(),
+                sexo: String(),
+                checkIn: new Date().toISOString(),
+                checkOut: new Date().toISOString(),
+                precoEstadia: String(),
                 pagamentoEfetuado: false
             };
-
-            const idRadioButtonPagamentoNaoEfetuado = "radioButtonPagamentoNaoEfetuado";
-            this.byId(idRadioButtonPagamentoNaoEfetuado).setSelected(true);
-            this._limparValueStateInputs();
 
             this.modelo(MODELO_RESERVA, reserva);
         },
 
+        _definirModeloPadraoEdicao(reserva) {
+            reserva.precoEstadia = Formatter.formataPrecoEstadia(reserva.precoEstadia);
+            this.modelo(MODELO_RESERVA, reserva);
+        },
+
+        _definirValorPadraoRadioButton() {
+            const idRadioButtonPagamentoNaoEfetuado = "radioButtonPagamentoNaoEfetuado";
+            this.byId(idRadioButtonPagamentoNaoEfetuado).setSelected(true);
+        },
+
         _definirValueStateInputValidado(input, valueStateText) {
             valueStateText
-                ? input.setValueState(VALUE_STATE_ERRO).setValueStateText(valueStateText)
-                : input.setValueState(VALUE_STATE_SUCESSO);
+                ? input.setValueState(ValueState.Error).setValueStateText(valueStateText)
+                : input.setValueState(ValueState.Success);
         },
 
         _definirValueStateInputsSemAlteracao(listaErrosValidacao) {
@@ -85,7 +99,7 @@ sap.ui.define([
                 let input = this.byId(ARRAY_ID_INPUTS[i]);
                 let valueStateInput = input.getValueState();
 
-                if (valueStateInput == VALOR_INICIAL_VALUE_STATE_INPUT) {
+                if (valueStateInput == ValueState.None) {
                     this._definirValueStateInputValidado(input, listaErrosValidacao[i]);
                 }
             }
@@ -94,83 +108,124 @@ sap.ui.define([
         _limparValueStateInputs() {
             for (let idInput of ARRAY_ID_INPUTS) {
                 let input = this.byId(idInput);
-                input.setValueState(VALOR_INICIAL_VALUE_STATE_INPUT);
+                input.setValueState(ValueState.None);
             }
         },
 
-        _obterInputsSemAlteracao() {
-            let inputsSemAlteracao = []
-
-            for (let idInput of ARRAY_ID_INPUTS) {
-                let valueStateInput = this.byId(idInput).getValueState();
-
-                if (valueStateInput == VALOR_INICIAL_VALUE_STATE_INPUT) {
-                    inputsSemAlteracao.push(idInput);
-                }
-            }
-
-            return inputsSemAlteracao;
+        _obterIdPeloParametro(evento) {
+            const parametroArguments = "arguments";
+            return evento.getParameter(parametroArguments).id;
         },
 
         _obterReservaPreenchida() {
-            let reserva = this.modelo(MODELO_RESERVA);
+            let reserva = structuredClone(this.modelo(MODELO_RESERVA));
 
-            return {
-                nome: reserva.nome,
-                cpf: reserva.cpf,
-                telefone: reserva.telefone,
-                idade: Number(reserva.idade),
-                sexo: Number(reserva.sexo),
-                checkIn: reserva.checkIn,
-                checkOut: reserva.checkOut,
-                precoEstadia: Number(reserva.precoEstadia
-                    .replace(REGEX_PONTOS, STRING_VAZIA)
-                    .replace(CHAR_VIRGULA, CHAR_PONTO)),
-                pagamentoEfetuado: reserva.pagamentoEfetuado
-            };
+            reserva.idade = Number(reserva.idade);
+            reserva.sexo = Number(reserva.sexo);
+            reserva.precoEstadia = Number(Formatter.desformataPrecoEstadia(reserva.precoEstadia));
+
+            return reserva;
         },
 
-        _criarReserva(reserva) {
-            const recursosi18n = this.obterRecursosI18n();
-            const variavelSucessoSalvar = "sucessoSalvar";
-            const mensagemSucessoSalvar = recursosi18n.getText(variavelSucessoSalvar);
-            let controllerCadastro = this;
+        _messageBoxConfirmacaoCancelamento(mensagemConfirmacao) {
+            const idReserva = this.modelo(MODELO_RESERVA).id;
 
-            ReservaRepository.criarReserva(reserva)
-                .then(async response => {
-                    if (response.status == STATUS_CREATED) {
-                        let reserva = await response.json();
-                        MessageBox.success(mensagemSucessoSalvar, {
-                            onClose: () => {
-                                controllerCadastro._abrirDetalhesReservaCriada(reserva.id);
-                            }
-                        });
-
-                        return response.json();
+            MessageBox.confirm(mensagemConfirmacao, {
+                actions: [MessageBox.Action.YES, MessageBox.Action.NO],
+                emphasizedAction: MessageBox.Action.YES,
+                onClose: (acao) => {
+                    if (acao == MessageBox.Action.YES) {
+                        idReserva
+                            ? this.navegarPara(ROTA_DETALHES, idReserva)
+                            : this.navegarPara(ROTA_LISTAGEM);
                     }
-                    else {
-                        return Promise.reject(response);
-                    }
-                })
-                .catch(async erro => {
-                    let mensagemErro = await erro.text();
-
-                    MessageBox.warning(mensagemErro);
-                });
+                }
+            });
         },
 
-        _abrirDetalhesReservaCriada(idReservaCriada) {
+        _definirReservaPeloId(id) {
             try {
-                const rotaDetalhes = "detalhes";
-                this.navegarPara(rotaDetalhes, idReservaCriada);
-            } catch (erro) {
+                ReservaRepository.obterPorId(id)
+                    .then(response => {
+                        return response.ok
+                            ? response.json()
+                            : Promise.reject(response);
+                    })
+                    .then(reserva => this._modeloReserva(reserva))
+                    .catch(async erro => {
+                        let mensagemErro = await erro.text();
+                        MessageBox.warning(mensagemErro);
+                    });
+            }
+            catch (erro) {
                 MessageBox.warning(erro.message);
             }
         },
 
-        aoClicarNavegarParaTelaListagem() {
+        _criarReserva(reservaParaCriar) {
             try {
-                this.navegarPara(ROTA_LISTAGEM);
+                const recursosi18n = this.obterRecursosI18n();
+                const variavelSucessoSalvar = "sucessoSalvar";
+                const mensagemSucessoSalvar = recursosi18n.getText(variavelSucessoSalvar);
+
+                ReservaRepository.criarReserva(reservaParaCriar)
+                    .then(response => {
+                        const statusCreated = 201;
+                        return response.status == statusCreated
+                            ? response.json()
+                            : Promise.reject(response)
+                    })
+                    .then(reservaCriada => {
+                        MessageBox.success(mensagemSucessoSalvar, {
+                            onClose: () => {
+                                this.navegarPara(ROTA_DETALHES, reservaCriada.id)
+                            }
+                        });
+                    })
+                    .catch(async erro => {
+                        let mensagemErro = await erro.text();
+                        MessageBox.warning(mensagemErro);
+                    });
+            }
+            catch (erro) {
+                MessageBox.warning(erro.message);
+            }
+        },
+
+        _atualizarReserva(reservaParaAtualizar) {
+            try {
+                const recursosi18n = this.obterRecursosI18n();
+                const variavelSucessoEditar = "sucessoEditar";
+                const mensagemSucessoEditar = recursosi18n.getText(variavelSucessoEditar);
+
+                ReservaRepository.atualizarReserva(reservaParaAtualizar)
+                    .then(response => {
+                        const statusNoContent = 204;
+                        return response.status == statusNoContent
+                            ? MessageBox.success(mensagemSucessoEditar, {
+                                onClose: () => {
+                                    this.navegarPara(ROTA_DETALHES, reservaParaAtualizar.id)
+                                }
+                            })
+                            : Promise.reject(response)
+                    })
+                    .catch(async erro => {
+                        let mensagemErro = await erro.text();
+                        MessageBox.warning(mensagemErro);
+                    });
+            }
+            catch (erro) {
+                MessageBox.warning(erro.message);
+            }
+        },
+
+        aoClicarNavegarParaTelaAnterior() {
+            try {
+                const idReserva = this.modelo(MODELO_RESERVA).id;
+
+                idReserva
+                    ? this.navegarPara(ROTA_DETALHES, idReserva)
+                    : this.navegarPara(ROTA_LISTAGEM);
             }
             catch (erro) {
                 MessageBox.warning(erro.message);
@@ -179,21 +234,18 @@ sap.ui.define([
 
         aoClicarSalvarReserva() {
             try {
-                let reservaPreenchida = this._obterReservaPreenchida();
-                let inputsSemAlteracao = this._obterInputsSemAlteracao();
-                let listaErrosValidacao = Validacao.obterListaErros();
+                const reservaPreenchida = this._obterReservaPreenchida();
+                Validacao.validarReserva(reservaPreenchida);
 
-                if (inputsSemAlteracao.length) {
-                    Validacao.validarPropriedadesVazias(reservaPreenchida);
-                    listaErrosValidacao = Validacao.obterListaErros();
-                    this._definirValueStateInputsSemAlteracao(listaErrosValidacao);
-                }
-
-                let mensagensErroValidacao = Formatter.formataListaErros(listaErrosValidacao);
+                const listaErrosValidacao = Validacao.obterListaErros();
+                const mensagensErroValidacao = Formatter.formataListaErros(listaErrosValidacao);
+                this._definirValueStateInputsSemAlteracao(listaErrosValidacao);
 
                 mensagensErroValidacao
                     ? MessageBox.warning(mensagensErroValidacao)
-                    : this._criarReserva(reservaPreenchida);
+                    : reservaPreenchida.id
+                        ? this._atualizarReserva(reservaPreenchida)
+                        : this._criarReserva(reservaPreenchida);
             }
             catch (erro) {
                 MessageBox.warning(erro.message);
@@ -203,49 +255,21 @@ sap.ui.define([
         aoClicarCancelarCadastro() {
             try {
                 const recursosi18n = this.obterRecursosI18n();
-
-                const variavelBotaoSim = "botaoSim";
-                const variavelBotaoNao = "botaoNao";
                 const variavelConfirmacaoCancelar = "confirmacaoCancelar";
-
-                const botaoSim = recursosi18n.getText(variavelBotaoSim);
-                const botaoNao = recursosi18n.getText(variavelBotaoNao);
                 const mensagemConfirmacao = recursosi18n.getText(variavelConfirmacaoCancelar);
 
-                let controllerCadastro = this;
-
-                MessageBox.confirm(mensagemConfirmacao, {
-                    actions: [botaoSim, botaoNao],
-                    emphasizedAction: botaoSim,
-                    onClose: function (acao) {
-                        if (acao == botaoSim) {
-                            controllerCadastro.navegarPara(ROTA_LISTAGEM);
-                        }
-                    }
-                });
+                this._messageBoxConfirmacaoCancelamento(mensagemConfirmacao);
             }
             catch (erro) {
                 MessageBox.warning(erro.message);
             }
         },
 
-        aoDigitarValidarIdade(evento) {
-            const regexNumeros = "[0-9]";
-            let valorInput = evento.getSource().getValue();
-
-            for (let char of valorInput) {
-                if (!char.match(regexNumeros)) {
-                    let inputValido = valorInput.replace(char, STRING_VAZIA);
-                    evento.getSource().setValue(inputValido);
-                }
-            }
-        },
-
         aoMudarValidarNome(evento) {
             try {
-                let inputNome = evento.getSource();
-                let valorNome = evento.getParameter(PARAMETRO_VALUE);
-                let mensagemErroValidacao = Validacao.validarNome(valorNome);
+                const inputNome = evento.getSource();
+                const valorNome = evento.getParameter(PARAMETRO_VALUE);
+                const mensagemErroValidacao = Validacao.validarNome(valorNome);
 
                 this._definirValueStateInputValidado(inputNome, mensagemErroValidacao);
             }
@@ -256,9 +280,9 @@ sap.ui.define([
 
         aoMudarValidarCpf(evento) {
             try {
-                let inputCpf = evento.getSource();
-                let valorCpf = evento.getParameter(PARAMETRO_VALUE);
-                let mensagemErroValidacao = Validacao.validarCpf(valorCpf);
+                const inputCpf = evento.getSource();
+                const valorCpf = evento.getParameter(PARAMETRO_VALUE);
+                const mensagemErroValidacao = Validacao.validarCpf(valorCpf);
 
                 this._definirValueStateInputValidado(inputCpf, mensagemErroValidacao);
             }
@@ -269,9 +293,9 @@ sap.ui.define([
 
         aoMudarValidarTelefone(evento) {
             try {
-                let inputTelefone = evento.getSource();
-                let valorTelefone = evento.getParameter(PARAMETRO_VALUE);
-                let mensagemErroValidacao = Validacao.validarTelefone(valorTelefone);
+                const inputTelefone = evento.getSource();
+                const valorTelefone = evento.getParameter(PARAMETRO_VALUE);
+                const mensagemErroValidacao = Validacao.validarTelefone(valorTelefone);
 
                 this._definirValueStateInputValidado(inputTelefone, mensagemErroValidacao);
             }
@@ -282,9 +306,9 @@ sap.ui.define([
 
         aoMudarValidarIdade(evento) {
             try {
-                let inputIdade = evento.getSource();
-                let valorIdade = evento.getParameter(PARAMETRO_VALUE);
-                let mensagemErroValidacao = Validacao.validarIdade(valorIdade);
+                const inputIdade = evento.getSource();
+                const valorIdade = evento.getParameter(PARAMETRO_VALUE);
+                const mensagemErroValidacao = Validacao.validarIdade(valorIdade);
 
                 this._definirValueStateInputValidado(inputIdade, mensagemErroValidacao);
             }
@@ -295,14 +319,24 @@ sap.ui.define([
 
         aoMudarValidarCheckInECheckOut() {
             try {
-                let inputCheckIn = this.byId(ID_INPUT_CHECK_IN);
-                let inputCheckOut = this.byId(ID_INPUT_CHECK_OUT);
+                const idReserva = this.modelo(MODELO_RESERVA).id;
 
-                let valorCheckIn = inputCheckIn.getValue();
-                let valorCheckOut = inputCheckOut.getValue();
+                const inputCheckIn = this.byId(ID_INPUT_CHECK_IN);
+                const inputCheckOut = this.byId(ID_INPUT_CHECK_OUT);
 
-                let mensagemErroValidacaoCheckIn = Validacao.validarCheckIn(valorCheckIn);
-                let mensagemErroValidacaoCheckOut = Validacao.validarCheckOut(valorCheckOut, valorCheckIn);
+                const valorCheckIn = inputCheckIn.getValue();
+                const valorCheckOut = inputCheckOut.getValue();
+
+                let mensagemErroValidacaoCheckIn, mensagemErroValidacaoCheckOut;
+
+                if (idReserva) {
+                    mensagemErroValidacaoCheckIn = Validacao.validarCheckIn(valorCheckIn);
+                    mensagemErroValidacaoCheckOut = Validacao.validarCheckOut(valorCheckOut, valorCheckIn);
+                }
+                else {
+                    mensagemErroValidacaoCheckIn = Validacao.validarCheckInCadastro(valorCheckIn);
+                    mensagemErroValidacaoCheckOut = Validacao.validarCheckOutCadastro(valorCheckOut, valorCheckIn);
+                }
 
                 this._definirValueStateInputValidado(inputCheckIn, mensagemErroValidacaoCheckIn);
                 this._definirValueStateInputValidado(inputCheckOut, mensagemErroValidacaoCheckOut);
@@ -314,23 +348,13 @@ sap.ui.define([
 
         aoMudarValidarPrecoEstadia(evento) {
             try {
-                let inputPrecoEstadia = evento.getSource();
-                let valorPrecoEstadia = inputPrecoEstadia.getValue();
-                let mensagemErroValidacao = Validacao.validarPrecoEstadia(valorPrecoEstadia);
+                const inputPrecoEstadia = evento.getSource();
+                const valorPrecoEstadia = evento.getParameter(PARAMETRO_VALUE);
+                const mensagemErroValidacao = Validacao.validarPrecoEstadia(valorPrecoEstadia);
 
                 this._definirValueStateInputValidado(inputPrecoEstadia, mensagemErroValidacao);
 
-                const regexNumerosPontoVirgula = "[0-9\.,]";
-                for (let char of valorPrecoEstadia) {
-                    if (!char.match(regexNumerosPontoVirgula)) {
-                        valorPrecoEstadia = valorPrecoEstadia.replace(char, STRING_VAZIA);
-                    }
-                }
-
-                valorPrecoEstadia = valorPrecoEstadia
-                    .replace(REGEX_PONTOS, STRING_VAZIA)
-                    .replace(REGEX_VIRGULAS, CHAR_PONTO);
-                inputPrecoEstadia.setValue(Formatter.formataPrecoEstadia(valorPrecoEstadia));
+                if (!mensagemErroValidacao) inputPrecoEstadia.setValue(Formatter.formataPrecoEstadia(valorPrecoEstadia));
             } catch (erro) {
                 MessageBox.warning(erro.message);
             }

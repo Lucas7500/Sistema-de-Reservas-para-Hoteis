@@ -11,39 +11,55 @@ sap.ui.define([
 
     return BaseController.extend(CAMINHO_ROTA_DETALHES, {
         formatter: Formatter,
+
         onInit() {
             const rotaDetalhes = "detalhes";
             this.vincularRota(rotaDetalhes, this._aoCoincidirRota);
         },
 
         _aoCoincidirRota(evento) {
+            this._definirReservaPeloId(this._obterIdPeloParametro(evento));
+        },
+
+        _obterIdPeloParametro(evento) {
+            const parametroArguments = "arguments";
+            return evento.getParameter(parametroArguments).id;
+        },
+
+        _definirReservaPeloId(id) {
             try {
-                const parametroArgumentos = "arguments";
-                let idReserva = evento.getParameter(parametroArgumentos).id;
-                this._obterReserva(idReserva);
+                ReservaRepository.obterPorId(id)
+                    .then(response => {
+                        return response.ok
+                            ? response.json()
+                            : Promise.reject(response);
+                    })
+                    .then(reserva => this.modelo(MODELO_RESERVA, reserva))
+                    .catch(async erro => {
+                        let mensagemErro = await erro.text();
+                        MessageBox.warning(mensagemErro);
+                    });
             }
             catch (erro) {
                 MessageBox.warning(erro.message);
             }
-        },
-        _obterReserva(id) {
-            ReservaRepository.obterPorId(id)
-                .then(response => {
-                    return response.ok
-                        ? response.json()
-                        : Promise.reject(response);
-                })
-                .then(reserva => this.modelo(MODELO_RESERVA, reserva))
-                .catch(async erro => {
-                    let mensagemErro = await erro.text();
-                    MessageBox.warning(mensagemErro);
-                });
         },
 
         aoClicarNavegarParaTelaListagem() {
             try {
                 const rotaListagem = "listagem";
                 this.navegarPara(rotaListagem);
+            } catch (erro) {
+                MessageBox.warning(erro.message);
+            }
+        },
+
+        aoClicarNavegarParaTelaEdicao() {
+            try {
+                const rotaEdicao = "edicao";
+                const idReserva = this.modelo(MODELO_RESERVA).id;
+                
+                this.navegarPara(rotaEdicao, idReserva);
             } catch (erro) {
                 MessageBox.warning(erro.message);
             }
