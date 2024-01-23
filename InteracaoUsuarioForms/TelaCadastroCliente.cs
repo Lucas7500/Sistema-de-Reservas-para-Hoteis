@@ -1,9 +1,10 @@
-﻿ using Dominio;
+﻿using Dominio;
 using Dominio.Constantes;
 using Dominio.Enums;
 using Dominio.Extensoes;
 using FluentValidation;
 using System.Text.RegularExpressions;
+using static LinqToDB.Reflection.Methods.LinqToDB.Insert;
 
 namespace InteracaoUsuarioForms
 {
@@ -15,8 +16,8 @@ namespace InteracaoUsuarioForms
         public TelaCadastroCliente(Reserva reservaParametro, IValidator<Reserva> validacaoReserva)
         {
             InitializeComponent();
-            CaixaSexo.DataSource = Enum.GetValues(typeof(GeneroEnum));
             _validacaoReserva = validacaoReserva;
+            CaixaSexo.DataSource = Enum.GetValues(typeof(GeneroEnum));
             if (reservaParametro.Id > ValoresPadrao.ID_ZERO)
             {
                 DataCheckIn.MinDate = reservaParametro.CheckIn;
@@ -33,64 +34,60 @@ namespace InteracaoUsuarioForms
 
         private void PermitirApenasNumerosNaIdade(object sender, KeyPressEventArgs e)
         {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
-            {
-                e.Handled = true;
-            }
+            e.Handled = !char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar);
         }
 
         private void PermitirApenasLetrasNoNome(object sender, KeyPressEventArgs e)
         {
             string regexNome = "^[a-zA-ZA-ZáàâãéèêíìîóòõôúùûçÁÀÃÂÉÈÊÍÌÎÓÒÔÕÚÙÛÇ ]*$";
 
-            if (!char.IsControl(e.KeyChar) && !Regex.IsMatch(e.KeyChar.ToString(), regexNome))
-            {
-                e.Handled = true;
-            }
+            e.Handled = !char.IsControl(e.KeyChar) && !Regex.IsMatch(e.KeyChar.ToString(), regexNome);
         }
 
         private void PermitirApenasDecimaisNoPrecoDaEstadia(object sender, KeyPressEventArgs e)
         {
-            bool PossuiVirgula = TextoPreco.Text.Contains(',');
+            const char virgula = ',';
+            string preco = TextoPreco.Text;
+            bool precoPossuiVirgula = preco.Contains(virgula);
+            string decimaisAposVirgula = precoPossuiVirgula
+                ? preco.Split(virgula)[ValoresPadrao.INDICE_CASAS_DECIMAIS]
+                : string.Empty;
 
-            if (e.KeyChar == ',')
-            {
-                e.Handled = PossuiVirgula;
-                return;
-            }
-            if (PossuiVirgula)
-            {
-                string[] preco = TextoPreco.Text.Split(',');
-                string CasasDecimais = preco[ValoresPadrao.INDEX_CASAS_DECIMAIS];
-                bool Possui2CasasDecimais = CasasDecimais.Length == ValoresPadrao.MAX_CASAS_DECIMAIS;
-                e.Handled = Possui2CasasDecimais && !char.IsControl(e.KeyChar);
-            }
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
-            {
-                e.Handled = true;
-            }
+            bool possuiDuasCasasDecimais = decimaisAposVirgula.Length == ValoresPadrao.MAX_CASAS_DECIMAIS;
+            bool primeiraCondicaoInvalida = !char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != virgula;
+            bool segundaCondicaoInvalida = precoPossuiVirgula && e.KeyChar == virgula;
+            bool terceiraCondicaoInvalida = precoPossuiVirgula && possuiDuasCasasDecimais && !char.IsControl(e.KeyChar);
+
+            e.Handled = primeiraCondicaoInvalida || segundaCondicaoInvalida || terceiraCondicaoInvalida;
         }
 
         private static decimal ConverterEmDecimalComVirgula(string numero)
         {
-            if (numero.Contains(','))
+            const char virgula = ',';
+            const int nenhumNumeroAposVirgula = 0;
+            const int umNumeroAposVirgula = 1;
+            const char umZeroAposVirgula = '0';
+            const string doisZerosAposVirgula = "00";
+
+            if (numero.Contains(virgula))
             {
-                string[] preco = numero.Split(',');
-                string CasasDecimais = preco[1];
+                string[] preco = numero.Split(virgula);
+                string CasasDecimais = preco[ValoresPadrao.INDICE_CASAS_DECIMAIS];
 
                 switch (CasasDecimais.Length)
                 {
-                    case 0:
-                        numero += "00";
-                        return Decimal.Parse(numero);
-                    case 1:
-                        numero += '0';
-                        return Decimal.Parse(numero);
-                    case 2:
-                        return Decimal.Parse(numero);
+                    case nenhumNumeroAposVirgula:
+                        numero += doisZerosAposVirgula;
+                        break;
+                    case umNumeroAposVirgula:
+                        numero += umZeroAposVirgula;
+                        break;
                 }
             }
-            numero += ",00";
+            else
+            {
+                numero += virgula + doisZerosAposVirgula;
+            }
 
             return Decimal.Parse(numero);
         }
@@ -120,13 +117,13 @@ namespace InteracaoUsuarioForms
         {
             return new Dictionary<string, dynamic>
             {
-                { "Nome", TextoNome.Text },
-                { "Cpf", TextoCPF.Text },
-                { "Telefone", TextoTelefone.Text },
-                { "Idade", String.IsNullOrWhiteSpace(TextoIdade.Text) ? ValoresPadrao.CODIGO_DE_ERRO : int.Parse(TextoIdade.Text) },
-                { "CheckIn", Convert.ToDateTime(DataCheckIn.Value.Date) },
-                { "CheckOut", Convert.ToDateTime(DataCheckOut.Value.Date) },
-                { "PrecoEstadia", String.IsNullOrWhiteSpace(TextoPreco.Text) ? ValoresPadrao.CODIGO_DE_ERRO : ConverterEmDecimalComVirgula(TextoPreco.Text) }
+                { CamposTabela.COLUNA_NOME, TextoNome.Text },
+                { CamposTabela.COLUNA_CPF, TextoCPF.Text },
+                { CamposTabela.COLUNA_TELEFONE, TextoTelefone.Text },
+                { CamposTabela.COLUNA_IDADE, String.IsNullOrWhiteSpace(TextoIdade.Text) ? ValoresPadrao.CODIGO_DE_ERRO : int.Parse(TextoIdade.Text) },
+                { CamposTabela.COLUNA_CHECK_IN, Convert.ToDateTime(DataCheckIn.Value.Date) },
+                { CamposTabela.COLUNA_CHECK_OUT, Convert.ToDateTime(DataCheckOut.Value.Date) },
+                { CamposTabela.COLUNA_PRECO_ESTADIA, String.IsNullOrWhiteSpace(TextoPreco.Text) ? ValoresPadrao.CODIGO_DE_ERRO : ConverterEmDecimalComVirgula(TextoPreco.Text) }
             };
         }
 
@@ -157,7 +154,7 @@ namespace InteracaoUsuarioForms
                 ValidacaoCampos.ValidarCampos(LerEntradasDoUsuario());
                 AtribuirValoresReserva(_reservaCopia);
                 _validacaoReserva.ValidateAndThrowArgumentException(_reservaCopia);
-                
+
                 if (TelaListaDeReservas.AdicionarReservaNoFormulario(_reservaCopia))
                 {
                     this.Close();
@@ -174,8 +171,8 @@ namespace InteracaoUsuarioForms
         private void AoClicarCancelarCadastro(object sender, EventArgs e)
         {
             string mensagem = "Você realmente deseja cancelar?", titulo = "Confirmação de cancelamento";
-
             var remover = MessageBox.Show(mensagem, titulo, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
             if (remover.Equals(DialogResult.Yes))
             {
                 this.Close();

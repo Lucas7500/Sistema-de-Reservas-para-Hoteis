@@ -38,7 +38,8 @@ namespace InteracaoUsuarioForms
             BotaoEditar = new Button();
             BotaoDeletar = new Button();
             TelaDaLista = new DataGridView();
-            idDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
+            reservaBindingSource = new BindingSource(components);
+            Id = new DataGridViewTextBoxColumn();
             nomeDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             cpfDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             telefoneDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
@@ -48,7 +49,6 @@ namespace InteracaoUsuarioForms
             checkOutDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             precoEstadiaDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             pagamentoEfetuadoDataGridViewCheckBoxColumn = new DataGridViewCheckBoxColumn();
-            reservaBindingSource = new BindingSource(components);
             ((System.ComponentModel.ISupportInitialize)TelaDaLista).BeginInit();
             ((System.ComponentModel.ISupportInitialize)reservaBindingSource).BeginInit();
             SuspendLayout();
@@ -99,7 +99,7 @@ namespace InteracaoUsuarioForms
             dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
             TelaDaLista.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             TelaDaLista.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            TelaDaLista.Columns.AddRange(new DataGridViewColumn[] { idDataGridViewTextBoxColumn, nomeDataGridViewTextBoxColumn, cpfDataGridViewTextBoxColumn, telefoneDataGridViewTextBoxColumn, idadeDataGridViewTextBoxColumn, sexoDataGridViewTextBoxColumn, checkInDataGridViewTextBoxColumn, checkOutDataGridViewTextBoxColumn, precoEstadiaDataGridViewTextBoxColumn, pagamentoEfetuadoDataGridViewCheckBoxColumn });
+            TelaDaLista.Columns.AddRange(new DataGridViewColumn[] { Id, nomeDataGridViewTextBoxColumn, cpfDataGridViewTextBoxColumn, telefoneDataGridViewTextBoxColumn, idadeDataGridViewTextBoxColumn, sexoDataGridViewTextBoxColumn, checkInDataGridViewTextBoxColumn, checkOutDataGridViewTextBoxColumn, precoEstadiaDataGridViewTextBoxColumn, pagamentoEfetuadoDataGridViewCheckBoxColumn });
             TelaDaLista.DataSource = reservaBindingSource;
             dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = SystemColors.Window;
@@ -125,14 +125,18 @@ namespace InteracaoUsuarioForms
             TelaDaLista.Size = new Size(848, 381);
             TelaDaLista.TabIndex = 4;
             // 
-            // idDataGridViewTextBoxColumn
+            // reservaBindingSource
             // 
-            idDataGridViewTextBoxColumn.DataPropertyName = "Id";
-            idDataGridViewTextBoxColumn.FillWeight = 49.0693741F;
-            idDataGridViewTextBoxColumn.HeaderText = "Id";
-            idDataGridViewTextBoxColumn.MinimumWidth = 40;
-            idDataGridViewTextBoxColumn.Name = "idDataGridViewTextBoxColumn";
-            idDataGridViewTextBoxColumn.ReadOnly = true;
+            reservaBindingSource.DataSource = typeof(Reserva);
+            // 
+            // Id
+            // 
+            Id.DataPropertyName = "Id";
+            Id.FillWeight = 49.0693741F;
+            Id.HeaderText = "Id";
+            Id.MinimumWidth = 40;
+            Id.Name = "Id";
+            Id.ReadOnly = true;
             // 
             // nomeDataGridViewTextBoxColumn
             // 
@@ -215,10 +219,6 @@ namespace InteracaoUsuarioForms
             pagamentoEfetuadoDataGridViewCheckBoxColumn.Name = "pagamentoEfetuadoDataGridViewCheckBoxColumn";
             pagamentoEfetuadoDataGridViewCheckBoxColumn.ReadOnly = true;
             // 
-            // reservaBindingSource
-            // 
-            reservaBindingSource.DataSource = typeof(Reserva);
-            // 
             // TelaListaDeReservas
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -253,6 +253,7 @@ namespace InteracaoUsuarioForms
         private DataGridViewTextBoxColumn checkOutDataGridViewTextBoxColumn;
         private DataGridViewTextBoxColumn precoEstadiaDataGridViewTextBoxColumn;
         private DataGridViewCheckBoxColumn pagamentoEfetuadoDataGridViewCheckBoxColumn;
+        private DataGridViewTextBoxColumn Id;
         private static DataGridView TelaDaLista;
     }
 }

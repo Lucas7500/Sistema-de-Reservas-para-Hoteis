@@ -2,7 +2,6 @@ using Dominio;
 using Dominio.Constantes;
 using FluentValidation;
 using Infraestrutura;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace InteracaoUsuarioForms
 {
@@ -23,15 +22,17 @@ namespace InteracaoUsuarioForms
         {
             try
             {
+                const string mensagemSucessoCriacao = "Reserva foi criada com Sucesso!";
+                const string mensagemSucessoEdicao = "Reserva foi editada com Sucesso!";
                 if (reserva.Id == ValoresPadrao.ID_ZERO)
                 {
                     _repositorio.Criar(reserva);
-                    MessageBox.Show("Reserva foi criada com Sucesso!");
+                    MessageBox.Show(mensagemSucessoCriacao);
                 }
                 else
                 {
                     _repositorio.Atualizar(reserva);
-                    MessageBox.Show("A reserva foi editada com sucesso!");
+                    MessageBox.Show(mensagemSucessoEdicao);
                 }
 
                 AtualizarGrid();
@@ -46,14 +47,10 @@ namespace InteracaoUsuarioForms
 
         private static void AtualizarGrid()
         {
-            TelaDaLista.DataSource = null;
-
             try
             {
-                if (_repositorio.ObterTodos().Any())
-                {
-                    TelaDaLista.DataSource = _repositorio.ObterTodos();
-                }
+                TelaDaLista.DataSource = null;
+                if (_repositorio.ObterTodos().Any()) TelaDaLista.DataSource = _repositorio.ObterTodos();
             }
             catch (Exception erro)
             {
@@ -62,38 +59,21 @@ namespace InteracaoUsuarioForms
 
         }
 
+
         private static bool SomenteUmaLinhaSelecionada()
         {
-            int qtdLinhasSelecionadas = TelaDaLista.SelectedRows.Count;
-
-            if (qtdLinhasSelecionadas == ValoresPadrao.UMA_LINHA_SELECIONADA)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return TelaDaLista.SelectedRows.Count == ValoresPadrao.UMA_LINHA_SELECIONADA;
         }
 
         private static bool ListaEhVazia()
         {
-            if (_repositorio.ObterTodos().Count == ValoresPadrao.LISTA_NULA)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return _repositorio.ObterTodos().Count == ValoresPadrao.LISTA_NULA;
         }
 
         private static int RetornaIdReservaSelecionada()
         {
-            int indexLinha = TelaDaLista.SelectedRows[ValoresPadrao.PRIMEIRO_ELEMENTO].Index;
-            int idLinhaSelecionada = (int)TelaDaLista.Rows[indexLinha].Cells[ValoresPadrao.PRIMEIRO_ELEMENTO].Value;
-
-            return idLinhaSelecionada;
+            const string nomeColunaId = "Id";
+            return (int)TelaDaLista.CurrentRow.Cells[nomeColunaId].Value;
         }
 
         private static void AbrirNovaTelaDeCadastro(Reserva reserva)
@@ -118,9 +98,11 @@ namespace InteracaoUsuarioForms
         {
             try
             {
+                const string acaoEditar = "editar";
+
                 if (ListaEhVazia())
                 {
-                    MessageBox.Show(MensagemExcessao.MensagemErroListaVazia("editar"));
+                    MessageBox.Show(MensagemExcessao.MensagemErroListaVazia(acaoEditar));
                 }
                 else if (SomenteUmaLinhaSelecionada())
                 {
@@ -129,7 +111,7 @@ namespace InteracaoUsuarioForms
                 }
                 else
                 {
-                    MessageBox.Show(MensagemExcessao.MensagemErroNenhumaLinhaSelecionada("editar"));
+                    MessageBox.Show(MensagemExcessao.MensagemErroNenhumaLinhaSelecionada(acaoEditar));
                 }
             }
             catch (Exception erro)
@@ -142,9 +124,11 @@ namespace InteracaoUsuarioForms
         {
             try
             {
+                const string acaoDeletar = "deletar";
+
                 if (ListaEhVazia())
                 {
-                    MessageBox.Show(MensagemExcessao.MensagemErroListaVazia("deletar"));
+                    MessageBox.Show(MensagemExcessao.MensagemErroListaVazia(acaoDeletar));
                 }
                 else if (SomenteUmaLinhaSelecionada())
                 {
@@ -159,7 +143,7 @@ namespace InteracaoUsuarioForms
                 }
                 else
                 {
-                    MessageBox.Show(MensagemExcessao.MensagemErroNenhumaLinhaSelecionada("deletar"));
+                    MessageBox.Show(MensagemExcessao.MensagemErroNenhumaLinhaSelecionada(acaoDeletar));
                 }
             }
             catch (Exception erro)
