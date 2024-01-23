@@ -4,8 +4,9 @@ sap.ui.define([
     "../Repositorios/ReservaRepository",
     "sap/m/MessageBox",
     "../Services/Validacao",
+    "../Services/ProcessadorDeEventos",
     "sap/ui/core/ValueState"
-], (BaseController, Formatter, ReservaRepository, MessageBox, Validacao, ValueState) => {
+], (BaseController, Formatter, ReservaRepository, MessageBox, Validacao, ProcessadorDeEventos, ValueState) => {
     "use strict";
 
     const CAMINHO_ROTA_CADASTRO = "reservas.hoteis.controller.Cadastro";
@@ -50,9 +51,11 @@ sap.ui.define([
         },
 
         _aoCoincidirRotaEdicao(evento) {
-            this._limparValueStateInputs();
-            this._definirValorPadraoRadioButton();
-            this._definirReservaPeloId(this._obterIdPeloParametro(evento));
+            ProcessadorDeEventos.processarEvento(() => {
+                this._limparValueStateInputs();
+                this._definirValorPadraoRadioButton();
+                this._definirReservaPeloId(this._obterIdPeloParametro(evento));
+            })
         },
 
         _modeloReserva(reserva) {
@@ -262,59 +265,47 @@ sap.ui.define([
         },
 
         aoMudarValidarNome(evento) {
-            try {
+            ProcessadorDeEventos.processarEvento(() => {
                 const inputNome = evento.getSource();
                 const valorNome = evento.getParameter(PARAMETRO_VALUE);
                 const mensagemErroValidacao = Validacao.validarNome(valorNome);
 
                 this._definirValueStateInputValidado(inputNome, mensagemErroValidacao);
-            }
-            catch (erro) {
-                MessageBox.warning(erro.message);
-            }
+            })
         },
 
         aoMudarValidarCpf(evento) {
-            try {
+            ProcessadorDeEventos.processarEvento(() => {
                 const inputCpf = evento.getSource();
                 const valorCpf = evento.getParameter(PARAMETRO_VALUE);
                 const mensagemErroValidacao = Validacao.validarCpf(valorCpf);
 
                 this._definirValueStateInputValidado(inputCpf, mensagemErroValidacao);
-            }
-            catch (erro) {
-                MessageBox.warning(erro.message);
-            }
+            })
         },
 
         aoMudarValidarTelefone(evento) {
-            try {
+            ProcessadorDeEventos.processarEvento(() => {
                 const inputTelefone = evento.getSource();
                 const valorTelefone = evento.getParameter(PARAMETRO_VALUE);
                 const mensagemErroValidacao = Validacao.validarTelefone(valorTelefone);
 
                 this._definirValueStateInputValidado(inputTelefone, mensagemErroValidacao);
-            }
-            catch (erro) {
-                MessageBox.warning(erro.message);
-            }
+            });
         },
 
         aoMudarValidarIdade(evento) {
-            try {
+            ProcessadorDeEventos.processarEvento(() => {
                 const inputIdade = evento.getSource();
                 const valorIdade = evento.getParameter(PARAMETRO_VALUE);
                 const mensagemErroValidacao = Validacao.validarIdade(valorIdade);
 
                 this._definirValueStateInputValidado(inputIdade, mensagemErroValidacao);
-            }
-            catch (erro) {
-                MessageBox.warning(erro.message);
-            }
+            });
         },
 
         aoMudarValidarCheckInECheckOut() {
-            try {
+            ProcessadorDeEventos.processarEvento(() => {
                 const idReserva = this.modelo(MODELO_RESERVA).id;
 
                 const inputCheckIn = this.byId(ID_INPUT_CHECK_IN);
@@ -336,14 +327,11 @@ sap.ui.define([
 
                 this._definirValueStateInputValidado(inputCheckIn, mensagemErroValidacaoCheckIn);
                 this._definirValueStateInputValidado(inputCheckOut, mensagemErroValidacaoCheckOut);
-            }
-            catch (erro) {
-                MessageBox.warning(erro.message);
-            }
+            });
         },
 
         aoMudarValidarPrecoEstadia(evento) {
-            try {
+            ProcessadorDeEventos.processarEvento(() => {
                 const inputPrecoEstadia = evento.getSource();
                 const valorPrecoEstadia = evento.getParameter(PARAMETRO_VALUE);
                 const mensagemErroValidacao = Validacao.validarPrecoEstadia(valorPrecoEstadia);
@@ -351,9 +339,7 @@ sap.ui.define([
                 this._definirValueStateInputValidado(inputPrecoEstadia, mensagemErroValidacao);
 
                 if (!mensagemErroValidacao) inputPrecoEstadia.setValue(Formatter.formataPrecoEstadia(valorPrecoEstadia));
-            } catch (erro) {
-                MessageBox.warning(erro.message);
-            }
+            });
         }
     })
 })

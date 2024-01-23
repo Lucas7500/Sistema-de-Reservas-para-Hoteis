@@ -2,8 +2,9 @@ sap.ui.define([
     "./BaseController",
     "../model/Formatter",
     "../Repositorios/ReservaRepository",
-    "sap/m/MessageBox"
-], (BaseController, Formatter, ReservaRepository, MessageBox) => {
+    "sap/m/MessageBox",
+    "../Services/ProcessadorDeEventos"
+], (BaseController, Formatter, ReservaRepository, MessageBox, ProcessadorDeEventos) => {
     "use strict";
 
     const CAMINHO_ROTA_DETALHES = "reservas.hoteis.controller.Detalhes";
@@ -19,7 +20,9 @@ sap.ui.define([
         },
 
         _aoCoincidirRota(evento) {
-            this._definirReservaPeloId(this._obterIdPeloParametro(evento));
+            ProcessadorDeEventos.processarEvento(() => {
+                this._definirReservaPeloId(this._obterIdPeloParametro(evento));
+            });
         },
 
         _obterIdPeloParametro(evento) {
