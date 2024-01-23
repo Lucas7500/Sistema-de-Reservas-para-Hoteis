@@ -8,6 +8,7 @@ sap.ui.define([
 
     const CAMINHO_ROTA_DETALHES = "reservas.hoteis.controller.Detalhes";
     const MODELO_RESERVA = "reserva";
+    const ROTA_LISTAGEM = "listagem";
 
     return BaseController.extend(CAMINHO_ROTA_DETALHES, {
         formatter: Formatter,
@@ -35,20 +36,34 @@ sap.ui.define([
                             : Promise.reject(response);
                     })
                     .then(reserva => this.modelo(MODELO_RESERVA, reserva))
-                    .catch(async erro => {
-                        let mensagemErro = await erro.text();
-                        MessageBox.warning(mensagemErro);
-                    });
+                    .catch(async erro => MessageBox.warning(await erro.text()));
             }
             catch (erro) {
                 MessageBox.warning(erro.message);
             }
         },
 
+        _removerReserva() {
+            try {
+                const idReserva = this.modelo(MODELO_RESERVA).id;
+                const sucessoRemover = "sucessoRemover";
+                const mensagemSucesso = this.obterRecursosI18n().getText(sucessoRemover);
+
+                return ReservaRepository.removerReserva(idReserva)
+                    .then(() => MessageBox.success(mensagemSucesso, {
+                        onClose: () => {
+                            this.navegarPara(ROTA_LISTAGEM);
+                        }
+                    }))
+                    .catch(async erro => MessageBox.warning(await erro.text()));
+            } catch (erro) {
+                MessageBox.warning(erro.message);
+            }
+        },
+
         aoClicarNavegarParaTelaListagem() {
             try {
-                const rotaListagem = "listagem";
-                this.navegarPara(rotaListagem);
+                this.navegarPara(ROTA_LISTAGEM);
             } catch (erro) {
                 MessageBox.warning(erro.message);
             }
@@ -58,11 +73,26 @@ sap.ui.define([
             try {
                 const rotaEdicao = "edicao";
                 const idReserva = this.modelo(MODELO_RESERVA).id;
-                
+
                 this.navegarPara(rotaEdicao, idReserva);
             } catch (erro) {
                 MessageBox.warning(erro.message);
             }
+        },
+
+        aoClicarRemoverReserva() {
+            const confirmacaoRemocao = "confirmacaoRemocao";
+            const mensagemConfirmacao = this.obterRecursosI18n().getText(confirmacaoRemocao);
+
+            MessageBox.confirm(mensagemConfirmacao, {
+                actions: [MessageBox.Action.YES, MessageBox.Action.NO],
+                emphasizedAction: MessageBox.Action.YES,
+                onClose: (acao) => {
+                    if (acao == MessageBox.Action.YES) {
+                        this._removerReserva();
+                    }
+                }
+            })
         }
     })
 })

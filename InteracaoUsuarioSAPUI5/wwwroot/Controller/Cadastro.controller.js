@@ -37,9 +37,8 @@ sap.ui.define([
         onInit() {
             const rotaCadastro = "cadastro";
             const rotaEdicao = "edicao";
-            const recursosi18n = this.obterRecursosI18n();
 
-            Validacao.definirRecursosi18n(recursosi18n);
+            Validacao.definirRecursosi18n(this.obterRecursosI18n());
             this.vincularRota(rotaCadastro, this._aoCoincidirRotaCadastro);
             this.vincularRota(rotaEdicao, this._aoCoincidirRotaEdicao);
         },
@@ -164,9 +163,8 @@ sap.ui.define([
 
         _criarReserva(reservaParaCriar) {
             try {
-                const recursosi18n = this.obterRecursosI18n();
                 const variavelSucessoSalvar = "sucessoSalvar";
-                const mensagemSucessoSalvar = recursosi18n.getText(variavelSucessoSalvar);
+                const mensagemSucessoSalvar = this.obterRecursosI18n().getText(variavelSucessoSalvar);
 
                 ReservaRepository.criarReserva(reservaParaCriar)
                     .then(response => {
@@ -194,9 +192,8 @@ sap.ui.define([
 
         _atualizarReserva(reservaParaAtualizar) {
             try {
-                const recursosi18n = this.obterRecursosI18n();
                 const variavelSucessoEditar = "sucessoEditar";
-                const mensagemSucessoEditar = recursosi18n.getText(variavelSucessoEditar);
+                const mensagemSucessoEditar = this.obterRecursosI18n().getText(variavelSucessoEditar);
 
                 ReservaRepository.atualizarReserva(reservaParaAtualizar)
                     .then(response => {
@@ -254,9 +251,8 @@ sap.ui.define([
 
         aoClicarCancelarCadastro() {
             try {
-                const recursosi18n = this.obterRecursosI18n();
                 const variavelConfirmacaoCancelar = "confirmacaoCancelar";
-                const mensagemConfirmacao = recursosi18n.getText(variavelConfirmacaoCancelar);
+                const mensagemConfirmacao = this.obterRecursosI18n().getText(variavelConfirmacaoCancelar);
 
                 this._messageBoxConfirmacaoCancelamento(mensagemConfirmacao);
             }

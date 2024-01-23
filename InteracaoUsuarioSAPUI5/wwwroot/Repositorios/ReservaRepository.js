@@ -35,6 +35,14 @@ sap.ui.define([], () => {
             };
 
             return fetch(`${ENDPOINT_RESERVA}/${reservaParaAtualizar.id}`, configuracoesRequisicao);
+        },
+
+        removerReserva(idReserva) {
+            let opcoes = {
+                method: "DELETE",
+            };
+
+            return fetch(`${ENDPOINT_RESERVA}/${idReserva}`, opcoes);
         }
     }
 })

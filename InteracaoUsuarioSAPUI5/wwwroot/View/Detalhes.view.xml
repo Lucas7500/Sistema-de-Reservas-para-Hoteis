@@ -20,7 +20,8 @@
                 <Button
                     icon="sap-icon://delete"
                     text="{i18n>tituloBotaoRemover}"
-                    type="Emphasized" />
+                    type="Emphasized"
+                    press=".aoClicarRemoverReserva" />
             </Toolbar>
         </customHeader>
         <Panel
