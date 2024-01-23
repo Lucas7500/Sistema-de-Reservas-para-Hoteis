@@ -10,12 +10,7 @@ namespace Infraestrutura
 
         public static List<Reserva> RetornaLista()
         {
-            if (_listaReservas == null)
-            {
-                _listaReservas = new();
-            }
-
-            return _listaReservas;
+            return _listaReservas ??= new();
         }
 
         public static int IncrementarId()

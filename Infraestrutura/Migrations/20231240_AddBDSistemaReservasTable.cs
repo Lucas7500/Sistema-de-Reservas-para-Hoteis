@@ -1,4 +1,5 @@
-﻿using FluentMigrator;
+﻿using Dominio.Constantes;
+using FluentMigrator;
 using FluentMigrator.SqlServer;
 
 namespace Infraestrutura.Migrations
@@ -8,22 +9,22 @@ namespace Infraestrutura.Migrations
     {
         public override void Up()
         {
-            Create.Table("TabelaReservas")
-                .WithColumn("Id").AsInt64().PrimaryKey().Identity(1,1).NotNullable()
-                .WithColumn("Nome").AsString().NotNullable()
-                .WithColumn("Cpf").AsString().NotNullable()
-                .WithColumn("Telefone").AsString().NotNullable()
-                .WithColumn("Idade").AsInt32().NotNullable()
-                .WithColumn("Sexo").AsString().NotNullable()
-                .WithColumn("CheckIn").AsDate().NotNullable()
-                .WithColumn("CheckOut").AsDate().NotNullable()
-                .WithColumn("PrecoEstadia").AsDecimal(12, 2).NotNullable()
-                .WithColumn("PagamentoEfetuado").AsBoolean().NotNullable();
+            Create.Table(CamposTabela.NOME_TABELA)
+                .WithColumn(CamposTabela.COLUNA_ID).AsInt64().PrimaryKey().Identity(1, 1).NotNullable()
+                .WithColumn(CamposTabela.COLUNA_NOME).AsString().NotNullable()
+                .WithColumn(CamposTabela.COLUNA_CPF).AsString().NotNullable()
+                .WithColumn(CamposTabela.COLUNA_TELEFONE).AsString().NotNullable()
+                .WithColumn(CamposTabela.COLUNA_IDADE).AsInt32().NotNullable()
+                .WithColumn(CamposTabela.COLUNA_SEXO).AsString().NotNullable()
+                .WithColumn(CamposTabela.COLUNA_CHECK_IN).AsDate().NotNullable()
+                .WithColumn(CamposTabela.COLUNA_CHECK_OUT).AsDate().NotNullable()
+                .WithColumn(CamposTabela.COLUNA_PRECO_ESTADIA).AsDecimal(12, 2).NotNullable()
+                .WithColumn(CamposTabela.COLUNA_PAGAMENTO_EFETUADO).AsBoolean().NotNullable();
         }
 
         public override void Down()
         {
-            Delete.Table("TabelaReservas");
+            Delete.Table(CamposTabela.NOME_TABELA);
         }
     }
 }

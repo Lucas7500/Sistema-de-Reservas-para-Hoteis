@@ -10,12 +10,13 @@ namespace Dominio
 
         public static void ValidarCampos(Dictionary<string, dynamic> reservaDict)
         {
-            string nome = reservaDict["Nome"];
-            string cpf = reservaDict["Cpf"];
-            string telefone = reservaDict["Telefone"];
-            int idade = reservaDict["Idade"];
-            decimal precoEstadia = reservaDict["PrecoEstadia"];
-            DateTime checkIn = reservaDict["CheckIn"], checkOut = reservaDict["CheckOut"];
+            string nome = reservaDict[CamposTabela.COLUNA_NOME];
+            string cpf = reservaDict[CamposTabela.COLUNA_CPF];
+            string telefone = reservaDict[CamposTabela.COLUNA_TELEFONE];
+            int idade = reservaDict[CamposTabela.COLUNA_IDADE];
+            decimal precoEstadia = reservaDict[CamposTabela.COLUNA_PRECO_ESTADIA];
+            DateTime checkIn = reservaDict[CamposTabela.COLUNA_CHECK_IN];
+            DateTime checkOut = reservaDict[CamposTabela.COLUNA_CHECK_OUT];
 
             ValidarNome(nome);
             ValidarCpf(cpf);
@@ -26,15 +27,17 @@ namespace Dominio
 
             if (_ListaExcessoes.Any())
             {
-                string erros = String.Join("\n", _ListaExcessoes);
+                string quebraDeLinha = "\n";
+                string erros = String.Join(quebraDeLinha, _ListaExcessoes);
+
                 _ListaExcessoes.Clear();
-                throw new Exception(message: erros);
+                throw new Exception(erros);
             }
         }
 
         private static void ValidarNome(string nome)
         {
-            string regexNome = @"^[a-zA-Z ]";
+            string regexNome = "^[a-zA-ZáàâãäéèêëíìïóòôõöüúùçñÁÀÂÃÄÉÈÊËÍÌÏÓÒÔÕÖÜÚÙÇÑ ]*$";
 
             if (String.IsNullOrWhiteSpace(nome))
             {
@@ -43,6 +46,10 @@ namespace Dominio
             else if (nome.Length < ValoresPadrao.TAMANHO_MINIMO_NOME)
             {
                 _ListaExcessoes.Add(MensagemExcessao.NOME_CURTO);
+            }
+            else if (nome.Length > ValoresPadrao.TAMANHO_MAXIMO_NOME)
+            {
+                _ListaExcessoes.Add(MensagemExcessao.NOME_LONGO);
             }
             else if (!Regex.IsMatch(nome, regexNome))
             {
@@ -63,7 +70,7 @@ namespace Dominio
                 _ListaExcessoes.Add(MensagemExcessao.CPF_INVALIDO);
             }
         }
-        
+
         private static void ValidarTelefone(string telefone)
         {
             string numerosTelefone = new(telefone.Where(char.IsDigit).ToArray());
@@ -77,7 +84,7 @@ namespace Dominio
                 _ListaExcessoes.Add(MensagemExcessao.TELEFONE_INVALIDO);
             }
         }
-        
+
         private static void ValidarIdade(int idade)
         {
             bool menordeIdade = idade < ValoresPadrao.MAIOR_DE_IDADE;
@@ -91,25 +98,27 @@ namespace Dominio
                 _ListaExcessoes.Add(MensagemExcessao.MENOR_DE_IDADE);
             }
         }
-        
+
         private static void ValidarCheckIn(DateTime checkIn, DateTime checkOut)
         {
             TimeSpan diferencaCheckoutCheckIn = checkOut - checkIn;
             string stringDiferencaCheckoutCheckIn = diferencaCheckoutCheckIn.ToString();
-            bool dataCheckOutAntesDoCheckIn = stringDiferencaCheckoutCheckIn[0].Equals('-');
 
-            if (dataCheckOutAntesDoCheckIn)
+            char ehNegativo = '-';
+            byte sinalDiferenca = 0;
+
+            if (stringDiferencaCheckoutCheckIn[sinalDiferenca].Equals(ehNegativo))
             {
-                _ListaExcessoes.Add(MensagemExcessao.CHECKOUT_EM_DATAS_PASSADAS);
+                _ListaExcessoes.Add(MensagemExcessao.CHECKOUT_ANTES_CHECK_IN);
             }
         }
-        
+
         private static void ValidarPrecoEstadia(decimal precoEstadia)
         {
             if (precoEstadia == ValoresPadrao.CODIGO_DE_ERRO)
             {
                 _ListaExcessoes.Add(MensagemExcessao.PRECO_DA_ESTADIA_NAO_PREENCHIDO);
             }
-        }   
+        }
     }
 }

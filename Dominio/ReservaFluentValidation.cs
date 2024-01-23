@@ -46,7 +46,7 @@ namespace Dominio
 
             RuleFor(reserva => reserva.CheckOut)
                 .NotNull().WithMessage(MensagemExcessao.CHECKOUT_NULO)
-                .GreaterThanOrEqualTo(reserva => reserva.CheckIn).WithMessage(MensagemExcessao.CHECKOUT_EM_DATAS_PASSADAS);
+                .GreaterThanOrEqualTo(reserva => reserva.CheckIn).WithMessage(MensagemExcessao.CHECKOUT_ANTES_CHECK_IN);
 
             RuleFor(reserva => reserva.PrecoEstadia)
                 .NotEmpty().WithMessage(MensagemExcessao.PRECO_DA_ESTADIA_NAO_PREENCHIDO)
@@ -59,38 +59,25 @@ namespace Dominio
 
         private bool CpfEhUnico(Reserva reserva)
         {
-            var reservaMesmoCpf = _repositorio.ObterTodos().FirstOrDefault(reservaMesmoCpf => reservaMesmoCpf.Cpf == reserva.Cpf);
+            var reservaMesmoCpf = _repositorio
+                .ObterTodos()
+                .FirstOrDefault(reservaMesmoCpf => reservaMesmoCpf.Cpf == reserva.Cpf);
 
-            if (reservaMesmoCpf == null || reservaMesmoCpf.Id == reserva.Id)
-            {
-                return true;
-            }
-
-            return false;
+            return reservaMesmoCpf == null || reservaMesmoCpf.Id == reserva.Id;
         }
 
         private bool TelefoneEstaPreeenchido(string telefone)
         {
             string numerosTelefone = new(telefone.Where(char.IsDigit).ToArray());
 
-            if (numerosTelefone.Length == ValoresPadrao.EH_VAZIO)
-            {
-                return false;
-            }
-
-            return true;
+            return numerosTelefone.Length != ValoresPadrao.EH_VAZIO;
         }
 
         private bool TelefoneEhValido(string telefone)
         {
             string numerosTelefone = new(telefone.Where(char.IsDigit).ToArray());
 
-            if (numerosTelefone.Length != ValoresPadrao.TAMANHO_NUMEROS_TELEFONE)
-            {
-                return false;
-            }
-
-            return true;
+            return numerosTelefone.Length == ValoresPadrao.TAMANHO_NUMEROS_TELEFONE;
         }
 
 
@@ -98,12 +85,7 @@ namespace Dominio
         {
             string numerosCpf = new(cpf.Where(char.IsDigit).ToArray());
 
-            if (numerosCpf.Length == ValoresPadrao.EH_VAZIO)
-            {
-                return false;
-            }
-
-            return true;
+            return numerosCpf.Length != ValoresPadrao.EH_VAZIO;
         }
 
         private static bool CpfEhValido(string cpf)
@@ -138,16 +120,16 @@ namespace Dominio
             int restoPrimeiroDigito = somaPrimeiroDigito % 11;
             int restoSegundoDigito = somaSegundoDigito % 11;
 
-            bool primeiroCasoInvalido = restoPrimeiroDigito < ValoresPadrao.VALOR_REFERENCIA_RESTO_CPF 
+            bool primeiroCasoInvalido = restoPrimeiroDigito < ValoresPadrao.VALOR_REFERENCIA_RESTO_CPF
                 && primeiroDigitoVerificador != ValoresPadrao.DIGITO_ZERO;
 
-            bool segundoCasoInvalido = restoPrimeiroDigito >= ValoresPadrao.VALOR_REFERENCIA_RESTO_CPF 
+            bool segundoCasoInvalido = restoPrimeiroDigito >= ValoresPadrao.VALOR_REFERENCIA_RESTO_CPF
                 && primeiroDigitoVerificador != (11 - restoPrimeiroDigito);
 
-            bool terceiroCasoInvalido = restoSegundoDigito < ValoresPadrao.VALOR_REFERENCIA_RESTO_CPF 
+            bool terceiroCasoInvalido = restoSegundoDigito < ValoresPadrao.VALOR_REFERENCIA_RESTO_CPF
                 && segundoDigitoVerificador != ValoresPadrao.DIGITO_ZERO;
 
-            bool quartoCasoInvalido = restoSegundoDigito >= ValoresPadrao.VALOR_REFERENCIA_RESTO_CPF 
+            bool quartoCasoInvalido = restoSegundoDigito >= ValoresPadrao.VALOR_REFERENCIA_RESTO_CPF
                 && segundoDigitoVerificador != (11 - restoSegundoDigito);
 
             return !(primeiroCasoInvalido || segundoCasoInvalido || terceiroCasoInvalido || quartoCasoInvalido);

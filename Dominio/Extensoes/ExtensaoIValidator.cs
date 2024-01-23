@@ -10,9 +10,9 @@ namespace Dominio.Extensoes
 
             if (!resultado.IsValid)
             {
-                var ex = new ValidationException(resultado.Errors);
+                var erro = new ValidationException(resultado.Errors);
                 string mensagemErro = String.Join("\n", resultado.Errors);
-                throw new ArgumentException(mensagemErro, ex);
+                throw new ArgumentException(mensagemErro, erro);
             }
         }
     }

@@ -1,4 +1,4 @@
-﻿using Dominio;
+﻿ using Dominio;
 using Dominio.Constantes;
 using Dominio.Enums;
 using Dominio.Extensoes;

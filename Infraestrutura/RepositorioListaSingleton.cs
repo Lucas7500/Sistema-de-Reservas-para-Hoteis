@@ -15,9 +15,7 @@ namespace Infraestrutura
 
         public Reserva ObterPorId(int id)
         {
-            var reserva = _listaReservas.FirstOrDefault(x => x.Id == id);
-
-            return reserva;
+            return _listaReservas.FirstOrDefault(x => x.Id == id);
         }
 
         public void Criar(Reserva reservaParaCriacao)
@@ -33,7 +31,7 @@ namespace Infraestrutura
 
         public void Remover(int id)
         {
-            Reserva reserva = ObterPorId(id);
+            var reserva = ObterPorId(id);
             _listaReservas.Remove(reserva);
         }
     }

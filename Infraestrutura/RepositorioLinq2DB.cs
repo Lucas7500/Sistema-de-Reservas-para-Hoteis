@@ -7,22 +7,19 @@ namespace Infraestrutura
 {
     public class RepositorioLinq2DB : IRepositorio
     {
-        private static readonly string _connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["BDSistemaReservas"].ConnectionString;
+        private const string nomeConexao = "BDSistemaReservas";
+        private static readonly string _connectionString = System.Configuration.ConfigurationManager.ConnectionStrings[nomeConexao].ConnectionString;
 
         private static DataConnection Connection()
         {
-            var conexaoLinq2Db = new DataConnection(
-                new DataOptions().UseSqlServer(_connectionString));
+            var conexaoLinq2Db = new DataConnection(new DataOptions().UseSqlServer(_connectionString));
             return conexaoLinq2Db;
         }
 
         public List<Reserva> ObterTodos()
         {
             using var conexaoLinq2Db = Connection();
-            List<Reserva> listaReservas = new();
-            listaReservas = conexaoLinq2Db.GetTable<Reserva>().ToList();
-
-            return listaReservas;
+            return conexaoLinq2Db.GetTable<Reserva>().ToList();
         }
 
         public Reserva ObterPorId(int id)

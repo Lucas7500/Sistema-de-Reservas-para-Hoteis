@@ -229,7 +229,7 @@
             // TextoTelefone
             // 
             TextoTelefone.Location = new Point(233, 53);
-            TextoTelefone.Mask = "(00) 00000-0000";
+            TextoTelefone.Mask = "(00) 0 0000-0000";
             TextoTelefone.Name = "TextoTelefone";
             TextoTelefone.Size = new Size(100, 23);
             TextoTelefone.TabIndex = 3;
