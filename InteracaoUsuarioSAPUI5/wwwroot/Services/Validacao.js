@@ -11,7 +11,7 @@ sap.ui.define([
     const INDICE_MENSAGEM_ERRO_CHECK_OUT = 5;
     const INDICE_MENSAGEM_ERRO_PRECO_ESTADIA = 6;
 
-    let LISTA_ERROS = [];
+    let LISTA_ERROS = new Array();
     let RECURSOS_I18N;
 
     return {

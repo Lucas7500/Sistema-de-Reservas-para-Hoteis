@@ -31,10 +31,7 @@ sap.ui.define([
                             : Promise.reject(response);
                     })
                     .then(reservas => this.modelo(MODELO_LISTA, reservas))
-                    .catch(async erro => {
-                        let mensagemErro = await erro.text();
-                        MessageBox.warning(mensagemErro);
-                    })
+                    .catch(async erro => MessageBox.warning(await erro.text()))
             }
             catch (erro) {
                 MessageBox.warning(erro.message);

@@ -8,8 +8,6 @@ sap.ui.define([
     "use strict";
 
     const CAMINHO_ROTA_DETALHES = "reservas.hoteis.controller.Detalhes";
-    const MODELO_RESERVA = "reserva";
-    const ROTA_LISTAGEM = "listagem";
 
     return BaseController.extend(CAMINHO_ROTA_DETALHES, {
         formatter: Formatter,
@@ -25,6 +23,11 @@ sap.ui.define([
             });
         },
 
+        _modeloReserva(modelo) {
+            const nomeModelo = "reserva";
+            return this.modelo(nomeModelo, modelo);
+        },
+
         _obterIdPeloParametro(evento) {
             const parametroArguments = "arguments";
             return evento.getParameter(parametroArguments).id;
@@ -38,7 +41,7 @@ sap.ui.define([
                             ? response.json()
                             : Promise.reject(response);
                     })
-                    .then(reserva => this.modelo(MODELO_RESERVA, reserva))
+                    .then(reserva => this._modeloReserva(reserva))
                     .catch(async erro => MessageBox.warning(await erro.text()));
             }
             catch (erro) {
@@ -48,15 +51,13 @@ sap.ui.define([
 
         _removerReserva() {
             try {
-                const idReserva = this.modelo(MODELO_RESERVA).id;
+                const idReserva = this._modeloReserva().id;
                 const sucessoRemover = "sucessoRemover";
                 const mensagemSucesso = this.obterRecursosI18n().getText(sucessoRemover);
 
                 return ReservaRepository.removerReserva(idReserva)
-                    .then(() => MessageBox.success(mensagemSucesso, {
-                        onClose: () => {
-                            this.navegarPara(ROTA_LISTAGEM);
-                        }
+                    .then(() => this.messageBoxSucesso(mensagemSucesso, () => {
+                        this._navegarParaTelaListagem();
                     }))
                     .catch(async erro => MessageBox.warning(await erro.text()));
             } catch (erro) {
@@ -64,9 +65,14 @@ sap.ui.define([
             }
         },
 
+        _navegarParaTelaListagem() {
+            const rotaListagem = "listagem";
+            this.navegarPara(rotaListagem);
+        },
+
         aoClicarNavegarParaTelaListagem() {
             try {
-                this.navegarPara(ROTA_LISTAGEM);
+                this._navegarParaTelaListagem();
             } catch (erro) {
                 MessageBox.warning(erro.message);
             }
@@ -75,7 +81,7 @@ sap.ui.define([
         aoClicarNavegarParaTelaEdicao() {
             try {
                 const rotaEdicao = "edicao";
-                const idReserva = this.modelo(MODELO_RESERVA).id;
+                const idReserva = this._modeloReserva().id;
 
                 this.navegarPara(rotaEdicao, idReserva);
             } catch (erro) {
@@ -87,15 +93,9 @@ sap.ui.define([
             const confirmacaoRemocao = "confirmacaoRemocao";
             const mensagemConfirmacao = this.obterRecursosI18n().getText(confirmacaoRemocao);
 
-            MessageBox.confirm(mensagemConfirmacao, {
-                actions: [MessageBox.Action.YES, MessageBox.Action.NO],
-                emphasizedAction: MessageBox.Action.YES,
-                onClose: (acao) => {
-                    if (acao == MessageBox.Action.YES) {
-                        this._removerReserva();
-                    }
-                }
-            })
+            this.messageBoxConfirmacao(mensagemConfirmacao, () => {
+                this._removerReserva();
+            });
         }
     })
 })
