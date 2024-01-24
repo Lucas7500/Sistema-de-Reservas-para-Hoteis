@@ -12,7 +12,7 @@
                     press=".aoClicarNavegarParaTelaAnterior"
                     type="Transparent" />
                 <ToolbarSpacer />
-                <ObjectIdentifier title="{i18n>tituloCadastro}" />
+                <ObjectIdentifier id="tituloTelaCadastro" />
                 <ToolbarSpacer />
                 <Button
                     class="sapUiTinyMarginEnd"

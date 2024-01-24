@@ -35,6 +35,7 @@ sap.ui.define([
         },
 
         _aoCoincidirRotaCadastro() {
+            this._definirTituloTelaCadastro();
             this._limparValueStateInputs();
             this._definirValorPadraoRadioButton();
             this._definirModeloPadraoCadastro();
@@ -42,9 +43,12 @@ sap.ui.define([
 
         _aoCoincidirRotaEdicao(evento) {
             ProcessadorDeEventos.processarEvento(() => {
+                const idReserva = this._obterIdPeloParametro(evento);
+                
+                this._definirTituloTelaCadastro(idReserva);
                 this._limparValueStateInputs();
                 this._definirValorPadraoRadioButton();
-                this._definirReservaPeloId(this._obterIdPeloParametro(evento));
+                this._definirReservaPeloId(idReserva);
             })
         },
 
@@ -72,6 +76,21 @@ sap.ui.define([
         _definirModeloPadraoEdicao(reserva) {
             reserva.precoEstadia = Formatter.formataPrecoEstadia(reserva.precoEstadia);
             this._modeloReserva(reserva);
+        },
+
+        _definirTituloTelaCadastro(idReserva) {
+            const idTituloTelaCadastro = "tituloTelaCadastro";
+            const tituloTelaCadastro = this.byId(idTituloTelaCadastro);
+
+            const variavelTituloCadastro = "tituloCadastro";
+            const variavelTituloEdicao = "tituloEdicao";
+            
+            const tituloCadastro = this.obterRecursosI18n().getText(variavelTituloCadastro);
+            const tituloEdicao = this.obterRecursosI18n().getText(variavelTituloEdicao);
+
+            idReserva
+                ? tituloTelaCadastro.setTitle(tituloEdicao)
+                : tituloTelaCadastro.setTitle(tituloCadastro)
         },
 
         _definirValorPadraoRadioButton() {
