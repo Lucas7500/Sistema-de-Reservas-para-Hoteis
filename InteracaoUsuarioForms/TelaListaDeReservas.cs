@@ -15,37 +15,35 @@ namespace InteracaoUsuarioForms
             _repositorio = repositorioUtilizado;
             _validacaoReserva = validacaoReserva;
             InitializeComponent();
-            AtualizarGrid();
+            AtualizarGridView();
         }
 
         public static bool AdicionarReservaNoFormulario(Reserva reserva)
         {
             try
             {
-                const string mensagemSucessoCriacao = "Reserva foi criada com Sucesso!";
-                const string mensagemSucessoEdicao = "Reserva foi editada com Sucesso!";
                 if (reserva.Id == ValoresPadrao.ID_ZERO)
                 {
                     _repositorio.Criar(reserva);
-                    MessageBox.Show(mensagemSucessoCriacao);
+                    MessageBox.Show(Mensagem.SUCESSO_CRIACAO);
                 }
                 else
                 {
                     _repositorio.Atualizar(reserva);
-                    MessageBox.Show(mensagemSucessoEdicao);
+                    MessageBox.Show(Mensagem.SUCESSO_EDICAO);
                 }
 
-                AtualizarGrid();
+                AtualizarGridView();
                 return true;
             }
             catch (Exception erro)
             {
-                MessageBox.Show(erro.Message, MensagemExcessao.TITULO_ERRO_INESPERADO, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(erro.Message, Mensagem.TITULO_ERRO_INESPERADO, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
         }
 
-        private static void AtualizarGrid()
+        private static void AtualizarGridView()
         {
             try
             {
@@ -54,7 +52,7 @@ namespace InteracaoUsuarioForms
             }
             catch (Exception erro)
             {
-                MessageBox.Show(erro.Message, MensagemExcessao.TITULO_ERRO_INESPERADO, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(erro.Message, Mensagem.TITULO_ERRO_INESPERADO, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
         }
@@ -70,27 +68,27 @@ namespace InteracaoUsuarioForms
             return _repositorio.ObterTodos().Count == ValoresPadrao.LISTA_NULA;
         }
 
-        private static int RetornaIdReservaSelecionada()
+        private static int ObterIdReservaSelecionada()
         {
-            const string nomeColunaId = "Id";
-            return (int)TelaDaLista.CurrentRow.Cells[nomeColunaId].Value;
+            const string nomeColunaIdGridView = "Id";
+            return (int)TelaDaLista.CurrentRow.Cells[nomeColunaIdGridView].Value;
         }
 
-        private static void AbrirNovaTelaDeCadastro(Reserva reserva)
+        private static void AbrirTelaCadastro(Reserva reserva)
         {
             TelaCadastroCliente TelaCadastro = new(reserva, _validacaoReserva);
             TelaCadastro.ShowDialog();
         }
 
-        private void AoClicarAdicionarAbrirTelaDeCadastro(object sender, EventArgs e)
+        private void AoClicarAdicionarAbrirTelaCadastro(object sender, EventArgs e)
         {
             try
             {
-                AbrirNovaTelaDeCadastro(new Reserva());
+                AbrirTelaCadastro(new Reserva());
             }
             catch (Exception erro)
             {
-                MessageBox.Show(erro.Message, MensagemExcessao.TITULO_ERRO_INESPERADO, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(erro.Message, Mensagem.TITULO_ERRO_INESPERADO, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -102,21 +100,21 @@ namespace InteracaoUsuarioForms
 
                 if (ListaEhVazia())
                 {
-                    MessageBox.Show(MensagemExcessao.MensagemErroListaVazia(acaoEditar));
+                    MessageBox.Show(Mensagem.MensagemErroListaVazia(acaoEditar));
                 }
                 else if (SomenteUmaLinhaSelecionada())
                 {
-                    Reserva reservaSelecionada = _repositorio.ObterPorId(RetornaIdReservaSelecionada());
-                    AbrirNovaTelaDeCadastro(reservaSelecionada);
+                    Reserva reservaSelecionada = _repositorio.ObterPorId(ObterIdReservaSelecionada());
+                    AbrirTelaCadastro(reservaSelecionada);
                 }
                 else
                 {
-                    MessageBox.Show(MensagemExcessao.MensagemErroNenhumaLinhaSelecionada(acaoEditar));
+                    MessageBox.Show(Mensagem.MensagemErroNenhumaLinhaSelecionada(acaoEditar));
                 }
             }
             catch (Exception erro)
             {
-                MessageBox.Show(erro.Message, MensagemExcessao.TITULO_ERRO_INESPERADO, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(erro.Message, Mensagem.TITULO_ERRO_INESPERADO, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -128,27 +126,27 @@ namespace InteracaoUsuarioForms
 
                 if (ListaEhVazia())
                 {
-                    MessageBox.Show(MensagemExcessao.MensagemErroListaVazia(acaoDeletar));
+                    MessageBox.Show(Mensagem.MensagemErroListaVazia(acaoDeletar));
                 }
                 else if (SomenteUmaLinhaSelecionada())
                 {
-                    Reserva reservaSelecionada = _repositorio.ObterPorId(RetornaIdReservaSelecionada());
+                    Reserva reservaSelecionada = _repositorio.ObterPorId(ObterIdReservaSelecionada());
                     string mensagem = $"Você tem certeza que quer deletar a reserva de {reservaSelecionada.Nome}?", titulo = "Confirmação de remoção";
                     var deletar = MessageBox.Show(mensagem, titulo, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                     if (deletar.Equals(DialogResult.Yes))
                     {
-                        _repositorio.Remover(RetornaIdReservaSelecionada());
-                        AtualizarGrid();
+                        _repositorio.Remover(ObterIdReservaSelecionada());
+                        AtualizarGridView();
                     }
                 }
                 else
                 {
-                    MessageBox.Show(MensagemExcessao.MensagemErroNenhumaLinhaSelecionada(acaoDeletar));
+                    MessageBox.Show(Mensagem.MensagemErroNenhumaLinhaSelecionada(acaoDeletar));
                 }
             }
             catch (Exception erro)
             {
-                MessageBox.Show(erro.Message, MensagemExcessao.TITULO_ERRO_INESPERADO, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(erro.Message, Mensagem.TITULO_ERRO_INESPERADO, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

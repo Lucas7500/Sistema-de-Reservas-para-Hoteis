@@ -1,7 +1,9 @@
 ﻿namespace Dominio.Constantes
 {
-    public class MensagemExcessao
+    public class Mensagem
     {
+        public const string SUCESSO_CRIACAO = "Reserva foi criada com Sucesso!";
+        public const string SUCESSO_EDICAO = "Reserva foi editada com Sucesso!";
         public const string NOME_NAO_PREENCHIDO = "- Informe o Nome do cliente!";
         public const string NOME_CURTO = "- O nome do cliente não pode conter menos que 3 caracteres!";
         public const string NOME_LONGO = "- O nome do cliente não pode superar 50 caracteres!";

@@ -41,19 +41,19 @@ namespace Dominio
 
             if (String.IsNullOrWhiteSpace(nome))
             {
-                _ListaExcessoes.Add(MensagemExcessao.NOME_NAO_PREENCHIDO);
+                _ListaExcessoes.Add(Mensagem.NOME_NAO_PREENCHIDO);
             }
             else if (nome.Length < ValoresPadrao.TAMANHO_MINIMO_NOME)
             {
-                _ListaExcessoes.Add(MensagemExcessao.NOME_CURTO);
+                _ListaExcessoes.Add(Mensagem.NOME_CURTO);
             }
             else if (nome.Length > ValoresPadrao.TAMANHO_MAXIMO_NOME)
             {
-                _ListaExcessoes.Add(MensagemExcessao.NOME_LONGO);
+                _ListaExcessoes.Add(Mensagem.NOME_LONGO);
             }
             else if (!Regex.IsMatch(nome, regexNome))
             {
-                _ListaExcessoes.Add(MensagemExcessao.NOME_FORMATO_INCORRETO);
+                _ListaExcessoes.Add(Mensagem.NOME_FORMATO_INCORRETO);
             }
         }
 
@@ -63,11 +63,11 @@ namespace Dominio
 
             if (numerosCPF.Length == ValoresPadrao.EH_VAZIO)
             {
-                _ListaExcessoes.Add(MensagemExcessao.CPF_NAO_PREENCHIDO);
+                _ListaExcessoes.Add(Mensagem.CPF_NAO_PREENCHIDO);
             }
             else if (numerosCPF.Length != ValoresPadrao.TAMANHO_NUMEROS_CPF)
             {
-                _ListaExcessoes.Add(MensagemExcessao.CPF_INVALIDO);
+                _ListaExcessoes.Add(Mensagem.CPF_INVALIDO);
             }
         }
 
@@ -77,11 +77,11 @@ namespace Dominio
 
             if (numerosTelefone.Length == ValoresPadrao.EH_VAZIO)
             {
-                _ListaExcessoes.Add(MensagemExcessao.TELEFONE_NAO_PREENCHIDO);
+                _ListaExcessoes.Add(Mensagem.TELEFONE_NAO_PREENCHIDO);
             }
             else if (numerosTelefone.Length != ValoresPadrao.TAMANHO_NUMEROS_TELEFONE)
             {
-                _ListaExcessoes.Add(MensagemExcessao.TELEFONE_INVALIDO);
+                _ListaExcessoes.Add(Mensagem.TELEFONE_INVALIDO);
             }
         }
 
@@ -91,11 +91,11 @@ namespace Dominio
 
             if (idade == ValoresPadrao.CODIGO_DE_ERRO)
             {
-                _ListaExcessoes.Add(MensagemExcessao.IDADE_NAO_PREENCHIDA);
+                _ListaExcessoes.Add(Mensagem.IDADE_NAO_PREENCHIDA);
             }
             else if (menordeIdade)
             {
-                _ListaExcessoes.Add(MensagemExcessao.MENOR_DE_IDADE);
+                _ListaExcessoes.Add(Mensagem.MENOR_DE_IDADE);
             }
         }
 
@@ -105,11 +105,11 @@ namespace Dominio
             string stringDiferencaCheckoutCheckIn = diferencaCheckoutCheckIn.ToString();
 
             char ehNegativo = '-';
-            byte sinalDiferenca = 0;
+            byte indiceSinalDiferenca = 0;
 
-            if (stringDiferencaCheckoutCheckIn[sinalDiferenca].Equals(ehNegativo))
+            if (stringDiferencaCheckoutCheckIn[indiceSinalDiferenca].Equals(ehNegativo))
             {
-                _ListaExcessoes.Add(MensagemExcessao.CHECKOUT_ANTES_CHECK_IN);
+                _ListaExcessoes.Add(Mensagem.CHECKOUT_ANTES_CHECK_IN);
             }
         }
 
@@ -117,7 +117,7 @@ namespace Dominio
         {
             if (precoEstadia == ValoresPadrao.CODIGO_DE_ERRO)
             {
-                _ListaExcessoes.Add(MensagemExcessao.PRECO_DA_ESTADIA_NAO_PREENCHIDO);
+                _ListaExcessoes.Add(Mensagem.PRECO_DA_ESTADIA_NAO_PREENCHIDO);
             }
         }
     }

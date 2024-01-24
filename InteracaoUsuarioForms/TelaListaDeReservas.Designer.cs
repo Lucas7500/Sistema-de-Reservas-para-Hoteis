@@ -61,7 +61,7 @@ namespace InteracaoUsuarioForms
             BotaoAdicionar.TabIndex = 1;
             BotaoAdicionar.Text = "Adicionar";
             BotaoAdicionar.UseVisualStyleBackColor = true;
-            BotaoAdicionar.Click += AoClicarAdicionarAbrirTelaDeCadastro;
+            BotaoAdicionar.Click += AoClicarAdicionarAbrirTelaCadastro;
             // 
             // BotaoEditar
             // 

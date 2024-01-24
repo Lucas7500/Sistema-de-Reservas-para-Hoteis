@@ -4,7 +4,6 @@ using Dominio.Enums;
 using Dominio.Extensoes;
 using FluentValidation;
 using System.Text.RegularExpressions;
-using static LinqToDB.Reflection.Methods.LinqToDB.Insert;
 
 namespace InteracaoUsuarioForms
 {
@@ -18,11 +17,12 @@ namespace InteracaoUsuarioForms
             InitializeComponent();
             _validacaoReserva = validacaoReserva;
             CaixaSexo.DataSource = Enum.GetValues(typeof(GeneroEnum));
+
             if (reservaParametro.Id > ValoresPadrao.ID_ZERO)
             {
                 DataCheckIn.MinDate = reservaParametro.CheckIn;
                 DataCheckOut.MinDate = reservaParametro.CheckOut;
-                PreencherTelaDeCadastro(reservaParametro);
+                PreencherTelaCadastro(reservaParametro);
                 _reservaCopia = (Reserva)reservaParametro.ShallowCopy();
             }
             else
@@ -61,7 +61,7 @@ namespace InteracaoUsuarioForms
             e.Handled = primeiraCondicaoInvalida || segundaCondicaoInvalida || terceiraCondicaoInvalida;
         }
 
-        private static decimal ConverterEmDecimalComVirgula(string numero)
+        private static decimal ConverteStringParaDecimalComVirgula(string numero)
         {
             const char virgula = ',';
             const int nenhumNumeroAposVirgula = 0;
@@ -92,7 +92,7 @@ namespace InteracaoUsuarioForms
             return Decimal.Parse(numero);
         }
 
-        private void PreencherTelaDeCadastro(Reserva reserva)
+        private void PreencherTelaCadastro(Reserva reserva)
         {
             try
             {
@@ -109,11 +109,11 @@ namespace InteracaoUsuarioForms
             }
             catch (Exception erro)
             {
-                MessageBox.Show(erro.Message, MensagemExcessao.TITULO_ERRO_INESPERADO, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(erro.Message, Mensagem.TITULO_ERRO_INESPERADO, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private Dictionary<string, dynamic> LerEntradasDoUsuario()
+        private Dictionary<string, dynamic> ObterReservaPreenchida()
         {
             return new Dictionary<string, dynamic>
             {
@@ -123,11 +123,11 @@ namespace InteracaoUsuarioForms
                 { CamposTabela.COLUNA_IDADE, String.IsNullOrWhiteSpace(TextoIdade.Text) ? ValoresPadrao.CODIGO_DE_ERRO : int.Parse(TextoIdade.Text) },
                 { CamposTabela.COLUNA_CHECK_IN, Convert.ToDateTime(DataCheckIn.Value.Date) },
                 { CamposTabela.COLUNA_CHECK_OUT, Convert.ToDateTime(DataCheckOut.Value.Date) },
-                { CamposTabela.COLUNA_PRECO_ESTADIA, String.IsNullOrWhiteSpace(TextoPreco.Text) ? ValoresPadrao.CODIGO_DE_ERRO : ConverterEmDecimalComVirgula(TextoPreco.Text) }
+                { CamposTabela.COLUNA_PRECO_ESTADIA, String.IsNullOrWhiteSpace(TextoPreco.Text) ? ValoresPadrao.CODIGO_DE_ERRO : ConverteStringParaDecimalComVirgula(TextoPreco.Text) }
             };
         }
 
-        private void AtribuirValoresReserva(Reserva reserva)
+        private void PreencherReserva(Reserva reserva)
         {
             try
             {
@@ -138,12 +138,12 @@ namespace InteracaoUsuarioForms
                 reserva.Sexo = (GeneroEnum)CaixaSexo.SelectedItem;
                 reserva.CheckIn = Convert.ToDateTime(DataCheckIn.Value.Date);
                 reserva.CheckOut = Convert.ToDateTime(DataCheckOut.Value.Date);
-                reserva.PrecoEstadia = ConverterEmDecimalComVirgula(TextoPreco.Text);
+                reserva.PrecoEstadia = ConverteStringParaDecimalComVirgula(TextoPreco.Text);
                 reserva.PagamentoEfetuado = BotaoTrue.Checked;
             }
             catch (Exception erro)
             {
-                MessageBox.Show(erro.Message, MensagemExcessao.TITULO_ERRO_INESPERADO, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(erro.Message, Mensagem.TITULO_ERRO_INESPERADO, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -151,8 +151,8 @@ namespace InteracaoUsuarioForms
         {
             try
             {
-                ValidacaoCampos.ValidarCampos(LerEntradasDoUsuario());
-                AtribuirValoresReserva(_reservaCopia);
+                ValidacaoCampos.ValidarCampos(ObterReservaPreenchida());
+                PreencherReserva(_reservaCopia);
                 _validacaoReserva.ValidateAndThrowArgumentException(_reservaCopia);
 
                 if (TelaListaDeReservas.AdicionarReservaNoFormulario(_reservaCopia))
