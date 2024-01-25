@@ -48,7 +48,9 @@ namespace InteracaoUsuarioForms
             try
             {
                 TelaDaLista.DataSource = null;
-                if (_repositorio.ObterTodos().Any()) TelaDaLista.DataSource = _repositorio.ObterTodos();
+
+                if (_repositorio.ObterTodos().Any())
+                    TelaDaLista.DataSource = _repositorio.ObterTodos();
             }
             catch (Exception erro)
             {
@@ -57,13 +59,12 @@ namespace InteracaoUsuarioForms
 
         }
 
-
-        private static bool SomenteUmaLinhaSelecionada()
+        private static bool EhSomenteUmaLinhaSelecionada()
         {
             return TelaDaLista.SelectedRows.Count == ValoresPadrao.UMA_LINHA_SELECIONADA;
         }
 
-        private static bool ListaEhVazia()
+        private static bool EhListaVazia()
         {
             return !_repositorio.ObterTodos().Any();
         }
@@ -80,7 +81,7 @@ namespace InteracaoUsuarioForms
             TelaCadastro.ShowDialog();
         }
 
-        private void AoClicarAdicionarAbrirTelaCadastro(object sender, EventArgs e)
+        private void AoClicarAdicionar(object sender, EventArgs e)
         {
             try
             {
@@ -92,24 +93,22 @@ namespace InteracaoUsuarioForms
             }
         }
 
-        private void AoClicarEditarElementoSelecionado(object sender, EventArgs e)
+        private void AoClicarEditar(object sender, EventArgs e)
         {
             try
             {
-                const string acaoEditar = "editar";
-
-                if (ListaEhVazia())
+                if (EhListaVazia())
                 {
-                    MessageBox.Show(Mensagem.MensagemErroListaVazia(acaoEditar));
+                    MessageBox.Show(Mensagem.MENSAGEM_ERRO_LISTA_VAZIA_EDICAO);
                 }
-                else if (SomenteUmaLinhaSelecionada())
+                else if (EhSomenteUmaLinhaSelecionada())
                 {
-                    Reserva reservaSelecionada = _repositorio.ObterPorId(ObterIdReservaSelecionada());
+                    var reservaSelecionada = _repositorio.ObterPorId(ObterIdReservaSelecionada());
                     AbrirTelaCadastro(reservaSelecionada);
                 }
                 else
                 {
-                    MessageBox.Show(Mensagem.MensagemErroNenhumaLinhaSelecionada(acaoEditar));
+                    MessageBox.Show(Mensagem.MENSAGEM_ERRO_NENHUMA_LINHA_SELECIONADA_EDICAO);
                 }
             }
             catch (Exception erro)
@@ -118,30 +117,30 @@ namespace InteracaoUsuarioForms
             }
         }
 
-        private void AoClicarDeletarElementoSelecionado(object sender, EventArgs e)
+        private void AoClicarDeletar(object sender, EventArgs e)
         {
             try
             {
-                const string acaoDeletar = "deletar";
-
-                if (ListaEhVazia())
+                if (EhListaVazia())
                 {
-                    MessageBox.Show(Mensagem.MensagemErroListaVazia(acaoDeletar));
+                    MessageBox.Show(Mensagem.MENSAGEM_ERRO_LISTA_VAZIA_REMOCAO);
                 }
-                else if (SomenteUmaLinhaSelecionada())
+                else if (EhSomenteUmaLinhaSelecionada())
                 {
-                    Reserva reservaSelecionada = _repositorio.ObterPorId(ObterIdReservaSelecionada());
-                    string mensagem = $"Você tem certeza que quer deletar a reserva de {reservaSelecionada.Nome}?", titulo = "Confirmação de remoção";
+                    var reservaSelecionada = _repositorio.ObterPorId(ObterIdReservaSelecionada());
+                    string mensagem = $"Você tem certeza que quer deletar a reserva de {reservaSelecionada.Nome}?";
+                    string titulo = "Confirmação de remoção";
                     var deletar = MessageBox.Show(mensagem, titulo, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
                     if (deletar.Equals(DialogResult.Yes))
                     {
-                        _repositorio.Remover(ObterIdReservaSelecionada());
+                        _repositorio.Remover(reservaSelecionada.Id);
                         AtualizarGridView();
                     }
                 }
                 else
                 {
-                    MessageBox.Show(Mensagem.MensagemErroNenhumaLinhaSelecionada(acaoDeletar));
+                    MessageBox.Show(Mensagem.MENSAGEM_ERRO_NENHUMA_LINHA_SELECIONADA_REMOCAO);
                 }
             }
             catch (Exception erro)

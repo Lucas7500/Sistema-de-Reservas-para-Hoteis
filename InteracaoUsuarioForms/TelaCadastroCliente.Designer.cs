@@ -204,7 +204,7 @@
             BotaoAdicionarCadastro.TabIndex = 11;
             BotaoAdicionarCadastro.Text = "Adicionar";
             BotaoAdicionarCadastro.UseVisualStyleBackColor = true;
-            BotaoAdicionarCadastro.Click += AoClicarAdicionarCadastro;
+            BotaoAdicionarCadastro.Click += AoClicarAdicionar;
             // 
             // BotaoCancelarCadastro
             // 
@@ -214,7 +214,7 @@
             BotaoCancelarCadastro.TabIndex = 12;
             BotaoCancelarCadastro.Text = "Cancelar";
             BotaoCancelarCadastro.UseVisualStyleBackColor = true;
-            BotaoCancelarCadastro.Click += AoClicarCancelarCadastro;
+            BotaoCancelarCadastro.Click += AoClicarCancelar;
             // 
             // TextoCPF
             // 

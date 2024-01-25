@@ -6,14 +6,14 @@ namespace Infraestrutura
 {
     public class RepositorioListaSingleton : IRepositorio
     {
-        protected List<Reserva> _listaReservas = ReservaSingleton.RetornaLista();
+        protected List<Reserva> _listaReservas = ReservaSingleton.ObterLista();
 
         public List<Reserva> ObterTodos()
         {
             return _listaReservas;
         }
 
-        public Reserva ObterPorId(int id)
+        public Reserva? ObterPorId(int id)
         {
             return _listaReservas.FirstOrDefault(x => x.Id == id);
         }

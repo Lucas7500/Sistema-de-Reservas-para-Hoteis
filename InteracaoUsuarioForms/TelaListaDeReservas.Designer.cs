@@ -61,7 +61,7 @@ namespace InteracaoUsuarioForms
             BotaoAdicionar.TabIndex = 1;
             BotaoAdicionar.Text = "Adicionar";
             BotaoAdicionar.UseVisualStyleBackColor = true;
-            BotaoAdicionar.Click += AoClicarAdicionarAbrirTelaCadastro;
+            BotaoAdicionar.Click += AoClicarAdicionar;
             // 
             // BotaoEditar
             // 
@@ -71,7 +71,7 @@ namespace InteracaoUsuarioForms
             BotaoEditar.TabIndex = 2;
             BotaoEditar.Text = "Editar";
             BotaoEditar.UseVisualStyleBackColor = true;
-            BotaoEditar.Click += AoClicarEditarElementoSelecionado;
+            BotaoEditar.Click += AoClicarEditar;
             // 
             // BotaoDeletar
             // 
@@ -81,7 +81,7 @@ namespace InteracaoUsuarioForms
             BotaoDeletar.TabIndex = 3;
             BotaoDeletar.Text = "Deletar";
             BotaoDeletar.UseVisualStyleBackColor = true;
-            BotaoDeletar.Click += AoClicarDeletarElementoSelecionado;
+            BotaoDeletar.Click += AoClicarDeletar;
             // 
             // TelaDaLista
             // 

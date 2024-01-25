@@ -22,10 +22,10 @@ namespace Infraestrutura
             return conexaoLinq2Db.GetTable<Reserva>().ToList();
         }
 
-        public Reserva ObterPorId(int id)
+        public Reserva? ObterPorId(int id)
         {
             using var conexaoLinq2Db = Connection();
-            return conexaoLinq2Db.GetTable<Reserva>().First(x => x.Id == id);
+            return conexaoLinq2Db.GetTable<Reserva>().FirstOrDefault(x => x.Id == id);
         }
 
         public void Criar(Reserva reservaParaCriacao)

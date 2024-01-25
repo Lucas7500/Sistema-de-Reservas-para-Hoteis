@@ -11,6 +11,7 @@ namespace InteracaoUsuarioForms
     {
         private readonly Reserva _reservaCopia = new();
         private static IValidator<Reserva> _validacaoReserva;
+        private const char virgula = ',';
 
         public TelaCadastroCliente(Reserva reservaParametro, IValidator<Reserva> validacaoReserva)
         {
@@ -46,7 +47,6 @@ namespace InteracaoUsuarioForms
 
         private void PermitirApenasDecimaisNoPrecoDaEstadia(object sender, KeyPressEventArgs e)
         {
-            const char virgula = ',';
             string preco = TextoPreco.Text;
             bool precoPossuiVirgula = preco.Contains(virgula);
             string decimaisAposVirgula = precoPossuiVirgula
@@ -63,7 +63,6 @@ namespace InteracaoUsuarioForms
 
         private static decimal ConverteStringParaDecimalComVirgula(string numero)
         {
-            const char virgula = ',';
             const int nenhumNumeroAposVirgula = 0;
             const int umNumeroAposVirgula = 1;
             const char umZeroAposVirgula = '0';
@@ -147,7 +146,7 @@ namespace InteracaoUsuarioForms
             }
         }
 
-        private void AoClicarAdicionarCadastro(object sender, EventArgs e)
+        private void AoClicarAdicionar(object sender, EventArgs e)
         {
             try
             {
@@ -168,7 +167,7 @@ namespace InteracaoUsuarioForms
             }
         }
 
-        private void AoClicarCancelarCadastro(object sender, EventArgs e)
+        private void AoClicarCancelar(object sender, EventArgs e)
         {
             string mensagem = "Você realmente deseja cancelar?", titulo = "Confirmação de cancelamento";
             var remover = MessageBox.Show(mensagem, titulo, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);

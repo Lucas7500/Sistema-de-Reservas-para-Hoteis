@@ -8,7 +8,7 @@ namespace Infraestrutura
         private static List<Reserva>? _listaReservas = null;
         private static int Id { get; set; } = ValoresPadrao.ID_ZERO;
 
-        public static List<Reserva> RetornaLista()
+        public static List<Reserva> ObterLista()
         {
             return _listaReservas ??= new();
         }

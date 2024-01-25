@@ -52,7 +52,7 @@ namespace Infraestrutura
             return listaReservas;
         }
 
-        public Reserva ObterPorId(int id)
+        public Reserva? ObterPorId(int id)
         {
             using var connection = Connection();
 

@@ -26,15 +26,9 @@
         public const string PRECO_DA_ESTADIA_ACIMA_DO_VALOR_MAXIMO = "- O preço da estadia está acima do máximo permitido!";
         public const string PAGAMENTO_EFETUADO_NULO = "- Informe se o preço da estadia foi pago!";
         public const string TITULO_ERRO_INESPERADO = "Ocorreu um Erro Inesperado";
-
-        public static string MensagemErroListaVazia(string acao)
-        {
-            return $"Seu programa não possui nenhuma reserva para {acao}.";
-        }
-
-        public static string MensagemErroNenhumaLinhaSelecionada(string acao)
-        {
-            return $"Selecione uma linha para {acao}!";
-        }
+        public const string MENSAGEM_ERRO_LISTA_VAZIA_EDICAO = "Seu programa não possui nenhuma reserva para editar!";
+        public const string MENSAGEM_ERRO_LISTA_VAZIA_REMOCAO = "Seu programa não possui nenhuma reserva para deletar!";
+        public const string MENSAGEM_ERRO_NENHUMA_LINHA_SELECIONADA_EDICAO = "Selecione uma linha para editar!";
+        public const string MENSAGEM_ERRO_NENHUMA_LINHA_SELECIONADA_REMOCAO = "Selecione uma linha para deletar!";
     }
 }
