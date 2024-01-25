@@ -58,10 +58,8 @@ namespace Dominio
         }
 
         private bool CpfEhUnico(Reserva reserva)
-        {
-            var reservaMesmoCpf = _repositorio
-                .ObterTodos()
-                .FirstOrDefault(reservaMesmoCpf => reservaMesmoCpf.Cpf == reserva.Cpf);
+        { 
+            var reservaMesmoCpf = _repositorio.ObterPorCpf(reserva.Cpf);
 
             return reservaMesmoCpf == null || reservaMesmoCpf.Id == reserva.Id;
         }

@@ -15,7 +15,11 @@ namespace Infraestrutura
 
         public Reserva ObterPorId(int id)
         {
-            return _listaReservas.First(x => x.Id == id);
+            return _listaReservas.First(reserva => reserva.Id == id);
+        }
+        public Reserva? ObterPorCpf(string cpf)
+        {
+            return _listaReservas.FirstOrDefault(reserva => reserva.Cpf == cpf);
         }
 
         public void Criar(Reserva reservaParaCriacao)

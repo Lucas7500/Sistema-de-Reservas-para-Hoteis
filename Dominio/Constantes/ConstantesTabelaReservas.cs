@@ -3,7 +3,7 @@
     public static class ConstantesTabelaReservas
     {
         private const string nomeConexao = "BDSistemaReservas";
-        public static readonly string STRING_CONEXAO_BD = System.Configuration.ConfigurationManager.ConnectionStrings[nomeConexao].ConnectionString;
+        public static string STRING_CONEXAO_BD = System.Configuration.ConfigurationManager.ConnectionStrings[nomeConexao].ConnectionString;
 
         public const string NOME_TABELA = "TabelaReservas";
 

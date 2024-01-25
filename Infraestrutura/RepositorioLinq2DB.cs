@@ -22,7 +22,13 @@ namespace Infraestrutura
         public Reserva ObterPorId(int id)
         {
             using var conexaoLinq2Db = Connection();
-            return conexaoLinq2Db.GetTable<Reserva>().First(x => x.Id == id);
+            return conexaoLinq2Db.GetTable<Reserva>().First(reserva => reserva.Id == id);
+        }
+
+        public Reserva? ObterPorCpf(string cpf)
+        {
+            using var conexaoLinq2Db = Connection();
+            return conexaoLinq2Db.GetTable<Reserva>().FirstOrDefault(reserva => reserva.Cpf == cpf);
         }
 
         public void Criar(Reserva reservaParaCriacao)

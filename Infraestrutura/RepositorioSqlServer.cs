@@ -55,7 +55,7 @@ namespace Infraestrutura
             using var connection = Connection();
 
             var reservaSelecionada = new Reserva();
-            string query = $"SELECT * FROM {ConstantesTabelaReservas.NOME_TABELA} WHERE {ConstantesTabelaReservas.COLUNA_ID}={id}";
+            string query = $"SELECT * FROM {ConstantesTabelaReservas.NOME_TABELA} WHERE {ConstantesTabelaReservas.COLUNA_ID} = {id}";
 
             SqlCommand obterObjetoPorId = new(query, connection);
             var leitor = obterObjetoPorId.ExecuteReader();
@@ -66,6 +66,24 @@ namespace Infraestrutura
             }
 
             return reservaSelecionada;
+        }
+
+        public Reserva? ObterPorCpf(string cpf)
+        {
+            using var connection = Connection();
+
+            Reserva? reservaMesmoCpf = null;
+            string query = $"SELECT * FROM {ConstantesTabelaReservas.NOME_TABELA} WHERE {ConstantesTabelaReservas.COLUNA_CPF} = '{cpf}'";
+
+            SqlCommand obterObjetoPorCpf = new(query, connection);
+            var leitor = obterObjetoPorCpf.ExecuteReader();
+
+            while (leitor.Read())
+            {
+                reservaMesmoCpf = CriarReserva(leitor);
+            }
+
+            return reservaMesmoCpf;
         }
 
         public void Criar(Reserva reservaParaCriacao)
