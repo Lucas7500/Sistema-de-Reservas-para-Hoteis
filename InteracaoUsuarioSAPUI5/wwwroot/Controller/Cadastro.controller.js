@@ -34,10 +34,12 @@ sap.ui.define([
         },
 
         _aoCoincidirRotaCadastro() {
-            this._definirTituloTelaCadastro();
-            this._limparValueStateInputs();
-            this._definirValorPadraoRadioButton();
-            this._definirModeloPadraoCadastro();
+            this.exibirEspera(() => {
+                this._definirTituloTelaCadastro();
+                this._limparValueStateInputs();
+                this._definirValorPadraoRadioButton();
+                this._definirModeloPadraoCadastro();
+            });
         },
 
         _aoCoincidirRotaEdicao(evento) {

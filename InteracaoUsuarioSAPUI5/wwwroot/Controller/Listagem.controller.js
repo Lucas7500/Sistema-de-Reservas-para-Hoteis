@@ -18,7 +18,9 @@ sap.ui.define([
         },
 
         _aoCoincidirRota() {
-            this._modeloListaReservas();
+            this.exibirEspera(() => {
+                this._modeloListaReservas();
+            });
         },
 
         _modeloListaReservas(filtro) {
