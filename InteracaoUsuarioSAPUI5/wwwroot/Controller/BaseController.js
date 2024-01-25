@@ -56,7 +56,13 @@ sap.ui.define([
                 .navTo(nomeDaRota, { id: parametroId });
         },
 
-        exibirEspera(acao) {
+        async exibirEspera(acao) {
+            await this.getView().setBusy(true);
+            await this.processarEvento(acao);
+            await this.getView().setBusy(false);
+        },
+
+        async processarEvento(acao) {
             try {
                 const tipoDaPromise = "catch", tipoBuscado = "function";
                 let promise = acao();
