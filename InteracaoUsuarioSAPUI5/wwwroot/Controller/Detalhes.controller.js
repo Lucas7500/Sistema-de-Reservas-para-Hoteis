@@ -2,9 +2,8 @@ sap.ui.define([
     "./BaseController",
     "../model/Formatter",
     "../Repositorios/ReservaRepository",
-    "sap/m/MessageBox",
-    "../Services/ProcessadorDeEventos"
-], (BaseController, Formatter, ReservaRepository, MessageBox, ProcessadorDeEventos) => {
+    "sap/m/MessageBox"
+], (BaseController, Formatter, ReservaRepository, MessageBox) => {
     "use strict";
 
     const CAMINHO_ROTA_DETALHES = "reservas.hoteis.controller.Detalhes";
@@ -18,7 +17,7 @@ sap.ui.define([
         },
 
         _aoCoincidirRota(evento) {
-            ProcessadorDeEventos.processarEvento(() => {
+            this.exibirEspera(() => {
                 this._definirReservaPeloId(this._obterIdPeloParametro(evento));
             });
         },
@@ -71,13 +70,13 @@ sap.ui.define([
         },
 
         aoClicarNavegarParaTelaListagem() {
-            ProcessadorDeEventos.processarEvento(() => {
+            this.exibirEspera(() => {
                 this._navegarParaTelaListagem();
             });
         },
 
         aoClicarNavegarParaTelaEdicao() {
-            ProcessadorDeEventos.processarEvento(() => {
+            this.exibirEspera(() => {
                 const rotaEdicao = "edicao";
                 const idReserva = this._modeloReserva().id;
 
@@ -86,7 +85,7 @@ sap.ui.define([
         },
 
         aoClicarRemoverReserva() {
-            ProcessadorDeEventos.processarEvento(() => {
+            this.exibirEspera(() => {
                 const confirmacaoRemocao = "confirmacaoRemocao";
                 const mensagemConfirmacao = this.obterRecursosI18n().getText(confirmacaoRemocao);
 

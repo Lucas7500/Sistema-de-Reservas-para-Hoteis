@@ -2,9 +2,8 @@ sap.ui.define([
     "./BaseController",
     "../model/Formatter",
     "../Repositorios/ReservaRepository",
-    "sap/m/MessageBox",
-    "../Services/ProcessadorDeEventos"
-], (BaseController, Formatter, ReservaRepository, MessageBox, ProcessadorDeEventos) => {
+    "sap/m/MessageBox"
+], (BaseController, Formatter, ReservaRepository, MessageBox) => {
     "use strict";
 
     const CAMINHO_ROTA_LISTAGEM = "reservas.hoteis.controller.Listagem";
@@ -39,7 +38,7 @@ sap.ui.define([
         },
 
         aoPesquisarFiltrarReservas(filtro) {
-            ProcessadorDeEventos.processarEvento(() => {
+            this.exibirEspera(() => {
                 const parametroQuery = "query";
                 const stringFiltro = filtro.getParameter(parametroQuery);
 
@@ -48,14 +47,14 @@ sap.ui.define([
         },
 
         aoClicarAbrirCadastro() {
-            ProcessadorDeEventos.processarEvento(() => {
+            this.exibirEspera(() => {
                 const rotaCadastro = "cadastro";
                 this.navegarPara(rotaCadastro);
             });
         },
 
         aoClicarAbrirDetalhes(evento) {
-            ProcessadorDeEventos.processarEvento(() => {
+            this.exibirEspera(() => {
                 const propriedadeId = "id";
                 const idReserva = evento
                     .getSource()

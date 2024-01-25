@@ -4,9 +4,8 @@ sap.ui.define([
     "../Repositorios/ReservaRepository",
     "sap/m/MessageBox",
     "../Services/Validacao",
-    "../Services/ProcessadorDeEventos",
     "sap/ui/core/ValueState"
-], (BaseController, Formatter, ReservaRepository, MessageBox, Validacao, ProcessadorDeEventos, ValueState) => {
+], (BaseController, Formatter, ReservaRepository, MessageBox, Validacao, ValueState) => {
     "use strict";
 
     const CAMINHO_ROTA_CADASTRO = "reservas.hoteis.controller.Cadastro";
@@ -42,7 +41,7 @@ sap.ui.define([
         },
 
         _aoCoincidirRotaEdicao(evento) {
-            ProcessadorDeEventos.processarEvento(() => {
+            this.exibirEspera(() => {
                 const idReserva = this._obterIdPeloParametro(evento);
 
                 this._definirTituloTelaCadastro(idReserva);
@@ -205,7 +204,7 @@ sap.ui.define([
         },
 
         aoClicarNavegarParaTelaAnterior() {
-            ProcessadorDeEventos.processarEvento(() => {
+            this.exibirEspera(() => {
                 const idReserva = this._modeloReserva().id;
 
                 idReserva
@@ -215,7 +214,7 @@ sap.ui.define([
         },
 
         aoClicarSalvarReserva() {
-            ProcessadorDeEventos.processarEvento(() => {
+            this.exibirEspera(() => {
                 const reservaPreenchida = this._obterReservaPreenchida();
                 Validacao.validarReserva(reservaPreenchida);
 
@@ -232,7 +231,7 @@ sap.ui.define([
         },
 
         aoClicarCancelarCadastro() {
-            ProcessadorDeEventos.processarEvento(() => {
+            this.exibirEspera(() => {
                 const confirmacaoCancelar = "confirmacaoCancelar";
                 const mensagemConfirmacao = this.obterRecursosI18n().getText(confirmacaoCancelar);
                 const idReserva = this._modeloReserva().id;
@@ -246,7 +245,7 @@ sap.ui.define([
         },
 
         aoMudarValidarNome(evento) {
-            ProcessadorDeEventos.processarEvento(() => {
+            this.exibirEspera(() => {
                 const inputNome = evento.getSource();
                 const valorNome = evento.getParameter(PARAMETRO_VALUE);
                 const mensagemErroValidacao = Validacao.validarNome(valorNome);
@@ -256,7 +255,7 @@ sap.ui.define([
         },
 
         aoMudarValidarCpf(evento) {
-            ProcessadorDeEventos.processarEvento(() => {
+            this.exibirEspera(() => {
                 const inputCpf = evento.getSource();
                 const valorCpf = evento.getParameter(PARAMETRO_VALUE);
                 const mensagemErroValidacao = Validacao.validarCpf(valorCpf);
@@ -266,7 +265,7 @@ sap.ui.define([
         },
 
         aoMudarValidarTelefone(evento) {
-            ProcessadorDeEventos.processarEvento(() => {
+            this.exibirEspera(() => {
                 const inputTelefone = evento.getSource();
                 const valorTelefone = evento.getParameter(PARAMETRO_VALUE);
                 const mensagemErroValidacao = Validacao.validarTelefone(valorTelefone);
@@ -276,7 +275,7 @@ sap.ui.define([
         },
 
         aoMudarValidarIdade(evento) {
-            ProcessadorDeEventos.processarEvento(() => {
+            this.exibirEspera(() => {
                 const inputIdade = evento.getSource();
                 const valorIdade = evento.getParameter(PARAMETRO_VALUE);
                 const mensagemErroValidacao = Validacao.validarIdade(valorIdade);
@@ -286,7 +285,7 @@ sap.ui.define([
         },
 
         aoMudarValidarCheckInECheckOut() {
-            ProcessadorDeEventos.processarEvento(() => {
+            this.exibirEspera(() => {
                 const idReserva = this._modeloReserva().id;
 
                 const inputCheckIn = this.byId(ID_INPUTS.idInputCheckIn);
@@ -312,7 +311,7 @@ sap.ui.define([
         },
 
         aoMudarValidarPrecoEstadia(evento) {
-            ProcessadorDeEventos.processarEvento(() => {
+            this.exibirEspera(() => {
                 const inputPrecoEstadia = evento.getSource();
                 const valorPrecoEstadia = evento.getParameter(PARAMETRO_VALUE);
                 const mensagemErroValidacao = Validacao.validarPrecoEstadia(valorPrecoEstadia);
