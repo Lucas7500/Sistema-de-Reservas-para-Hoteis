@@ -11,13 +11,13 @@ namespace Dominio
 
         public static void ValidarCampos(Dictionary<string, dynamic> reservaDict)
         {
-            string nome = reservaDict[CamposTabelaReservas.COLUNA_NOME];
-            string cpf = reservaDict[CamposTabelaReservas.COLUNA_CPF];
-            string telefone = reservaDict[CamposTabelaReservas.COLUNA_TELEFONE];
-            int idade = reservaDict[CamposTabelaReservas.COLUNA_IDADE];
-            decimal precoEstadia = reservaDict[CamposTabelaReservas.COLUNA_PRECO_ESTADIA];
-            DateTime checkIn = reservaDict[CamposTabelaReservas.COLUNA_CHECK_IN];
-            DateTime checkOut = reservaDict[CamposTabelaReservas.COLUNA_CHECK_OUT];
+            string nome = reservaDict[ConstantesTabelaReservas.COLUNA_NOME];
+            string cpf = reservaDict[ConstantesTabelaReservas.COLUNA_CPF];
+            string telefone = reservaDict[ConstantesTabelaReservas.COLUNA_TELEFONE];
+            int idade = reservaDict[ConstantesTabelaReservas.COLUNA_IDADE];
+            decimal precoEstadia = reservaDict[ConstantesTabelaReservas.COLUNA_PRECO_ESTADIA];
+            DateTime checkIn = reservaDict[ConstantesTabelaReservas.COLUNA_CHECK_IN];
+            DateTime checkOut = reservaDict[ConstantesTabelaReservas.COLUNA_CHECK_OUT];
 
             ValidarNome(nome);
             ValidarCpf(cpf);

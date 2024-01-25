@@ -7,12 +7,9 @@ namespace Infraestrutura
 {
     public class RepositorioLinq2DB : IRepositorio
     {
-        private const string nomeConexao = "BDSistemaReservas";
-        private static readonly string _connectionString = System.Configuration.ConfigurationManager.ConnectionStrings[nomeConexao].ConnectionString;
-
         private static DataConnection Connection()
         {
-            var conexaoLinq2Db = new DataConnection(new DataOptions().UseSqlServer(_connectionString));
+            var conexaoLinq2Db = new DataConnection(new DataOptions().UseSqlServer(ConstantesTabelaReservas.STRING_CONEXAO_BD));
             return conexaoLinq2Db;
         }
 
@@ -22,10 +19,10 @@ namespace Infraestrutura
             return conexaoLinq2Db.GetTable<Reserva>().ToList();
         }
 
-        public Reserva? ObterPorId(int id)
+        public Reserva ObterPorId(int id)
         {
             using var conexaoLinq2Db = Connection();
-            return conexaoLinq2Db.GetTable<Reserva>().FirstOrDefault(x => x.Id == id);
+            return conexaoLinq2Db.GetTable<Reserva>().First(x => x.Id == id);
         }
 
         public void Criar(Reserva reservaParaCriacao)
