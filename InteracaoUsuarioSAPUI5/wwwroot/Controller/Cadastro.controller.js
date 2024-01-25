@@ -82,15 +82,15 @@ sap.ui.define([
             const idTituloTelaCadastro = "tituloTelaCadastro";
             const tituloTelaCadastro = this.byId(idTituloTelaCadastro);
 
-            const variavelTituloCadastro = "tituloCadastro";
-            const variavelTituloEdicao = "tituloEdicao";
+            const tituloCadastro = "tituloCadastro";
+            const tituloEdicao = "tituloEdicao";
 
-            const tituloCadastro = this.obterRecursosI18n().getText(variavelTituloCadastro);
-            const tituloEdicao = this.obterRecursosI18n().getText(variavelTituloEdicao);
+            const textoTituloCadastro = this.obterRecursosI18n().getText(tituloCadastro);
+            const textoTituloEdicao = this.obterRecursosI18n().getText(tituloEdicao);
 
             idReserva
-                ? tituloTelaCadastro.setTitle(tituloEdicao)
-                : tituloTelaCadastro.setTitle(tituloCadastro)
+                ? tituloTelaCadastro.setTitle(textoTituloEdicao)
+                : tituloTelaCadastro.setTitle(textoTituloCadastro)
         },
 
         _definirValorPadraoRadioButton() {
@@ -153,8 +153,8 @@ sap.ui.define([
 
         _criarReserva(reservaParaCriar) {
             try {
-                const variavelSucessoCriar = "sucessoCriar";
-                const mensagemSucessoCriar = this.obterRecursosI18n().getText(variavelSucessoCriar);
+                const sucessoCriar = "sucessoCriar";
+                const mensagemSucessoCriar = this.obterRecursosI18n().getText(sucessoCriar);
 
                 ReservaRepository.criarReserva(reservaParaCriar)
                     .then(response => {
@@ -175,8 +175,8 @@ sap.ui.define([
 
         _atualizarReserva(reservaParaAtualizar) {
             try {
-                const variavelSucessoEditar = "sucessoEditar";
-                const mensagemSucessoEditar = this.obterRecursosI18n().getText(variavelSucessoEditar);
+                const sucessoEditar = "sucessoEditar";
+                const mensagemSucessoEditar = this.obterRecursosI18n().getText(sucessoEditar);
 
                 ReservaRepository.atualizarReserva(reservaParaAtualizar)
                     .then(response => {
@@ -195,40 +195,27 @@ sap.ui.define([
         },
 
         _navegarParaTelaListagem() {
-            try {
-                const rotaListagem = "listagem";
-                this.navegarPara(rotaListagem);
-            }
-            catch (erro) {
-                MessageBox.warning(erro.message);
-            }
+            const rotaListagem = "listagem";
+            this.navegarPara(rotaListagem);
         },
 
         _navegarParaDetalhesReserva(id) {
-            try {
-                const rotaDetalhes = "detalhes";
-                this.navegarPara(rotaDetalhes, id);
-            }
-            catch (erro) {
-                MessageBox.warning(erro.message);
-            }
+            const rotaDetalhes = "detalhes";
+            this.navegarPara(rotaDetalhes, id);
         },
 
         aoClicarNavegarParaTelaAnterior() {
-            try {
+            ProcessadorDeEventos.processarEvento(() => {
                 const idReserva = this._modeloReserva().id;
 
                 idReserva
                     ? this._navegarParaDetalhesReserva(idReserva)
                     : this._navegarParaTelaListagem();
-            }
-            catch (erro) {
-                MessageBox.warning(erro.message);
-            }
+            });
         },
 
         aoClicarSalvarReserva() {
-            try {
+            ProcessadorDeEventos.processarEvento(() => {
                 const reservaPreenchida = this._obterReservaPreenchida();
                 Validacao.validarReserva(reservaPreenchida);
 
@@ -241,16 +228,13 @@ sap.ui.define([
                     : reservaPreenchida.id
                         ? this._atualizarReserva(reservaPreenchida)
                         : this._criarReserva(reservaPreenchida);
-            }
-            catch (erro) {
-                MessageBox.warning(erro.message);
-            }
+            });
         },
 
         aoClicarCancelarCadastro() {
-            try {
-                const variavelConfirmacaoCancelar = "confirmacaoCancelar";
-                const mensagemConfirmacao = this.obterRecursosI18n().getText(variavelConfirmacaoCancelar);
+            ProcessadorDeEventos.processarEvento(() => {
+                const confirmacaoCancelar = "confirmacaoCancelar";
+                const mensagemConfirmacao = this.obterRecursosI18n().getText(confirmacaoCancelar);
                 const idReserva = this._modeloReserva().id;
 
                 this.messageBoxConfirmacao(mensagemConfirmacao, () => {
@@ -258,10 +242,7 @@ sap.ui.define([
                         ? this._navegarParaDetalhesReserva(idReserva)
                         : this._navegarParaTelaListagem();
                 });
-            }
-            catch (erro) {
-                MessageBox.warning(erro.message);
-            }
+            });
         },
 
         aoMudarValidarNome(evento) {

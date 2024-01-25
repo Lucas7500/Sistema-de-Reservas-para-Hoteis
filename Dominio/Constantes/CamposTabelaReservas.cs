@@ -1,6 +1,6 @@
 ﻿namespace Dominio.Constantes
 {
-    public class CamposTabela
+    public class CamposTabelaReservas
     {
         public const string NOME_TABELA = "TabelaReservas";
         public const string COLUNA_ID = "Id";

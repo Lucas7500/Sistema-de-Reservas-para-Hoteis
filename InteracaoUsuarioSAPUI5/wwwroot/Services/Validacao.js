@@ -11,7 +11,7 @@ sap.ui.define([
     const INDICE_MENSAGEM_ERRO_CHECK_OUT = 5;
     const INDICE_MENSAGEM_ERRO_PRECO_ESTADIA = 6;
 
-    let LISTA_ERROS = new Array();
+    let LISTA_ERROS = [];
     let RECURSOS_I18N;
 
     return {
@@ -43,20 +43,20 @@ sap.ui.define([
             const regexNome = "^[a-zA-ZáàâãäéèêëíìïóòôõöüúùçñÁÀÂÃÄÉÈÊËÍÌÏÓÒÔÕÖÜÚÙÇÑ ]*$";
 
             if (!this.contemValor(nomeFormatado)) {
-                const variavelNomeNaoPreenchido = "nomeNaoPreenchido";
-                LISTA_ERROS[INDICE_MENSAGEM_ERRO_NOME] = RECURSOS_I18N.getText(variavelNomeNaoPreenchido);
+                const nomeNaoPreenchido = "nomeNaoPreenchido";
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_NOME] = RECURSOS_I18N.getText(nomeNaoPreenchido);
             }
             else if (tamanhoNome < tamanhoMinimoNome) {
-                const variavelNomeCurto = "nomeCurto";
-                LISTA_ERROS[INDICE_MENSAGEM_ERRO_NOME] = RECURSOS_I18N.getText(variavelNomeCurto);
+                const nomeCurto = "nomeCurto";
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_NOME] = RECURSOS_I18N.getText(nomeCurto);
             }
             else if (tamanhoNome > tamanhoMaximoNome) {
-                const variavelNomeLongo = "nomeLongo";
-                LISTA_ERROS[INDICE_MENSAGEM_ERRO_NOME] = RECURSOS_I18N.getText(variavelNomeLongo);
+                const nomeLongo = "nomeLongo";
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_NOME] = RECURSOS_I18N.getText(nomeLongo);
             }
             else if (!nomeFormatado.match(regexNome)) {
-                const variavelNomeFormatoIncorreto = "nomeFormatoIncorreto";
-                LISTA_ERROS[INDICE_MENSAGEM_ERRO_NOME] = RECURSOS_I18N.getText(variavelNomeFormatoIncorreto);
+                const nomeFormatoIncorreto = "nomeFormatoIncorreto";
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_NOME] = RECURSOS_I18N.getText(nomeFormatoIncorreto);
             }
             else {
                 LISTA_ERROS[INDICE_MENSAGEM_ERRO_NOME] = undefined;
@@ -96,16 +96,16 @@ sap.ui.define([
             const quartoCasoInvalido = restoSegundoDigito >= 2 && segundoDigitoVerificador != (11 - restoSegundoDigito);
 
             if (!this.contemValor(cpf)) {
-                const variavelCpfNaoPreenchido = "cpfNaoPreenchido";
-                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CPF] = RECURSOS_I18N.getText(variavelCpfNaoPreenchido);
+                const cpfNaoPreenchido = "cpfNaoPreenchido";
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CPF] = RECURSOS_I18N.getText(cpfNaoPreenchido);
             }
             else if (tamanhoNumerosCpf < tamanhoCpfPreenchido) {
-                const variavelCpfParcialmentePreenchido = "cpfParcialmentePreenchido";
-                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CPF] = RECURSOS_I18N.getText(variavelCpfParcialmentePreenchido);
+                const cpfParcialmentePreenchido = "cpfParcialmentePreenchido";
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CPF] = RECURSOS_I18N.getText(cpfParcialmentePreenchido);
             }
             else if (primeiroCasoInvalido || segundoCasoInvalido || terceiroCasoInvalido || quartoCasoInvalido) {
-                const variavelCpfInvalido = "cpfInvalido";
-                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CPF] = RECURSOS_I18N.getText(variavelCpfInvalido);
+                const cpfInvalido = "cpfInvalido";
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CPF] = RECURSOS_I18N.getText(cpfInvalido);
             }
             else {
                 LISTA_ERROS[INDICE_MENSAGEM_ERRO_CPF] = undefined;
@@ -126,12 +126,12 @@ sap.ui.define([
             const tamanhoTelefonePreenchido = 11;
 
             if (!this.contemValor(telefone)) {
-                const variavelTelefoneNaoPreenchido = "telefoneNaoPreenchido";
-                LISTA_ERROS[INDICE_MENSAGEM_ERRO_TELEFONE] = RECURSOS_I18N.getText(variavelTelefoneNaoPreenchido);
+                const telefoneNaoPreenchido = "telefoneNaoPreenchido";
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_TELEFONE] = RECURSOS_I18N.getText(telefoneNaoPreenchido);
             }
             else if (tamanhoNumerosTelefone < tamanhoTelefonePreenchido) {
-                const variavelTelefoneParcialmentePreenchido = "telefoneParcialmentePreenchido";
-                LISTA_ERROS[INDICE_MENSAGEM_ERRO_TELEFONE] = RECURSOS_I18N.getText(variavelTelefoneParcialmentePreenchido);
+                const telefoneParcialmentePreenchido = "telefoneParcialmentePreenchido";
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_TELEFONE] = RECURSOS_I18N.getText(telefoneParcialmentePreenchido);
             }
             else {
                 LISTA_ERROS[INDICE_MENSAGEM_ERRO_TELEFONE] = undefined;
@@ -147,20 +147,20 @@ sap.ui.define([
             const valorMaximoIdade = 200;
 
             if (!this.contemValor(idade)) {
-                const variavelIdadeNaoPreenchida = "idadeNaoPreenchida";
-                LISTA_ERROS[INDICE_MENSAGEM_ERRO_IDADE] = RECURSOS_I18N.getText(variavelIdadeNaoPreenchida);
+                const idadeNaoPreenchida = "idadeNaoPreenchida";
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_IDADE] = RECURSOS_I18N.getText(idadeNaoPreenchida);
             }
             else if (!String(idade).match(regexNumeros)) {
-                const variavelIdadeFormatoInvalido = "idadeFormatoInvalido";
-                LISTA_ERROS[INDICE_MENSAGEM_ERRO_IDADE] = RECURSOS_I18N.getText(variavelIdadeFormatoInvalido);
+                const idadeFormatoInvalido = "idadeFormatoInvalido";
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_IDADE] = RECURSOS_I18N.getText(idadeFormatoInvalido);
             }
             else if (numeroIdade < valorMinimoIdade) {
-                const variavelMenorDeIdade = "menorDeIdade";
-                LISTA_ERROS[INDICE_MENSAGEM_ERRO_IDADE] = RECURSOS_I18N.getText(variavelMenorDeIdade);
+                const menorDeIdade = "menorDeIdade";
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_IDADE] = RECURSOS_I18N.getText(menorDeIdade);
             }
             else if (numeroIdade >= valorMaximoIdade) {
-                const variavelIdadeAcimaValorMaximo = "idadeAcimaValorMaximo";
-                LISTA_ERROS[INDICE_MENSAGEM_ERRO_IDADE] = RECURSOS_I18N.getText(variavelIdadeAcimaValorMaximo);
+                const idadeAcimaValorMaximo = "idadeAcimaValorMaximo";
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_IDADE] = RECURSOS_I18N.getText(idadeAcimaValorMaximo);
             }
             else {
                 LISTA_ERROS[INDICE_MENSAGEM_ERRO_IDADE] = undefined;
@@ -187,8 +187,8 @@ sap.ui.define([
 
         validarCheckIn(checkIn) {
             if (!this.contemValor(checkIn)) {
-                const variavelCheckInNaoPreenchido = "checkInNaoPreenchido";
-                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_IN] = RECURSOS_I18N.getText(variavelCheckInNaoPreenchido);
+                const checkInNaoPreenchido = "checkInNaoPreenchido";
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_IN] = RECURSOS_I18N.getText(checkInNaoPreenchido);
             }
             else {
                 LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_IN] = undefined;
@@ -206,12 +206,12 @@ sap.ui.define([
             const terceiroCasoInvalido = (anoCheckOut == anoCheckIn) && (mesCheckOut == mesCheckIn) && (diaCheckOut < diaCheckIn);
 
             if (!this.contemValor(checkOut)) {
-                const variavelCheckOutNaoPreenchido = "checkOutNaoPreenchido";
-                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_OUT] = RECURSOS_I18N.getText(variavelCheckOutNaoPreenchido);
+                const checkOutNaoPreenchido = "checkOutNaoPreenchido";
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_OUT] = RECURSOS_I18N.getText(checkOutNaoPreenchido);
             }
             else if (primeiroCasoInvalido || segundoCasoInvalido || terceiroCasoInvalido) {
-                const variavelCheckOutAnteriorCheckIn = "checkOutAnteriorCheckIn";
-                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_OUT] = RECURSOS_I18N.getText(variavelCheckOutAnteriorCheckIn);
+                const checkOutAnteriorCheckIn = "checkOutAnteriorCheckIn";
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_OUT] = RECURSOS_I18N.getText(checkOutAnteriorCheckIn);
             }
             else {
                 LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_OUT] = undefined;
@@ -224,8 +224,8 @@ sap.ui.define([
             LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_IN] = this.validarCheckIn(checkIn);
 
             if (!this.validarDataCadastro(checkIn)) {
-                const variavelCheckInDatasPassadas = "checkInDatasPassadas";
-                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_IN] = RECURSOS_I18N.getText(variavelCheckInDatasPassadas);
+                const checkInDatasPassadas = "checkInDatasPassadas";
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_IN] = RECURSOS_I18N.getText(checkInDatasPassadas);
             }
 
             return LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_IN];
@@ -235,8 +235,8 @@ sap.ui.define([
             LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_OUT] = this.validarCheckOut(checkOut, checkIn);
 
             if (!this.validarDataCadastro(checkOut)) {
-                const variavelCheckOutDatasPassadas = "checkOutDatasPassadas";
-                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_OUT] = RECURSOS_I18N.getText(variavelCheckOutDatasPassadas);
+                const checkOutDatasPassadas = "checkOutDatasPassadas";
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_OUT] = RECURSOS_I18N.getText(checkOutDatasPassadas);
             }
 
             return LISTA_ERROS[INDICE_MENSAGEM_ERRO_CHECK_OUT];
@@ -249,20 +249,20 @@ sap.ui.define([
             const numeroPrecoEstadia = Number(Formatter.desformataPrecoEstadia(precoEstadia));
 
             if (!this.contemValor(precoEstadia)) {
-                const variavelPrecoEstadiaNaoPreenchido = "precoEstadiaNaoPreenchido"
-                LISTA_ERROS[INDICE_MENSAGEM_ERRO_PRECO_ESTADIA] = RECURSOS_I18N.getText(variavelPrecoEstadiaNaoPreenchido);
+                const precoEstadiaNaoPreenchido = "precoEstadiaNaoPreenchido"
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_PRECO_ESTADIA] = RECURSOS_I18N.getText(precoEstadiaNaoPreenchido);
             }
             else if (String(precoEstadia).match(regexValoresNaoPermitidos)) {
-                const variavelPrecoEstadiaFormatoInvalido = "precoEstadiaFormatoInvalido"
-                LISTA_ERROS[INDICE_MENSAGEM_ERRO_PRECO_ESTADIA] = RECURSOS_I18N.getText(variavelPrecoEstadiaFormatoInvalido);
+                const precoEstadiaFormatoInvalido = "precoEstadiaFormatoInvalido"
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_PRECO_ESTADIA] = RECURSOS_I18N.getText(precoEstadiaFormatoInvalido);
             }
             else if (numeroPrecoEstadia > valorMaximoPrecoEstadia) {
-                const variavelPrecoEstadiaAcimaValorMaximo = "precoEstadiaAcimaValorMaximo"
-                LISTA_ERROS[INDICE_MENSAGEM_ERRO_PRECO_ESTADIA] = RECURSOS_I18N.getText(variavelPrecoEstadiaAcimaValorMaximo);
+                const precoEstadiaAcimaValorMaximo = "precoEstadiaAcimaValorMaximo"
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_PRECO_ESTADIA] = RECURSOS_I18N.getText(precoEstadiaAcimaValorMaximo);
             }
             else if (numeroPrecoEstadia <= valorZero) {
-                const variavelPrecoEstadiaNegativoOuZero = "precoEstadiaNegativoOuZero"
-                LISTA_ERROS[INDICE_MENSAGEM_ERRO_PRECO_ESTADIA] = RECURSOS_I18N.getText(variavelPrecoEstadiaNegativoOuZero);
+                const precoEstadiaNegativoOuZero = "precoEstadiaNegativoOuZero"
+                LISTA_ERROS[INDICE_MENSAGEM_ERRO_PRECO_ESTADIA] = RECURSOS_I18N.getText(precoEstadiaNegativoOuZero);
             }
             else {
                 LISTA_ERROS[INDICE_MENSAGEM_ERRO_PRECO_ESTADIA] = undefined;

@@ -1,6 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using Dominio.Constantes;
 using Dominio.Enums;
+using Dominio.Extensoes;
 
 namespace Dominio
 {
@@ -10,13 +11,13 @@ namespace Dominio
 
         public static void ValidarCampos(Dictionary<string, dynamic> reservaDict)
         {
-            string nome = reservaDict[CamposTabela.COLUNA_NOME];
-            string cpf = reservaDict[CamposTabela.COLUNA_CPF];
-            string telefone = reservaDict[CamposTabela.COLUNA_TELEFONE];
-            int idade = reservaDict[CamposTabela.COLUNA_IDADE];
-            decimal precoEstadia = reservaDict[CamposTabela.COLUNA_PRECO_ESTADIA];
-            DateTime checkIn = reservaDict[CamposTabela.COLUNA_CHECK_IN];
-            DateTime checkOut = reservaDict[CamposTabela.COLUNA_CHECK_OUT];
+            string nome = reservaDict[CamposTabelaReservas.COLUNA_NOME];
+            string cpf = reservaDict[CamposTabelaReservas.COLUNA_CPF];
+            string telefone = reservaDict[CamposTabelaReservas.COLUNA_TELEFONE];
+            int idade = reservaDict[CamposTabelaReservas.COLUNA_IDADE];
+            decimal precoEstadia = reservaDict[CamposTabelaReservas.COLUNA_PRECO_ESTADIA];
+            DateTime checkIn = reservaDict[CamposTabelaReservas.COLUNA_CHECK_IN];
+            DateTime checkOut = reservaDict[CamposTabelaReservas.COLUNA_CHECK_OUT];
 
             ValidarNome(nome);
             ValidarCpf(cpf);
@@ -38,8 +39,8 @@ namespace Dominio
         private static void ValidarNome(string nome)
         {
             string regexNome = "^[a-zA-ZáàâãäéèêëíìïóòôõöüúùçñÁÀÂÃÄÉÈÊËÍÌÏÓÒÔÕÖÜÚÙÇÑ ]*$";
-
-            if (String.IsNullOrWhiteSpace(nome))
+            
+            if (!nome.ContemValor())
             {
                 _ListaExcessoes.Add(Mensagem.NOME_NAO_PREENCHIDO);
             }

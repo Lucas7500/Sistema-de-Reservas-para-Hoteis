@@ -65,7 +65,7 @@ namespace InteracaoUsuarioForms
 
         private static bool ListaEhVazia()
         {
-            return _repositorio.ObterTodos().Count == ValoresPadrao.LISTA_NULA;
+            return !_repositorio.ObterTodos().Any();
         }
 
         private static int ObterIdReservaSelecionada()

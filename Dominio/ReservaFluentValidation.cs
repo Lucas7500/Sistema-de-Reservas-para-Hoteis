@@ -70,7 +70,7 @@ namespace Dominio
         {
             string numerosTelefone = new(telefone.Where(char.IsDigit).ToArray());
 
-            return numerosTelefone.Length != ValoresPadrao.EH_VAZIO;
+            return Convert.ToBoolean(numerosTelefone.Length);
         }
 
         private bool TelefoneEhValido(string telefone)
@@ -85,7 +85,7 @@ namespace Dominio
         {
             string numerosCpf = new(cpf.Where(char.IsDigit).ToArray());
 
-            return numerosCpf.Length != ValoresPadrao.EH_VAZIO;
+            return Convert.ToBoolean(numerosCpf.Length);
         }
 
         private static bool CpfEhValido(string cpf)

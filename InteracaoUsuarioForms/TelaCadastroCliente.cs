@@ -117,13 +117,13 @@ namespace InteracaoUsuarioForms
         {
             return new Dictionary<string, dynamic>
             {
-                { CamposTabela.COLUNA_NOME, TextoNome.Text },
-                { CamposTabela.COLUNA_CPF, TextoCPF.Text },
-                { CamposTabela.COLUNA_TELEFONE, TextoTelefone.Text },
-                { CamposTabela.COLUNA_IDADE, String.IsNullOrWhiteSpace(TextoIdade.Text) ? ValoresPadrao.CODIGO_DE_ERRO : int.Parse(TextoIdade.Text) },
-                { CamposTabela.COLUNA_CHECK_IN, Convert.ToDateTime(DataCheckIn.Value.Date) },
-                { CamposTabela.COLUNA_CHECK_OUT, Convert.ToDateTime(DataCheckOut.Value.Date) },
-                { CamposTabela.COLUNA_PRECO_ESTADIA, String.IsNullOrWhiteSpace(TextoPreco.Text) ? ValoresPadrao.CODIGO_DE_ERRO : ConverteStringParaDecimalComVirgula(TextoPreco.Text) }
+                { CamposTabelaReservas.COLUNA_NOME, TextoNome.Text },
+                { CamposTabelaReservas.COLUNA_CPF, TextoCPF.Text },
+                { CamposTabelaReservas.COLUNA_TELEFONE, TextoTelefone.Text },
+                { CamposTabelaReservas.COLUNA_IDADE, String.IsNullOrWhiteSpace(TextoIdade.Text) ? ValoresPadrao.CODIGO_DE_ERRO : int.Parse(TextoIdade.Text) },
+                { CamposTabelaReservas.COLUNA_CHECK_IN, Convert.ToDateTime(DataCheckIn.Value.Date) },
+                { CamposTabelaReservas.COLUNA_CHECK_OUT, Convert.ToDateTime(DataCheckOut.Value.Date) },
+                { CamposTabelaReservas.COLUNA_PRECO_ESTADIA, String.IsNullOrWhiteSpace(TextoPreco.Text) ? ValoresPadrao.CODIGO_DE_ERRO : ConverteStringParaDecimalComVirgula(TextoPreco.Text) }
             };
         }
 

@@ -39,23 +39,19 @@ sap.ui.define([
         },
 
         aoPesquisarFiltrarReservas(filtro) {
-            try {
+            ProcessadorDeEventos.processarEvento(() => {
                 const parametroQuery = "query";
                 const stringFiltro = filtro.getParameter(parametroQuery);
 
                 this._modeloListaReservas(stringFiltro);
-            } catch (erro) {
-                MessageBox.warning(erro.message);
-            }
+            });
         },
 
         aoClicarAbrirCadastro() {
-            try {
+            ProcessadorDeEventos.processarEvento(() => {
                 const rotaCadastro = "cadastro";
                 this.navegarPara(rotaCadastro);
-            } catch (erro) {
-                MessageBox.warning(erro.message);
-            }
+            });
         },
 
         aoClicarAbrirDetalhes(evento) {

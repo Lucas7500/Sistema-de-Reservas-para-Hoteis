@@ -71,30 +71,28 @@ sap.ui.define([
         },
 
         aoClicarNavegarParaTelaListagem() {
-            try {
+            ProcessadorDeEventos.processarEvento(() => {
                 this._navegarParaTelaListagem();
-            } catch (erro) {
-                MessageBox.warning(erro.message);
-            }
+            });
         },
 
         aoClicarNavegarParaTelaEdicao() {
-            try {
+            ProcessadorDeEventos.processarEvento(() => {
                 const rotaEdicao = "edicao";
                 const idReserva = this._modeloReserva().id;
 
                 this.navegarPara(rotaEdicao, idReserva);
-            } catch (erro) {
-                MessageBox.warning(erro.message);
-            }
+            });
         },
 
         aoClicarRemoverReserva() {
-            const confirmacaoRemocao = "confirmacaoRemocao";
-            const mensagemConfirmacao = this.obterRecursosI18n().getText(confirmacaoRemocao);
+            ProcessadorDeEventos.processarEvento(() => {
+                const confirmacaoRemocao = "confirmacaoRemocao";
+                const mensagemConfirmacao = this.obterRecursosI18n().getText(confirmacaoRemocao);
 
-            this.messageBoxConfirmacao(mensagemConfirmacao, () => {
-                this._removerReserva();
+                this.messageBoxConfirmacao(mensagemConfirmacao, () => {
+                    this._removerReserva();
+                });
             });
         }
     })
