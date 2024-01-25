@@ -2,8 +2,8 @@
 {
     public class ValoresPadrao
     {
-        public const int PRECO_NEGATIVO_OU_ZERO = 0;
         public const int CODIGO_DE_ERRO = -1;
+        public const int PRECO_NEGATIVO_OU_ZERO = 0;
         public const int EH_VAZIO = 0;
         public const int PRIMEIRO_ELEMENTO = 0;
         public const int ID_ZERO = 0;

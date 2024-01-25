@@ -44,7 +44,7 @@ sap.ui.define([
         _aoCoincidirRotaEdicao(evento) {
             ProcessadorDeEventos.processarEvento(() => {
                 const idReserva = this._obterIdPeloParametro(evento);
-                
+
                 this._definirTituloTelaCadastro(idReserva);
                 this._limparValueStateInputs();
                 this._definirValorPadraoRadioButton();
@@ -84,7 +84,7 @@ sap.ui.define([
 
             const variavelTituloCadastro = "tituloCadastro";
             const variavelTituloEdicao = "tituloEdicao";
-            
+
             const tituloCadastro = this.obterRecursosI18n().getText(variavelTituloCadastro);
             const tituloEdicao = this.obterRecursosI18n().getText(variavelTituloEdicao);
 

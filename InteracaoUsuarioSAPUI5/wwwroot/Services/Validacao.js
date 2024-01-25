@@ -173,7 +173,7 @@ sap.ui.define([
             const anoAtual = new Date().getFullYear();
             const mesAtual = new Date().getMonth() + 1;
             const diaAtual = new Date().getDate();
-            
+
             const separador = "-";
             const [ano, mes, dia] = data.split(separador);
 

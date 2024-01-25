@@ -27,7 +27,7 @@ namespace Dominio
 
             if (_ListaExcessoes.Any())
             {
-                string quebraDeLinha = "\n";
+                const char quebraDeLinha = '\n';
                 string erros = String.Join(quebraDeLinha, _ListaExcessoes);
 
                 _ListaExcessoes.Clear();
