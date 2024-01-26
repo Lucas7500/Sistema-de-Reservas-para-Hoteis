@@ -1,8 +1,9 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/model/json/JSONModel",
-    "sap/m/MessageBox"
-], (Controller, JSONModel, MessageBox) => {
+    "sap/m/MessageBox",
+    "sap/ui/core/BusyIndicator"
+], (Controller, JSONModel, MessageBox, BusyIndicator) => {
     "use strict";
 
     const CAMINHO_ROTA_BASE_CONTROLLER = "reservas.hoteis.controller.BaseController";
@@ -57,15 +58,17 @@ sap.ui.define([
         },
 
         async exibirEspera(acao) {
-            await this.getView().setBusy(true);
+            const duracaoBusyIndicator = 450;
+            const delayBusyIndicator = 0;
+
+            await this._showBusyIndicator(duracaoBusyIndicator, delayBusyIndicator);
             await this.processarEvento(acao);
-            await this.getView().setBusy(false);
         },
 
         async processarEvento(acao) {
             try {
                 const tipoDaPromise = "catch", tipoBuscado = "function";
-                let promise = acao();
+                let promise = await acao();
 
                 if (promise && typeof (promise[tipoDaPromise]) == tipoBuscado) {
                     promise.catch(erro => MessageBox.warning(erro.message));
@@ -73,6 +76,25 @@ sap.ui.define([
             } catch (erro) {
                 MessageBox.warning(erro.message);
             }
-        }
+        },
+
+        async _showBusyIndicator(duracao, delay) {
+            BusyIndicator.show(delay);
+
+            if (duracao && duracao > 0) {
+                if (this._sTimeoutId) {
+                    clearTimeout(this._sTimeoutId);
+                    this._sTimeoutId = null;
+                }
+
+                this._sTimeoutId = setTimeout(function () {
+                    this._hideBusyIndicator();
+                }.bind(this), duracao);
+            }
+        },
+
+        async _hideBusyIndicator() {
+            BusyIndicator.hide();
+        },
     });
 });
