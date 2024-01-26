@@ -58,7 +58,7 @@ sap.ui.define([
         },
 
         async exibirEspera(acao) {
-            const duracaoBusyIndicator = 450;
+            const duracaoBusyIndicator = 350;
             const delayBusyIndicator = 0;
 
             await this._showBusyIndicator(duracaoBusyIndicator, delayBusyIndicator);
@@ -88,13 +88,9 @@ sap.ui.define([
                 }
 
                 this._sTimeoutId = setTimeout(function () {
-                    this._hideBusyIndicator();
+                    BusyIndicator.hide();
                 }.bind(this), duracao);
             }
-        },
-
-        async _hideBusyIndicator() {
-            BusyIndicator.hide();
         },
     });
 });
