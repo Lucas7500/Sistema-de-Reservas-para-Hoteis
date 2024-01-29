@@ -247,7 +247,7 @@ sap.ui.define([
         },
 
         aoMudarValidarNome(evento) {
-            this.exibirEspera(() => {
+            this.processarEvento(() => {
                 const inputNome = evento.getSource();
                 const valorNome = evento.getParameter(PARAMETRO_VALUE);
                 const mensagemErroValidacao = Validacao.validarNome(valorNome);
@@ -257,7 +257,7 @@ sap.ui.define([
         },
 
         aoMudarValidarCpf(evento) {
-            this.exibirEspera(() => {
+            this.processarEvento(() => {
                 const inputCpf = evento.getSource();
                 const valorCpf = evento.getParameter(PARAMETRO_VALUE);
                 const mensagemErroValidacao = Validacao.validarCpf(valorCpf);
@@ -267,7 +267,7 @@ sap.ui.define([
         },
 
         aoMudarValidarTelefone(evento) {
-            this.exibirEspera(() => {
+            this.processarEvento(() => {
                 const inputTelefone = evento.getSource();
                 const valorTelefone = evento.getParameter(PARAMETRO_VALUE);
                 const mensagemErroValidacao = Validacao.validarTelefone(valorTelefone);
@@ -277,7 +277,7 @@ sap.ui.define([
         },
 
         aoMudarValidarIdade(evento) {
-            this.exibirEspera(() => {
+            this.processarEvento(() => {
                 const inputIdade = evento.getSource();
                 const valorIdade = evento.getParameter(PARAMETRO_VALUE);
                 const mensagemErroValidacao = Validacao.validarIdade(valorIdade);
@@ -287,7 +287,7 @@ sap.ui.define([
         },
 
         aoMudarValidarCheckInECheckOut() {
-            this.exibirEspera(() => {
+            this.processarEvento(() => {
                 const idReserva = this._modeloReserva().id;
 
                 const inputCheckIn = this.byId(ID_INPUTS.idInputCheckIn);
@@ -313,7 +313,7 @@ sap.ui.define([
         },
 
         aoMudarValidarPrecoEstadia(evento) {
-            this.exibirEspera(() => {
+            this.processarEvento(() => {
                 const inputPrecoEstadia = evento.getSource();
                 const valorPrecoEstadia = evento.getParameter(PARAMETRO_VALUE);
                 const mensagemErroValidacao = Validacao.validarPrecoEstadia(valorPrecoEstadia);

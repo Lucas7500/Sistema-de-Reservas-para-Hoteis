@@ -141,7 +141,7 @@ sap.ui.define([
         },
 
         validarIdade(idade) {
-            const regexNumeros = "^[\d+]*$";
+            const regexNumeros = "^[0-9]*$";
             const numeroIdade = Number(idade);
             const valorMinimoIdade = 18;
             const valorMaximoIdade = 200;
