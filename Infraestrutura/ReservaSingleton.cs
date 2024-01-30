@@ -6,16 +6,11 @@ namespace Infraestrutura
     public sealed class ReservaSingleton
     {
         private static List<Reserva>? _listaReservas = null;
-        private static int Id { get; set; } = ValoresPadrao.ID_NULO;
+        private static int Id { get; set; } = ValoresPadrao.ID_ZERO;
 
-        public static List<Reserva> RetornaLista()
+        public static List<Reserva> ObterLista()
         {
-            if (_listaReservas == null)
-            {
-                _listaReservas = new();
-            }
-
-            return _listaReservas;
+            return _listaReservas ??= new();
         }
 
         public static int IncrementarId()

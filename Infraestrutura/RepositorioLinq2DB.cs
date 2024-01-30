@@ -1,4 +1,5 @@
 ﻿using Dominio;
+using Dominio.Constantes;
 using LinqToDB;
 using LinqToDB.Data;
 
@@ -6,118 +7,46 @@ namespace Infraestrutura
 {
     public class RepositorioLinq2DB : IRepositorio
     {
-        private static readonly string _connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["BDSistemaReservas"].ConnectionString;
-
         private static DataConnection Connection()
         {
-            var conexaoLinq2Db = new DataConnection(
-                new DataOptions().UseSqlServer(_connectionString));
+            var conexaoLinq2Db = new DataConnection(new DataOptions().UseSqlServer(ConstantesTabelaReservas.STRING_CONEXAO_BD));
             return conexaoLinq2Db;
-        }
-
-        private static void VerificaSeCpfEhUnico(Reserva reserva)
-        {
-            bool cpfNaoEhUnico = false;
-
-            try
-            {
-                using var conexaoLinq2Db = Connection();
-
-                var reservaMesmoCpf = conexaoLinq2Db.GetTable<Reserva>().FirstOrDefault(x => x.Cpf == reserva.Cpf);
-
-                if (reservaMesmoCpf == null)
-                {
-                    return;
-                }
-                else if (reservaMesmoCpf.Id != reserva.Id)
-                {
-                    cpfNaoEhUnico = true;
-                }
-            }
-            catch
-            {
-                string mensagemErro = "Erro ao verificar se o CPF é único!";
-                throw new Exception(message: mensagemErro);
-            }
-
-            if (cpfNaoEhUnico)
-            {
-                string mensagemErro = "Esse CPF já está registrado no sistema!";
-                throw new Exception(message: mensagemErro);
-            }
         }
 
         public List<Reserva> ObterTodos()
         {
-            try
-            { 
-                List<Reserva> listaReservas = new();
-                using var conexaoLinq2Db = Connection();
-                listaReservas = conexaoLinq2Db.GetTable<Reserva>().ToList();
-                return listaReservas;
-            }
-            catch
-            {
-                string mensagemErro = "Erro ao obter os elementos do banco de dados!";
-                throw new Exception(message: mensagemErro);
-            }
+            using var conexaoLinq2Db = Connection();
+            return conexaoLinq2Db.GetTable<Reserva>().ToList();
         }
 
         public Reserva ObterPorId(int id)
         {
-            try
-            {
-                using var conexaoLinq2Db = Connection();
-                return conexaoLinq2Db.GetTable<Reserva>().First(x => x.Id == id);
-            }
-            catch
-            {
-                string mensagemErro = "Erro ao obter o elemento por id!";
-                throw new Exception(message: mensagemErro);
-            }
+            using var conexaoLinq2Db = Connection();
+            return conexaoLinq2Db.GetTable<Reserva>().First(reserva => reserva.Id == id);
         }
 
-        public void Criar(Reserva reserva)
+        public Reserva? ObterPorCpf(string cpf)
         {
-            VerificaSeCpfEhUnico(reserva);
+            using var conexaoLinq2Db = Connection();
+            return conexaoLinq2Db.GetTable<Reserva>().FirstOrDefault(reserva => reserva.Cpf == cpf);
+        }
 
-            try
-            {
-                using var conexaoLinq2Db = Connection();
-                conexaoLinq2Db.Insert(reserva);
-            }
-            catch
-            {
-                throw new Exception(message: "Erro ao Adicionar Reserva no Banco de Dados");
-            }
+        public void Criar(Reserva reservaParaCriacao)
+        {
+            using var conexaoLinq2Db = Connection();
+            reservaParaCriacao.Id = conexaoLinq2Db.InsertWithInt32Identity(reservaParaCriacao);
+        }
+
+        public void Atualizar(Reserva reservaParaAtualizar)
+        {
+            using var conexaoLinq2Db = Connection();
+            conexaoLinq2Db.Update(reservaParaAtualizar);
         }
 
         public void Remover(int id)
         {
-            try
-            {
-                using var conexaoLinq2Db = Connection();
-                conexaoLinq2Db.Delete(ObterPorId(id));
-            }
-            catch
-            {
-                throw new Exception(message: "Erro ao Remover Reserva do Banco de Dados");
-            }
-        }
-
-        public void Atualizar(Reserva copiaReserva)
-        {
-            VerificaSeCpfEhUnico(copiaReserva);
-
-            try
-            {
-                using var conexaoLinq2Db = Connection();
-                conexaoLinq2Db.Update(copiaReserva);
-            }
-            catch
-            {
-                throw new Exception(message: "Erro ao Editar Reserva do Banco de Dados");
-            }
+            using var conexaoLinq2Db = Connection();
+            conexaoLinq2Db.Delete(ObterPorId(id));
         }
     }
 }

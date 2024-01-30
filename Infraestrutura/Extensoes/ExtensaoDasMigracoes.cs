@@ -8,11 +8,13 @@ namespace Infraestrutura.Extensoes
     {
         public static void ExecutarMigracoes(this IServiceCollection service)
         {
+            const string nomeConexao = "BDSistemaReservas";
+
             service
                .AddFluentMigratorCore()
                 .ConfigureRunner(rb => rb
                     .AddSqlServer()
-                    .WithGlobalConnectionString(System.Configuration.ConfigurationManager.ConnectionStrings["BDSistemaReservas"].ConnectionString)
+                    .WithGlobalConnectionString(System.Configuration.ConfigurationManager.ConnectionStrings[nomeConexao].ConnectionString)
                     .ScanIn(Assembly.GetExecutingAssembly()).For.Migrations())
                 .AddLogging(lb => lb.AddFluentMigratorConsole())
                 .BuildServiceProvider(false);

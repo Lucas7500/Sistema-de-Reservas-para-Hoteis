@@ -1,6 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using Dominio.Constantes;
 using Dominio.Enums;
+using Dominio.Extensoes;
 
 namespace Dominio
 {
@@ -10,12 +11,13 @@ namespace Dominio
 
         public static void ValidarCampos(Dictionary<string, dynamic> reservaDict)
         {
-            string nome = reservaDict["Nome"];
-            string cpf = reservaDict["Cpf"];
-            string telefone = reservaDict["Telefone"];
-            int idade = reservaDict["Idade"];
-            decimal precoEstadia = reservaDict["PrecoEstadia"];
-            DateTime checkIn = reservaDict["CheckIn"], checkOut = reservaDict["CheckOut"];
+            string nome = reservaDict[ConstantesTabelaReservas.COLUNA_NOME];
+            string cpf = reservaDict[ConstantesTabelaReservas.COLUNA_CPF];
+            string telefone = reservaDict[ConstantesTabelaReservas.COLUNA_TELEFONE];
+            int idade = reservaDict[ConstantesTabelaReservas.COLUNA_IDADE];
+            decimal precoEstadia = reservaDict[ConstantesTabelaReservas.COLUNA_PRECO_ESTADIA];
+            DateTime checkIn = reservaDict[ConstantesTabelaReservas.COLUNA_CHECK_IN];
+            DateTime checkOut = reservaDict[ConstantesTabelaReservas.COLUNA_CHECK_OUT];
 
             ValidarNome(nome);
             ValidarCpf(cpf);
@@ -26,27 +28,33 @@ namespace Dominio
 
             if (_ListaExcessoes.Any())
             {
-                string erros = String.Join("\n", _ListaExcessoes);
+                const char quebraDeLinha = '\n';
+                string erros = String.Join(quebraDeLinha, _ListaExcessoes);
+
                 _ListaExcessoes.Clear();
-                throw new Exception(message: erros);
+                throw new Exception(erros);
             }
         }
 
         private static void ValidarNome(string nome)
         {
-            string regexNome = @"^[a-zA-Z ]";
-
-            if (String.IsNullOrWhiteSpace(nome))
+            string regexNome = "^[a-zA-ZáàâãäéèêëíìïóòôõöüúùçñÁÀÂÃÄÉÈÊËÍÌÏÓÒÔÕÖÜÚÙÇÑ ]*$";
+            
+            if (!nome.ContemValor())
             {
-                _ListaExcessoes.Add(MensagemExcessao.NOME_NAO_PREENCHIDO);
+                _ListaExcessoes.Add(Mensagem.NOME_NAO_PREENCHIDO);
             }
             else if (nome.Length < ValoresPadrao.TAMANHO_MINIMO_NOME)
             {
-                _ListaExcessoes.Add(MensagemExcessao.NOME_CURTO);
+                _ListaExcessoes.Add(Mensagem.NOME_CURTO);
+            }
+            else if (nome.Length > ValoresPadrao.TAMANHO_MAXIMO_NOME)
+            {
+                _ListaExcessoes.Add(Mensagem.NOME_LONGO);
             }
             else if (!Regex.IsMatch(nome, regexNome))
             {
-                _ListaExcessoes.Add(MensagemExcessao.NOME_FORMATO_INCORRETO);
+                _ListaExcessoes.Add(Mensagem.NOME_FORMATO_INCORRETO);
             }
         }
 
@@ -56,60 +64,62 @@ namespace Dominio
 
             if (numerosCPF.Length == ValoresPadrao.EH_VAZIO)
             {
-                _ListaExcessoes.Add(MensagemExcessao.CPF_NAO_PREENCHIDO);
+                _ListaExcessoes.Add(Mensagem.CPF_NAO_PREENCHIDO);
             }
             else if (numerosCPF.Length != ValoresPadrao.TAMANHO_NUMEROS_CPF)
             {
-                _ListaExcessoes.Add(MensagemExcessao.CPF_INVALIDO);
+                _ListaExcessoes.Add(Mensagem.CPF_INVALIDO);
             }
         }
-        
+
         private static void ValidarTelefone(string telefone)
         {
             string numerosTelefone = new(telefone.Where(char.IsDigit).ToArray());
 
             if (numerosTelefone.Length == ValoresPadrao.EH_VAZIO)
             {
-                _ListaExcessoes.Add(MensagemExcessao.TELEFONE_NAO_PREENCHIDO);
+                _ListaExcessoes.Add(Mensagem.TELEFONE_NAO_PREENCHIDO);
             }
             else if (numerosTelefone.Length != ValoresPadrao.TAMANHO_NUMEROS_TELEFONE)
             {
-                _ListaExcessoes.Add(MensagemExcessao.TELEFONE_INVALIDO);
+                _ListaExcessoes.Add(Mensagem.TELEFONE_INVALIDO);
             }
         }
-        
+
         private static void ValidarIdade(int idade)
         {
             bool menordeIdade = idade < ValoresPadrao.MAIOR_DE_IDADE;
 
             if (idade == ValoresPadrao.CODIGO_DE_ERRO)
             {
-                _ListaExcessoes.Add(MensagemExcessao.IDADE_NAO_PREENCHIDA);
+                _ListaExcessoes.Add(Mensagem.IDADE_NAO_PREENCHIDA);
             }
             else if (menordeIdade)
             {
-                _ListaExcessoes.Add(MensagemExcessao.MENOR_DE_IDADE);
+                _ListaExcessoes.Add(Mensagem.MENOR_DE_IDADE);
             }
         }
-        
+
         private static void ValidarCheckIn(DateTime checkIn, DateTime checkOut)
         {
             TimeSpan diferencaCheckoutCheckIn = checkOut - checkIn;
             string stringDiferencaCheckoutCheckIn = diferencaCheckoutCheckIn.ToString();
-            bool dataCheckOutAntesDoCheckIn = stringDiferencaCheckoutCheckIn[0].Equals('-');
 
-            if (dataCheckOutAntesDoCheckIn)
+            char ehNegativo = '-';
+            byte indiceSinalDiferenca = 0;
+
+            if (stringDiferencaCheckoutCheckIn[indiceSinalDiferenca].Equals(ehNegativo))
             {
-                _ListaExcessoes.Add(MensagemExcessao.CHECKOUT_EM_DATAS_PASSADAS);
+                _ListaExcessoes.Add(Mensagem.CHECKOUT_ANTES_CHECK_IN);
             }
         }
-        
+
         private static void ValidarPrecoEstadia(decimal precoEstadia)
         {
             if (precoEstadia == ValoresPadrao.CODIGO_DE_ERRO)
             {
-                _ListaExcessoes.Add(MensagemExcessao.PRECO_DA_ESTADIA_NAO_PREENCHIDO);
+                _ListaExcessoes.Add(Mensagem.PRECO_DA_ESTADIA_NAO_PREENCHIDO);
             }
-        }   
+        }
     }
 }

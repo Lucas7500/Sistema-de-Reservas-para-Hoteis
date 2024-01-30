@@ -1,10 +1,12 @@
 ﻿using Dominio;
+using Dominio.Constantes;
+using System.Linq;
 
 namespace Infraestrutura
 {
     public class RepositorioListaSingleton : IRepositorio
     {
-        protected List<Reserva> _listaReservas = ReservaSingleton.RetornaLista();
+        protected List<Reserva> _listaReservas = ReservaSingleton.ObterLista();
 
         public List<Reserva> ObterTodos()
         {
@@ -13,56 +15,28 @@ namespace Infraestrutura
 
         public Reserva ObterPorId(int id)
         {
-            Reserva reservaSelecionada = new();
-
-            try
-            {
-                reservaSelecionada = _listaReservas.First(x => x.Id == id);
-            }
-            catch
-            {
-                throw new Exception(message: "Erro ao Obter Reserva Selecionada da Lista Singleton");
-            }
-
-            return reservaSelecionada;
+            return _listaReservas.First(reserva => reserva.Id == id);
+        }
+        public Reserva? ObterPorCpf(string cpf)
+        {
+            return _listaReservas.FirstOrDefault(reserva => reserva.Cpf == cpf);
         }
 
-        public void Criar(Reserva reserva)
+        public void Criar(Reserva reservaParaCriacao)
         {
-            try
-            {
-                reserva.Id = ReservaSingleton.IncrementarId();
-                _listaReservas.Add(reserva);
-            }
-            catch
-            {
-                throw new Exception(message: "Erro Ao Adicionar Reserva na Lista Singleton");
-            }
+            reservaParaCriacao.Id = ReservaSingleton.IncrementarId();
+            _listaReservas.Add(reservaParaCriacao);
         }
-        public void Atualizar(Reserva copiaReserva)
+        public void Atualizar(Reserva reservaParaAtualizar)
         {
-            try
-            {
-                var reservaNaLista = _listaReservas.FindIndex(x => x.Id == copiaReserva.Id);
-                _listaReservas[reservaNaLista] = copiaReserva;
-            }
-            catch
-            {
-                throw new Exception(message: "Erro ao Editar Reserva da Lista Singleton");
-            }
+            var reservaNaLista = _listaReservas.FindIndex(x => x.Id == reservaParaAtualizar.Id);
+            _listaReservas[reservaNaLista] = reservaParaAtualizar;
         }
 
         public void Remover(int id)
         {
-            try
-            {
-                Reserva reserva = ObterPorId(id);
-                _listaReservas.Remove(reserva);
-            }
-            catch
-            {
-                throw new Exception(message: "Erro ao Remover Reserva da Lista Singleton");
-            }
+            var reserva = ObterPorId(id);
+            _listaReservas.Remove(reserva);
         }
     }
 }
