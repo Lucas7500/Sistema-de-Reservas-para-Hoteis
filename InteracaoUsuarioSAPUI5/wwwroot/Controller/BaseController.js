@@ -57,40 +57,25 @@ sap.ui.define([
                 .navTo(nomeDaRota, { id: parametroId });
         },
 
-        async exibirEspera(acao) {
-            const duracaoBusyIndicator = 350;
-            const delayBusyIndicator = 0;
-
-            await this._showBusyIndicator(duracaoBusyIndicator, delayBusyIndicator);
-            await this.processarEvento(acao);
-        },
-
-        async processarEvento(acao) {
+        exibirEspera(acao) {
             try {
-                const tipoDaPromise = "catch", tipoBuscado = "function";
-                let promise = await acao();
+                const delayBusyIndicator = 0;
+                BusyIndicator.show(delayBusyIndicator);
 
-                if (promise && typeof (promise[tipoDaPromise]) == tipoBuscado) {
-                    promise.catch(erro => MessageBox.warning(erro.message));
-                }
+                const promiseAcao = new Promise((resolve) => {
+                    resolve(acao());
+                });
+
+                promiseAcao
+                    .catch(erro => {
+                        BusyIndicator.hide();
+                        MessageBox.warning(erro.message);
+                    })
+                    .finally(() => BusyIndicator.hide())
+
             } catch (erro) {
                 MessageBox.warning(erro.message);
             }
-        },
-
-        async _showBusyIndicator(duracao, delay) {
-            BusyIndicator.show(delay);
-
-            if (duracao && duracao > 0) {
-                if (this._sTimeoutId) {
-                    clearTimeout(this._sTimeoutId);
-                    this._sTimeoutId = null;
-                }
-
-                this._sTimeoutId = setTimeout(function () {
-                    BusyIndicator.hide();
-                }.bind(this), duracao);
-            }
-        },
+        }
     });
 });

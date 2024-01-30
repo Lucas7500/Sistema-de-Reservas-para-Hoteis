@@ -18,14 +18,12 @@ sap.ui.define([
         },
 
         _aoCoincidirRota() {
-            this.exibirEspera(() => {
-                this._modeloListaReservas();
-            });
+            this.exibirEspera(() => this._modeloListaReservas());
         },
 
         _modeloListaReservas(filtro) {
             try {
-                ReservaRepository.obterTodos(filtro)
+                return ReservaRepository.obterTodos(filtro)
                     .then(response => {
                         return response.ok
                             ? response.json()

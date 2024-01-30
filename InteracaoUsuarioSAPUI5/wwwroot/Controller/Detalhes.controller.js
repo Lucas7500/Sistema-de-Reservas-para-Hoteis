@@ -17,9 +17,7 @@ sap.ui.define([
         },
 
         _aoCoincidirRota(evento) {
-            this.exibirEspera(() => {
-                this._definirReservaPeloId(this._obterIdPeloParametro(evento));
-            });
+            this.exibirEspera(() => this._definirReservaPeloId(this._obterIdPeloParametro(evento)));
         },
 
         _modeloReserva(modelo) {
@@ -34,7 +32,7 @@ sap.ui.define([
 
         _definirReservaPeloId(id) {
             try {
-                ReservaRepository.obterPorId(id)
+                return ReservaRepository.obterPorId(id)
                     .then(response => {
                         return response.ok
                             ? response.json()
