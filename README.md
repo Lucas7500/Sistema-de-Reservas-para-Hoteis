@@ -6,7 +6,7 @@ Este projeto é um sistema de reservas para hóteis implementado utilizando a ar
 
 - **Linguagens de Programação:** C#, JavaScript
 - **Frameworks:** .NET para C#, SAPUI5 para JavaScript
-- **Bibliotecas:** FluentMigration, FluentValidation
+- **Bibliotecas:** FluentMigrator, FluentValidation
 - **ORM:** Linq2DB
 - **Banco de Dados:** SQL Server
 
