@@ -6,7 +6,7 @@ sap.ui.define([], () => {
     return {
         obterTodos(filtro) {
             let query = ENDPOINT_RESERVA;
-            if (filtro != undefined || filtro != null) {
+            if (filtro) {
                 query += `?filtro=${filtro}`
             }
 

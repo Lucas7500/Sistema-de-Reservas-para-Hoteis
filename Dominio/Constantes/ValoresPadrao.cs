@@ -2,15 +2,14 @@
 {
     public class ValoresPadrao
     {
-        public const int PRECO_NEGATIVO_OU_ZERO = 0;
         public const int CODIGO_DE_ERRO = -1;
+        public const int PRECO_NEGATIVO_OU_ZERO = 0;
         public const int EH_VAZIO = 0;
         public const int PRIMEIRO_ELEMENTO = 0;
         public const int ID_ZERO = 0;
-        public const int LISTA_NULA = 0;
         public const int DIGITO_ZERO = 0;
         public const int UMA_LINHA_SELECIONADA = 1;
-        public const int INDEX_CASAS_DECIMAIS = 1;
+        public const int INDICE_CASAS_DECIMAIS = 1;
         public const int MAX_CASAS_DECIMAIS = 2;
         public const int VALOR_REFERENCIA_RESTO_CPF = 2;
         public const int TAMANHO_MINIMO_NOME = 3;

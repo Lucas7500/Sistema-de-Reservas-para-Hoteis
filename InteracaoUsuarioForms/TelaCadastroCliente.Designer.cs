@@ -204,7 +204,7 @@
             BotaoAdicionarCadastro.TabIndex = 11;
             BotaoAdicionarCadastro.Text = "Adicionar";
             BotaoAdicionarCadastro.UseVisualStyleBackColor = true;
-            BotaoAdicionarCadastro.Click += AoClicarAdicionarCadastro;
+            BotaoAdicionarCadastro.Click += AoClicarAdicionar;
             // 
             // BotaoCancelarCadastro
             // 
@@ -214,7 +214,7 @@
             BotaoCancelarCadastro.TabIndex = 12;
             BotaoCancelarCadastro.Text = "Cancelar";
             BotaoCancelarCadastro.UseVisualStyleBackColor = true;
-            BotaoCancelarCadastro.Click += AoClicarCancelarCadastro;
+            BotaoCancelarCadastro.Click += AoClicarCancelar;
             // 
             // TextoCPF
             // 
@@ -229,7 +229,7 @@
             // TextoTelefone
             // 
             TextoTelefone.Location = new Point(233, 53);
-            TextoTelefone.Mask = "(00) 00000-0000";
+            TextoTelefone.Mask = "(00) 0 0000-0000";
             TextoTelefone.Name = "TextoTelefone";
             TextoTelefone.Size = new Size(100, 23);
             TextoTelefone.TabIndex = 3;

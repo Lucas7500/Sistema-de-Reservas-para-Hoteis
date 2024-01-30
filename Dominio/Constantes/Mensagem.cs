@@ -1,7 +1,9 @@
 ﻿namespace Dominio.Constantes
 {
-    public class MensagemExcessao
+    public class Mensagem
     {
+        public const string SUCESSO_CRIACAO = "Reserva foi criada com Sucesso!";
+        public const string SUCESSO_EDICAO = "Reserva foi editada com Sucesso!";
         public const string NOME_NAO_PREENCHIDO = "- Informe o Nome do cliente!";
         public const string NOME_CURTO = "- O nome do cliente não pode conter menos que 3 caracteres!";
         public const string NOME_LONGO = "- O nome do cliente não pode superar 50 caracteres!";
@@ -18,21 +20,15 @@
         public const string SEXO_INVALIDO = "- O sexo do cliente é inválido!";
         public const string CHECKIN_NULO = "- A data de Check-in não pode ser nula!";
         public const string CHECKOUT_NULO = "- A data de Check-out não pode ser nula!";
-        public const string CHECKOUT_EM_DATAS_PASSADAS = "- O Check-out não pode ser realizado antes do Check-in!";
+        public const string CHECKOUT_ANTES_CHECK_IN = "- O Check-out não pode ser realizado antes do Check-in!";
         public const string PRECO_DA_ESTADIA_NAO_PREENCHIDO = "- Informe o Preço da Estadia!";
         public const string PRECO_DA_ESTADIA_MENOR_IGUAL_A_ZERO = "- O preço da estadia não pode ser negativo ou zero!";
-        public const string PRECO_DA_ESTADIA_ACIMA_DO_VALOR_MAXIMO= "- O preço da estadia está acima do máximo permitido!";
+        public const string PRECO_DA_ESTADIA_ACIMA_DO_VALOR_MAXIMO = "- O preço da estadia está acima do máximo permitido!";
         public const string PAGAMENTO_EFETUADO_NULO = "- Informe se o preço da estadia foi pago!";
         public const string TITULO_ERRO_INESPERADO = "Ocorreu um Erro Inesperado";
-
-        public static string MensagemErroListaVazia(string acao)
-        {
-            return $"Seu programa não possui nenhuma reserva para {acao}.";
-        }
-
-        public static string MensagemErroNenhumaLinhaSelecionada(string acao)
-        {
-            return $"Selecione uma linha para {acao}!";
-        }
+        public const string MENSAGEM_ERRO_LISTA_VAZIA_EDICAO = "Seu programa não possui nenhuma reserva para editar!";
+        public const string MENSAGEM_ERRO_LISTA_VAZIA_REMOCAO = "Seu programa não possui nenhuma reserva para deletar!";
+        public const string MENSAGEM_ERRO_NENHUMA_LINHA_SELECIONADA_EDICAO = "Selecione uma linha para editar!";
+        public const string MENSAGEM_ERRO_NENHUMA_LINHA_SELECIONADA_REMOCAO = "Selecione uma linha para deletar!";
     }
 }

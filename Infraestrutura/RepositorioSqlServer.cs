@@ -7,11 +7,9 @@ namespace Infraestrutura
 {
     public class RepositorioSqlServer : IRepositorio
     {
-        private static readonly string _connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["BDSistemaReservas"].ConnectionString;
-
         private static SqlConnection Connection()
         {
-            SqlConnection connection = new(_connectionString);
+            SqlConnection connection = new(ConstantesTabelaReservas.STRING_CONEXAO_BD);
             connection.Open();
             return connection;
         }
@@ -20,16 +18,16 @@ namespace Infraestrutura
         {
             return new Reserva()
             {
-                Id = (int)leitor["Id"],
-                Nome = (string)leitor["Nome"],
-                Cpf = (string)leitor["Cpf"],
-                Telefone = (string)leitor["Telefone"],
-                Idade = (int)leitor["Idade"],
-                Sexo = (GeneroEnum)Enum.Parse(typeof(GeneroEnum), (string)leitor["Sexo"]),
-                CheckIn = (DateTime)leitor["CheckIn"],
-                CheckOut = (DateTime)leitor["CheckOut"],
-                PrecoEstadia = Math.Round((decimal)leitor["PrecoEstadia"], 2),
-                PagamentoEfetuado = (bool)leitor["PagamentoEfetuado"]
+                Id = Convert.ToInt32(leitor[ConstantesTabelaReservas.COLUNA_ID]),
+                Nome = (string)leitor[ConstantesTabelaReservas.COLUNA_NOME],
+                Cpf = (string)leitor[ConstantesTabelaReservas.COLUNA_CPF],
+                Telefone = (string)leitor[ConstantesTabelaReservas.COLUNA_TELEFONE],
+                Idade = (int)leitor[ConstantesTabelaReservas.COLUNA_IDADE],
+                Sexo = (GeneroEnum)Enum.Parse(typeof(GeneroEnum), (string)leitor[ConstantesTabelaReservas.COLUNA_SEXO]),
+                CheckIn = (DateTime)leitor[ConstantesTabelaReservas.COLUNA_CHECK_IN],
+                CheckOut = (DateTime)leitor[ConstantesTabelaReservas.COLUNA_CHECK_OUT],
+                PrecoEstadia = Math.Round((decimal)leitor[ConstantesTabelaReservas.COLUNA_PRECO_ESTADIA], ValoresPadrao.MAX_CASAS_DECIMAIS),
+                PagamentoEfetuado = (bool)leitor[ConstantesTabelaReservas.COLUNA_PAGAMENTO_EFETUADO]
             };
         }
 
@@ -39,7 +37,8 @@ namespace Infraestrutura
 
             using (var connection = Connection())
             {
-                SqlCommand obterLinhasBD = new("SELECT * FROM TabelaReservas", connection);
+                const string query = $"SELECT * FROM {ConstantesTabelaReservas.NOME_TABELA}";
+                SqlCommand obterLinhasBD = new(query, connection);
                 var leitor = obterLinhasBD.ExecuteReader();
 
                 while (leitor.Read())
@@ -55,10 +54,11 @@ namespace Infraestrutura
         {
             using var connection = Connection();
 
-            Reserva reservaSelecionada = new();
-            SqlCommand obterObjetoPorId = new($"SELECT * FROM TabelaReservas WHERE Id={id}", connection);
-            var leitor = obterObjetoPorId.ExecuteReader();
+            var reservaSelecionada = new Reserva();
+            string query = $"SELECT * FROM {ConstantesTabelaReservas.NOME_TABELA} WHERE {ConstantesTabelaReservas.COLUNA_ID} = {id}";
 
+            SqlCommand obterObjetoPorId = new(query, connection);
+            var leitor = obterObjetoPorId.ExecuteReader();
 
             while (leitor.Read())
             {
@@ -68,25 +68,66 @@ namespace Infraestrutura
             return reservaSelecionada;
         }
 
+        public Reserva? ObterPorCpf(string cpf)
+        {
+            using var connection = Connection();
+
+            Reserva? reservaMesmoCpf = null;
+            string query = $"SELECT * FROM {ConstantesTabelaReservas.NOME_TABELA} WHERE {ConstantesTabelaReservas.COLUNA_CPF} = '{cpf}'";
+
+            SqlCommand obterObjetoPorCpf = new(query, connection);
+            var leitor = obterObjetoPorCpf.ExecuteReader();
+
+            while (leitor.Read())
+            {
+                reservaMesmoCpf = CriarReserva(leitor);
+            }
+
+            return reservaMesmoCpf;
+        }
+
         public void Criar(Reserva reservaParaCriacao)
         {
             using var connection = Connection();
-            string comandoCriar = @"INSERT INTO TabelaReservas
-                (Nome, Cpf, Telefone, Idade, Sexo, CheckIn, CheckOut, PrecoEstadia, PagamentoEfetuado)
+
+            string query = @$"INSERT INTO {ConstantesTabelaReservas.NOME_TABELA} (
+                    {ConstantesTabelaReservas.COLUNA_NOME}, 
+                    {ConstantesTabelaReservas.COLUNA_CPF}, 
+                    {ConstantesTabelaReservas.COLUNA_TELEFONE},
+                    {ConstantesTabelaReservas.COLUNA_IDADE}, 
+                    {ConstantesTabelaReservas.COLUNA_SEXO},     
+                    {ConstantesTabelaReservas.COLUNA_CHECK_IN}, 
+                    {ConstantesTabelaReservas.COLUNA_CHECK_OUT}, 
+                    {ConstantesTabelaReservas.COLUNA_PRECO_ESTADIA}, 
+                    {ConstantesTabelaReservas.COLUNA_PAGAMENTO_EFETUADO}
+                )
                 OUTPUT INSERTED.ID
-                VALUES (@nome, @cpf, @telefone, @idade, @sexo, @checkin, @checkout, @precoestadia, @pagamentoefetuado)";
+                VALUES (
+                    {ConstantesTabelaReservas.PARAMETRO_NOME}, 
+                    {ConstantesTabelaReservas.PARAMETRO_CPF}, 
+                    {ConstantesTabelaReservas.PARAMETRO_TELEFONE},
+                    {ConstantesTabelaReservas.PARAMETRO_IDADE}, 
+                    {ConstantesTabelaReservas.PARAMETRO_SEXO},     
+                    {ConstantesTabelaReservas.PARAMETRO_CHECK_IN}, 
+                    {ConstantesTabelaReservas.PARAMETRO_CHECK_OUT}, 
+                    {ConstantesTabelaReservas.PARAMETRO_PRECO_ESTADIA}, 
+                    {ConstantesTabelaReservas.PARAMETRO_PAGAMENTO_EFETUADO}
+                )";
 
-            SqlCommand inserirReservaNaTabela = new(comandoCriar, connection);
+            SqlCommand inserirReservaNaTabela = new(query, connection);
+            const string formatoData = "dd-MM-yyyy";
+            const char virgula = ',';
+            const char ponto = '.';
 
-            inserirReservaNaTabela.Parameters.AddWithValue("@nome", reservaParaCriacao.Nome);
-            inserirReservaNaTabela.Parameters.AddWithValue("@cpf", reservaParaCriacao.Cpf);
-            inserirReservaNaTabela.Parameters.AddWithValue("@telefone", reservaParaCriacao.Telefone);
-            inserirReservaNaTabela.Parameters.AddWithValue("@idade", reservaParaCriacao.Idade);
-            inserirReservaNaTabela.Parameters.AddWithValue("@sexo", reservaParaCriacao.Sexo);
-            inserirReservaNaTabela.Parameters.AddWithValue("@checkin", reservaParaCriacao.CheckIn.Date.ToString("dd-MM-yyyy"));
-            inserirReservaNaTabela.Parameters.AddWithValue("@checkout", reservaParaCriacao.CheckOut.Date.ToString("dd-MM-yyyy"));
-            inserirReservaNaTabela.Parameters.AddWithValue("@precoestadia", reservaParaCriacao.PrecoEstadia.ToString().Replace(',', '.'));
-            inserirReservaNaTabela.Parameters.AddWithValue("@pagamentoefetuado", reservaParaCriacao.PagamentoEfetuado);
+            inserirReservaNaTabela.Parameters.AddWithValue(ConstantesTabelaReservas.PARAMETRO_NOME, reservaParaCriacao.Nome);
+            inserirReservaNaTabela.Parameters.AddWithValue(ConstantesTabelaReservas.PARAMETRO_CPF, reservaParaCriacao.Cpf);
+            inserirReservaNaTabela.Parameters.AddWithValue(ConstantesTabelaReservas.PARAMETRO_TELEFONE, reservaParaCriacao.Telefone);
+            inserirReservaNaTabela.Parameters.AddWithValue(ConstantesTabelaReservas.PARAMETRO_IDADE, reservaParaCriacao.Idade);
+            inserirReservaNaTabela.Parameters.AddWithValue(ConstantesTabelaReservas.PARAMETRO_SEXO, reservaParaCriacao.Sexo);
+            inserirReservaNaTabela.Parameters.AddWithValue(ConstantesTabelaReservas.PARAMETRO_CHECK_IN, reservaParaCriacao.CheckIn.Date.ToString(formatoData));
+            inserirReservaNaTabela.Parameters.AddWithValue(ConstantesTabelaReservas.PARAMETRO_CHECK_OUT, reservaParaCriacao.CheckOut.Date.ToString(formatoData));
+            inserirReservaNaTabela.Parameters.AddWithValue(ConstantesTabelaReservas.PARAMETRO_PRECO_ESTADIA, reservaParaCriacao.PrecoEstadia.ToString().Replace(virgula, ponto));
+            inserirReservaNaTabela.Parameters.AddWithValue(ConstantesTabelaReservas.PARAMETRO_PAGAMENTO_EFETUADO, reservaParaCriacao.PagamentoEfetuado);
 
             reservaParaCriacao.Id = Convert.ToInt32(inserirReservaNaTabela.ExecuteScalar());
         }
@@ -94,23 +135,32 @@ namespace Infraestrutura
         public void Atualizar(Reserva reservaParaAtualizar)
         {
             using var connection = Connection();
-            string comandoEditar = @"UPDATE TabelaReservas
-                SET Nome=@nome, Cpf=@cpf, Telefone=@telefone, Idade=@idade, Sexo=@sexo, CheckIn=@checkin,
-                CheckOut=@checkout, PrecoEstadia=@precoestadia, PagamentoEfetuado=@pagamentoefetuado
-                WHERE id=@id";
+            string query = $@"UPDATE {ConstantesTabelaReservas.NOME_TABELA}
+                SET 
+                    {ConstantesTabelaReservas.COLUNA_NOME} = {ConstantesTabelaReservas.PARAMETRO_NOME}, 
+                    {ConstantesTabelaReservas.COLUNA_CPF} = {ConstantesTabelaReservas.PARAMETRO_CPF}, 
+                    {ConstantesTabelaReservas.COLUNA_TELEFONE} = {ConstantesTabelaReservas.PARAMETRO_TELEFONE}, 
+                    {ConstantesTabelaReservas.COLUNA_IDADE} = {ConstantesTabelaReservas.PARAMETRO_IDADE}, 
+                    {ConstantesTabelaReservas.COLUNA_SEXO} = {ConstantesTabelaReservas.PARAMETRO_SEXO}, 
+                    {ConstantesTabelaReservas.COLUNA_CHECK_IN} = {ConstantesTabelaReservas.PARAMETRO_CHECK_IN},
+                    {ConstantesTabelaReservas.COLUNA_CHECK_OUT} = {ConstantesTabelaReservas.PARAMETRO_CHECK_OUT}, 
+                    {ConstantesTabelaReservas.COLUNA_PRECO_ESTADIA} = {ConstantesTabelaReservas.PARAMETRO_PRECO_ESTADIA}, 
+                    {ConstantesTabelaReservas.COLUNA_PAGAMENTO_EFETUADO} = {ConstantesTabelaReservas.PARAMETRO_PAGAMENTO_EFETUADO}
+                WHERE 
+                    {ConstantesTabelaReservas.COLUNA_ID} = {ConstantesTabelaReservas.PARAMETRO_ID}";
 
-            SqlCommand editarReservaNaTabela = new(comandoEditar, connection);
+            SqlCommand editarReservaNaTabela = new(query, connection);
 
-            editarReservaNaTabela.Parameters.AddWithValue("@nome", reservaParaAtualizar.Nome);
-            editarReservaNaTabela.Parameters.AddWithValue("@cpf", reservaParaAtualizar.Cpf);
-            editarReservaNaTabela.Parameters.AddWithValue("@telefone", reservaParaAtualizar.Telefone);
-            editarReservaNaTabela.Parameters.AddWithValue("@idade", reservaParaAtualizar.Idade);
-            editarReservaNaTabela.Parameters.AddWithValue("@sexo", reservaParaAtualizar.Sexo);
-            editarReservaNaTabela.Parameters.AddWithValue("@checkin", reservaParaAtualizar.CheckIn.Date.ToString("dd-MM-yyyy"));
-            editarReservaNaTabela.Parameters.AddWithValue("@checkout", reservaParaAtualizar.CheckOut.Date.ToString("dd-MM-yyyy"));
-            editarReservaNaTabela.Parameters.AddWithValue("@precoestadia", reservaParaAtualizar.PrecoEstadia.ToString().Replace(',', '.'));
-            editarReservaNaTabela.Parameters.AddWithValue("@pagamentoefetuado", reservaParaAtualizar.PagamentoEfetuado);
-            editarReservaNaTabela.Parameters.AddWithValue("@id", reservaParaAtualizar.Id);
+            editarReservaNaTabela.Parameters.AddWithValue(ConstantesTabelaReservas.PARAMETRO_NOME, reservaParaAtualizar.Nome);
+            editarReservaNaTabela.Parameters.AddWithValue(ConstantesTabelaReservas.PARAMETRO_CPF, reservaParaAtualizar.Cpf);
+            editarReservaNaTabela.Parameters.AddWithValue(ConstantesTabelaReservas.PARAMETRO_TELEFONE, reservaParaAtualizar.Telefone);
+            editarReservaNaTabela.Parameters.AddWithValue(ConstantesTabelaReservas.PARAMETRO_IDADE, reservaParaAtualizar.Idade);
+            editarReservaNaTabela.Parameters.AddWithValue(ConstantesTabelaReservas.PARAMETRO_SEXO, reservaParaAtualizar.Sexo);
+            editarReservaNaTabela.Parameters.AddWithValue(ConstantesTabelaReservas.PARAMETRO_CHECK_IN, reservaParaAtualizar.CheckIn.Date.ToString("dd-MM-yyyy"));
+            editarReservaNaTabela.Parameters.AddWithValue(ConstantesTabelaReservas.PARAMETRO_CHECK_OUT, reservaParaAtualizar.CheckOut.Date.ToString("dd-MM-yyyy"));
+            editarReservaNaTabela.Parameters.AddWithValue(ConstantesTabelaReservas.PARAMETRO_PRECO_ESTADIA, reservaParaAtualizar.PrecoEstadia.ToString().Replace(',', '.'));
+            editarReservaNaTabela.Parameters.AddWithValue(ConstantesTabelaReservas.PARAMETRO_PAGAMENTO_EFETUADO, reservaParaAtualizar.PagamentoEfetuado);
+            editarReservaNaTabela.Parameters.AddWithValue(ConstantesTabelaReservas.PARAMETRO_ID, reservaParaAtualizar.Id);
 
             editarReservaNaTabela.ExecuteNonQuery();
         }
@@ -118,7 +168,8 @@ namespace Infraestrutura
         public void Remover(int id)
         {
             using var connection = Connection();
-            SqlCommand deletarReserva = new($"DELETE FROM TabelaReservas WHERE Id={id}", connection);
+            string query = $"DELETE FROM {ConstantesTabelaReservas.NOME_TABELA} WHERE {ConstantesTabelaReservas.COLUNA_ID}={id}";
+            SqlCommand deletarReserva = new(query, connection);
             deletarReserva.ExecuteNonQuery();
         }
     }

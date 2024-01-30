@@ -1,7 +1,9 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
-    "sap/ui/model/json/JSONModel"
-], (Controller, JSONModel) => {
+    "sap/ui/model/json/JSONModel",
+    "sap/m/MessageBox",
+    "sap/ui/core/BusyIndicator"
+], (Controller, JSONModel, MessageBox, BusyIndicator) => {
     "use strict";
 
     const CAMINHO_ROTA_BASE_CONTROLLER = "reservas.hoteis.controller.BaseController";
@@ -30,10 +32,50 @@ sap.ui.define([
                 .attachPatternMatched(aoCoincidirRota, this);
         },
 
-        navegarPara(nomeDaRota, parametroId) {
-            return this.getOwnerComponent().getRouter().navTo(nomeDaRota, {
-                id: parametroId
+        messageBoxConfirmacao(mensagem, metodo) {
+            MessageBox.confirm(mensagem, {
+                actions: [MessageBox.Action.YES, MessageBox.Action.NO],
+                emphasizedAction: MessageBox.Action.YES,
+                onClose: (acao) => {
+                    if (acao == MessageBox.Action.YES) metodo();
+                }
             });
+        },
+
+        messageBoxSucesso(mensagem, metodo) {
+            MessageBox.success(mensagem, {
+                onClose: () => {
+                    metodo();
+                }
+            });
+        },
+
+        navegarPara(nomeDaRota, parametroId) {
+            return this
+                .getOwnerComponent()
+                .getRouter()
+                .navTo(nomeDaRota, { id: parametroId });
+        },
+
+        exibirEspera(acao) {
+            try {
+                const delayBusyIndicator = 0;
+                BusyIndicator.show(delayBusyIndicator);
+
+                const promiseAcao = new Promise((resolve) => {
+                    resolve(acao());
+                });
+
+                promiseAcao
+                    .catch(erro => {
+                        BusyIndicator.hide();
+                        MessageBox.warning(erro.message);
+                    })
+                    .finally(() => BusyIndicator.hide())
+
+            } catch (erro) {
+                MessageBox.warning(erro.message);
+            }
         }
     });
 });

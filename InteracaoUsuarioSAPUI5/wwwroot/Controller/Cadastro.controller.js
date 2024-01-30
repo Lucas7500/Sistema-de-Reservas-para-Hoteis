@@ -9,27 +9,17 @@ sap.ui.define([
     "use strict";
 
     const CAMINHO_ROTA_CADASTRO = "reservas.hoteis.controller.Cadastro";
-    const ROTA_LISTAGEM = "listagem";
-    const ROTA_DETALHES = "detalhes";
-    const MODELO_RESERVA = "reserva";
     const PARAMETRO_VALUE = "value";
-    const ID_INPUT_NOME = "inputNome";
-    const ID_INPUT_CPF = "inputCpf";
-    const ID_INPUT_TELEFONE = "inputTelefone";
-    const ID_INPUT_IDADE = "inputIdade";
-    const ID_INPUT_CHECK_IN = "inputCheckIn";
-    const ID_INPUT_CHECK_OUT = "inputCheckOut";
-    const ID_INPUT_PRECO_ESTADIA = "inputPrecoEstadia";
 
-    const ARRAY_ID_INPUTS = [
-        ID_INPUT_NOME,
-        ID_INPUT_CPF,
-        ID_INPUT_TELEFONE,
-        ID_INPUT_IDADE,
-        ID_INPUT_CHECK_IN,
-        ID_INPUT_CHECK_OUT,
-        ID_INPUT_PRECO_ESTADIA
-    ]
+    const ID_INPUTS = {
+        idInputNome: "inputNome",
+        idInputCpf: "inputCpf",
+        idInputTelefone: "inputTelefone",
+        idInputIdade: "inputIdade",
+        idInputCheckIn: "inputCheckIn",
+        idInputCheckOut: "inputCheckOut",
+        idInputPrecoEstadia: "inputPrecoEstadia"
+    };
 
     return BaseController.extend(CAMINHO_ROTA_CADASTRO, {
         formatter: Formatter,
@@ -44,21 +34,28 @@ sap.ui.define([
         },
 
         _aoCoincidirRotaCadastro() {
-            this._limparValueStateInputs();
-            this._definirValorPadraoRadioButton();
-            this._modeloReserva();
+            this.exibirEspera(() => {
+                this._definirTituloTelaCadastro();
+                this._limparValueStateInputs();
+                this._definirValorPadraoRadioButton();
+                this._definirModeloPadraoCadastro();
+            });
         },
 
         _aoCoincidirRotaEdicao(evento) {
-            this._limparValueStateInputs();
-            this._definirValorPadraoRadioButton();
-            this._definirReservaPeloId(this._obterIdPeloParametro(evento));
+            this.exibirEspera(() => {
+                const idReserva = this._obterIdPeloParametro(evento);
+
+                this._definirTituloTelaCadastro(idReserva);
+                this._limparValueStateInputs();
+                this._definirValorPadraoRadioButton();
+                return this._definirReservaPeloId(idReserva);
+            })
         },
 
-        _modeloReserva(reserva) {
-            return reserva
-                ? this._definirModeloPadraoEdicao(reserva)
-                : this._definirModeloPadraoCadastro();
+        _modeloReserva(modelo) {
+            const nomeModelo = "reserva";
+            return this.modelo(nomeModelo, modelo);
         },
 
         _definirModeloPadraoCadastro() {
@@ -74,12 +71,27 @@ sap.ui.define([
                 pagamentoEfetuado: false
             };
 
-            this.modelo(MODELO_RESERVA, reserva);
+            this._modeloReserva(reserva);
         },
 
         _definirModeloPadraoEdicao(reserva) {
             reserva.precoEstadia = Formatter.formataPrecoEstadia(reserva.precoEstadia);
-            this.modelo(MODELO_RESERVA, reserva);
+            this._modeloReserva(reserva);
+        },
+
+        _definirTituloTelaCadastro(idReserva) {
+            const idTituloTelaCadastro = "tituloTelaCadastro";
+            const tituloTelaCadastro = this.byId(idTituloTelaCadastro);
+
+            const tituloCadastro = "tituloCadastro";
+            const tituloEdicao = "tituloEdicao";
+
+            const textoTituloCadastro = this.obterRecursosI18n().getText(tituloCadastro);
+            const textoTituloEdicao = this.obterRecursosI18n().getText(tituloEdicao);
+
+            idReserva
+                ? tituloTelaCadastro.setTitle(textoTituloEdicao)
+                : tituloTelaCadastro.setTitle(textoTituloCadastro)
         },
 
         _definirValorPadraoRadioButton() {
@@ -94,21 +106,19 @@ sap.ui.define([
         },
 
         _definirValueStateInputsSemAlteracao(listaErrosValidacao) {
-            for (let i = 0; i < ARRAY_ID_INPUTS.length; i++) {
-                let input = this.byId(ARRAY_ID_INPUTS[i]);
-                let valueStateInput = input.getValueState();
+            Object.values(ID_INPUTS).forEach((idInput, index) => {
+                let input = this.byId(idInput);
 
-                if (valueStateInput == ValueState.None) {
-                    this._definirValueStateInputValidado(input, listaErrosValidacao[i]);
+                if (input.getValueState() == ValueState.None) {
+                    this._definirValueStateInputValidado(input, listaErrosValidacao[index]);
                 }
-            }
+            })
         },
 
         _limparValueStateInputs() {
-            for (let idInput of ARRAY_ID_INPUTS) {
-                let input = this.byId(idInput);
-                input.setValueState(ValueState.None);
-            }
+            Object
+                .values(ID_INPUTS)
+                .forEach(idInput => this.byId(idInput).setValueState(ValueState.None));
         },
 
         _obterIdPeloParametro(evento) {
@@ -117,7 +127,7 @@ sap.ui.define([
         },
 
         _obterReservaPreenchida() {
-            let reserva = structuredClone(this.modelo(MODELO_RESERVA));
+            let reserva = structuredClone(this._modeloReserva());
 
             reserva.idade = Number(reserva.idade);
             reserva.sexo = Number(reserva.sexo);
@@ -126,35 +136,16 @@ sap.ui.define([
             return reserva;
         },
 
-        _messageBoxConfirmacaoCancelamento(mensagemConfirmacao) {
-            const idReserva = this.modelo(MODELO_RESERVA).id;
-
-            MessageBox.confirm(mensagemConfirmacao, {
-                actions: [MessageBox.Action.YES, MessageBox.Action.NO],
-                emphasizedAction: MessageBox.Action.YES,
-                onClose: (acao) => {
-                    if (acao == MessageBox.Action.YES) {
-                        idReserva
-                            ? this.navegarPara(ROTA_DETALHES, idReserva)
-                            : this.navegarPara(ROTA_LISTAGEM);
-                    }
-                }
-            });
-        },
-
         _definirReservaPeloId(id) {
             try {
-                ReservaRepository.obterPorId(id)
+                return ReservaRepository.obterPorId(id)
                     .then(response => {
                         return response.ok
                             ? response.json()
                             : Promise.reject(response);
                     })
-                    .then(reserva => this._modeloReserva(reserva))
-                    .catch(async erro => {
-                        let mensagemErro = await erro.text();
-                        MessageBox.warning(mensagemErro);
-                    });
+                    .then(reserva => this._definirModeloPadraoEdicao(reserva))
+                    .catch(async erro => MessageBox.warning(await erro.text()));
             }
             catch (erro) {
                 MessageBox.warning(erro.message);
@@ -163,27 +154,20 @@ sap.ui.define([
 
         _criarReserva(reservaParaCriar) {
             try {
-                const variavelSucessoSalvar = "sucessoSalvar";
-                const mensagemSucessoSalvar = this.obterRecursosI18n().getText(variavelSucessoSalvar);
+                const sucessoCriar = "sucessoCriar";
+                const mensagemSucessoCriar = this.obterRecursosI18n().getText(sucessoCriar);
 
-                ReservaRepository.criarReserva(reservaParaCriar)
+                return ReservaRepository.criarReserva(reservaParaCriar)
                     .then(response => {
                         const statusCreated = 201;
                         return response.status == statusCreated
                             ? response.json()
                             : Promise.reject(response)
                     })
-                    .then(reservaCriada => {
-                        MessageBox.success(mensagemSucessoSalvar, {
-                            onClose: () => {
-                                this.navegarPara(ROTA_DETALHES, reservaCriada.id)
-                            }
-                        });
-                    })
-                    .catch(async erro => {
-                        let mensagemErro = await erro.text();
-                        MessageBox.warning(mensagemErro);
-                    });
+                    .then(reservaCriada => this.messageBoxSucesso(mensagemSucessoCriar, () => {
+                        this._navegarParaDetalhesReserva(reservaCriada.id);
+                    }))
+                    .catch(async erro => MessageBox.warning(await erro.text()));
             }
             catch (erro) {
                 MessageBox.warning(erro.message);
@@ -192,45 +176,47 @@ sap.ui.define([
 
         _atualizarReserva(reservaParaAtualizar) {
             try {
-                const variavelSucessoEditar = "sucessoEditar";
-                const mensagemSucessoEditar = this.obterRecursosI18n().getText(variavelSucessoEditar);
+                const sucessoEditar = "sucessoEditar";
+                const mensagemSucessoEditar = this.obterRecursosI18n().getText(sucessoEditar);
 
-                ReservaRepository.atualizarReserva(reservaParaAtualizar)
+                return ReservaRepository.atualizarReserva(reservaParaAtualizar)
                     .then(response => {
                         const statusNoContent = 204;
                         return response.status == statusNoContent
-                            ? MessageBox.success(mensagemSucessoEditar, {
-                                onClose: () => {
-                                    this.navegarPara(ROTA_DETALHES, reservaParaAtualizar.id)
-                                }
+                            ? this.messageBoxSucesso(mensagemSucessoEditar, () => {
+                                this._navegarParaDetalhesReserva(reservaParaAtualizar.id);
                             })
                             : Promise.reject(response)
                     })
-                    .catch(async erro => {
-                        let mensagemErro = await erro.text();
-                        MessageBox.warning(mensagemErro);
-                    });
+                    .catch(async erro => MessageBox.warning(await erro.text()));
             }
             catch (erro) {
                 MessageBox.warning(erro.message);
             }
+        },
+
+        _navegarParaTelaListagem() {
+            const rotaListagem = "listagem";
+            this.navegarPara(rotaListagem);
+        },
+
+        _navegarParaDetalhesReserva(id) {
+            const rotaDetalhes = "detalhes";
+            this.navegarPara(rotaDetalhes, id);
         },
 
         aoClicarNavegarParaTelaAnterior() {
-            try {
-                const idReserva = this.modelo(MODELO_RESERVA).id;
+            this.exibirEspera(() => {
+                const idReserva = this._modeloReserva().id;
 
                 idReserva
-                    ? this.navegarPara(ROTA_DETALHES, idReserva)
-                    : this.navegarPara(ROTA_LISTAGEM);
-            }
-            catch (erro) {
-                MessageBox.warning(erro.message);
-            }
+                    ? this._navegarParaDetalhesReserva(idReserva)
+                    : this._navegarParaTelaListagem();
+            });
         },
 
         aoClicarSalvarReserva() {
-            try {
+            this.exibirEspera(() => {
                 const reservaPreenchida = this._obterReservaPreenchida();
                 Validacao.validarReserva(reservaPreenchida);
 
@@ -243,85 +229,72 @@ sap.ui.define([
                     : reservaPreenchida.id
                         ? this._atualizarReserva(reservaPreenchida)
                         : this._criarReserva(reservaPreenchida);
-            }
-            catch (erro) {
-                MessageBox.warning(erro.message);
-            }
+            });
         },
 
         aoClicarCancelarCadastro() {
-            try {
-                const variavelConfirmacaoCancelar = "confirmacaoCancelar";
-                const mensagemConfirmacao = this.obterRecursosI18n().getText(variavelConfirmacaoCancelar);
+            this.exibirEspera(() => {
+                const confirmacaoCancelar = "confirmacaoCancelar";
+                const mensagemConfirmacao = this.obterRecursosI18n().getText(confirmacaoCancelar);
+                const idReserva = this._modeloReserva().id;
 
-                this._messageBoxConfirmacaoCancelamento(mensagemConfirmacao);
-            }
-            catch (erro) {
-                MessageBox.warning(erro.message);
-            }
+                this.messageBoxConfirmacao(mensagemConfirmacao, () => {
+                    idReserva
+                        ? this._navegarParaDetalhesReserva(idReserva)
+                        : this._navegarParaTelaListagem();
+                });
+            });
         },
 
         aoMudarValidarNome(evento) {
-            try {
+            this.exibirEspera(() => {
                 const inputNome = evento.getSource();
                 const valorNome = evento.getParameter(PARAMETRO_VALUE);
                 const mensagemErroValidacao = Validacao.validarNome(valorNome);
 
                 this._definirValueStateInputValidado(inputNome, mensagemErroValidacao);
-            }
-            catch (erro) {
-                MessageBox.warning(erro.message);
-            }
+            })
         },
 
         aoMudarValidarCpf(evento) {
-            try {
+            this.exibirEspera(() => {
                 const inputCpf = evento.getSource();
                 const valorCpf = evento.getParameter(PARAMETRO_VALUE);
                 const mensagemErroValidacao = Validacao.validarCpf(valorCpf);
 
                 this._definirValueStateInputValidado(inputCpf, mensagemErroValidacao);
-            }
-            catch (erro) {
-                MessageBox.warning(erro.message);
-            }
+            })
         },
 
         aoMudarValidarTelefone(evento) {
-            try {
+            this.exibirEspera(() => {
                 const inputTelefone = evento.getSource();
                 const valorTelefone = evento.getParameter(PARAMETRO_VALUE);
                 const mensagemErroValidacao = Validacao.validarTelefone(valorTelefone);
 
                 this._definirValueStateInputValidado(inputTelefone, mensagemErroValidacao);
-            }
-            catch (erro) {
-                MessageBox.warning(erro.message);
-            }
+            });
         },
 
         aoMudarValidarIdade(evento) {
-            try {
+            this.exibirEspera(() => {
                 const inputIdade = evento.getSource();
                 const valorIdade = evento.getParameter(PARAMETRO_VALUE);
                 const mensagemErroValidacao = Validacao.validarIdade(valorIdade);
 
                 this._definirValueStateInputValidado(inputIdade, mensagemErroValidacao);
-            }
-            catch (erro) {
-                MessageBox.warning(erro.message);
-            }
+            });
         },
 
         aoMudarValidarCheckInECheckOut() {
-            try {
-                const idReserva = this.modelo(MODELO_RESERVA).id;
+            this.exibirEspera(() => {
+                const idReserva = this._modeloReserva().id;
 
-                const inputCheckIn = this.byId(ID_INPUT_CHECK_IN);
-                const inputCheckOut = this.byId(ID_INPUT_CHECK_OUT);
+                const inputCheckIn = this.byId(ID_INPUTS.idInputCheckIn);
+                const inputCheckOut = this.byId(ID_INPUTS.idInputCheckOut);
 
-                const valorCheckIn = inputCheckIn.getValue();
                 const valorCheckOut = inputCheckOut.getValue();
+                const valorCheckIn = inputCheckIn.getValue();
 
                 let mensagemErroValidacaoCheckIn, mensagemErroValidacaoCheckOut;
 
@@ -336,14 +309,11 @@ sap.ui.define([
 
                 this._definirValueStateInputValidado(inputCheckIn, mensagemErroValidacaoCheckIn);
                 this._definirValueStateInputValidado(inputCheckOut, mensagemErroValidacaoCheckOut);
-            }
-            catch (erro) {
-                MessageBox.warning(erro.message);
-            }
+            });
         },
 
         aoMudarValidarPrecoEstadia(evento) {
-            try {
+            this.exibirEspera(() => {
                 const inputPrecoEstadia = evento.getSource();
                 const valorPrecoEstadia = evento.getParameter(PARAMETRO_VALUE);
                 const mensagemErroValidacao = Validacao.validarPrecoEstadia(valorPrecoEstadia);
@@ -351,9 +321,7 @@ sap.ui.define([
                 this._definirValueStateInputValidado(inputPrecoEstadia, mensagemErroValidacao);
 
                 if (!mensagemErroValidacao) inputPrecoEstadia.setValue(Formatter.formataPrecoEstadia(valorPrecoEstadia));
-            } catch (erro) {
-                MessageBox.warning(erro.message);
-            }
+            });
         }
     })
 })

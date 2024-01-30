@@ -18,22 +18,19 @@ sap.ui.define([
         },
 
         _aoCoincidirRota() {
-            this._modeloListaReservas();
+            this.exibirEspera(() => this._modeloListaReservas());
         },
 
         _modeloListaReservas(filtro) {
             try {
-                ReservaRepository.obterTodos(filtro)
+                return ReservaRepository.obterTodos(filtro)
                     .then(response => {
                         return response.ok
                             ? response.json()
                             : Promise.reject(response);
                     })
                     .then(reservas => this.modelo(MODELO_LISTA, reservas))
-                    .catch(async erro => {
-                        let mensagemErro = await erro.text();
-                        MessageBox.warning(mensagemErro);
-                    })
+                    .catch(async erro => MessageBox.warning(await erro.text()))
             }
             catch (erro) {
                 MessageBox.warning(erro.message);
@@ -41,27 +38,23 @@ sap.ui.define([
         },
 
         aoPesquisarFiltrarReservas(filtro) {
-            try {
+            this.exibirEspera(() => {
                 const parametroQuery = "query";
                 const stringFiltro = filtro.getParameter(parametroQuery);
 
                 this._modeloListaReservas(stringFiltro);
-            } catch (erro) {
-                MessageBox.warning(erro.message);
-            }
+            });
         },
 
         aoClicarAbrirCadastro() {
-            try {
+            this.exibirEspera(() => {
                 const rotaCadastro = "cadastro";
                 this.navegarPara(rotaCadastro);
-            } catch (erro) {
-                MessageBox.warning(erro.message);
-            }
+            });
         },
 
         aoClicarAbrirDetalhes(evento) {
-            try {
+            this.exibirEspera(() => {
                 const propriedadeId = "id";
                 const idReserva = evento
                     .getSource()
@@ -70,9 +63,7 @@ sap.ui.define([
 
                 const rotaDetalhes = "detalhes";
                 this.navegarPara(rotaDetalhes, idReserva);
-            } catch (erro) {
-                MessageBox.warning(erro.message);
-            }
+            });
         }
     });
 });

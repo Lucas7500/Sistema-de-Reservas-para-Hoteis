@@ -11,17 +11,19 @@ namespace InteracaoUsuarioForms
     {
         private readonly Reserva _reservaCopia = new();
         private static IValidator<Reserva> _validacaoReserva;
+        private const char virgula = ',';
 
         public TelaCadastroCliente(Reserva reservaParametro, IValidator<Reserva> validacaoReserva)
         {
             InitializeComponent();
-            CaixaSexo.DataSource = Enum.GetValues(typeof(GeneroEnum));
             _validacaoReserva = validacaoReserva;
+            CaixaSexo.DataSource = Enum.GetValues(typeof(GeneroEnum));
+
             if (reservaParametro.Id > ValoresPadrao.ID_ZERO)
             {
                 DataCheckIn.MinDate = reservaParametro.CheckIn;
                 DataCheckOut.MinDate = reservaParametro.CheckOut;
-                PreencherTelaDeCadastro(reservaParametro);
+                PreencherTelaCadastro(reservaParametro);
                 _reservaCopia = (Reserva)reservaParametro.ShallowCopy();
             }
             else
@@ -33,69 +35,63 @@ namespace InteracaoUsuarioForms
 
         private void PermitirApenasNumerosNaIdade(object sender, KeyPressEventArgs e)
         {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
-            {
-                e.Handled = true;
-            }
+            e.Handled = !char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar);
         }
 
         private void PermitirApenasLetrasNoNome(object sender, KeyPressEventArgs e)
         {
             string regexNome = "^[a-zA-ZA-ZáàâãéèêíìîóòõôúùûçÁÀÃÂÉÈÊÍÌÎÓÒÔÕÚÙÛÇ ]*$";
 
-            if (!char.IsControl(e.KeyChar) && !Regex.IsMatch(e.KeyChar.ToString(), regexNome))
-            {
-                e.Handled = true;
-            }
+            e.Handled = !char.IsControl(e.KeyChar) && !Regex.IsMatch(e.KeyChar.ToString(), regexNome);
         }
 
         private void PermitirApenasDecimaisNoPrecoDaEstadia(object sender, KeyPressEventArgs e)
         {
-            bool PossuiVirgula = TextoPreco.Text.Contains(',');
+            string preco = TextoPreco.Text;
+            bool precoPossuiVirgula = preco.Contains(virgula);
+            string decimaisAposVirgula = precoPossuiVirgula
+                ? preco.Split(virgula)[ValoresPadrao.INDICE_CASAS_DECIMAIS]
+                : string.Empty;
 
-            if (e.KeyChar == ',')
-            {
-                e.Handled = PossuiVirgula;
-                return;
-            }
-            if (PossuiVirgula)
-            {
-                string[] preco = TextoPreco.Text.Split(',');
-                string CasasDecimais = preco[ValoresPadrao.INDEX_CASAS_DECIMAIS];
-                bool Possui2CasasDecimais = CasasDecimais.Length == ValoresPadrao.MAX_CASAS_DECIMAIS;
-                e.Handled = Possui2CasasDecimais && !char.IsControl(e.KeyChar);
-            }
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
-            {
-                e.Handled = true;
-            }
+            bool possuiDuasCasasDecimais = decimaisAposVirgula.Length == ValoresPadrao.MAX_CASAS_DECIMAIS;
+            bool primeiraCondicaoInvalida = !char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != virgula;
+            bool segundaCondicaoInvalida = precoPossuiVirgula && e.KeyChar == virgula;
+            bool terceiraCondicaoInvalida = precoPossuiVirgula && possuiDuasCasasDecimais && !char.IsControl(e.KeyChar);
+
+            e.Handled = primeiraCondicaoInvalida || segundaCondicaoInvalida || terceiraCondicaoInvalida;
         }
 
-        private static decimal ConverterEmDecimalComVirgula(string numero)
+        private static decimal ConverteStringParaDecimalComVirgula(string numero)
         {
-            if (numero.Contains(','))
+            const int nenhumNumeroAposVirgula = 0;
+            const int umNumeroAposVirgula = 1;
+            const char umZeroAposVirgula = '0';
+            const string doisZerosAposVirgula = "00";
+
+            if (numero.Contains(virgula))
             {
-                string[] preco = numero.Split(',');
-                string CasasDecimais = preco[1];
+                string[] preco = numero.Split(virgula);
+                string CasasDecimais = preco[ValoresPadrao.INDICE_CASAS_DECIMAIS];
 
                 switch (CasasDecimais.Length)
                 {
-                    case 0:
-                        numero += "00";
-                        return Decimal.Parse(numero);
-                    case 1:
-                        numero += '0';
-                        return Decimal.Parse(numero);
-                    case 2:
-                        return Decimal.Parse(numero);
+                    case nenhumNumeroAposVirgula:
+                        numero += doisZerosAposVirgula;
+                        break;
+                    case umNumeroAposVirgula:
+                        numero += umZeroAposVirgula;
+                        break;
                 }
             }
-            numero += ",00";
+            else
+            {
+                numero += virgula + doisZerosAposVirgula;
+            }
 
             return Decimal.Parse(numero);
         }
 
-        private void PreencherTelaDeCadastro(Reserva reserva)
+        private void PreencherTelaCadastro(Reserva reserva)
         {
             try
             {
@@ -112,25 +108,25 @@ namespace InteracaoUsuarioForms
             }
             catch (Exception erro)
             {
-                MessageBox.Show(erro.Message, MensagemExcessao.TITULO_ERRO_INESPERADO, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(erro.Message, Mensagem.TITULO_ERRO_INESPERADO, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private Dictionary<string, dynamic> LerEntradasDoUsuario()
+        private Dictionary<string, dynamic> ObterReservaPreenchida()
         {
             return new Dictionary<string, dynamic>
             {
-                { "Nome", TextoNome.Text },
-                { "Cpf", TextoCPF.Text },
-                { "Telefone", TextoTelefone.Text },
-                { "Idade", String.IsNullOrWhiteSpace(TextoIdade.Text) ? ValoresPadrao.CODIGO_DE_ERRO : int.Parse(TextoIdade.Text) },
-                { "CheckIn", Convert.ToDateTime(DataCheckIn.Value.Date) },
-                { "CheckOut", Convert.ToDateTime(DataCheckOut.Value.Date) },
-                { "PrecoEstadia", String.IsNullOrWhiteSpace(TextoPreco.Text) ? ValoresPadrao.CODIGO_DE_ERRO : ConverterEmDecimalComVirgula(TextoPreco.Text) }
+                { ConstantesTabelaReservas.COLUNA_NOME, TextoNome.Text },
+                { ConstantesTabelaReservas.COLUNA_CPF, TextoCPF.Text },
+                { ConstantesTabelaReservas.COLUNA_TELEFONE, TextoTelefone.Text },
+                { ConstantesTabelaReservas.COLUNA_IDADE, String.IsNullOrWhiteSpace(TextoIdade.Text) ? ValoresPadrao.CODIGO_DE_ERRO : int.Parse(TextoIdade.Text) },
+                { ConstantesTabelaReservas.COLUNA_CHECK_IN, Convert.ToDateTime(DataCheckIn.Value.Date) },
+                { ConstantesTabelaReservas.COLUNA_CHECK_OUT, Convert.ToDateTime(DataCheckOut.Value.Date) },
+                { ConstantesTabelaReservas.COLUNA_PRECO_ESTADIA, String.IsNullOrWhiteSpace(TextoPreco.Text) ? ValoresPadrao.CODIGO_DE_ERRO : ConverteStringParaDecimalComVirgula(TextoPreco.Text) }
             };
         }
 
-        private void AtribuirValoresReserva(Reserva reserva)
+        private void PreencherReserva(Reserva reserva)
         {
             try
             {
@@ -141,23 +137,23 @@ namespace InteracaoUsuarioForms
                 reserva.Sexo = (GeneroEnum)CaixaSexo.SelectedItem;
                 reserva.CheckIn = Convert.ToDateTime(DataCheckIn.Value.Date);
                 reserva.CheckOut = Convert.ToDateTime(DataCheckOut.Value.Date);
-                reserva.PrecoEstadia = ConverterEmDecimalComVirgula(TextoPreco.Text);
+                reserva.PrecoEstadia = ConverteStringParaDecimalComVirgula(TextoPreco.Text);
                 reserva.PagamentoEfetuado = BotaoTrue.Checked;
             }
             catch (Exception erro)
             {
-                MessageBox.Show(erro.Message, MensagemExcessao.TITULO_ERRO_INESPERADO, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(erro.Message, Mensagem.TITULO_ERRO_INESPERADO, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private void AoClicarAdicionarCadastro(object sender, EventArgs e)
+        private void AoClicarAdicionar(object sender, EventArgs e)
         {
             try
             {
-                ValidacaoCampos.ValidarCampos(LerEntradasDoUsuario());
-                AtribuirValoresReserva(_reservaCopia);
+                ValidacaoCampos.ValidarCampos(ObterReservaPreenchida());
+                PreencherReserva(_reservaCopia);
                 _validacaoReserva.ValidateAndThrowArgumentException(_reservaCopia);
-                
+
                 if (TelaListaDeReservas.AdicionarReservaNoFormulario(_reservaCopia))
                 {
                     this.Close();
@@ -171,11 +167,11 @@ namespace InteracaoUsuarioForms
             }
         }
 
-        private void AoClicarCancelarCadastro(object sender, EventArgs e)
+        private void AoClicarCancelar(object sender, EventArgs e)
         {
             string mensagem = "Você realmente deseja cancelar?", titulo = "Confirmação de cancelamento";
-
             var remover = MessageBox.Show(mensagem, titulo, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
             if (remover.Equals(DialogResult.Yes))
             {
                 this.Close();

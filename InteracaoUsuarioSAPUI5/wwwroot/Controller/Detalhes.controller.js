@@ -7,8 +7,6 @@ sap.ui.define([
     "use strict";
 
     const CAMINHO_ROTA_DETALHES = "reservas.hoteis.controller.Detalhes";
-    const MODELO_RESERVA = "reserva";
-    const ROTA_LISTAGEM = "listagem";
 
     return BaseController.extend(CAMINHO_ROTA_DETALHES, {
         formatter: Formatter,
@@ -19,7 +17,12 @@ sap.ui.define([
         },
 
         _aoCoincidirRota(evento) {
-            this._definirReservaPeloId(this._obterIdPeloParametro(evento));
+            this.exibirEspera(() => this._definirReservaPeloId(this._obterIdPeloParametro(evento)));
+        },
+
+        _modeloReserva(modelo) {
+            const nomeModelo = "reserva";
+            return this.modelo(nomeModelo, modelo);
         },
 
         _obterIdPeloParametro(evento) {
@@ -29,13 +32,13 @@ sap.ui.define([
 
         _definirReservaPeloId(id) {
             try {
-                ReservaRepository.obterPorId(id)
+                return ReservaRepository.obterPorId(id)
                     .then(response => {
                         return response.ok
                             ? response.json()
                             : Promise.reject(response);
                     })
-                    .then(reserva => this.modelo(MODELO_RESERVA, reserva))
+                    .then(reserva => this._modeloReserva(reserva))
                     .catch(async erro => MessageBox.warning(await erro.text()));
             }
             catch (erro) {
@@ -45,15 +48,13 @@ sap.ui.define([
 
         _removerReserva() {
             try {
-                const idReserva = this.modelo(MODELO_RESERVA).id;
+                const idReserva = this._modeloReserva().id;
                 const sucessoRemover = "sucessoRemover";
                 const mensagemSucesso = this.obterRecursosI18n().getText(sucessoRemover);
 
                 return ReservaRepository.removerReserva(idReserva)
-                    .then(() => MessageBox.success(mensagemSucesso, {
-                        onClose: () => {
-                            this.navegarPara(ROTA_LISTAGEM);
-                        }
+                    .then(() => this.messageBoxSucesso(mensagemSucesso, () => {
+                        this._navegarParaTelaListagem();
                     }))
                     .catch(async erro => MessageBox.warning(await erro.text()));
             } catch (erro) {
@@ -61,38 +62,35 @@ sap.ui.define([
             }
         },
 
+        _navegarParaTelaListagem() {
+            const rotaListagem = "listagem";
+            this.navegarPara(rotaListagem);
+        },
+
         aoClicarNavegarParaTelaListagem() {
-            try {
-                this.navegarPara(ROTA_LISTAGEM);
-            } catch (erro) {
-                MessageBox.warning(erro.message);
-            }
+            this.exibirEspera(() => {
+                this._navegarParaTelaListagem();
+            });
         },
 
         aoClicarNavegarParaTelaEdicao() {
-            try {
+            this.exibirEspera(() => {
                 const rotaEdicao = "edicao";
-                const idReserva = this.modelo(MODELO_RESERVA).id;
+                const idReserva = this._modeloReserva().id;
 
                 this.navegarPara(rotaEdicao, idReserva);
-            } catch (erro) {
-                MessageBox.warning(erro.message);
-            }
+            });
         },
 
         aoClicarRemoverReserva() {
-            const confirmacaoRemocao = "confirmacaoRemocao";
-            const mensagemConfirmacao = this.obterRecursosI18n().getText(confirmacaoRemocao);
+            this.exibirEspera(() => {
+                const confirmacaoRemocao = "confirmacaoRemocao";
+                const mensagemConfirmacao = this.obterRecursosI18n().getText(confirmacaoRemocao);
 
-            MessageBox.confirm(mensagemConfirmacao, {
-                actions: [MessageBox.Action.YES, MessageBox.Action.NO],
-                emphasizedAction: MessageBox.Action.YES,
-                onClose: (acao) => {
-                    if (acao == MessageBox.Action.YES) {
-                        this._removerReserva();
-                    }
-                }
-            })
+                this.messageBoxConfirmacao(mensagemConfirmacao, () => {
+                    this._removerReserva();
+                });
+            });
         }
     })
 })

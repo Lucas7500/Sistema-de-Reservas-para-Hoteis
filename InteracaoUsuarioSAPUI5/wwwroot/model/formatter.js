@@ -18,10 +18,14 @@ sap.ui.define([
         formataPrecoEstadia(precoEstadia) {
             const charVirgula = ",";
             const charPonto = ".";
+            const regexPontos = /\./g;
+            const stringVazia = "";
 
             return NumberFormat
                 .getCurrencyInstance({ currencyCode: false })
-                .format(parseFloat(String(precoEstadia).replace(charVirgula, charPonto)));
+                .format(parseFloat(String(precoEstadia)
+                    .replace(regexPontos, stringVazia)
+                    .replace(charVirgula, charPonto)));
         },
 
         desformataPrecoEstadia(precoEstadia) {
