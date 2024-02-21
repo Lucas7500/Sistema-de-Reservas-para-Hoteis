@@ -9,7 +9,3 @@ Este projeto é um sistema de reservas para hóteis implementado utilizando a ar
 - **Bibliotecas:** FluentMigrator, FluentValidation
 - **ORM:** Linq2DB
 - **Banco de Dados:** SQL Server
-
-## Arquitetura
-
-O projeto segue a arquitetura Clean Architecture, que separa as responsabilidades do sistema em camadas distintas, facilitando a manutenção e a expansão do código.
